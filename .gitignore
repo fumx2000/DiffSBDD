@@ -1,0 +1,12 @@
+checkpoints/
+__pycache__/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+runs/
+lightning_logs/
+wandb/
+example/*demo*.sdf
+data/processed/*.npz
+data/processed/*.pt
+data/processed/*.pkl
