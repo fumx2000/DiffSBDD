@@ -39,3 +39,25 @@ scaffold/linker/warhead atom annotations are manually checked.
 - Confirm `ligand_reactive_atom_id = 29`.
 - Fill `final_role` in the annotation template for scaffold/linker/warhead.
 - Transfer confirmed atom groups into `manifest_real_small.csv`.
+
+## Reference Files for Bond-Order / Pre-Reaction Graph Curation
+
+Reference files are stored under
+`data/raw/covalent_small/metadata/5F2E_reference/`.
+
+- `5F2E.cif`: RCSB mmCIF for the full 5F2E structure.
+- `5UT.cif`: RCSB Chemical Component Dictionary definition for ligand `5UT`.
+- `5UT_ideal.sdf`: RCSB ideal CCD ligand SDF.
+- `5UT_model.sdf` and `5UT_model.mol2`: optional RCSB model-coordinate
+  ligand files if available from RCSB.
+
+The extracted ligand SDF remains limited by PDB HETATM coordinates and PDB
+CONECT records. CONECT is useful for connectivity but does not encode reliable
+bond order, so the extracted SDF should not be used as the final scientific
+training graph without curation.
+
+The CCD CIF and ideal SDF can help confirm the ligand chemistry, warhead
+substructure, and likely bond orders for a pre-reaction graph. These reference
+files may use a different atom order from the extracted SDF. Final manifest atom
+indices must always come from the final selected `ligand_sdf` atom order; do not
+copy ideal/reference SDF atom indices directly into the manifest.
