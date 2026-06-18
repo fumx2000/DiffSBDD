@@ -84,8 +84,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Build a ligand atom annotation template from SDF and atom mapping.")
     parser.add_argument("--ligand_sdf", type=Path, required=True)
     parser.add_argument("--mapping_csv", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--ligand_reactive_atom_id", type=int, required=True)
+    parser.add_argument("--output", "--output_csv", dest="output", type=Path, required=True)
+    parser.add_argument(
+        "--ligand_reactive_atom_id",
+        "--reactive_atom_id",
+        dest="ligand_reactive_atom_id",
+        type=int,
+        required=True,
+    )
     return parser
 
 
