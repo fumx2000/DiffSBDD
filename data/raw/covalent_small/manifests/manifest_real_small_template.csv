@@ -1,0 +1,1 @@
+sample_id,protein_pdb_path,ligand_sdf_path,reactive_residue_chain,reactive_residue_id,reactive_residue_type,reactive_atom_name,ligand_reactive_atom_id,warhead_type,scaffold_atoms,linker_atoms,warhead_atoms
