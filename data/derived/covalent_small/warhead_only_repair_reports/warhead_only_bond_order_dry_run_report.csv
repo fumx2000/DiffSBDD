@@ -1,0 +1,114 @@
+sample_id,bond_endpoint_a,bond_endpoint_b,extracted_old_bond_type,reference_candidate_bond_type,both_atoms_accepted_warhead,touches_unresolved_boundary,proposed_action,safety_decision,rationale
+BTK_C481_6DI9,0,1,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,0,20,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,0,25,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,1,16,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,1,21,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,2,3,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,2,7,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,2,25,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,3,4,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,4,5,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,5,6,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,5,8,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,6,7,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,8,9,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,8,26,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,10,27,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,11,27,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,12,27,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,13,24,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,13,28,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,14,15,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,14,28,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,14,29,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,15,17,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,16,30,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,16,31,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,17,18,single,single,true,false,keep,eligible,bond is inside accepted warhead-only scope and bond type already matches reference
+BTK_C481_6DI9,17,32,single,double,true,false,would_transfer_in_warhead_only_scope,eligible,bond is inside accepted warhead-only scope and reference bond type differs
+BTK_C481_6DI9,18,19,single,double,true,false,would_transfer_in_warhead_only_scope,eligible,bond is inside accepted warhead-only scope and reference bond type differs
+BTK_C481_6DI9,20,23,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,21,22,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,22,23,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,23,24,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+BTK_C481_6DI9,24,29,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+BTK_C481_6DI9,26,27,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,0,1,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,0,10,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,0,18,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,0,19,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,1,2,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,1,17,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,2,3,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,2,16,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,3,4,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,4,5,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,4,15,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,5,14,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,5,17,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,6,22,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,6,23,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,7,22,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,7,24,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,7,26,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,8,27,single,single,true,false,keep,eligible,bond is inside accepted warhead-only scope and bond type already matches reference
+KRAS_G12C_5F2E,8,29,single,double,true,false,would_transfer_in_warhead_only_scope,eligible,bond is inside accepted warhead-only scope and reference bond type differs
+KRAS_G12C_5F2E,9,20,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,9,21,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,10,18,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,11,12,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,12,13,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,12,20,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,13,14,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,20,23,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,21,22,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_5F2E,24,25,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,25,26,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,25,27,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_5F2E,27,28,single,double,true,false,would_transfer_in_warhead_only_scope,eligible,bond is inside accepted warhead-only scope and reference bond type differs
+KRAS_G12C_6OIM,0,1,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,1,2,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,1,10,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,2,3,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,3,4,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,3,8,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,4,5,single,double,true,false,would_transfer_in_warhead_only_scope,eligible,bond is inside accepted warhead-only scope and reference bond type differs
+KRAS_G12C_6OIM,4,6,single,single,true,false,keep,eligible,bond is inside accepted warhead-only scope and bond type already matches reference
+KRAS_G12C_6OIM,6,7,single,single,true,false,keep,eligible,bond is inside accepted warhead-only scope and bond type already matches reference
+KRAS_G12C_6OIM,8,9,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,9,10,single,,false,true,blocked_touches_unresolved_boundary,blocked,at least one endpoint is an unresolved linker/local boundary atom
+KRAS_G12C_6OIM,10,11,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,11,12,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,11,28,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,12,13,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,13,14,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,13,15,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,15,16,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,15,26,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,16,17,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,16,22,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,17,18,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,17,19,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,19,20,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,20,21,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,21,22,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,22,23,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,23,24,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,23,25,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,26,27,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,26,28,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,27,32,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,28,29,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,29,30,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,30,31,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,30,32,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,32,33,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,33,34,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,33,39,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,34,35,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,34,36,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,36,37,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,37,38,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,38,39,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
+KRAS_G12C_6OIM,39,40,single,,false,false,blocked_atom_not_accepted,blocked,one or both endpoints are not accepted warhead atoms
