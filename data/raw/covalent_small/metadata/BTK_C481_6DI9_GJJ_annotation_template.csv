@@ -1,34 +1,34 @@
 sdf_atom_index,pdb_atom_name,element,x,y,z,neighbors,suggested_role,final_role,notes
-0,C2,C,-20.2740,6.0060,-0.6340,1:single;20:single;25:single,unassigned,,
-1,C3,C,-19.2610,5.6970,-1.6680,0:single;16:single;21:single,unassigned,,
-2,C9,C,-20.9290,5.8110,1.7150,3:single;7:single;25:single,unassigned,,
-3,C10,C,-20.4990,5.3360,2.9590,2:single;4:single,unassigned,,
-4,C11,C,-21.2900,5.5280,4.0940,3:single;5:single,unassigned,,
-5,C12,C,-22.5430,6.1580,3.9710,4:single;6:single;8:single,unassigned,,
-6,C13,C,-22.9580,6.6460,2.7440,5:single;7:single,unassigned,,
-7,C14,C,-22.1520,6.4780,1.6170,2:single;6:single,unassigned,,
-8,C15,C,-23.4430,6.4730,5.1310,5:single;9:single;26:single,unassigned,,
-9,O17,O,-24.6260,6.6610,4.8640,8:single,unassigned,,
-10,C19,C,-24.7410,6.0370,7.8910,27:single,unassigned,,
-11,C20,C,-22.7170,7.2400,8.7230,27:single,unassigned,,
-12,C21,C,-24.3440,8.4460,7.2960,27:single,unassigned,,
-13,C22,C,-23.0600,8.1520,-3.9530,24:single;28:single,unassigned,,
-14,C24,C,-24.5200,9.1560,-2.3130,15:single;28:single;29:single,unassigned,,
-15,N26,N,-24.1660,10.5800,-2.2850,14:single;17:single,unassigned,,
-16,C27,C,-17.9800,5.0020,-1.2840,1:single;30:single;31:single,unassigned,,
-17,C30,C,-24.6300,11.4440,-1.3700,15:single;18:single;32:single,unassigned,,
-18,C32,C,-24.2510,12.9030,-1.5070,17:single;19:single,unassigned,,
-19,C33,C,-24.0850,13.7570,-0.2530,18:single,warhead_candidate / ligand_reactive_atom_candidate,,PDB LINK identifies this atom as covalent partner candidate; confirm manually.
-20,N1,N,-21.3680,6.6870,-1.0310,0:single;23:single,unassigned,,
-21,C4,C,-19.4470,6.0590,-2.9780,1:single;22:single,unassigned,,
-22,C5,C,-20.6110,6.7780,-3.3150,21:single;23:single,unassigned,,
-23,C6,C,-21.5470,7.0510,-2.3180,20:single;22:single;24:single,unassigned,,
-24,N7,N,-22.7030,7.7630,-2.5910,13:single;23:single;29:single,unassigned,,
-25,N8,N,-20.0890,5.6520,0.6650,0:single;2:single,unassigned,,
-26,N16,N,-22.9080,6.7040,6.3520,8:single;27:single,unassigned,,
-27,C18,C,-23.6830,7.0820,7.5440,10:single;11:single;12:single;26:single,unassigned,,
-28,C23,C,-24.4610,8.7400,-3.7590,13:single;14:single,unassigned,,
-29,C25,C,-23.5930,8.2030,-1.5400,14:single;24:single,unassigned,,
-30,N28,N,-16.9330,5.0740,-2.1900,16:single,unassigned,,
-31,O29,O,-17.8810,4.4570,-0.2100,16:single,unassigned,,
-32,O31,O,-25.3840,11.1820,-0.4350,17:single,unassigned,,
+0,C2,C,-20.2740,6.0060,-0.6340,1:single;20:single;25:single,unassigned,scaffold,
+1,C3,C,-19.2610,5.6970,-1.6680,0:single;16:single;21:single,unassigned,scaffold,
+2,C9,C,-20.9290,5.8110,1.7150,3:single;7:single;25:single,unassigned,scaffold,
+3,C10,C,-20.4990,5.3360,2.9590,2:single;4:single,unassigned,scaffold,
+4,C11,C,-21.2900,5.5280,4.0940,3:single;5:single,unassigned,scaffold,
+5,C12,C,-22.5430,6.1580,3.9710,4:single;6:single;8:single,unassigned,scaffold,
+6,C13,C,-22.9580,6.6460,2.7440,5:single;7:single,unassigned,scaffold,
+7,C14,C,-22.1520,6.4780,1.6170,2:single;6:single,unassigned,scaffold,
+8,C15,C,-23.4430,6.4730,5.1310,5:single;9:single;26:single,unassigned,scaffold,
+9,O17,O,-24.6260,6.6610,4.8640,8:single,unassigned,scaffold,
+10,C19,C,-24.7410,6.0370,7.8910,27:single,unassigned,scaffold,
+11,C20,C,-22.7170,7.2400,8.7230,27:single,unassigned,scaffold,
+12,C21,C,-24.3440,8.4460,7.2960,27:single,unassigned,scaffold,
+13,C22,C,-23.0600,8.1520,-3.9530,24:single;28:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+14,C24,C,-24.5200,9.1560,-2.3130,15:single;28:single;29:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+15,N26,N,-24.1660,10.5800,-2.2850,14:single;17:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+16,C27,C,-17.9800,5.0020,-1.2840,1:single;30:single;31:single,unassigned,scaffold,
+17,C30,C,-24.6300,11.4440,-1.3700,15:single;18:single;32:single,unassigned,warhead,draft acrylamide/Michael acceptor warhead around C30-C32-C33-O31; workflow smoke test. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+18,C32,C,-24.2510,12.9030,-1.5070,17:single;19:single,unassigned,warhead,draft acrylamide/Michael acceptor warhead around C30-C32-C33-O31; workflow smoke test. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+19,C33,C,-24.0850,13.7570,-0.2530,18:single,warhead_candidate / ligand_reactive_atom_candidate,warhead,ligand_reactive_atom_candidate; PDB atom C33; covalent link to CYS A 481 SG altloc A/B. draft acrylamide/Michael acceptor warhead around C30-C32-C33-O31; workflow smoke test. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+20,N1,N,-21.3680,6.6870,-1.0310,0:single;23:single,unassigned,scaffold,
+21,C4,C,-19.4470,6.0590,-2.9780,1:single;22:single,unassigned,scaffold,
+22,C5,C,-20.6110,6.7780,-3.3150,21:single;23:single,unassigned,scaffold,
+23,C6,C,-21.5470,7.0510,-2.3180,20:single;22:single;24:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+24,N7,N,-22.7030,7.7630,-2.5910,13:single;23:single;29:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+25,N8,N,-20.0890,5.6520,0.6650,0:single;2:single,unassigned,scaffold,
+26,N16,N,-22.9080,6.7040,6.3520,8:single;27:single,unassigned,scaffold,
+27,C18,C,-23.6830,7.0820,7.5440,10:single;11:single;12:single;26:single,unassigned,scaffold,
+28,C23,C,-24.4610,8.7400,-3.7590,13:single;14:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+29,C25,C,-23.5930,8.2030,-1.5400,14:single;24:single,unassigned,linker,draft connecting ring/linker between acrylamide warhead and core scaffold. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
+30,N28,N,-16.9330,5.0740,-2.1900,16:single,unassigned,scaffold,
+31,O29,O,-17.8810,4.4570,-0.2100,16:single,unassigned,scaffold,
+32,O31,O,-25.3840,11.1820,-0.4350,17:single,unassigned,warhead,draft acrylamide/Michael acceptor warhead around C30-C32-C33-O31; workflow smoke test. workflow smoke test draft; extracted SDF is post-covalent-compatible bound geometry; bond order in extracted SDF is not reliable; final scientific training requires future bond-order repair and curated/pre-reaction ligand graph.
