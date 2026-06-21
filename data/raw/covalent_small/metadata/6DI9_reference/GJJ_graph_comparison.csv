@@ -1,0 +1,24 @@
+section,key,value,note
+extracted,atom_count,33,
+extracted,element_count,C:24; N:6; O:3,
+extracted,bond_count,35,
+extracted,bond_order_summary,single:35,
+extracted,ring_atom_count,17,
+extracted,aromatic_atom_count,0,
+reference,atom_count,63,
+reference,element_count,C:24; H:30; N:6; O:3,
+reference,bond_count,65,
+reference,bond_order_summary,aromatic:12; double:4; single:49,
+reference,ring_atom_count,17,
+reference,aromatic_atom_count,12,
+difference,atom_count_delta,-30,
+difference,bond_count_delta,-30,
+difference,extracted_minus_reference_elements,,
+difference,reference_minus_extracted_elements,H:30,
+reactive_atom,extracted_atom_id,19,final manifest atom indices must use the final selected ligand_sdf atom order; do not copy ideal SDF atom indices directly
+reactive_atom,pdb_atom_name,C33,final manifest atom indices must use the final selected ligand_sdf atom order; do not copy ideal SDF atom indices directly
+reactive_atom,extracted_signature,"('C', 1, ('C',), ('single',))",final manifest atom indices must use the final selected ligand_sdf atom order; do not copy ideal SDF atom indices directly
+reactive_atom,extracted_local_graph,18:C:single,final manifest atom indices must use the final selected ligand_sdf atom order; do not copy ideal SDF atom indices directly
+reactive_atom,reference_candidate_atom_indices,,final manifest atom indices must use the final selected ligand_sdf atom order; do not copy ideal SDF atom indices directly
+reactive_atom,tentative_reference_atom_by_heavy_atom_order,19,tentative only; valid only because the extracted and reference heavy-atom element sequences match
+reactive_atom,tentative_reference_local_graph,18:C:double; 51:H:single; 52:H:single,tentative only; reference SDF has explicit hydrogens and reliable bond orders
