@@ -1,0 +1,4 @@
+sample_id,rows,accept_candidate_count,unresolved_count,replace_candidate_count,exclude_sample_count,reviewed_count,needs_followup_count,excluded_count,reactive_atom_rows,warhead_rows,linker_or_boundary_rows,accepted_warhead_rows,unresolved_boundary_rows,has_empty_manual_decision,all_warhead_atoms_accepted,has_unresolved_boundary,local_bond_order_transfer_ready,recommended_next_action
+BTK_C481_6DI9,9,4,5,0,0,4,5,0,1,4,6,4,5,false,true,true,false,strictly_warhead_only_trial_or_manual_boundary_review_before_transfer
+KRAS_G12C_5F2E,8,4,4,0,0,4,4,0,1,4,5,4,4,false,true,true,false,strictly_warhead_only_trial_or_manual_boundary_review_before_transfer
+KRAS_G12C_6OIM,10,4,6,0,0,4,6,0,1,4,7,4,6,false,true,true,false,strictly_warhead_only_trial_or_manual_boundary_review_before_transfer
