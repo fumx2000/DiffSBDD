@@ -1,0 +1,4 @@
+sample_id,qa_total_rows,qa_passed_rows,qa_failed_rows,transferred_count,kept_count,blocked_count,coordinate_hash_same_all,raw_sdf_hash_same_all,blocked_bonds_unchanged,boundary_touches_blocked,manual_accept_candidate_count,manual_unresolved_count,all_warhead_atoms_accepted,has_unresolved_boundary,cross_boundary_transfer_ready,derived_trial_safe,training_ready,pre_reaction_graph_ready,recommended_next_action
+BTK_C481_6DI9,35,35,0,2,1,32,true,true,true,true,4,5,true,true,false,true,false,false,manual_boundary_review_or_pre_reaction_graph_design_before_training_ready
+KRAS_G12C_5F2E,33,33,0,2,1,30,true,true,true,true,4,4,true,true,false,true,false,false,manual_boundary_review_or_pre_reaction_graph_design_before_training_ready
+KRAS_G12C_6OIM,45,45,0,1,2,42,true,true,true,true,4,6,true,true,false,true,false,false,manual_boundary_review_or_pre_reaction_graph_design_before_training_ready
