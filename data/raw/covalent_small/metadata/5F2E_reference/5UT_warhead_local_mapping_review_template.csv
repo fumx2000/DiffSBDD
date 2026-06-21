@@ -1,0 +1,9 @@
+sample_id,extracted_atom_id,extracted_element,extracted_pdb_atom_name,reference_candidate_atom_id,reference_element,graph_distance_to_reactive_atom,final_role,is_reactive_atom,mapping_confidence,mapping_warning,local_review_reason,manual_reference_atom_id,manual_decision,manual_note
+KRAS_G12C_5F2E,7,C,C11,7,C,5,linker,false,low,,low_confidence_warhead_or_linker,,,
+KRAS_G12C_5F2E,8,C,C14,8,C,1,warhead,false,low,,warhead_atom;within_graph_distance_3;low_confidence_warhead_or_linker,,,
+KRAS_G12C_5F2E,24,C,C16,24,C,4,linker,false,low,,low_confidence_warhead_or_linker,,,
+KRAS_G12C_5F2E,25,N,N3,25,N,3,linker,false,medium,,within_graph_distance_3,,,
+KRAS_G12C_5F2E,26,C,C12,26,C,4,linker,false,low,,low_confidence_warhead_or_linker,,,
+KRAS_G12C_5F2E,27,C,C13,27,C,2,warhead,false,medium,,warhead_atom;within_graph_distance_3,,,
+KRAS_G12C_5F2E,28,O,O1,28,O,3,warhead,false,medium,,warhead_atom;within_graph_distance_3,,,
+KRAS_G12C_5F2E,29,C,C15,29,C,0,warhead,true,high,,reactive_atom;warhead_atom;within_graph_distance_3,,,
