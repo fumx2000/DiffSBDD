@@ -1,0 +1,106 @@
+{
+  "approval_token": "APPROVE_TRAINING_DATASET_DESIGN_STEP_8AT",
+  "dataset_role": "training_dataset_design_schema_only",
+  "design_manifest_path": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_manifest.json",
+  "design_name": "covalent_small_pre_reaction_training_dataset_design_review",
+  "design_report_path": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_report.csv",
+  "design_root": "data/derived/covalent_small/training_dataset_design_review_only",
+  "design_stage": "training_dataset_design_review_only_not_training",
+  "planned_splits": [
+    "smoke_test"
+  ],
+  "planned_training_record_fields": [
+    "sample_id",
+    "source_sample_id",
+    "protein_pdb_path",
+    "ligand_sdf_path",
+    "packaged_metadata_json_path",
+    "reactive_residue_chain",
+    "reactive_residue_number",
+    "reactive_residue_atom",
+    "ligand_reactive_atom_id",
+    "warhead_type",
+    "scaffold_atom_ids",
+    "linker_atom_ids",
+    "warhead_atom_ids",
+    "mask_level",
+    "auxiliary_labels",
+    "split",
+    "graph_ligand_atom_count",
+    "graph_ligand_bond_count",
+    "graph_protein_atom_count",
+    "graph_protein_residue_count",
+    "source_hashes",
+    "safety_flags"
+  ],
+  "recommended_next_action": "build_training_dataset_design_review_qa_not_training",
+  "required_auxiliary_labels": [
+    "ligand_reactive_atom_id",
+    "pre_reaction_geometry_label",
+    "protein_reactive_residue",
+    "warhead_type"
+  ],
+  "required_input_file_roles": [
+    "packaged_protein",
+    "packaged_ligand_sdf",
+    "packaged_metadata_json",
+    "source_protein",
+    "source_ligand_sdf"
+  ],
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "dataloader_tensor_generated": false,
+    "files_copied": false,
+    "model_initialized": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "torch_imported": false,
+    "training_dataset_design_executed": true,
+    "training_ready": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "schema_report_path": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_schema_report.csv",
+  "source_dataset_name": "covalent_small_pre_reaction_review_only",
+  "source_sample_ids": [
+    "BTK_C481_6DI9",
+    "KRAS_G12C_5F2E",
+    "KRAS_G12C_6OIM"
+  ],
+  "split_plan_path": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_split_plan.csv",
+  "split_strategy": "smoke_test_fixed_split_review_only",
+  "supported_mask_levels": [
+    "A_warhead_only",
+    "B2_scaffold_warhead",
+    "B_linker_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "target_dataset_name": "covalent_small_pre_reaction_training_candidate_design",
+  "upstream_artifact_sha256": {
+    "dataset_manifest_json": "b8ac33eaf8245fe014123d8547daef8a0b92e576706e96933399bd73ac90a76f",
+    "index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "raw_manifest_csv": "b3832a12e66ad3e5b13e5fc74ff750a031cbcc6087ad44b3a955fea2d75acdb4",
+    "snapshot_file_list_csv": "d5221015aa6171b7491e597ba884c4c74e4f292a15a2ddee401e8d0e3f550875",
+    "snapshot_manifest_json": "5776404089f848236b92fc878413a00d230178d8f4701d4a8b489bf494083f1d",
+    "snapshot_review_qa_report_csv": "db6080ad995759a7b80854567ec188c76841455356c79909fa367f601c6ce007",
+    "snapshot_review_report_csv": "a806b215a751d0dde57332a997823f9f7a45238f5390bcb19e9b59353f2af5c9",
+    "training_dataset_design_gate_plan_csv": "9ec48163d5ae16490144e2e1033a98f5c660cef37d64ea12e1b769261ce4bd7e",
+    "training_dataset_design_gate_report_csv": "0173df2bb9d3096125054c60121aac8ed25b00bd1073ca50634a2b5252be8f64"
+  },
+  "upstream_artifacts": {
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+    "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "raw_manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "snapshot_file_list_csv": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_file_list.csv",
+    "snapshot_manifest_json": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_manifest.json",
+    "snapshot_review_qa_report_csv": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_qa_report.csv",
+    "snapshot_review_report_csv": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_report.csv",
+    "training_dataset_design_gate_plan_csv": "data/derived/covalent_small/snapshot_review_only/training_dataset_design_gate_plan.csv",
+    "training_dataset_design_gate_report_csv": "data/derived/covalent_small/snapshot_review_only/training_dataset_design_gate_report.csv"
+  }
+}

@@ -1,0 +1,23 @@
+field_name,field_group,required,dtype,source_artifact,validation_rule,used_for_masking,used_for_auxiliary_task,used_for_split,generated_now,training_tensor,notes
+sample_id,identity,true,string,index_csv,nonempty unique sample id,false,false,false,false,false,schema_design_only_not_training
+source_sample_id,identity,true,string,index_csv,matches fixed source mapping,false,false,false,false,false,schema_design_only_not_training
+protein_pdb_path,path,true,string,index_csv,path exists and hash-locked upstream,false,false,false,false,false,schema_design_only_not_training
+ligand_sdf_path,path,true,string,index_csv,path exists and hash-locked upstream,false,false,false,false,false,schema_design_only_not_training
+packaged_metadata_json_path,path,true,string,index_csv,path exists and hash-locked upstream,false,false,false,false,false,schema_design_only_not_training
+reactive_residue_chain,reaction_context,true,string,index_csv,nonempty reactive residue chain,false,true,false,false,false,schema_design_only_not_training
+reactive_residue_number,reaction_context,true,int/string,index_csv,nonempty reactive residue number,false,true,false,false,false,schema_design_only_not_training
+reactive_residue_atom,reaction_context,true,string,index_csv,expected protein reactive atom label,false,true,false,false,false,schema_design_only_not_training
+ligand_reactive_atom_id,auxiliary_label,true,int/string,index_csv,nonempty ligand reactive atom id,false,true,false,false,false,schema_design_only_not_training
+warhead_type,auxiliary_label,true,string,packaged_metadata_json,known warhead type label,false,true,false,false,false,schema_design_only_not_training
+scaffold_atom_ids,masking,true,string,index_csv,space-delimited atom ids,true,false,false,false,false,schema_design_only_not_training
+linker_atom_ids,masking,true,string,index_csv,space-delimited atom ids,true,false,false,false,false,schema_design_only_not_training
+warhead_atom_ids,masking,true,string,index_csv,space-delimited atom ids,true,false,false,false,false,schema_design_only_not_training
+mask_level,masking,true,string,design_schema,one of supported mask levels,true,false,false,false,false,schema_design_only_not_training
+auxiliary_labels,auxiliary_label,true,json/string,design_schema,contains required auxiliary labels,false,true,false,false,false,schema_design_only_not_training
+split,split,true,string,split_plan,review-only smoke_test split,false,false,true,false,false,schema_design_only_not_training
+graph_ligand_atom_count,graph_count,true,int,index_csv,positive integer,false,false,false,false,false,schema_design_only_not_training
+graph_ligand_bond_count,graph_count,true,int,index_csv,positive integer,false,false,false,false,false,schema_design_only_not_training
+graph_protein_atom_count,graph_count,true,int,index_csv,positive integer,false,false,false,false,false,schema_design_only_not_training
+graph_protein_residue_count,graph_count,true,int,index_csv,positive integer,false,false,false,false,false,schema_design_only_not_training
+source_hashes,safety,true,json/string,snapshot_file_list,hashes must match current source files,false,false,false,false,false,schema_design_only_not_training
+safety_flags,safety,true,json/string,design_manifest,must remain not training-ready,false,false,false,false,false,schema_design_only_not_training
