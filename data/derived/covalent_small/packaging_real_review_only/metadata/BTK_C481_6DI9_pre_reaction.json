@@ -1,0 +1,51 @@
+{
+  "covalent_context": {
+    "linker_atom_count": "7",
+    "linker_atoms": "13 14 15 23 24 28 29",
+    "reactive_atom_name": "SG",
+    "reactive_residue_chain": "A",
+    "reactive_residue_id": "481",
+    "reactive_residue_type": "CYS",
+    "scaffold_atom_count": "22",
+    "scaffold_atoms": "0 1 2 3 4 5 6 7 8 9 10 11 12 16 20 21 22 25 26 27 30 31",
+    "warhead_atom_count": "4",
+    "warhead_atoms": "17 18 19 32"
+  },
+  "ligand": {
+    "atom_count": "33",
+    "bond_count": "35",
+    "heavy_atom_count": "33",
+    "ligand_reactive_atom_id": "19",
+    "packaged_path": "data/derived/covalent_small/packaging_real_review_only/ligands_pre_reaction/BTK_C481_6DI9_pre_reaction.sdf",
+    "packaged_relative_path": "ligands_pre_reaction/BTK_C481_6DI9_pre_reaction.sdf",
+    "sha256": "004ec8e1ccb4552156762180137f092ae745179a2ae7b9ea06ff5632e62eb126",
+    "source_path": "data/derived/covalent_small/ligands_pre_reaction/BTK_C481_6DI9_pre_reaction.sdf"
+  },
+  "pre_reaction_sample_id": "BTK_C481_6DI9_pre_reaction",
+  "protein": {
+    "atom_count": "2306",
+    "packaged_path": "data/derived/covalent_small/packaging_real_review_only/proteins/BTK_C481_6DI9.pdb",
+    "packaged_relative_path": "proteins/BTK_C481_6DI9.pdb",
+    "residue_count": "473",
+    "sha256": "d62004ac38434a0cc5846862e03169a132c095e475603e4725058ea04328cf5d",
+    "source_path": "data/raw/covalent_small/proteins/BTK_C481_6DI9.pdb"
+  },
+  "provenance": {
+    "approval_token": "APPROVE_REAL_PACKAGING_EXECUTION_STEP_8AG",
+    "execution_gate_plan_csv": "data/derived/covalent_small/pre_reaction_graph/real_packaging_execution_gate_plan.csv",
+    "execution_gate_report_csv": "data/derived/covalent_small/pre_reaction_graph/real_packaging_execution_gate_report.csv",
+    "packaging_stage": "real_packaging_execution_step_8ag",
+    "source_manifest": "data/raw/covalent_small/manifests/manifest_real_small.csv"
+  },
+  "safety_flags": {
+    "manifest_modified": false,
+    "package_archive_created": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "source_pdb_modified": false,
+    "source_sdf_modified": false,
+    "training_ready": false
+  },
+  "sample_id": "BTK_C481_6DI9_pre_reaction",
+  "source_sample_id": "BTK_C481_6DI9"
+}
