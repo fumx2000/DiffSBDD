@@ -1,0 +1,83 @@
+{
+  "approvals": {
+    "approval_stage": "actual_dataset_index_build_step_8ak",
+    "approval_token": "APPROVE_ACTUAL_DATASET_INDEX_BUILD_STEP_8AK"
+  },
+  "dataset_name": "covalent_small_pre_reaction_review_only",
+  "dataset_role": "smoke_test_pre_reaction_packaged_artifact",
+  "index_csv_path": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+  "index_stage": "actual_dataset_index_build_review_only_not_training",
+  "input_files": {
+    "dataset_index_build_gate_plan_csv": "data/derived/covalent_small/pre_reaction_graph/dataset_index_build_gate_plan.csv",
+    "dataset_index_build_gate_report_csv": "data/derived/covalent_small/pre_reaction_graph/dataset_index_build_gate_report.csv",
+    "dataset_index_design_plan_csv": "data/derived/covalent_small/pre_reaction_graph/dataset_index_design_review_plan.csv",
+    "dataset_index_design_report_csv": "data/derived/covalent_small/pre_reaction_graph/dataset_index_design_review_report.csv",
+    "manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "packaging_qa_report_csv": "data/derived/covalent_small/pre_reaction_graph/real_packaging_execution_qa_report.csv"
+  },
+  "output_files": {
+    "dataset_index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json"
+  },
+  "package_root": "data/derived/covalent_small/packaging_real_review_only",
+  "packaged_file_counts": {
+    "ligand_sdf_count": 3,
+    "metadata_json_count": 3,
+    "protein_pdb_count": 3
+  },
+  "required_auxiliary_labels": [
+    "warhead_type",
+    "ligand_reactive_atom_id",
+    "protein_reactive_residue",
+    "pre_reaction_geometry_label"
+  ],
+  "required_mask_levels": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "row_count": 3,
+  "safety_flags": {
+    "files_copied": false,
+    "package_archive_created": false,
+    "packaged_pdb_sdf_json_modified": false,
+    "pre_reaction_transform_ready": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "source_manifest_modified": false,
+    "source_pdb_modified": false,
+    "source_sdf_modified": false,
+    "training_ready": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "schema_version": "dataset_index_v0_review_only",
+  "sha256": {
+    "dataset_index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "packaged_ligands": {
+      "BTK_C481_6DI9_pre_reaction": "004ec8e1ccb4552156762180137f092ae745179a2ae7b9ea06ff5632e62eb126",
+      "KRAS_G12C_5F2E_pre_reaction": "4015047b42b77f1f8e785c10eb073fb01d60198245d5e76b1db7db73781eeb9b",
+      "KRAS_G12C_6OIM_pre_reaction": "09e366d2e8d7b761b23c0e0f8efb86173f9b5815bc84e53d29c8d465c445dfe1"
+    },
+    "packaged_metadata": {
+      "BTK_C481_6DI9_pre_reaction": "d3dc20da98e2dcd1b917f9d5d01b360f9793240387777c5eb1542bf153e55b1a",
+      "KRAS_G12C_5F2E_pre_reaction": "54ad52bc53be906507c135d5534076eb1014078e17dd506d2027b29f8a787fd5",
+      "KRAS_G12C_6OIM_pre_reaction": "c6fcbafe9c744629af10366066858b628031a1e0f7bd0bab57dfa6d9f239a49a"
+    },
+    "packaged_proteins": {
+      "BTK_C481_6DI9_pre_reaction": "d62004ac38434a0cc5846862e03169a132c095e475603e4725058ea04328cf5d",
+      "KRAS_G12C_5F2E_pre_reaction": "ddfa80d8ca2ae558ce6633702d417ed0ba61514ac2f8506fecf6061311412f78",
+      "KRAS_G12C_6OIM_pre_reaction": "42deda943440cc8dd3020a2c65ddc260970936d675b47c8b43564195b77d5006"
+    }
+  },
+  "source_sample_ids": [
+    "BTK_C481_6DI9",
+    "KRAS_G12C_5F2E",
+    "KRAS_G12C_6OIM"
+  ],
+  "split": "smoke_test"
+}
