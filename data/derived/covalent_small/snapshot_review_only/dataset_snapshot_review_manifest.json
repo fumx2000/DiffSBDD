@@ -1,0 +1,72 @@
+{
+  "approval_token": "APPROVE_DATASET_SNAPSHOT_REVIEW_STEP_8AQ",
+  "candidate_count": 3,
+  "dataset_name": "covalent_small_pre_reaction_review_only",
+  "dataset_role": "smoke_test_pre_reaction_packaged_artifact",
+  "expected_candidate_file_roles": [
+    "packaged_protein",
+    "packaged_ligand_sdf",
+    "packaged_metadata_json",
+    "source_protein",
+    "source_ligand_sdf"
+  ],
+  "packaged_file_counts": {
+    "ligand_sdf_count": 3,
+    "metadata_json_count": 3,
+    "protein_pdb_count": 3
+  },
+  "recommended_next_action": "build_dataset_snapshot_review_qa_not_training",
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "dataloader_tensor_generated": false,
+    "files_copied": false,
+    "model_initialized": false,
+    "pre_reaction_transform_ready": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "snapshot_review_executed": true,
+    "torch_imported": false,
+    "training_ready": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "schema_version": "dataset_index_v0_review_only",
+  "snapshot_file_list_path": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_file_list.csv",
+  "snapshot_file_list_row_count": 23,
+  "snapshot_manifest_path": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_manifest.json",
+  "snapshot_name": "covalent_small_pre_reaction_review_only_snapshot_review",
+  "snapshot_report_path": "data/derived/covalent_small/snapshot_review_only/dataset_snapshot_review_report.csv",
+  "snapshot_root": "data/derived/covalent_small/snapshot_review_only",
+  "snapshot_stage": "dataset_snapshot_review_only_not_training",
+  "source_sample_ids": [
+    "BTK_C481_6DI9",
+    "KRAS_G12C_5F2E",
+    "KRAS_G12C_6OIM"
+  ],
+  "split": "smoke_test",
+  "upstream_artifact_sha256": {
+    "actual_dataset_index_qa_report_csv": "0db38ca2e800aee48ecac147bde13417b85d2a7b352401d6f736f154e935279a",
+    "dataset_manifest_json": "b8ac33eaf8245fe014123d8547daef8a0b92e576706e96933399bd73ac90a76f",
+    "index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "loader_dry_run_qa_report_csv": "b4066591e88709623a91548887f1d43fac26bd85a769611692eebe3bf1b9b718",
+    "loader_dry_run_report_csv": "48dffeeed592b155cbaa006cbd79827b973af13e1ffc654835d2e9391817c33a",
+    "raw_manifest_csv": "b3832a12e66ad3e5b13e5fc74ff750a031cbcc6087ad44b3a955fea2d75acdb4",
+    "snapshot_review_gate_plan_csv": "0c4dd8356ee320e655bf7f7d6d3d8e7cc8ea827eb13fa955ac89af346cb1d8b8",
+    "snapshot_review_gate_report_csv": "cb0499e6471216fda9f319124ffc45b80c59d40511488a8803424b0855589bc3"
+  },
+  "upstream_artifacts": {
+    "actual_dataset_index_qa_report_csv": "data/derived/covalent_small/pre_reaction_graph/actual_dataset_index_qa_report.csv",
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+    "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "loader_dry_run_qa_report_csv": "data/derived/covalent_small/loader_dry_run_review_only/read_only_dataset_loader_dry_run_qa_report.csv",
+    "loader_dry_run_report_csv": "data/derived/covalent_small/loader_dry_run_review_only/read_only_dataset_loader_dry_run_report.csv",
+    "raw_manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "snapshot_review_gate_plan_csv": "data/derived/covalent_small/loader_dry_run_review_only/dataset_snapshot_review_gate_plan.csv",
+    "snapshot_review_gate_report_csv": "data/derived/covalent_small/loader_dry_run_review_only/dataset_snapshot_review_gate_report.csv"
+  }
+}
