@@ -1,0 +1,61 @@
+{
+  "approval_token": "APPROVE_TRAINING_TENSOR_DESIGN_REVIEW_STEP_8BF",
+  "archive_created": false,
+  "copied_file_count": 0,
+  "dataloader_tensor_generated": false,
+  "dataset_name": "covalent_small_pre_reaction_real_training_dataset_candidate",
+  "design_name": "training_tensor_design_review",
+  "design_root": "data/derived/covalent_small/training_tensor_design_review_only",
+  "design_stage": "training_tensor_design_review_only_not_training",
+  "loader_mode": "read_only_record_construction_no_dataloader",
+  "package_mode": "reference_only_no_data_file_copy",
+  "plan_row_count": 3,
+  "recommended_next_action": "build_training_tensor_design_review_qa_not_training",
+  "report_row_count": 3,
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "dataloader_tensor_generated": false,
+    "files_copied": false,
+    "model_initialized": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "tensor_files_generated": false,
+    "tensor_schema_generated": true,
+    "torch_imported": false,
+    "training_ready": false,
+    "training_tensor_design_executed": true
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "schema_field_count": 47,
+  "source_dry_run_root": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only",
+  "tensor_design_mode": "schema_and_plan_only_no_tensor_files",
+  "tensor_file_count": 0,
+  "tensor_files_generated": false,
+  "tensor_schema_generated": true,
+  "upstream_artifact_sha256": {
+    "dataset_manifest_json": "b8ac33eaf8245fe014123d8547daef8a0b92e576706e96933399bd73ac90a76f",
+    "dry_run_manifest_json": "6f8a5bf038d5281b1de9ed9ee767b1675a0aca227fa96ec9afa9913683e57d37",
+    "dry_run_report_csv": "97b20ea37ce2c0464509b0527376e90eef4f54e520c44c2abf81ba75f11dac7b",
+    "index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "raw_manifest_csv": "b3832a12e66ad3e5b13e5fc74ff750a031cbcc6087ad44b3a955fea2d75acdb4",
+    "read_only_loader_dry_run_qa_report_csv": "cae25f465adf44d24e48c8294d33443262b43ba5140047b71d6464f2b40cb653",
+    "training_tensor_design_gate_plan_csv": "b06f276a013cc48347c7cc7c6f2e52b759d93396518548643025b7dec721ba84",
+    "training_tensor_design_gate_report_csv": "931c2a79ee0ef14bf6ec73c9051707dc96c8124020be274ee8afe4e792db47cd"
+  },
+  "upstream_artifacts": {
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+    "dry_run_manifest_json": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only/read_only_training_dataset_loader_dry_run_manifest.json",
+    "dry_run_report_csv": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only/read_only_training_dataset_loader_dry_run_report.csv",
+    "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "raw_manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "read_only_loader_dry_run_qa_report_csv": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only/read_only_training_dataset_loader_dry_run_qa_report.csv",
+    "training_tensor_design_gate_plan_csv": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only/training_tensor_design_gate_plan.csv",
+    "training_tensor_design_gate_report_csv": "data/derived/covalent_small/read_only_training_dataset_loader_dry_run_review_only/training_tensor_design_gate_report.csv"
+  }
+}

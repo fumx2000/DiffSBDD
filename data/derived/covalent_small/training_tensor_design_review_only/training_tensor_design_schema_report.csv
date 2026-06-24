@@ -1,0 +1,48 @@
+field_name,field_group,planned_dtype,planned_shape,source_artifact,required,generated_in_this_step,tensor_generated,notes
+sample_id,identity,string_metadata,scalar_string,dry_run_record,true,false,false,candidate identifier
+source_sample_id,identity,string_metadata,scalar_string,dry_run_record,true,false,false,source sample identifier
+split,identity,string_metadata,scalar_string,dry_run_record,true,false,false,review split label
+package_mode,identity,string_metadata,scalar_string,dry_run_record,true,false,false,reference-only package mode
+packaged_protein_path,path_hash,string_metadata,scalar_string,dry_run_record,true,false,false,packaged protein path
+packaged_ligand_sdf_path,path_hash,string_metadata,scalar_string,dry_run_record,true,false,false,packaged ligand path
+packaged_metadata_json_path,path_hash,string_metadata,scalar_string,dry_run_record,true,false,false,packaged metadata path
+source_protein_path,path_hash,string_metadata,scalar_string,dry_run_record,true,false,false,source protein path
+source_ligand_sdf_path,path_hash,string_metadata,scalar_string,dry_run_record,true,false,false,source ligand path
+packaged_protein_sha256,path_hash,string_metadata,sha256_hex_string,dry_run_record,true,false,false,packaged protein hash
+packaged_ligand_sdf_sha256,path_hash,string_metadata,sha256_hex_string,dry_run_record,true,false,false,packaged ligand hash
+packaged_metadata_json_sha256,path_hash,string_metadata,sha256_hex_string,dry_run_record,true,false,false,packaged metadata hash
+source_protein_sha256,path_hash,string_metadata,sha256_hex_string,dry_run_record,true,false,false,source protein hash
+source_ligand_sdf_sha256,path_hash,string_metadata,sha256_hex_string,dry_run_record,true,false,false,source ligand hash
+protein_atom_features,protein_graph,float32_future_tensor,num_protein_atoms_by_feature_count,future_featurizer,true,false,false,future protein atom features
+protein_atom_coords,protein_graph,float32_future_tensor,num_protein_atoms_by_3,packaged_protein,true,false,false,future protein coordinates
+protein_atom_mask,protein_graph,bool_future_tensor,num_protein_atoms,future_featurizer,true,false,false,future protein atom mask
+protein_residue_ids,protein_graph,int64_future_tensor,num_protein_atoms,packaged_protein,true,false,false,future residue ids
+protein_chain_ids,protein_graph,string_metadata,num_protein_atoms,packaged_protein,true,false,false,future chain ids
+protein_reactive_residue_index,protein_graph,int64_future_tensor,scalar,index_csv,true,false,false,future reactive residue index
+protein_reactive_atom_index,protein_graph,int64_future_tensor,scalar,index_csv,true,false,false,future reactive atom index
+pocket_center,protein_graph,float32_future_tensor,3,future_geometry,true,false,false,future pocket center
+pocket_radius,protein_graph,float32_future_tensor,scalar,future_geometry,true,false,false,future pocket radius
+ligand_atom_features,ligand_graph,float32_future_tensor,num_ligand_atoms_by_feature_count,packaged_ligand,true,false,false,future ligand atom features
+ligand_atom_coords,ligand_graph,float32_future_tensor,num_ligand_atoms_by_3,packaged_ligand,true,false,false,future ligand coordinates
+ligand_bond_index,ligand_graph,int64_future_tensor,2_by_num_ligand_bonds,packaged_ligand,true,false,false,future ligand bond index
+ligand_bond_type,ligand_graph,int64_future_tensor,num_ligand_bonds,packaged_ligand,true,false,false,future ligand bond type
+ligand_atom_mask,ligand_graph,bool_future_tensor,num_ligand_atoms,future_featurizer,true,false,false,future ligand atom mask
+ligand_reactive_atom_index,ligand_graph,int64_future_tensor,scalar,index_csv,true,false,false,future ligand reactive atom index
+scaffold_atom_mask,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future scaffold mask
+linker_atom_mask,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future linker mask
+warhead_atom_mask,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future warhead mask
+generation_mask_A_warhead_only,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future A mask
+generation_mask_B_linker_warhead,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future B mask
+generation_mask_B2_scaffold_warhead,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future B2 mask
+generation_mask_C_scaffold_linker_warhead,masking,bool_future_tensor,num_ligand_atoms,index_csv,true,false,false,future C mask
+warhead_type_label,auxiliary_label,string_metadata,scalar_string,packaged_metadata,true,false,false,future warhead label
+ligand_reactive_atom_label,auxiliary_label,int64_future_tensor,scalar,index_csv,true,false,false,future ligand reactive label
+protein_reactive_residue_label,auxiliary_label,string_metadata,scalar_string,index_csv,true,false,false,future protein reactive label
+pre_reaction_geometry_label,auxiliary_label,float32_future_tensor,geometry_descriptor,future_geometry,true,false,false,future geometry label
+source_files_exist,safety_quality,bool_metadata,scalar_bool,dry_run_record,true,false,false,source file existence flag
+source_hashes_revalidated,safety_quality,bool_metadata,scalar_bool,dry_run_record,true,false,false,source hash validation flag
+reference_only_flags_valid,safety_quality,bool_metadata,scalar_bool,dry_run_record,true,false,false,reference-only flag
+tensor_schema_only,safety_quality,bool_metadata,scalar_bool,design_manifest,true,false,false,schema-only design flag
+tensor_generated,safety_quality,bool_metadata,scalar_bool,design_manifest,true,false,false,must remain false
+dataloader_built,safety_quality,bool_metadata,scalar_bool,design_manifest,true,false,false,must remain false
+training_ready,safety_quality,bool_metadata,scalar_bool,design_manifest,true,false,false,must remain false
