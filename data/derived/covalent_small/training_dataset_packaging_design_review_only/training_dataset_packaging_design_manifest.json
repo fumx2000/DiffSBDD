@@ -1,0 +1,104 @@
+{
+  "approval_token": "APPROVE_TRAINING_DATASET_PACKAGING_DESIGN_STEP_8AW",
+  "dataset_role": "training_dataset_packaging_design_schema_only",
+  "packaging_design_manifest_path": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_design_manifest.json",
+  "packaging_design_name": "covalent_small_pre_reaction_training_dataset_packaging_design_review",
+  "packaging_design_report_path": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_design_report.csv",
+  "packaging_design_root": "data/derived/covalent_small/training_dataset_packaging_design_review_only",
+  "packaging_design_stage": "training_dataset_packaging_design_review_only_not_training",
+  "packaging_file_plan_path": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_file_plan.csv",
+  "packaging_schema_report_path": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_schema_report.csv",
+  "planned_packaging_file_roles": [
+    "packaged_protein",
+    "packaged_ligand_sdf",
+    "packaged_metadata_json",
+    "source_protein",
+    "source_ligand_sdf",
+    "design_manifest",
+    "design_schema_report",
+    "design_split_plan",
+    "design_report",
+    "design_review_qa_report"
+  ],
+  "planned_packaging_record_fields": [
+    "sample_id",
+    "source_sample_id",
+    "split",
+    "package_role",
+    "source_file_role",
+    "source_file_path",
+    "source_file_sha256",
+    "source_file_size_bytes",
+    "copied_to_training_package",
+    "embedded_in_training_manifest",
+    "archive_member",
+    "training_tensor",
+    "generated_now",
+    "safety_flags"
+  ],
+  "planned_splits": [
+    "smoke_test"
+  ],
+  "recommended_next_action": "build_training_dataset_packaging_design_review_qa_not_training",
+  "required_auxiliary_labels": [
+    "ligand_reactive_atom_id",
+    "pre_reaction_geometry_label",
+    "protein_reactive_residue",
+    "warhead_type"
+  ],
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "dataloader_tensor_generated": false,
+    "files_copied": false,
+    "model_initialized": false,
+    "real_dataset_generated": false,
+    "real_training_tensor_generated": false,
+    "torch_imported": false,
+    "training_dataset_packaging_design_executed": true,
+    "training_ready": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "source_dataset_name": "covalent_small_pre_reaction_review_only",
+  "source_sample_ids": [
+    "BTK_C481_6DI9",
+    "KRAS_G12C_5F2E",
+    "KRAS_G12C_6OIM"
+  ],
+  "supported_mask_levels": [
+    "A_warhead_only",
+    "B2_scaffold_warhead",
+    "B_linker_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "target_packaging_name": "covalent_small_pre_reaction_training_packaging_candidate_design",
+  "upstream_artifact_sha256": {
+    "dataset_manifest_json": "b8ac33eaf8245fe014123d8547daef8a0b92e576706e96933399bd73ac90a76f",
+    "design_manifest_json": "30f2516a7be0ed33ef7c1ae954448624de8b9f1c104019ad13cf6cae8147d034",
+    "design_report_csv": "55d570dab4b10e590a186bbc0c64cf2fab7ac988eb84735b1f0a80dc489cf664",
+    "index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "raw_manifest_csv": "b3832a12e66ad3e5b13e5fc74ff750a031cbcc6087ad44b3a955fea2d75acdb4",
+    "schema_report_csv": "2077292dff3b66339e7cf3b9d2918e6378544bbb7b3926c8a1e0b03745895cbc",
+    "split_plan_csv": "34dda452b519be9d1b0bbc1f5bd7e3c98fa6a5b17a3e88ff9a56db30a5563853",
+    "training_dataset_design_review_qa_report_csv": "b98256bccc7188e8caa48ffb6e4fb3780db961faf7a6a3d9cfa0cdb986eb3677",
+    "training_dataset_packaging_design_gate_plan_csv": "048e0a843ee6849a78b877e80dac7458b68f79b3b532941e0abed392f696a7e5",
+    "training_dataset_packaging_design_gate_report_csv": "82c76eedd8cad4dd825c1ff81374e191d4b9399af9dde7baa8bf80b30500125e"
+  },
+  "upstream_artifacts": {
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+    "design_manifest_json": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_manifest.json",
+    "design_report_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_report.csv",
+    "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "raw_manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "schema_report_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_schema_report.csv",
+    "split_plan_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_split_plan.csv",
+    "training_dataset_design_review_qa_report_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_design_review_qa_report.csv",
+    "training_dataset_packaging_design_gate_plan_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_packaging_design_gate_plan.csv",
+    "training_dataset_packaging_design_gate_report_csv": "data/derived/covalent_small/training_dataset_design_review_only/training_dataset_packaging_design_gate_report.csv"
+  }
+}
