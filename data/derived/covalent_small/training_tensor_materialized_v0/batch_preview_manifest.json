@@ -1,0 +1,39 @@
+{
+  "archive_created": false,
+  "batch_count_checked": 1,
+  "batch_size": 3,
+  "checkpoint_loaded": false,
+  "dataloader_created": true,
+  "dataset_created": true,
+  "dataset_len": 3,
+  "dataset_name": "covalent_small_pre_reaction_training_tensor_materialized_v0",
+  "ligand_atom_coords_shape": [
+    3,
+    41,
+    3
+  ],
+  "ligand_atom_mask_shape": [
+    3,
+    41
+  ],
+  "ligand_padded_length": 41,
+  "model_initialized": false,
+  "protein_atom_coords_shape": [
+    3,
+    2306,
+    3
+  ],
+  "protein_atom_mask_shape": [
+    3,
+    2306
+  ],
+  "protein_padded_length": 2306,
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "sanity_passed": true,
+  "stage": "torch_dataset_dataloader_batch_sanity_v0",
+  "training_executed": false
+}
