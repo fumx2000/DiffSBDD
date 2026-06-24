@@ -1,0 +1,13 @@
+sample_id,mask_level,ligand_atom_count,protein_atom_count,generation_mask_count,fixed_ligand_atom_count,reactive_atom_in_ligand_mask,reactive_atom_in_generation_mask,generation_mask_subset_ligand_mask,fixed_mask_subset_ligand_mask,generation_fixed_no_overlap,context_mask_equals_fixed_mask,target_mask_equals_generation_mask,coordinate_center_finite,centered_ligand_coords_finite,centered_protein_coords_finite,no_nan,no_inf,checkpoint_loaded,model_initialized,training_executed,adapter_sanity_status,blocking_reasons
+BTK_C481_6DI9_pre_reaction,A_warhead_only,33,2306,4,29,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,A_warhead_only,30,1723,4,26,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,A_warhead_only,41,1613,4,37,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,B_linker_warhead,33,2306,11,22,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,B_linker_warhead,30,1723,8,22,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,B_linker_warhead,41,1613,11,30,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,B2_scaffold_warhead,33,2306,26,7,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,B2_scaffold_warhead,30,1723,26,4,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,B2_scaffold_warhead,41,1613,34,7,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,C_scaffold_linker_warhead,33,2306,33,0,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,C_scaffold_linker_warhead,30,1723,30,0,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,C_scaffold_linker_warhead,41,1613,41,0,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,passed,
