@@ -1,0 +1,79 @@
+{
+  "approval_token": "APPROVE_REAL_TRAINING_DATASET_PACKAGING_STEP_8AZ",
+  "archive_created": false,
+  "copied_file_count": 0,
+  "dataset_name": "covalent_small_pre_reaction_real_training_dataset_candidate",
+  "dataset_stage": "real_training_dataset_packaging_reference_only_not_training",
+  "file_index_path": "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_file_index.csv",
+  "file_index_row_count": 15,
+  "package_mode": "reference_only_no_data_file_copy",
+  "package_root": "data/derived/covalent_small/real_training_dataset_package_review_only",
+  "packaging_report_path": "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_packaging_report.csv",
+  "recommended_next_action": "build_real_training_dataset_packaging_qa_not_training",
+  "required_auxiliary_labels": [
+    "ligand_reactive_atom_id",
+    "pre_reaction_geometry_label",
+    "protein_reactive_residue",
+    "warhead_type"
+  ],
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "dataloader_tensor_generated": false,
+    "files_copied": false,
+    "model_initialized": false,
+    "real_dataset_generated": false,
+    "real_training_dataset_packaging_executed": true,
+    "real_training_tensor_generated": false,
+    "torch_imported": false,
+    "training_ready": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "sample_index_path": "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_sample_index.csv",
+  "sample_index_row_count": 3,
+  "source_dataset_name": "covalent_small_pre_reaction_review_only",
+  "source_sample_ids": [
+    "BTK_C481_6DI9",
+    "KRAS_G12C_5F2E",
+    "KRAS_G12C_6OIM"
+  ],
+  "split_names": [
+    "smoke_test"
+  ],
+  "supported_mask_levels": [
+    "A_warhead_only",
+    "B2_scaffold_warhead",
+    "B_linker_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "training_tensor_file_count": 0,
+  "upstream_artifact_sha256": {
+    "dataset_manifest_json": "b8ac33eaf8245fe014123d8547daef8a0b92e576706e96933399bd73ac90a76f",
+    "index_csv": "68a66613c1eada27d51ca4eb62bc2bd2aa797ebc53cadb8a25919267f0f01010",
+    "packaging_design_manifest_json": "d7253a9fbe7fef8d730e118dcc32fc750fbbca5a01e60d956e61fdff45ead360",
+    "packaging_design_report_csv": "20056df514050ba75a52409d03a44e6119844b6cbabb0562ece3791504fb755f",
+    "packaging_design_review_qa_report_csv": "cb69c8bfde62a9b65e7942609c9a0f91a81111d804114ff163fdfb08a2503cac",
+    "packaging_file_plan_csv": "75ea6eac561c7910e74ade84c2bc80705ddf3c43809d34fbe46dd87d9c1f053b",
+    "packaging_schema_report_csv": "6bc91887fec2d926aa77d8e006b6397ec70671d8a6fa427d03ed211da5eeb6c9",
+    "raw_manifest_csv": "b3832a12e66ad3e5b13e5fc74ff750a031cbcc6087ad44b3a955fea2d75acdb4",
+    "real_training_dataset_packaging_gate_plan_csv": "43444d504b715effe9237ca89f28de92e743d0700af5e1e8bcfe59de00634f8d",
+    "real_training_dataset_packaging_gate_report_csv": "85221d515ae219c94987443ffcd52efffcba736741db949071f52d15ae9597d4"
+  },
+  "upstream_artifacts": {
+    "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+    "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+    "packaging_design_manifest_json": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_design_manifest.json",
+    "packaging_design_report_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_design_report.csv",
+    "packaging_design_review_qa_report_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_design_review_qa_report.csv",
+    "packaging_file_plan_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_file_plan.csv",
+    "packaging_schema_report_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/training_dataset_packaging_schema_report.csv",
+    "raw_manifest_csv": "data/raw/covalent_small/manifests/manifest_real_small.csv",
+    "real_training_dataset_packaging_gate_plan_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/real_training_dataset_packaging_gate_plan.csv",
+    "real_training_dataset_packaging_gate_report_csv": "data/derived/covalent_small/training_dataset_packaging_design_review_only/real_training_dataset_packaging_gate_report.csv"
+  }
+}
