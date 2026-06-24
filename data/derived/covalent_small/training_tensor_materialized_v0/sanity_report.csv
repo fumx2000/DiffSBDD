@@ -1,0 +1,4 @@
+sample_id,npz_exists,npz_loadable,all_coords_finite,ligand_atom_count_matches_index,bond_index_shape_valid,mask_lengths_match_ligand_atom_count,scaffold_linker_warhead_masks_cover_expected_atoms,generation_masks_valid,ligand_reactive_atom_index_in_range,ligand_reactive_atom_index_in_warhead_mask,protein_coords_nonempty,no_nan,no_inf,sanity_status,blocking_reasons
+BTK_C481_6DI9_pre_reaction,true,true,true,true,true,true,true,true,true,true,true,true,true,passed,
+KRAS_G12C_5F2E_pre_reaction,true,true,true,true,true,true,true,true,true,true,true,true,true,passed,
+KRAS_G12C_6OIM_pre_reaction,true,true,true,true,true,true,true,true,true,true,true,true,true,passed,

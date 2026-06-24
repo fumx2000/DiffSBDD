@@ -1,0 +1,29 @@
+{
+  "dataset_manifest_json": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_manifest.json",
+  "dataset_name": "covalent_small_pre_reaction_training_tensor_materialized_v0",
+  "index_csv": "data/derived/covalent_small/dataset_index_review_only/covalent_small_pre_reaction_review_only_index.csv",
+  "input_materialization_file_plan_csv": "data/derived/covalent_small/training_tensor_materialization_review_only/training_tensor_materialization_file_plan.csv",
+  "input_materialization_plan_csv": "data/derived/covalent_small/training_tensor_materialization_review_only/training_tensor_materialization_plan.csv",
+  "input_materialization_review_manifest_json": "data/derived/covalent_small/training_tensor_materialization_review_only/training_tensor_materialization_manifest.json",
+  "materialization_report_row_count": 3,
+  "materialization_stage": "actual_minimal_tensor_like_materialization_v0_not_training",
+  "npz_count": 3,
+  "output_root": "data/derived/covalent_small/training_tensor_materialized_v0",
+  "row_count": 3,
+  "safety_flags": {
+    "archive_created": false,
+    "checkpoint_loaded": false,
+    "data_loader_created": false,
+    "model_initialized": false,
+    "pt_generated": false,
+    "torch_imported": false,
+    "training_executed": false
+  },
+  "sample_ids": [
+    "BTK_C481_6DI9_pre_reaction",
+    "KRAS_G12C_5F2E_pre_reaction",
+    "KRAS_G12C_6OIM_pre_reaction"
+  ],
+  "sample_index_row_count": 3,
+  "sanity_report_row_count": 3
+}
