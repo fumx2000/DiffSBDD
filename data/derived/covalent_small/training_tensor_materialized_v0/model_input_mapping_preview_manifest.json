@@ -1,0 +1,38 @@
+{
+  "all_mask_levels_passed": true,
+  "archive_created": false,
+  "batch_size": 3,
+  "checkpoint_loaded": false,
+  "coordinate_center_shape": [
+    3,
+    3
+  ],
+  "dataset_len": 3,
+  "dataset_name": "covalent_small_pre_reaction_training_tensor_materialized_v0",
+  "ligand_context_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "ligand_target_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "ligand_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "mask_levels_checked": 4,
+  "mock_loss_all_finite": true,
+  "model_initialized": false,
+  "protein_x_shape": [
+    3,
+    2306,
+    3
+  ],
+  "report_row_count": 12,
+  "stage": "covalent_model_input_mapping_mock_loss_v0",
+  "training_executed": false
+}

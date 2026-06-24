@@ -1,0 +1,13 @@
+sample_id,mask_level,protein_x_shape,ligand_x_shape,ligand_context_x_shape,ligand_target_x_shape,target_atom_count,reactive_atom_in_target_mask,context_target_no_overlap,model_input_shapes_valid,centered_coords_finite,mock_loss_computed,mock_loss_finite,checkpoint_loaded,model_initialized,training_executed,model_input_mapping_status,blocking_reasons
+BTK_C481_6DI9_pre_reaction,A_warhead_only,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",4,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,A_warhead_only,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",4,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,A_warhead_only,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",4,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,B_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",11,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,B_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",8,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,B_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",11,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,B2_scaffold_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",26,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,B2_scaffold_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",26,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,B2_scaffold_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",34,true,true,true,true,true,true,false,false,false,passed,
+BTK_C481_6DI9_pre_reaction,C_scaffold_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",33,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_5F2E_pre_reaction,C_scaffold_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",30,true,true,true,true,true,true,false,false,false,passed,
+KRAS_G12C_6OIM_pre_reaction,C_scaffold_linker_warhead,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]",41,true,true,true,true,true,true,false,false,false,passed,
