@@ -1,0 +1,82 @@
+{
+  "all_backward_success": true,
+  "all_checks_passed": true,
+  "all_expected_context_counts": true,
+  "all_expected_target_counts": true,
+  "all_grad_inf_count_zero": true,
+  "all_grad_nan_count_zero": true,
+  "all_gradients_finite": true,
+  "all_gradients_nonzero": true,
+  "all_mask_levels_passed": true,
+  "all_safety_flags_false_except_backward_called": true,
+  "all_sources_unmodified": true,
+  "archive_created": false,
+  "backward_called": true,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "checkpoint_written": false,
+  "context_atom_count_by_mask_level": {
+    "A_warhead_only": 92,
+    "B2_scaffold_warhead": 18,
+    "B_linker_warhead": 74,
+    "C_scaffold_linker_warhead": 0
+  },
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "loss_total_dry_by_mask_level": {
+    "A_warhead_only": 6.584610939025879,
+    "B2_scaffold_warhead": 6.321281433105469,
+    "B_linker_warhead": 6.209671974182129,
+    "C_scaffold_linker_warhead": 6.252922058105469
+  },
+  "mask_levels": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_levels_checked": 4,
+  "max_grad_abs_by_mask_level": {
+    "A_warhead_only": 3.3658764362335205,
+    "B2_scaffold_warhead": 3.162646770477295,
+    "B_linker_warhead": 3.5268123149871826,
+    "C_scaffold_linker_warhead": 3.310892105102539
+  },
+  "optimizer_step_executed": false,
+  "original_source_files_modified": false,
+  "parameters_with_grad_by_mask_level": {
+    "A_warhead_only": 130,
+    "B2_scaffold_warhead": 130,
+    "B_linker_warhead": 130,
+    "C_scaffold_linker_warhead": 130
+  },
+  "previous_stage": "masked_loss_dry_run_without_backward_v0",
+  "real_finetune_executed": false,
+  "recommended_next_step": "masked_loss_optimizer_smoke_one_step_no_checkpoint",
+  "requested_device": "auto",
+  "resolved_device": "cuda:0",
+  "stage": "masked_loss_backward_smoke_without_optimizer_v0",
+  "step10m_masked_loss_dry_run_passed": true,
+  "target_atom_count_by_mask_level": {
+    "A_warhead_only": 12,
+    "B2_scaffold_warhead": 86,
+    "B_linker_warhead": 30,
+    "C_scaffold_linker_warhead": 104
+  },
+  "total_grad_norm_by_mask_level": {
+    "A_warhead_only": 28.027170408204803,
+    "B2_scaffold_warhead": 26.914096818239923,
+    "B_linker_warhead": 27.71733934150819,
+    "C_scaffold_linker_warhead": 27.99770212419442
+  },
+  "trainable_parameters_with_grad_by_mask_level": {
+    "A_warhead_only": 130,
+    "B2_scaffold_warhead": 130,
+    "B_linker_warhead": 130,
+    "C_scaffold_linker_warhead": 130
+  },
+  "trainer_fit_called": false,
+  "training_executed": false,
+  "training_step_called": false
+}
