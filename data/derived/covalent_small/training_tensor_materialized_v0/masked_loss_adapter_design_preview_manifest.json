@@ -1,0 +1,85 @@
+{
+  "adapter_input_contract": [
+    "model output raw loss-like tensor",
+    "optional raw atomwise predicted noise / target noise if exposed later",
+    "ligand_target_mask_flat",
+    "ligand_context_mask_flat",
+    "generation_mask_flat",
+    "ligand_mask_flat",
+    "sample_id",
+    "mask_level",
+    "ligand_reactive_atom_index",
+    "residue reactive atom info",
+    "warhead_type_label",
+    "optional geometry labels"
+  ],
+  "adapter_output_contract": [
+    "loss_total",
+    "loss_original",
+    "loss_masked_x",
+    "loss_masked_h",
+    "loss_aux",
+    "diagnostics",
+    "safety_flags"
+  ],
+  "all_checks_passed": true,
+  "archive_created": false,
+  "atomwise_loss_exposed_by_current_forward": false,
+  "backward_called": false,
+  "can_build_masked_loss_from_current_output_only": false,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "checkpoint_written": false,
+  "current_forward_is_full_ligand_objective": true,
+  "current_forward_is_mask_aware": false,
+  "design_status": "ready",
+  "mask_level_loss_policy": {
+    "A_warhead_only": {
+      "context": "scaffold + linker",
+      "focus": "warhead geometry/reactivity",
+      "target": "warhead atoms"
+    },
+    "B2_scaffold_warhead": {
+      "context": "linker",
+      "focus": "scaffold variation with warhead constraints",
+      "target": "scaffold + warhead"
+    },
+    "B_linker_warhead": {
+      "context": "scaffold",
+      "focus": "linker trajectory + warhead placement",
+      "target": "linker + warhead"
+    },
+    "C_scaffold_linker_warhead": {
+      "context": "none",
+      "focus": "full ligand generation with covalent labels",
+      "target": "all ligand atoms"
+    }
+  },
+  "minimal_required_hook_points": [
+    "Expose or recompute ligand node-wise squared error before sum_except_batch in EnVariationalDiffusion.forward / ConditionalDDPM.forward.",
+    "Expose net_out_lig and eps_t_lig or their coordinate/feature residuals before scatter_add reduction.",
+    "Thread ligand_target_mask_flat/generation_mask_flat through a wrapper-side data contract without changing original forward behavior.",
+    "Keep original nll.mean() available as loss_original and add masked losses in covalent_ext wrapper code."
+  ],
+  "must_modify_loss_for_masked_training": true,
+  "no_diffsbdd_modification_feasible": "uncertain",
+  "nodewise_noise_exposed_by_current_forward": false,
+  "optimizer_step_executed": false,
+  "previous_stage": "diffsbdd_backward_smoke_without_checkpoint_v0",
+  "proposed_loss_components": [
+    "loss_original = nll.mean()",
+    "loss_masked_x = masked coordinate denoising loss over ligand target atoms",
+    "loss_masked_h = masked feature denoising loss over ligand target atoms",
+    "loss_warhead_type = optional warhead type classification auxiliary",
+    "loss_reactive_pair = optional ligand reactive atom / residue atom pair auxiliary",
+    "loss_geometry = optional covalent-ready geometry auxiliary"
+  ],
+  "real_finetune_executed": false,
+  "recommended_next_step": "diffsbdd_atomwise_loss_hook_design_without_behavior_change",
+  "recommended_path": "Implement a no-behavior-change hook/probe to expose ligand atom-wise denoising residuals, then run masked loss dry run before any optimizer smoke.",
+  "stage": "masked_loss_adapter_design_without_diffsbdd_modification_v0",
+  "step10h_backward_smoke_passed": true,
+  "trainer_fit_called": false,
+  "training_executed": false,
+  "training_step_called": false
+}
