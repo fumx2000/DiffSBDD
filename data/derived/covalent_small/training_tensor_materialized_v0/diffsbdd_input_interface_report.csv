@@ -1,0 +1,5 @@
+mask_level,batch_size,ligand_x_shape,protein_x_shape,ligand_mask_shape,protein_mask_shape,generation_mask_shape,target_atom_count,context_atom_count,diffsbdd_like_keys_present,required_covalent_keys_present,direct_mapping_field_count,missing_or_uncertain_field_count,shape_sanity_passed,mask_sanity_passed,checkpoint_loaded,diffsbdd_model_initialized,diffsbdd_model_called,training_executed,adapter_status,blocking_reasons
+A_warhead_only,3,"[3, 41, 3]","[3, 2306, 3]","[3, 41]","[3, 2306]","[3, 41]",12,92,true,true,11,6,true,true,false,false,false,false,passed,
+B_linker_warhead,3,"[3, 41, 3]","[3, 2306, 3]","[3, 41]","[3, 2306]","[3, 41]",30,74,true,true,11,6,true,true,false,false,false,false,passed,
+B2_scaffold_warhead,3,"[3, 41, 3]","[3, 2306, 3]","[3, 41]","[3, 2306]","[3, 41]",86,18,true,true,11,6,true,true,false,false,false,false,passed,
+C_scaffold_linker_warhead,3,"[3, 41, 3]","[3, 2306, 3]","[3, 41]","[3, 2306]","[3, 41]",104,0,true,true,11,6,true,true,false,false,false,false,passed,
