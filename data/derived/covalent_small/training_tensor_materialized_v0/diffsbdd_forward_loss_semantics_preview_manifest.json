@@ -1,0 +1,74 @@
+{
+  "all_checks_passed": true,
+  "archive_created": false,
+  "backward_called": false,
+  "can_do_backward_smoke_next": true,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "context_mask_consumed_by_forward": false,
+  "cuda_available": true,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "current_forward_is_full_ligand_objective": true,
+  "current_forward_is_mask_aware": false,
+  "forward_loss_semantics_status": "ready",
+  "generation_mask_consumed_by_forward": false,
+  "inspected_source_files": [
+    "lightning_modules.py",
+    "equivariant_diffusion/en_diffusion.py",
+    "equivariant_diffusion/dynamics.py",
+    "equivariant_diffusion/conditional_model.py",
+    "dataset.py",
+    "train.py",
+    "generate_ligands.py",
+    "optimize.py",
+    "src/covalent_ext/diffsbdd_forward_shape_smoke.py",
+    "src/covalent_ext/diffsbdd_forward_mask_sweep.py"
+  ],
+  "lig_fixed_consumed_by_forward": false,
+  "mask_consumption_status": "consumed_by_sampling_only",
+  "must_modify_loss_for_masked_training": true,
+  "optimizer_step_executed": false,
+  "output0_is_loss_like": true,
+  "output0_is_per_sample_vector": true,
+  "output0_shape_by_mask_level": {
+    "A_warhead_only": [
+      3
+    ],
+    "B2_scaffold_warhead": [
+      3
+    ],
+    "B_linker_warhead": [
+      3
+    ],
+    "C_scaffold_linker_warhead": [
+      3
+    ]
+  },
+  "output1_is_diagnostics": true,
+  "output1_keys": [
+    "SNR_weight",
+    "delta_log_px",
+    "eps_hat_lig_h",
+    "eps_hat_lig_x",
+    "error_t_lig",
+    "error_t_pocket",
+    "kl_prior",
+    "log_pN",
+    "loss_0",
+    "neg_log_const_0"
+  ],
+  "previous_stage": "diffsbdd_forward_mask_level_sweep_without_checkpoint_v0",
+  "real_finetune_executed": false,
+  "recommended_loss_reduction": "mean",
+  "recommended_next_step": "real_diffsbdd_backward_smoke_without_checkpoint_then_masked_loss_adapter_design",
+  "requested_device": "auto",
+  "resolved_device": "cuda:0",
+  "stage": "diffsbdd_forward_loss_semantics_review_without_backward_v0",
+  "step10f_forward_sweep_passed": true,
+  "target_mask_consumed_by_forward": false,
+  "trainer_fit_called": false,
+  "training_executed": false,
+  "training_step_called": false,
+  "training_step_reduction_semantics": "nll.mean(0)",
+  "training_step_uses_forward_output0": true
+}
