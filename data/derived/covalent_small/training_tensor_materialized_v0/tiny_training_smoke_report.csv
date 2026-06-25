@@ -1,0 +1,5 @@
+mask_level,batch_size,target_atom_count,requested_device,resolved_device,cuda_available,cuda_device_count,cuda_device_name,initial_total_loss,post_step_total_loss,initial_loss_finite,post_step_loss_finite,gradient_norm,gradient_norm_finite,any_gradient_nonzero,optimizer_step_executed,tiny_model_initialized,diffsbdd_model_initialized,checkpoint_loaded,checkpoint_saved,real_training_executed,tiny_training_step_executed,smoke_status,blocking_reasons
+A_warhead_only,3,12,auto,cuda:0,true,1,NVIDIA A100-SXM4-80GB,51.04842,50.514015,true,true,10.666517,true,true,true,true,false,false,false,false,true,passed,
+B_linker_warhead,3,30,auto,cuda:0,true,1,NVIDIA A100-SXM4-80GB,49.799744,49.353333,true,true,8.9513638,true,true,true,true,false,false,false,false,true,passed,
+B2_scaffold_warhead,3,86,auto,cuda:0,true,1,NVIDIA A100-SXM4-80GB,60.167923,59.927406,true,true,5.075222,true,true,true,true,false,false,false,false,true,passed,
+C_scaffold_linker_warhead,3,104,auto,cuda:0,true,1,NVIDIA A100-SXM4-80GB,58.844738,58.553383,true,true,6.184418,true,true,true,true,false,false,false,false,true,passed,

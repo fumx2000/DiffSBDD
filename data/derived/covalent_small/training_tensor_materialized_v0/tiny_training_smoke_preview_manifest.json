@@ -1,0 +1,49 @@
+{
+  "all_gradients_finite": true,
+  "all_gradients_nonzero": true,
+  "all_losses_finite": true,
+  "all_mask_levels_passed": true,
+  "archive_created": false,
+  "batch_size": 3,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "dataset_len": 3,
+  "dataset_name": "covalent_small_pre_reaction_training_tensor_materialized_v0",
+  "diffsbdd_model_initialized": false,
+  "gradient_norm_by_mask_level": {
+    "A_warhead_only": 10.666516717565608,
+    "B2_scaffold_warhead": 5.075222021412113,
+    "B_linker_warhead": 8.951363757085113,
+    "C_scaffold_linker_warhead": 6.1844180132938416
+  },
+  "initial_total_loss_by_mask_level": {
+    "A_warhead_only": 51.04841995239258,
+    "B2_scaffold_warhead": 60.16792297363281,
+    "B_linker_warhead": 49.79974365234375,
+    "C_scaffold_linker_warhead": 58.8447380065918
+  },
+  "mask_levels_checked": 4,
+  "optimizer_step_executed": true,
+  "post_step_total_loss_by_mask_level": {
+    "A_warhead_only": 50.514015197753906,
+    "B2_scaffold_warhead": 59.927406311035156,
+    "B_linker_warhead": 49.35333251953125,
+    "C_scaffold_linker_warhead": 58.553382873535156
+  },
+  "real_training_executed": false,
+  "recommended_next_step": "diffSBDD_input_interface_inspection_or_adapter",
+  "report_row_count": 4,
+  "requested_device": "auto",
+  "resolved_device": "cuda:0",
+  "stage": "tiny_covalent_model_training_smoke_v0",
+  "target_atom_count_total_by_mask_level": {
+    "A_warhead_only": 12,
+    "B2_scaffold_warhead": 86,
+    "B_linker_warhead": 30,
+    "C_scaffold_linker_warhead": 104
+  },
+  "tiny_model_initialized": true
+}
