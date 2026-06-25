@@ -1,0 +1,73 @@
+{
+  "all_mask_levels_passed": true,
+  "archive_created": false,
+  "batch_size": 3,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "context_atom_count_by_mask_level": {
+    "A_warhead_only": 92,
+    "B2_scaffold_warhead": 18,
+    "B_linker_warhead": 74,
+    "C_scaffold_linker_warhead": 0
+  },
+  "dataset_len": 3,
+  "diffsbdd_model_called": false,
+  "diffsbdd_model_initialized": false,
+  "expected_diffsbdd_batch_fields": [
+    "lig_coords",
+    "lig_one_hot",
+    "lig_mask",
+    "num_lig_atoms",
+    "pocket_coords",
+    "pocket_one_hot",
+    "pocket_mask",
+    "num_pocket_nodes",
+    "lig_fixed",
+    "generation_mask_flat",
+    "ligand_context_mask_flat",
+    "ligand_target_mask_flat",
+    "coordinate_center",
+    "sample_id",
+    "mask_level",
+    "batch_size"
+  ],
+  "expected_ligand_dict_fields": [
+    "x",
+    "one_hot",
+    "size",
+    "mask"
+  ],
+  "expected_pocket_dict_fields": [
+    "x",
+    "one_hot",
+    "size",
+    "mask"
+  ],
+  "ligand_atom_total_by_mask_level": {
+    "A_warhead_only": 104,
+    "B2_scaffold_warhead": 104,
+    "B_linker_warhead": 104,
+    "C_scaffold_linker_warhead": 104
+  },
+  "ligand_feature_dim": 11,
+  "mask_levels_checked": 4,
+  "mask_sanity_all_passed": true,
+  "pocket_atom_total_by_mask_level": {
+    "A_warhead_only": 5642,
+    "B2_scaffold_warhead": 5642,
+    "B_linker_warhead": 5642,
+    "C_scaffold_linker_warhead": 5642
+  },
+  "pocket_feature_dim": 11,
+  "recommended_next_step": "diffsbdd_model_instantiation_dry_run_without_checkpoint_or_manual_interface_review",
+  "report_row_count": 4,
+  "shape_sanity_all_passed": true,
+  "stage": "diffsbdd_adapter_shape_smoke_without_checkpoint_v0",
+  "target_atom_count_by_mask_level": {
+    "A_warhead_only": 12,
+    "B2_scaffold_warhead": 86,
+    "B_linker_warhead": 30,
+    "C_scaffold_linker_warhead": 104
+  },
+  "training_executed": false
+}
