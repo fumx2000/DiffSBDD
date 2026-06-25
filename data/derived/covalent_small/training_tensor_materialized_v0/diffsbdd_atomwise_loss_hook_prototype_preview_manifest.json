@@ -1,0 +1,72 @@
+{
+  "all_checks_passed": true,
+  "archive_created": false,
+  "backward_called": false,
+  "can_compute_masked_h_loss_later": true,
+  "can_compute_masked_x_loss_later": true,
+  "captured_tensor_contract": {
+    "adapter_supplied": [
+      "ligand_target_mask_flat",
+      "ligand_context_mask_flat",
+      "generation_mask_flat"
+    ],
+    "required": [
+      "eps_t_lig",
+      "net_out_lig",
+      "ligand_mask_flat"
+    ]
+  },
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "checkpoint_written": false,
+  "cuda_available": true,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "default_behavior_preserved": true,
+  "eps_t_lig_shape": [
+    104,
+    14
+  ],
+  "ligand_mask_flat_shape": [
+    104
+  ],
+  "mask_level": "A_warhead_only",
+  "model_initialized": true,
+  "model_mode": "train",
+  "net_out_lig_requires_grad": true,
+  "net_out_lig_shape": [
+    104,
+    14
+  ],
+  "optimizer_step_executed": false,
+  "original_methods_restored": true,
+  "original_source_files_modified": false,
+  "output0_allclose": true,
+  "output1_scalar_allclose": true,
+  "previous_stage": "diffsbdd_atomwise_loss_hook_design_without_behavior_change_v0",
+  "real_finetune_executed": false,
+  "recommended_next_step": "atomwise_loss_hook_shape_sweep_without_backward",
+  "requested_device": "auto",
+  "residual_h_finite": true,
+  "residual_h_shape": [
+    104,
+    11
+  ],
+  "residual_shape": [
+    104,
+    14
+  ],
+  "residual_x_finite": true,
+  "residual_x_shape": [
+    104,
+    3
+  ],
+  "resolved_device": "cuda:0",
+  "stage": "diffsbdd_atomwise_loss_hook_prototype_without_behavior_change_v0",
+  "step10j_hook_design_passed": true,
+  "target_mask_matches_ligand_atoms": true,
+  "target_mask_nonempty": true,
+  "tensor_first_dim_matches_ligand_atoms": true,
+  "trainer_fit_called": false,
+  "training_executed": false,
+  "training_step_called": false
+}
