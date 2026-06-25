@@ -1,0 +1,31 @@
+{
+  "all_checks_passed": true,
+  "archive_created": false,
+  "atom_encoder_source": "constants.dataset_params['crossdock_full']['atom_encoder']",
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "config_source": "configs/crossdock_fullatom_cond.yml",
+  "config_status": "ready",
+  "constructor_signature_resolved": true,
+  "dataset_info_source": "constants.dataset_params['crossdock_full']",
+  "device": "cpu",
+  "diffsbdd_model_called": false,
+  "forward_called": false,
+  "missing_or_uncertain_config_fields": [
+    "repository does not include the original processed size_distribution.npy; dry-run uses a minimal positive 2x2 histogram for constructor-only initialization",
+    "configs/crossdock_fullatom_cond.yml names dataset as crossdock while process_crossdock.py full-atom branch uses constants.dataset_params['crossdock_full']; dry-run uses crossdock_full to match 11-dimensional full-atom fields",
+    "configs/crossdock_fullatom_cond.yml does not explicitly set virtual_nodes; dry-run uses the constructor default false"
+  ],
+  "model_class_imported": true,
+  "model_class_name": "LigandPocketDDPM",
+  "model_initialized": true,
+  "module_count": 140,
+  "parameter_count": 4822706,
+  "previous_stage": "diffsbdd_adapter_shape_smoke_without_checkpoint_v0",
+  "recommended_next_step": "diffsbdd_single_batch_forward_shape_smoke_without_checkpoint",
+  "stage": "diffsbdd_model_instantiation_dry_run_without_checkpoint_v0",
+  "step10c_shape_smoke_passed": true,
+  "trainable_parameter_count": 4822205,
+  "training_executed": false,
+  "training_step_called": false
+}
