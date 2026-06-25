@@ -1,0 +1,86 @@
+{
+  "all_checks_passed": true,
+  "all_expected_context_counts": true,
+  "all_expected_target_counts": true,
+  "all_loss_scalars_finite": true,
+  "all_loss_total_requires_grad": true,
+  "all_mask_levels_passed": true,
+  "all_safety_flags_false": true,
+  "all_sources_unmodified": true,
+  "all_target_masks_nonempty": true,
+  "archive_created": false,
+  "backward_called": false,
+  "c_level_full_ligand_target_expected": true,
+  "checkpoint_loaded": false,
+  "checkpoint_saved": false,
+  "checkpoint_written": false,
+  "context_atom_count_by_mask_level": {
+    "A_warhead_only": 92,
+    "B2_scaffold_warhead": 18,
+    "B_linker_warhead": 74,
+    "C_scaffold_linker_warhead": 0
+  },
+  "cuda_available": true,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "loss_masked_h_by_mask_level": {
+    "A_warhead_only": 11.725685119628906,
+    "B2_scaffold_warhead": 11.038163185119629,
+    "B_linker_warhead": 11.865649223327637,
+    "C_scaffold_linker_warhead": 11.186741828918457
+  },
+  "loss_masked_x_by_mask_level": {
+    "A_warhead_only": 3.8641624450683594,
+    "B2_scaffold_warhead": 3.2138586044311523,
+    "B_linker_warhead": 3.577101230621338,
+    "C_scaffold_linker_warhead": 3.2433021068573
+  },
+  "loss_original_by_mask_level": {
+    "A_warhead_only": 0.7176262736320496,
+    "B2_scaffold_warhead": 0.7180026769638062,
+    "B_linker_warhead": 0.7180026769638062,
+    "C_scaffold_linker_warhead": 0.7180027365684509
+  },
+  "loss_total_dry_by_mask_level": {
+    "A_warhead_only": 6.9269256591796875,
+    "B2_scaffold_warhead": 6.139493942260742,
+    "B_linker_warhead": 6.668233871459961,
+    "C_scaffold_linker_warhead": 6.198653221130371
+  },
+  "loss_total_dry_requires_grad_by_mask_level": {
+    "A_warhead_only": true,
+    "B2_scaffold_warhead": true,
+    "B_linker_warhead": true,
+    "C_scaffold_linker_warhead": true
+  },
+  "mask_levels": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_levels_checked": 4,
+  "optimizer_step_executed": false,
+  "original_source_files_modified": false,
+  "previous_stage": "diffsbdd_atomwise_loss_hook_shape_sweep_without_backward_v0",
+  "real_finetune_executed": false,
+  "recommended_next_step": "masked_loss_backward_smoke_without_optimizer",
+  "requested_device": "auto",
+  "resolved_device": "cuda:0",
+  "stage": "masked_loss_dry_run_without_backward_v0",
+  "step10l_hook_shape_sweep_passed": true,
+  "target_atom_count_by_mask_level": {
+    "A_warhead_only": 12,
+    "B2_scaffold_warhead": 86,
+    "B_linker_warhead": 30,
+    "C_scaffold_linker_warhead": 104
+  },
+  "trainer_fit_called": false,
+  "training_executed": false,
+  "training_step_called": false,
+  "used_target_mask_not_full_ligand_by_mask_level": {
+    "A_warhead_only": true,
+    "B2_scaffold_warhead": true,
+    "B_linker_warhead": true,
+    "C_scaffold_linker_warhead": false
+  }
+}
