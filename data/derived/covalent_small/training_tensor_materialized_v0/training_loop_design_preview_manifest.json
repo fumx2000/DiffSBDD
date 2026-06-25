@@ -1,0 +1,349 @@
+{
+  "all_checks_passed": true,
+  "allowed_outputs": [
+    "csv report",
+    "json preview manifest",
+    "markdown summary"
+  ],
+  "batch_size": 3,
+  "checkpoint_allowed": false,
+  "checkpoint_boundary_policy": {
+    "checkpoint_forbidden_patterns": [
+      "torch.save",
+      "trainer.save_checkpoint",
+      "ModelCheckpoint",
+      ".ckpt",
+      ".pt",
+      ".pth"
+    ],
+    "current_stage_checkpoint_allowed": false,
+    "first_checkpoint_may_only_be_considered_after": [
+      "few-step loop passes",
+      "source modification boundary is reviewed",
+      "output directory naming is fixed",
+      "checkpoint naming / retention / metadata policy is reviewed",
+      "explicit user approval"
+    ],
+    "next_few_step_dry_run_checkpoint_allowed": false
+  },
+  "contract": {
+    "allowed_actions_next_stage": [
+      "instantiate model",
+      "build optimizer",
+      "iterate over dataloader",
+      "compute masked loss",
+      "backward",
+      "optimizer.step",
+      "log scalar metrics"
+    ],
+    "allowed_outputs_next_stage": [
+      "csv report",
+      "json preview manifest",
+      "markdown summary"
+    ],
+    "forbidden_actions_next_stage": [
+      "trainer.fit",
+      "training_step",
+      "checkpoint loading",
+      "checkpoint saving",
+      "torch.save",
+      "model saving",
+      "archive writing",
+      "modifying DiffSBDD source files",
+      "source modification"
+    ],
+    "forbidden_outputs_next_stage": [
+      ".pt",
+      ".pkl",
+      ".lmdb",
+      ".tar",
+      ".zip",
+      ".tgz",
+      "checkpoint files",
+      "saved model files"
+    ],
+    "intended_next_stage": "few_step_training_dry_run_no_checkpoint",
+    "loop_name": "masked_covalent_training_loop_v0",
+    "required_logging_fields": [
+      "step",
+      "mask_level",
+      "sample_ids",
+      "loss_original",
+      "loss_masked_x",
+      "loss_masked_h",
+      "loss_total",
+      "target_atom_count",
+      "context_atom_count",
+      "grad_norm",
+      "max_grad_abs",
+      "param_delta_norm",
+      "max_param_delta_abs",
+      "learning_rate",
+      "optimizer_class",
+      "cuda_device",
+      "elapsed_seconds"
+    ],
+    "required_stop_conditions": [
+      "max_steps hard cap",
+      "finite loss required",
+      "finite gradients required",
+      "finite parameters after step required",
+      "no NaN/Inf in loss/grad/params",
+      "abort on unexpected mask level",
+      "abort on missing target mask"
+    ]
+  },
+  "forbidden_outputs": [
+    ".pt",
+    ".pkl",
+    ".lmdb",
+    ".tar",
+    ".zip",
+    ".tgz",
+    "checkpoint files",
+    "saved model files"
+  ],
+  "intended_next_stage": "few_step_training_dry_run_no_checkpoint",
+  "loop_name": "masked_covalent_training_loop_v0",
+  "loop_plan": [
+    {
+      "allowed": "Read reports and manifests only.",
+      "expected_evidence": "Validated upstream manifest and source diff check.",
+      "failure_action": "Abort before model construction.",
+      "forbidden": "Proceeding with missing, stale, or blocked upstream evidence.",
+      "order": 1,
+      "purpose": "Validate Step 10O reports, materialized inputs, mask levels, and source immutability.",
+      "stage_name": "preflight_validate_inputs"
+    },
+    {
+      "allowed": "Constructor-only initialization from reviewed config.",
+      "expected_evidence": "Model class, parameter count, and no-checkpoint flags.",
+      "failure_action": "Abort and write blocked report.",
+      "forbidden": "Checkpoint loading or source edits.",
+      "order": 2,
+      "purpose": "Create a fresh in-memory DiffSBDD model instance for the dry run.",
+      "stage_name": "instantiate_model_no_checkpoint"
+    },
+    {
+      "allowed": "AdamW with reviewed learning rate and no weight decay.",
+      "expected_evidence": "Optimizer class, learning rate, and weight decay logged.",
+      "failure_action": "Abort if optimizer configuration differs from policy.",
+      "forbidden": "Trainer, Lightning loop, saved optimizer state.",
+      "order": 3,
+      "purpose": "Create a conservative optimizer for the in-memory model.",
+      "stage_name": "build_optimizer"
+    },
+    {
+      "allowed": "Fixed seed, no shuffle, tiny max step count.",
+      "expected_evidence": "Mask level per step and target/context counts.",
+      "failure_action": "Abort on unexpected mask level or empty target mask.",
+      "forbidden": "Random uncontrolled sampling for first dry run.",
+      "order": 4,
+      "purpose": "Use a deterministic A/B/B2/C cycle so every mask level is covered.",
+      "stage_name": "prepare_mask_schedule"
+    },
+    {
+      "allowed": "Forward, masked loss, backward, optimizer step, metrics logging.",
+      "expected_evidence": "One row per step with loss, gradient, and parameter delta metrics.",
+      "failure_action": "Stop immediately on any failed invariant.",
+      "forbidden": "Formal training, checkpoint writing, trainer.fit, training_step.",
+      "order": 5,
+      "purpose": "Run only the explicitly capped number of dry-run steps.",
+      "stage_name": "run_few_step_dry_loop"
+    },
+    {
+      "allowed": "Scalar logging only.",
+      "expected_evidence": "Finite loss fields for every step.",
+      "failure_action": "Abort on NaN or Inf.",
+      "forbidden": "Tensor artifact persistence.",
+      "order": 6,
+      "purpose": "Record original and masked loss components for audit.",
+      "stage_name": "collect_loss_metrics"
+    },
+    {
+      "allowed": "Gradient inspection after backward.",
+      "expected_evidence": "Finite nonzero gradient metrics.",
+      "failure_action": "Abort before optimizer step if gradients fail.",
+      "forbidden": "Optimizer step before gradient checks.",
+      "order": 7,
+      "purpose": "Record gradient norm, max abs, finite checks, and NaN/Inf counts.",
+      "stage_name": "collect_gradient_metrics"
+    },
+    {
+      "allowed": "Lightweight before/after in-memory comparison.",
+      "expected_evidence": "Finite nonzero parameter delta and post-step finite parameters.",
+      "failure_action": "Abort if update is zero or non-finite.",
+      "forbidden": "Saving model weights or optimizer state.",
+      "order": 8,
+      "purpose": "Record in-memory parameter delta after optimizer step.",
+      "stage_name": "collect_parameter_update_metrics"
+    },
+    {
+      "allowed": "Abort-on-first-failure policy.",
+      "expected_evidence": "Stop reason and last safe step.",
+      "failure_action": "Stop loop and write blocked report.",
+      "forbidden": "Continuing after a failed invariant.",
+      "order": 9,
+      "purpose": "Apply hard stop conditions after every step.",
+      "stage_name": "enforce_stop_conditions"
+    },
+    {
+      "allowed": "CSV report, JSON preview manifest, Markdown summary.",
+      "expected_evidence": "Only allowed files are present.",
+      "failure_action": "Delete disallowed outputs and mark blocked.",
+      "forbidden": "Model files, checkpoint files, archives, tensor dumps.",
+      "order": 10,
+      "purpose": "Write auditable review-only dry-run outputs.",
+      "stage_name": "write_report_only"
+    },
+    {
+      "allowed": "Filesystem scan of dry-run output root.",
+      "expected_evidence": "Empty forbidden artifact scan.",
+      "failure_action": "Mark blocked and remove forbidden outputs if any were created.",
+      "forbidden": "Any .pt/.pkl/.lmdb/.tar/.zip/.tgz output.",
+      "order": 11,
+      "purpose": "Confirm no checkpoint, model, tensor, or archive file was created.",
+      "stage_name": "verify_no_checkpoint_or_model_saved"
+    },
+    {
+      "allowed": "Source diff inspection.",
+      "expected_evidence": "No diff in protected source paths.",
+      "failure_action": "Abort and require manual review.",
+      "forbidden": "Source modification.",
+      "order": 12,
+      "purpose": "Confirm DiffSBDD, equivariant_diffusion, and lightning_modules are unchanged.",
+      "stage_name": "verify_sources_unmodified"
+    }
+  ],
+  "loss_policy": {
+    "current_step_auxiliary_losses_enabled": false,
+    "default_weights": {
+      "w_h": 0.2,
+      "w_original": 1.0,
+      "w_x": 1.0
+    },
+    "future_optional_losses": [
+      "warhead type classification",
+      "reactive atom pair prediction",
+      "geometry/residue distance auxiliary loss"
+    ],
+    "loss_masked_h": "target masked feature residual loss",
+    "loss_masked_x": "target masked coordinate residual loss",
+    "loss_original": "output0.mean()",
+    "loss_total": "w_original*loss_original + w_x*loss_masked_x + w_h*loss_masked_h"
+  },
+  "loss_weights": {
+    "w_h": 0.2,
+    "w_original": 1.0,
+    "w_x": 1.0
+  },
+  "mask_order": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_schedule_name": "balanced_A_B_B2_C_cycle",
+  "mask_schedule_policy": {
+    "batch_size": 3,
+    "mask_order": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "max_steps_initial_dry_run": 4,
+    "not_for_real_training": true,
+    "rationale": "Each mask level runs once first; this validates loop behavior and safety, not loss decrease.",
+    "schedule_name": "balanced_A_B_B2_C_cycle",
+    "seed": 4401,
+    "shuffle": false
+  },
+  "max_steps_initial_dry_run": 4,
+  "model_save_allowed": false,
+  "output_policy": {
+    "allowed_outputs": [
+      "csv report",
+      "json preview manifest",
+      "markdown summary"
+    ],
+    "archive_allowed": false,
+    "checkpoint_allowed": false,
+    "forbidden_outputs": [
+      ".pt",
+      ".pkl",
+      ".lmdb",
+      ".tar",
+      ".zip",
+      ".tgz",
+      "checkpoint files",
+      "saved model files"
+    ],
+    "model_save_allowed": false
+  },
+  "previous_stage": "masked_loss_optimizer_smoke_one_step_no_checkpoint_v0",
+  "recommended_next_step": "few_step_training_dry_run_no_checkpoint",
+  "required_logging_fields": [
+    "step",
+    "mask_level",
+    "sample_ids",
+    "loss_original",
+    "loss_masked_x",
+    "loss_masked_h",
+    "loss_total",
+    "target_atom_count",
+    "context_atom_count",
+    "grad_norm",
+    "max_grad_abs",
+    "param_delta_norm",
+    "max_param_delta_abs",
+    "learning_rate",
+    "optimizer_class",
+    "cuda_device",
+    "elapsed_seconds"
+  ],
+  "risk_register": [
+    {
+      "mitigation": "Use a hard max_steps cap and report-only outputs; require explicit approval before any broader run.",
+      "risk": "Dry-run loop accidentally becomes formal training."
+    },
+    {
+      "mitigation": "Scan output roots for forbidden suffixes and keep checkpoint/model saving disabled.",
+      "risk": "Checkpoint or model artifact is written unintentionally."
+    },
+    {
+      "mitigation": "Abort on first non-finite loss, gradient, parameter, or missing target mask.",
+      "risk": "Masked loss is unstable for one mask level."
+    },
+    {
+      "mitigation": "Require protected source diff checks before and after the few-step dry run.",
+      "risk": "Source-level behavior changes hide in the training loop step."
+    }
+  ],
+  "seed": 4401,
+  "shuffle": false,
+  "source_modification_allowed": false,
+  "source_modification_policy": {
+    "protected_paths": [
+      "equivariant_diffusion/en_diffusion.py",
+      "equivariant_diffusion/conditional_model.py",
+      "equivariant_diffusion/dynamics.py",
+      "lightning_modules.py"
+    ],
+    "required_check": "git diff -- equivariant_diffusion/ lightning_modules.py must be empty",
+    "source_modification_allowed": false
+  },
+  "stage": "training_loop_design_without_checkpoint_v0",
+  "step10o_optimizer_smoke_passed": true,
+  "stop_conditions": [
+    "max_steps hard cap",
+    "finite loss required",
+    "finite gradients required",
+    "finite parameters after step required",
+    "no NaN/Inf in loss/grad/params",
+    "abort on unexpected mask level",
+    "abort on missing target mask"
+  ],
+  "trainer_fit_allowed": false,
+  "training_step_allowed": false
+}
