@@ -1,0 +1,5 @@
+mask_level,batch_size,sample_count,protein_x_shape,ligand_x_shape,ligand_context_x_shape,ligand_target_x_shape,coordinate_center_shape,target_atom_count_total,context_atom_count_total,reactive_atom_in_target_mask_all,context_target_no_overlap_all,finite_coords_all,no_nan,no_inf,mock_x_mse_on_target,mock_h_mse_on_target,mock_total_loss,mock_total_loss_finite,device,checkpoint_loaded,model_initialized,training_executed,preflight_status,blocking_reasons
+A_warhead_only,3,3,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]","[3, 3]",12,92,true,true,true,true,true,50.354523,43,50.784523,true,cpu,false,false,false,passed,
+B_linker_warhead,3,3,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]","[3, 3]",30,74,true,true,true,true,true,49.104252,40.966667,49.513919,true,cpu,false,false,false,passed,
+B2_scaffold_warhead,3,3,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]","[3, 3]",86,18,true,true,true,true,true,59.981007,44.581394,60.426821,true,cpu,false,false,false,passed,
+C_scaffold_linker_warhead,3,3,"[3, 2306, 3]","[3, 41, 3]","[3, 41, 3]","[3, 41, 3]","[3, 3]",104,0,true,true,true,true,true,57.954227,43.721153,58.391439,true,cpu,false,false,false,passed,

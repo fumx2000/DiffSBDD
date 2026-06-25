@@ -1,0 +1,52 @@
+{
+  "all_mask_levels_passed": true,
+  "archive_created": false,
+  "batch_size": 3,
+  "checkpoint_loaded": false,
+  "coordinate_center_shape": [
+    3,
+    3
+  ],
+  "dataset_len": 3,
+  "dataset_name": "covalent_small_pre_reaction_training_tensor_materialized_v0",
+  "device": "cpu",
+  "ligand_context_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "ligand_target_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "ligand_x_shape": [
+    3,
+    41,
+    3
+  ],
+  "mask_levels_checked": 4,
+  "mock_total_loss_all_finite": true,
+  "mock_total_loss_by_mask_level": {
+    "A_warhead_only": 50.784522705078125,
+    "B2_scaffold_warhead": 60.42682056427002,
+    "B_linker_warhead": 49.513918533325196,
+    "C_scaffold_linker_warhead": 58.39143898010254
+  },
+  "model_initialized": false,
+  "protein_x_shape": [
+    3,
+    2306,
+    3
+  ],
+  "recommended_next_step": "diffSBDD_adapter_or_tiny_model_smoke_test",
+  "report_row_count": 4,
+  "stage": "covalent_training_preflight_dry_run_v0",
+  "target_atom_count_total_by_mask_level": {
+    "A_warhead_only": 12,
+    "B2_scaffold_warhead": 86,
+    "B_linker_warhead": 30,
+    "C_scaffold_linker_warhead": 104
+  },
+  "training_executed": false
+}
