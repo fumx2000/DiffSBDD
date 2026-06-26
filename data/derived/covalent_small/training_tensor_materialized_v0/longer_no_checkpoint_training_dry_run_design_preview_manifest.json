@@ -1,0 +1,132 @@
+{
+  "all_checks_passed": true,
+  "allowed_outputs": [
+    "csv report",
+    "json preview manifest",
+    "markdown summary"
+  ],
+  "batch_size": 3,
+  "checkpoint_allowed": false,
+  "checkpoint_load_allowed": false,
+  "checkpoint_save_allowed": false,
+  "forbidden_outputs": [
+    ".pt",
+    ".pkl",
+    ".lmdb",
+    ".tar",
+    ".zip",
+    ".tgz",
+    ".ckpt",
+    ".pth",
+    "saved model files",
+    "checkpoint files",
+    "tensor dumps",
+    "optimizer state files"
+  ],
+  "hard_stop_conditions": [
+    "abort on non-finite loss",
+    "abort on loss_total_requires_grad=false",
+    "abort on non-finite gradients",
+    "abort on gradients all zero",
+    "abort on grad_nan_count > 0",
+    "abort on grad_inf_count > 0",
+    "abort on optimizer step failure",
+    "abort on non-finite parameter delta",
+    "abort on zero parameter delta",
+    "abort on post-step parameter NaN/Inf",
+    "abort on zero target mask",
+    "abort on unexpected mask level",
+    "abort on checkpoint/model artifact",
+    "abort on source modification"
+  ],
+  "loop_name": "masked_covalent_training_loop_v0",
+  "loss_decrease_required": false,
+  "loss_weights": {
+    "w_h": 0.2,
+    "w_original": 1.0,
+    "w_x": 1.0
+  },
+  "mask_counts": {
+    "A_warhead_only": 3,
+    "B2_scaffold_warhead": 3,
+    "B_linker_warhead": 3,
+    "C_scaffold_linker_warhead": 3
+  },
+  "mask_schedule": "A_warhead_only / B_linker_warhead / B2_scaffold_warhead / C_scaffold_linker_warhead repeated 3 cycles",
+  "mask_schedule_length": 12,
+  "mask_schedule_values": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "max_steps": 12,
+  "model_save_allowed": false,
+  "next_stage": "longer_no_checkpoint_training_dry_run_v0",
+  "optimizer_class": "AdamW",
+  "optimizer_lr": 1e-06,
+  "optimizer_weight_decay": 0.0,
+  "previous_stage": "few_step_training_dry_run_review_and_training_boundary_v0",
+  "quality_claim_allowed": false,
+  "recommended_next_step": "longer_no_checkpoint_training_dry_run",
+  "risk_register": [
+    {
+      "mitigation": "Keep max_steps hard-capped at 12 and keep checkpoint/model saving disabled.",
+      "risk": "The 12-step dry run is mistaken for formal training."
+    },
+    {
+      "mitigation": "Use exactly three complete A/B/B2/C cycles.",
+      "risk": "A single mask level dominates the longer dry run."
+    },
+    {
+      "mitigation": "Log warning thresholds and keep hard stops for non-finite loss, gradients, and parameters.",
+      "risk": "Warnings hide unstable gradients or losses."
+    },
+    {
+      "mitigation": "Scan for forbidden outputs and protected source modifications before declaring success.",
+      "risk": "Unexpected artifacts or source edits appear during the dry run."
+    }
+  ],
+  "seed": 4401,
+  "shuffle": false,
+  "source_modification_allowed": false,
+  "stage": "longer_no_checkpoint_training_dry_run_design_v0",
+  "step10r_boundary_review_passed": true,
+  "success_criteria": {
+    "all_backward_success": true,
+    "all_gradients_finite": true,
+    "all_gradients_nonzero": true,
+    "all_loss_total_requires_grad": true,
+    "all_losses_finite": true,
+    "all_optimizer_steps_success": true,
+    "all_parameter_updates_finite": true,
+    "all_parameter_updates_nonzero": true,
+    "all_post_step_params_finite": true,
+    "checkpoint_loaded": false,
+    "checkpoint_saved": false,
+    "executed_steps": 12,
+    "expected_mask_schedule_followed": true,
+    "forbidden_artifacts_created": false,
+    "formal_training_executed": false,
+    "model_saved": false,
+    "original_source_files_modified": false,
+    "real_finetune_executed": false,
+    "stop_triggered": false
+  },
+  "trainer_fit_allowed": false,
+  "training_step_allowed": false,
+  "warning_thresholds": {
+    "grad_norm": 10000.0,
+    "loss_total": 10000.0,
+    "max_grad_abs": 1000.0,
+    "param_delta_norm": 1.0
+  }
+}
