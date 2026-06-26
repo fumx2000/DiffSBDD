@@ -1,0 +1,5 @@
+stage,mask_level,candidate_inputs_built,forward_success,loss_hook_success,finite_loss,selected_primary_loss_key,selected_primary_loss_value,nan_count,inf_count,synthetic_mask_loss_adapter_used,status,blocking_reasons
+pretrained_masked_loss_smoke_v0,A_warhead_only,True,True,True,True,masked_loss_total_dry,24.993852615356445,0,0,True,passed,
+pretrained_masked_loss_smoke_v0,B_linker_warhead,True,True,True,True,masked_loss_total_dry,64.95052337646484,0,0,True,passed,
+pretrained_masked_loss_smoke_v0,B2_scaffold_warhead,True,True,True,True,masked_loss_total_dry,16.925447463989258,0,0,True,passed,
+pretrained_masked_loss_smoke_v0,C_scaffold_linker_warhead,True,True,True,True,masked_loss_total_dry,508.4341735839844,0,0,True,passed,
