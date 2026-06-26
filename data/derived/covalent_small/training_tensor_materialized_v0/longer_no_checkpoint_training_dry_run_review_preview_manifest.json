@@ -1,0 +1,107 @@
+{
+  "all_backward_success": true,
+  "all_checks_passed": true,
+  "all_gradients_finite": true,
+  "all_gradients_nonzero": true,
+  "all_losses_finite": true,
+  "all_optimizer_steps_success": true,
+  "all_parameter_updates_finite": true,
+  "all_parameter_updates_nonzero": true,
+  "all_steps_passed": true,
+  "checkpoint_allowed": false,
+  "checkpoint_discussion_gate": {
+    "checkpoint_load_allowed": false,
+    "checkpoint_may_be_enabled_only_after": [
+      "checkpoint/output policy design passed",
+      "output directory naming fixed",
+      "checkpoint naming policy fixed",
+      "retention policy fixed",
+      "metadata policy fixed",
+      "resume-test design fixed",
+      "explicit user approval"
+    ],
+    "checkpoint_save_allowed": false,
+    "current_review_checkpoint_allowed": false,
+    "model_save_allowed": false,
+    "next_step_is_policy_design_only": true
+  },
+  "checkpoint_load_allowed": false,
+  "checkpoint_policy_design_allowed": true,
+  "checkpoint_save_allowed": false,
+  "dry_run_training_steps_executed": 12,
+  "executed_steps": 12,
+  "finetune_allowed": false,
+  "formal_training_allowed": false,
+  "highest_grad_mask_level": "A_warhead_only",
+  "highest_grad_step": 9,
+  "highest_grad_value": 201.119884,
+  "loss_decrease_required": false,
+  "mask_counts_seen": {
+    "A_warhead_only": 3,
+    "B2_scaffold_warhead": 3,
+    "B_linker_warhead": 3,
+    "C_scaffold_linker_warhead": 3
+  },
+  "mask_levels_seen": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_schedule": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead",
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_schedule_length": 12,
+  "model_save_allowed": false,
+  "next_step_is_policy_design_only": true,
+  "output_policy_design_allowed": true,
+  "previous_stage": "longer_no_checkpoint_training_dry_run_v0",
+  "quality_claim_allowed": false,
+  "recommended_next_step": "checkpoint_and_output_policy_design",
+  "risk_register": [
+    {
+      "mitigation": "Keep loss decrease and quality claims disabled; treat the result as wiring and numerical-boundary evidence only.",
+      "risk": "Treating a 12-step dry run as model-quality evidence."
+    },
+    {
+      "mitigation": "Keep checkpoint/model saving disabled; only allow checkpoint/output policy design next.",
+      "risk": "Enabling checkpoint saves before output policy review."
+    },
+    {
+      "mitigation": "Record highest_grad_step=9 as an observation; it is finite and below warning threshold.",
+      "risk": "Step 9 high gradient is overlooked."
+    },
+    {
+      "mitigation": "Require protected source diff checks and forbid source modification.",
+      "risk": "Accidental source modification during review."
+    }
+  ],
+  "source_modification_allowed": false,
+  "stability_status": "passed",
+  "stage": "longer_no_checkpoint_training_dry_run_review_v0",
+  "step10t_dry_run_passed": true,
+  "stop_triggered": false,
+  "trainer_fit_allowed": false,
+  "training_step_allowed": false,
+  "warning_steps": [],
+  "warnings_triggered": false
+}
