@@ -1,0 +1,123 @@
+key,category,checkpoint_shape,model_shape,status,inferred_reason,checkpoint_numel,model_numel
+ddpm.buffer,other,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.atom_decoder.0.bias,atom_decoder,[20],[20],shape_matched,same_shape,20,20
+ddpm.dynamics.atom_decoder.0.weight,atom_decoder,"[20, 32]","[20, 32]",shape_matched,same_shape,640,640
+ddpm.dynamics.atom_decoder.2.bias,atom_decoder,[10],[10],shape_matched,same_shape,10,10
+ddpm.dynamics.atom_decoder.2.weight,atom_decoder,"[10, 20]","[10, 20]",shape_matched,same_shape,200,200
+ddpm.dynamics.atom_encoder.0.bias,atom_encoder,[20],[20],shape_matched,same_shape,20,20
+ddpm.dynamics.atom_encoder.0.weight,atom_encoder,"[20, 10]","[20, 10]",shape_matched,same_shape,200,200
+ddpm.dynamics.atom_encoder.2.bias,atom_encoder,[32],[32],shape_matched,same_shape,32,32
+ddpm.dynamics.atom_encoder.2.weight,atom_encoder,"[32, 20]","[32, 20]",shape_matched,same_shape,640,640
+ddpm.dynamics.egnn.e_block_0.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.egnn.e_block_0.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[128, 256]",shape_matched,same_shape,32768,32768
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.egnn.e_block_1.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[128, 256]",shape_matched,same_shape,32768,32768
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.egnn.e_block_2.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[128, 256]",shape_matched,same_shape,32768,32768
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.egnn.e_block_3.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[128, 256]",shape_matched,same_shape,32768,32768
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,same_shape,1,1
+ddpm.dynamics.egnn.e_block_4.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[128, 256]",shape_matched,same_shape,32768,32768
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[128, 258]",shape_matched,same_shape,33024,33024
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[128, 128]",shape_matched,same_shape,16384,16384
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 128]",shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.embedding.bias,egnn_other,[128],[128],shape_matched,same_shape,128,128
+ddpm.dynamics.egnn.embedding.weight,egnn_other,"[128, 33]","[128, 33]",shape_matched,same_shape,4224,4224
+ddpm.dynamics.egnn.embedding_out.bias,egnn_other,[33],[33],shape_matched,same_shape,33,33
+ddpm.dynamics.egnn.embedding_out.weight,egnn_other,"[33, 128]","[33, 128]",shape_matched,same_shape,4224,4224
+ddpm.dynamics.residue_decoder.0.bias,residue_decoder,[20],[20],shape_matched,same_shape,20,20
+ddpm.dynamics.residue_decoder.0.weight,residue_decoder,"[20, 32]","[20, 32]",shape_matched,same_shape,640,640
+ddpm.dynamics.residue_decoder.2.bias,residue_decoder,[10],[10],shape_matched,same_shape,10,10
+ddpm.dynamics.residue_decoder.2.weight,residue_decoder,"[10, 20]","[10, 20]",shape_matched,same_shape,200,200
+ddpm.dynamics.residue_encoder.0.bias,residue_encoder,[20],[20],shape_matched,same_shape,20,20
+ddpm.dynamics.residue_encoder.0.weight,residue_encoder,"[20, 10]","[20, 10]",shape_matched,same_shape,200,200
+ddpm.dynamics.residue_encoder.2.bias,residue_encoder,[32],[32],shape_matched,same_shape,32,32
+ddpm.dynamics.residue_encoder.2.weight,residue_encoder,"[32, 20]","[32, 20]",shape_matched,same_shape,640,640
+ddpm.gamma.gamma,other,[501],[501],shape_matched,same_shape,501,501

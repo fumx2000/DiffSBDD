@@ -1,0 +1,160 @@
+{
+  "all_checks_passed": true,
+  "backward_called": false,
+  "blocking_reasons": [],
+  "checkpoint_inferred_architecture": {
+    "atom_decoder_hidden_dim": 20,
+    "atom_decoder_input_dim": 32,
+    "atom_decoder_output_dim": 10,
+    "atom_encoder_hidden_dim_1": 20,
+    "atom_encoder_input_dim": 10,
+    "atom_encoder_output_dim": 32,
+    "context_or_edge_feature_dim_candidates": [
+      258,
+      258
+    ],
+    "coord_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "coord_mlp_input_dim_candidates": [
+      258
+    ],
+    "edge_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "edge_mlp_input_dim_candidates": [
+      258
+    ],
+    "egnn_block_count": 5,
+    "egnn_block_indices": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "egnn_embedding_input_dim": 33,
+    "egnn_embedding_out_input_dim": 128,
+    "egnn_embedding_out_output_dim": 33,
+    "egnn_embedding_output_dim": 128,
+    "egnn_hidden_dim_candidates": [
+      128
+    ],
+    "known_unparsed_keys_count": 0,
+    "node_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "node_mlp_input_dim_candidates": [
+      256
+    ],
+    "residue_encoder_hidden_dim_1": 20,
+    "residue_encoder_input_dim": 10,
+    "residue_encoder_output_dim": 32,
+    "source_name": "checkpoint"
+  },
+  "checkpoint_load_smoke_allowed": true,
+  "checkpoint_path": "checkpoints/crossdocked_fullatom_cond.ckpt",
+  "checkpoint_saved": false,
+  "checkpoint_sha256": "07f86764bf569aafbc40a9c15fc02de8e2550437dd0f17f657eab3abe66c372c",
+  "checkpoint_state_dict_key_count": 122,
+  "compatible_config_built": true,
+  "compatible_config_source": "configs/crossdock_fullatom_joint.yml",
+  "config_preview_path": "data/derived/covalent_small/checkpoint_original_config_instantiation_design_v0/checkpoint_original_config_preview.json",
+  "finetune_allowed": false,
+  "forbidden_artifacts_created": false,
+  "formal_training_allowed": false,
+  "forward_smoke_attempted": true,
+  "forward_smoke_skip_reason": "",
+  "forward_smoke_success": true,
+  "incompatible_shape_count": 0,
+  "input_contract_built": true,
+  "instantiated_inferred_architecture": {
+    "atom_decoder_hidden_dim": 20,
+    "atom_decoder_input_dim": 32,
+    "atom_decoder_output_dim": 10,
+    "atom_encoder_hidden_dim_1": 20,
+    "atom_encoder_input_dim": 10,
+    "atom_encoder_output_dim": 32,
+    "context_or_edge_feature_dim_candidates": [
+      258,
+      258
+    ],
+    "coord_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "coord_mlp_input_dim_candidates": [
+      258
+    ],
+    "edge_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "edge_mlp_input_dim_candidates": [
+      258
+    ],
+    "egnn_block_count": 5,
+    "egnn_block_indices": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "egnn_embedding_input_dim": 33,
+    "egnn_embedding_out_input_dim": 128,
+    "egnn_embedding_out_output_dim": 33,
+    "egnn_embedding_output_dim": 128,
+    "egnn_hidden_dim_candidates": [
+      128
+    ],
+    "known_unparsed_keys_count": 0,
+    "node_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "node_mlp_input_dim_candidates": [
+      256
+    ],
+    "residue_encoder_hidden_dim_1": 20,
+    "residue_encoder_input_dim": 10,
+    "residue_encoder_output_dim": 32,
+    "source_name": "checkpoint_compatible_wrapper"
+  },
+  "instantiation_status": "checkpoint_compatible_model_instantiated",
+  "loss_decrease_required": false,
+  "masked_loss_smoke_allowed": false,
+  "matched_key_count": 122,
+  "missing_key_count": 0,
+  "model_class": "LigandPocketDDPM",
+  "model_instantiated": true,
+  "model_instantiation_attempted": true,
+  "model_saved": false,
+  "model_state_dict_key_count": 122,
+  "optimizer_created": false,
+  "optimizer_step_called": false,
+  "original_source_files_modified": false,
+  "output_finite": true,
+  "pretrained_masked_loss_smoke_allowed": false,
+  "previous_shape_matched_ratio": 0.05737704918032787,
+  "previous_stage": "checkpoint_original_config_instantiation_design_v0",
+  "quality_claim_allowed": false,
+  "reached_shape_match_goal": true,
+  "recommended_next_step": "checkpoint_compatible_pretrained_load_smoke",
+  "requested_device": "cpu",
+  "resolved_device": "cpu",
+  "shape_match_improved_over_step11a": true,
+  "shape_matched_key_count": 122,
+  "shape_matched_ratio": 1.0,
+  "stage": "checkpoint_compatible_instantiation_wrapper_v0",
+  "step11c_validated": true,
+  "target_atom_feature_dim": 10,
+  "target_egnn_blocks": 5,
+  "target_hidden_nf": 128,
+  "target_joint_nf": 32,
+  "target_mode": "pocket_conditioning",
+  "target_n_layers": 5,
+  "target_pocket_representation": "full-atom",
+  "target_residue_feature_dim": 10,
+  "trainer_fit_called": false,
+  "training_step_called": false,
+  "unexpected_key_count": 0,
+  "wrapper_status": "checkpoint_compatible_instantiation_proven"
+}

@@ -1,0 +1,24 @@
+{
+  "checkpoint_state_dict_key_count": 122,
+  "compatible_config_mode": "pocket_conditioning",
+  "contract_source": "checkpoint_state_dict_shape_inference",
+  "current_default_atom_feature_dim": 11,
+  "current_default_crossdock_full_contract_used": false,
+  "dataset_info_strategy": "build_minimal_10d_shape_contract_in_memory",
+  "feature_semantics_known": false,
+  "feature_semantics_status": "shape_only_contract_for_instantiation_smoke",
+  "input_contract_built": true,
+  "node_histogram_strategy": "synthetic_placeholder_for_constructor_compatibility",
+  "one_hot_strategy": "synthetic_10d_one_hot_for_shape_smoke",
+  "risks": [
+    "10d feature semantics may not match current 11d constants",
+    "shape smoke is not training data smoke",
+    "strict load may still fail if constructor has hidden assumptions"
+  ],
+  "synthetic_forward_candidate_safe": true,
+  "synthetic_forward_candidate_scope": "shape_and_finiteness_only",
+  "target_atom_feature_dim": 10,
+  "target_ligand_feature_dim": 10,
+  "target_pocket_feature_dim": 10,
+  "target_residue_feature_dim": 10
+}
