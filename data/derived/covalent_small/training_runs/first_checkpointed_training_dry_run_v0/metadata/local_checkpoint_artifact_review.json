@@ -1,0 +1,20 @@
+{
+  "checkpoint_git_commit_allowed": false,
+  "checkpoint_ignored_or_untracked": true,
+  "checkpoint_keep_local_only": true,
+  "checkpoint_path": "data/derived/covalent_small/training_runs/first_checkpointed_training_dry_run_v0/checkpoints/checkpoint_step_000012.pt",
+  "checkpoint_staged_by_git": false,
+  "checkpoint_tracked_by_git": false,
+  "expected_checkpoint_sha256": "c121b6555f1b29f70bcc53a09cecff32fb7c3a5ad72a291d44de1052c5ef72e4",
+  "expected_checkpoint_size_bytes": 58022805,
+  "forbidden_artifacts_under_run_root": [],
+  "local_checkpoint_present": true,
+  "local_checkpoint_review_passed": true,
+  "local_checkpoint_sha256": "c121b6555f1b29f70bcc53a09cecff32fb7c3a5ad72a291d44de1052c5ef72e4",
+  "local_checkpoint_sha256_matches": true,
+  "local_checkpoint_size_bytes": 58022805,
+  "local_checkpoint_size_matches": true,
+  "run_root_pt_files": [
+    "data/derived/covalent_small/training_runs/first_checkpointed_training_dry_run_v0/checkpoints/checkpoint_step_000012.pt"
+  ]
+}
