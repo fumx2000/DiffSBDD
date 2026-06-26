@@ -1,0 +1,193 @@
+{
+  "all_checks_passed": true,
+  "backward_called": false,
+  "best_config_candidate_path": "configs/crossdock_fullatom_joint.yml",
+  "best_config_candidate_score": 4,
+  "blocking_reasons": [],
+  "candidate_instantiation_attempted": false,
+  "candidate_shape_matched_ratio": null,
+  "checkpoint_config_recovery_required": true,
+  "checkpoint_has_hyper_parameters": true,
+  "checkpoint_hyper_parameters_keys": [
+    "outdir",
+    "dataset",
+    "datadir",
+    "batch_size",
+    "lr",
+    "egnn_params",
+    "diffusion_params",
+    "num_workers",
+    "augment_noise",
+    "augment_rotation",
+    "clip_grad",
+    "eval_epochs",
+    "eval_params",
+    "visualize_sample_epoch",
+    "visualize_chain_epoch",
+    "auxiliary_loss",
+    "loss_params",
+    "mode",
+    "node_histogram",
+    "pocket_representation",
+    "virtual_nodes"
+  ],
+  "checkpoint_inferred_architecture": {
+    "atom_decoder_hidden_dim": 20,
+    "atom_decoder_input_dim": 32,
+    "atom_decoder_output_dim": 10,
+    "atom_encoder_hidden_dim_1": 20,
+    "atom_encoder_input_dim": 10,
+    "atom_encoder_output_dim": 32,
+    "context_or_edge_feature_dim_candidates": [
+      258,
+      258
+    ],
+    "coord_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "coord_mlp_input_dim_candidates": [
+      258
+    ],
+    "edge_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "edge_mlp_input_dim_candidates": [
+      258
+    ],
+    "egnn_block_count": 5,
+    "egnn_block_indices": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "egnn_embedding_input_dim": 33,
+    "egnn_embedding_out_input_dim": 128,
+    "egnn_embedding_out_output_dim": 33,
+    "egnn_embedding_output_dim": 128,
+    "egnn_hidden_dim_candidates": [
+      128
+    ],
+    "known_unparsed_keys_count": 0,
+    "node_mlp_hidden_dim_candidates": [
+      128
+    ],
+    "node_mlp_input_dim_candidates": [
+      256
+    ],
+    "residue_encoder_hidden_dim_1": 20,
+    "residue_encoder_input_dim": 10,
+    "residue_encoder_output_dim": 32,
+    "source_name": "checkpoint"
+  },
+  "checkpoint_path": "checkpoints/crossdocked_fullatom_cond.ckpt",
+  "checkpoint_saved": false,
+  "checkpoint_sha256": "07f86764bf569aafbc40a9c15fc02de8e2550437dd0f17f657eab3abe66c372c",
+  "checkpoint_size_bytes": 17861341,
+  "checkpoint_state_dict_key_count": 122,
+  "confidence_by_root_cause": {
+    "atom_encoder_decoder_dim_mismatch": "medium",
+    "atom_feature_dim_mismatch": "high",
+    "egnn_layer_count_mismatch": "high",
+    "hidden_dim_mismatch": "high"
+  },
+  "current_config_not_checkpoint_config": true,
+  "current_config_path": "configs/crossdock_fullatom_cond.yml",
+  "current_config_present": true,
+  "current_inferred_architecture": {
+    "atom_decoder_hidden_dim": 22,
+    "atom_decoder_input_dim": 128,
+    "atom_decoder_output_dim": 11,
+    "atom_encoder_hidden_dim_1": 22,
+    "atom_encoder_input_dim": 11,
+    "atom_encoder_output_dim": 128,
+    "context_or_edge_feature_dim_candidates": [
+      514,
+      514
+    ],
+    "coord_mlp_hidden_dim_candidates": [
+      256
+    ],
+    "coord_mlp_input_dim_candidates": [
+      514
+    ],
+    "edge_mlp_hidden_dim_candidates": [
+      256
+    ],
+    "edge_mlp_input_dim_candidates": [
+      514
+    ],
+    "egnn_block_count": 6,
+    "egnn_block_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "egnn_embedding_input_dim": 129,
+    "egnn_embedding_out_input_dim": 256,
+    "egnn_embedding_out_output_dim": 129,
+    "egnn_embedding_output_dim": 256,
+    "egnn_hidden_dim_candidates": [
+      256
+    ],
+    "known_unparsed_keys_count": 0,
+    "node_mlp_hidden_dim_candidates": [
+      256
+    ],
+    "node_mlp_input_dim_candidates": [
+      512
+    ],
+    "residue_encoder_hidden_dim_1": 22,
+    "residue_encoder_input_dim": 11,
+    "residue_encoder_output_dim": 128,
+    "source_name": "current_model"
+  },
+  "current_model_instantiated": true,
+  "finetune_allowed": false,
+  "forbidden_artifacts_created": false,
+  "formal_training_allowed": false,
+  "incompatible_shape_count": 115,
+  "likely_root_causes": [
+    "hidden_dim_mismatch",
+    "atom_feature_dim_mismatch",
+    "egnn_layer_count_mismatch",
+    "atom_encoder_decoder_dim_mismatch"
+  ],
+  "loss_decrease_required": false,
+  "masked_loss_smoke_allowed": false,
+  "matched_key_count": 122,
+  "mismatch_category_counts": {
+    "atom_decoder": 4,
+    "atom_encoder": 4,
+    "egnn_att_mlp": 5,
+    "egnn_coord_mlp": 25,
+    "egnn_cross_product_mlp": 25,
+    "egnn_edge_mlp": 20,
+    "egnn_node_mlp": 20,
+    "egnn_other": 4,
+    "other": 8
+  },
+  "missing_key_count": 20,
+  "model_class": "LigandPocketDDPM",
+  "model_saved": false,
+  "optimizer_created": false,
+  "optimizer_step_called": false,
+  "original_source_files_modified": false,
+  "pretrained_masked_loss_smoke_allowed": false,
+  "previous_stage": "pretrained_checkpoint_load_smoke_v0",
+  "quality_claim_allowed": false,
+  "recommended_next_step": "checkpoint_original_config_model_instantiation_design",
+  "reconciliation_status": "checkpoint_original_config_recovery_needed",
+  "shape_matched_key_count": 7,
+  "shape_matched_ratio": 0.05737704918032787,
+  "stage": "pretrained_checkpoint_architecture_reconciliation_v0",
+  "step11a_validated": true,
+  "trainer_fit_called": false,
+  "training_allowed": false,
+  "training_step_called": false,
+  "unexpected_key_count": 0
+}

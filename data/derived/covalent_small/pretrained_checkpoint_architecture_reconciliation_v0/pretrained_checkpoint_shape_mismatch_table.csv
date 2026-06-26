@@ -1,0 +1,143 @@
+key,category,checkpoint_shape,model_shape,status,inferred_reason,checkpoint_numel,model_numel
+ddpm.buffer,other,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.atom_decoder.0.bias,atom_decoder,[20],[22],shape_mismatched,ligand_atom_feature_dim_mismatch,20,22
+ddpm.dynamics.atom_decoder.0.weight,atom_decoder,"[20, 32]","[22, 128]",shape_mismatched,ligand_atom_feature_dim_mismatch,640,2816
+ddpm.dynamics.atom_decoder.2.bias,atom_decoder,[10],[11],shape_mismatched,ligand_atom_feature_dim_mismatch,10,11
+ddpm.dynamics.atom_decoder.2.weight,atom_decoder,"[10, 20]","[11, 22]",shape_mismatched,ligand_atom_feature_dim_mismatch,200,242
+ddpm.dynamics.atom_encoder.0.bias,atom_encoder,[20],[22],shape_mismatched,ligand_atom_feature_dim_mismatch,20,22
+ddpm.dynamics.atom_encoder.0.weight,atom_encoder,"[20, 10]","[22, 11]",shape_mismatched,ligand_atom_feature_dim_mismatch,200,242
+ddpm.dynamics.atom_encoder.2.bias,atom_encoder,[32],[128],shape_mismatched,ligand_atom_feature_dim_mismatch,32,128
+ddpm.dynamics.atom_encoder.2.weight,atom_encoder,"[32, 20]","[128, 22]",shape_mismatched,ligand_atom_feature_dim_mismatch,640,2816
+ddpm.dynamics.egnn.e_block_0.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.egnn.e_block_0.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[256, 512]",shape_mismatched,egnn_hidden_dim_mismatch,32768,131072
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_0.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.egnn.e_block_1.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[256, 512]",shape_mismatched,egnn_hidden_dim_mismatch,32768,131072
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_1.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.egnn.e_block_2.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[256, 512]",shape_mismatched,egnn_hidden_dim_mismatch,32768,131072
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_2.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.egnn.e_block_3.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[256, 512]",shape_mismatched,egnn_hidden_dim_mismatch,32768,131072
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_3.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.att_mlp.0.bias,egnn_att_mlp,[1],[1],shape_matched,shape_matched,1,1
+ddpm.dynamics.egnn.e_block_4.gcl_0.att_mlp.0.weight,egnn_att_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.0.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.0.weight,egnn_node_mlp,"[128, 256]","[256, 512]",shape_mismatched,egnn_hidden_dim_mismatch,32768,131072
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.2.bias,egnn_node_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_0.node_mlp.2.weight,egnn_node_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,"[128, 258]","[256, 514]",shape_mismatched,egnn_hidden_dim_mismatch,33024,131584
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,"[128, 128]","[256, 256]",shape_mismatched,egnn_hidden_dim_mismatch,16384,65536
+ddpm.dynamics.egnn.e_block_4.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,"[1, 128]","[1, 256]",shape_mismatched,edge_feature_or_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.att_mlp.0.bias,egnn_att_mlp,[],[1],missing_in_checkpoint,egnn_layer_count_mismatch,0,1
+ddpm.dynamics.egnn.e_block_5.gcl_0.att_mlp.0.weight,egnn_att_mlp,[],"[1, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.edge_mlp.0.bias,egnn_edge_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.edge_mlp.0.weight,egnn_edge_mlp,[],"[256, 514]",missing_in_checkpoint,egnn_layer_count_mismatch,0,131584
+ddpm.dynamics.egnn.e_block_5.gcl_0.edge_mlp.2.bias,egnn_edge_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.edge_mlp.2.weight,egnn_edge_mlp,[],"[256, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,65536
+ddpm.dynamics.egnn.e_block_5.gcl_0.node_mlp.0.bias,egnn_node_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.node_mlp.0.weight,egnn_node_mlp,[],"[256, 512]",missing_in_checkpoint,egnn_layer_count_mismatch,0,131072
+ddpm.dynamics.egnn.e_block_5.gcl_0.node_mlp.2.bias,egnn_node_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_0.node_mlp.2.weight,egnn_node_mlp,[],"[256, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,65536
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.coord_mlp.0.bias,egnn_coord_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.coord_mlp.0.weight,egnn_coord_mlp,[],"[256, 514]",missing_in_checkpoint,egnn_layer_count_mismatch,0,131584
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.coord_mlp.2.bias,egnn_coord_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.coord_mlp.2.weight,egnn_coord_mlp,[],"[256, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,65536
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.coord_mlp.4.weight,egnn_coord_mlp,[],"[1, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.cross_product_mlp.0.bias,egnn_cross_product_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.cross_product_mlp.0.weight,egnn_cross_product_mlp,[],"[256, 514]",missing_in_checkpoint,egnn_layer_count_mismatch,0,131584
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.cross_product_mlp.2.bias,egnn_cross_product_mlp,[],[256],missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.cross_product_mlp.2.weight,egnn_cross_product_mlp,[],"[256, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,65536
+ddpm.dynamics.egnn.e_block_5.gcl_equiv.cross_product_mlp.4.weight,egnn_cross_product_mlp,[],"[1, 256]",missing_in_checkpoint,egnn_layer_count_mismatch,0,256
+ddpm.dynamics.egnn.embedding.bias,egnn_other,[128],[256],shape_mismatched,egnn_hidden_dim_mismatch,128,256
+ddpm.dynamics.egnn.embedding.weight,egnn_other,"[128, 33]","[256, 129]",shape_mismatched,egnn_hidden_dim_mismatch,4224,33024
+ddpm.dynamics.egnn.embedding_out.bias,egnn_other,[33],[129],shape_mismatched,egnn_hidden_dim_mismatch,33,129
+ddpm.dynamics.egnn.embedding_out.weight,egnn_other,"[33, 128]","[129, 256]",shape_mismatched,egnn_hidden_dim_mismatch,4224,33024
+ddpm.dynamics.residue_decoder.0.bias,other,[20],[22],shape_mismatched,unknown_shape_mismatch,20,22
+ddpm.dynamics.residue_decoder.0.weight,other,"[20, 32]","[22, 128]",shape_mismatched,unknown_shape_mismatch,640,2816
+ddpm.dynamics.residue_decoder.2.bias,other,[10],[11],shape_mismatched,unknown_shape_mismatch,10,11
+ddpm.dynamics.residue_decoder.2.weight,other,"[10, 20]","[11, 22]",shape_mismatched,unknown_shape_mismatch,200,242
+ddpm.dynamics.residue_encoder.0.bias,other,[20],[22],shape_mismatched,unknown_shape_mismatch,20,22
+ddpm.dynamics.residue_encoder.0.weight,other,"[20, 10]","[22, 11]",shape_mismatched,unknown_shape_mismatch,200,242
+ddpm.dynamics.residue_encoder.2.bias,other,[32],[128],shape_mismatched,unknown_shape_mismatch,32,128
+ddpm.dynamics.residue_encoder.2.weight,other,"[32, 20]","[128, 22]",shape_mismatched,unknown_shape_mismatch,640,2816
+ddpm.gamma.gamma,other,[501],[501],shape_matched,shape_matched,501,501
