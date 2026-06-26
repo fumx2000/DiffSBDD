@@ -1,0 +1,104 @@
+{
+  "all_backward_success": true,
+  "all_checks_passed": true,
+  "all_gradients_finite": true,
+  "all_gradients_nonzero": true,
+  "all_losses_finite": true,
+  "all_optimizer_steps_success": true,
+  "all_parameter_updates_finite": true,
+  "all_parameter_updates_nonzero": true,
+  "checkpoint_allowed": false,
+  "checkpoint_boundary": {
+    "checkpoint_save_patterns_forbidden": [
+      "torch.save",
+      ".pt",
+      ".pth",
+      ".ckpt",
+      "trainer.save_checkpoint",
+      "ModelCheckpoint"
+    ],
+    "current_review_checkpoint_allowed": false,
+    "first_checkpoint_discussion_requires": [
+      "12-step no-checkpoint dry run passed",
+      "output directory policy reviewed",
+      "checkpoint naming policy reviewed",
+      "retention policy reviewed",
+      "explicit user approval"
+    ],
+    "next_12_step_dry_run_checkpoint_allowed": false,
+    "next_checkpoint_allowed": false
+  },
+  "dry_run_training_steps_executed": 4,
+  "executed_steps": 4,
+  "finetune_allowed": false,
+  "formal_training_allowed": false,
+  "longer_no_checkpoint_dry_run_allowed": true,
+  "loss_decrease_required": false,
+  "mask_levels_seen": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "mask_order": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "model_save_allowed": false,
+  "next_checkpoint_allowed": false,
+  "next_run_stop_policy": {
+    "hard_max_steps": 12,
+    "hard_stop_conditions": [
+      "abort on non-finite loss",
+      "abort on non-finite gradients",
+      "abort on grad_nan_count > 0",
+      "abort on grad_inf_count > 0",
+      "abort on non-finite post-step params",
+      "abort on zero target mask",
+      "abort on unexpected mask level",
+      "abort on checkpoint/model artifact",
+      "abort on source modification"
+    ],
+    "warning_policy": "warnings do not necessarily fail unless configured as hard stop; record them",
+    "warning_thresholds": {
+      "grad_norm": 10000.0,
+      "loss_total": 10000.0,
+      "max_grad_abs": 1000.0,
+      "param_delta_norm": 1.0
+    },
+    "warnings_are_hard_stop_by_default": false
+  },
+  "previous_stage": "few_step_training_dry_run_no_checkpoint_v0",
+  "proposed_next_lr": 1e-06,
+  "proposed_next_mask_schedule": "A_warhead_only / B_linker_warhead / B2_scaffold_warhead / C_scaffold_linker_warhead repeated 3 cycles",
+  "proposed_next_max_steps": 12,
+  "proposed_next_shuffle": false,
+  "recommended_next_step": "longer_no_checkpoint_training_dry_run_design",
+  "risk_register": [
+    {
+      "mitigation": "Keep formal training disabled; the dry run only verifies loop wiring and numerical stability.",
+      "risk": "Treating four dry-run optimizer steps as evidence of model quality."
+    },
+    {
+      "mitigation": "Keep checkpoint/model saving forbidden for the next 12-step dry run.",
+      "risk": "Introducing checkpoint or model artifacts before output policy review."
+    },
+    {
+      "mitigation": "Cycle A/B/B2/C three times and abort on non-finite loss, gradients, parameters, unexpected masks, or artifacts.",
+      "risk": "Longer dry run hides unstable mask-level behavior."
+    },
+    {
+      "mitigation": "Require protected source diff checks and abort on source modification.",
+      "risk": "Accidental source modification during dry-run iteration."
+    }
+  ],
+  "source_modification_allowed": false,
+  "stability_status": "passed",
+  "stage": "few_step_training_dry_run_review_and_training_boundary_v0",
+  "step10q_dry_run_passed": true,
+  "stop_triggered": false,
+  "trainer_fit_allowed": false,
+  "training_step_allowed": false
+}
