@@ -1,0 +1,23 @@
+{
+  "blocking_reasons": [],
+  "checkpoint_loaded": true,
+  "checkpoint_path": "data/derived/covalent_small/training_runs/first_checkpointed_training_dry_run_v0/checkpoints/checkpoint_step_000012.pt",
+  "completed_steps_verified": true,
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "cuda_device_name": "NVIDIA A100-SXM4-80GB",
+  "device_fallback_reason": "",
+  "mask_schedule_verified": true,
+  "model_saved": false,
+  "model_state_loaded": true,
+  "optimizer_state_loaded": true,
+  "optimizer_step_during_resume_smoke": false,
+  "parameter_shapes_verified": true,
+  "requested_device": "auto",
+  "resolved_device": "cuda:0",
+  "resume_smoke_passed": true,
+  "second_checkpoint_saved": false,
+  "stage": "first_checkpointed_training_dry_run_v0",
+  "trainer_fit_called": false,
+  "training_step_called": false
+}
