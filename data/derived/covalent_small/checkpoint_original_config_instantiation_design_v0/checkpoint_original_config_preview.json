@@ -1,0 +1,58 @@
+{
+  "base_template_candidate": "configs/crossdock_fullatom_joint.yml",
+  "checkpoint_path": "checkpoints/crossdocked_fullatom_cond.ckpt",
+  "checkpoint_sha256": "07f86764bf569aafbc40a9c15fc02de8e2550437dd0f17f657eab3abe66c372c",
+  "config_fields_requiring_manual_resolution": [
+    "dataset and dataset_info mapping for 10-dimensional full-atom checkpoint features",
+    "atom_encoder / atom_decoder feature contract",
+    "residue feature contract",
+    "node_histogram source and shape",
+    "mode mismatch between checkpoint hparams and best repo template"
+  ],
+  "config_fields_to_keep_from_candidate": [
+    "diffusion_params",
+    "loss_params",
+    "eval_params",
+    "batch_size",
+    "lr",
+    "edge_cutoff_ligand",
+    "edge_cutoff_pocket",
+    "edge_cutoff_interaction",
+    "attention",
+    "tanh",
+    "normalization_factor"
+  ],
+  "config_fields_to_override": {
+    "egnn_params.hidden_nf": 128,
+    "egnn_params.joint_nf": 32,
+    "egnn_params.n_layers": 5,
+    "mode": "pocket_conditioning",
+    "pocket_representation": "full-atom",
+    "virtual_nodes": false
+  },
+  "current_config_reference": "configs/crossdock_fullatom_cond.yml",
+  "expected_checkpoint_state_dict_key_count": 122,
+  "expected_shape_match_goal": {
+    "acceptable_nonstrict_load_success_condition": "only after shape table documents known minor mismatches",
+    "ideal_strict_load_success": true,
+    "shape_matched_ratio_minimum": 0.8
+  },
+  "risks": [
+    "repo candidate config matches EGNN dimensions but has mode=joint rather than pocket_conditioning",
+    "current constants crossdock_full atom encoder is 11-dimensional while checkpoint tensors are 10-dimensional",
+    "safe instantiation requires in-memory wrapper rather than editing original config files"
+  ],
+  "source": "checkpoint_hyper_parameters_plus_repo_config_template",
+  "target_atom_feature_dim": 10,
+  "target_egnn_blocks": 5,
+  "target_egnn_embedding_input_dim": 33,
+  "target_egnn_embedding_output_dim": 128,
+  "target_egnn_params": {
+    "hidden_nf": 128,
+    "joint_nf": 32,
+    "n_layers": 5
+  },
+  "target_mode": "pocket_conditioning",
+  "target_pocket_representation": "full-atom",
+  "target_residue_feature_dim": 10
+}
