@@ -9,6 +9,7 @@ MASK_LEVEL_TO_BATCH_KEY = {
     "A_warhead_only": "generation_mask_A_warhead_only",
     "B_linker_warhead": "generation_mask_B_linker_warhead",
     "B2_scaffold_warhead": "generation_mask_B2_scaffold_warhead",
+    "B3_scaffold_only": "generation_mask_B3_scaffold_only",
     "C_scaffold_linker_warhead": "generation_mask_C_scaffold_linker_warhead",
 }
 
@@ -66,7 +67,11 @@ def adapt_covalent_batch_for_model_v0(batch: dict[str, Any], mask_level: str = "
         raise ValueError(f"unsupported mask_level: {mask_level}")
     ligand_mask = batch["ligand_atom_mask"].to(dtype=torch.bool)
     protein_mask = batch["protein_atom_mask"].to(dtype=torch.bool)
-    generation_mask = batch[MASK_LEVEL_TO_BATCH_KEY[mask_level]].to(dtype=torch.bool) & ligand_mask
+    generation_mask_key = MASK_LEVEL_TO_BATCH_KEY[mask_level]
+    if mask_level == "B3_scaffold_only" and generation_mask_key not in batch:
+        generation_mask = batch["scaffold_atom_mask"].to(dtype=torch.bool) & ligand_mask
+    else:
+        generation_mask = batch[generation_mask_key].to(dtype=torch.bool) & ligand_mask
     fixed_ligand_atom_mask = ligand_mask & ~generation_mask
     center = _coordinate_center(batch)
     ligand_coords = batch["ligand_atom_coords"].to(dtype=torch.float32)
@@ -170,7 +175,14 @@ def validate_adapted_covalent_batch_v0(adapted: dict[str, Any]) -> tuple[bool, l
         atom_idx = int(reactive[idx].item())
         if atom_idx < 0 or atom_idx >= ligand_mask.shape[1] or not bool(ligand_mask[idx, atom_idx].item()):
             reasons.append(f"reactive_not_in_ligand_mask:{idx}")
-        if atom_idx < 0 or atom_idx >= generation_mask.shape[1] or not bool(generation_mask[idx, atom_idx].item()):
+        if adapted["mask_level"] == "B3_scaffold_only":
+            if atom_idx < 0 or atom_idx >= fixed_mask.shape[1] or not bool(fixed_mask[idx, atom_idx].item()):
+                reasons.append(f"reactive_not_in_context_mask:{idx}")
+            if atom_idx < 0 or atom_idx >= adapted["warhead_atom_mask"].shape[1] or not bool(
+                adapted["warhead_atom_mask"][idx, atom_idx].item()
+            ):
+                reasons.append(f"reactive_not_in_warhead_mask:{idx}")
+        elif atom_idx < 0 or atom_idx >= generation_mask.shape[1] or not bool(generation_mask[idx, atom_idx].item()):
             reasons.append(f"reactive_not_in_generation_mask:{idx}")
     if (generation_mask.sum(dim=1) == 0).any():
         reasons.append("empty_generation_mask")

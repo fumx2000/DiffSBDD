@@ -1,0 +1,19 @@
+stage,section,field,value
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,short_tokens_detected,"[""A"", ""B"", ""B2"", ""C""]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_names_detected,"[""A_warhead_only"", ""B2_scaffold_warhead"", ""B3_scaffold_only"", ""B_linker_warhead"", ""C_scaffold_linker_warhead""]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,legacy_mask_scaffold_function_present,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,legacy_short_name_ambiguity_detected,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,legacy_short_name_preserved,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_b2_semantics_protected,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,short_alias_b3_added,False
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,short_alias_b3_deferred,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,short_alias_b3_deferred_reason,avoid_legacy_short_name_ambiguity
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,canonical_b3_name,B3_scaffold_only
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,canonical_b3_available,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,batch_adapter_b3_available,True
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,legacy_short_b2_visible_atoms,"[3, 4, 5, 6]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,legacy_short_b2_masked_atoms,"[0, 1, 2]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_b2_visible_atoms,"[3, 4]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_b2_masked_atoms,"[0, 1, 2, 5, 6]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_b3_visible_atoms,"[3, 4, 5, 6]"
+b3_scaffold_only_mask_implementation_v0,mask_api_audit,long_form_b3_masked_atoms,"[0, 1, 2]"

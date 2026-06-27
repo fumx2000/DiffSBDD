@@ -23,11 +23,13 @@ Each covalent-ready sample should contain these fields:
 | `scaffold_atoms` | list of integers | Ligand atom indices assigned to the scaffold region. |
 | `linker_atoms` | list of integers | Ligand atom indices assigned to the linker region. |
 | `warhead_atoms` | list of integers | Ligand atom indices assigned to the warhead region. |
-| `mask_type` | string | One of `A`, `B`, `B2`, or `C`, indicating which ligand region is masked for reconstruction. |
+| `mask_type` | string | Legacy short mask token, one of `A`, `B`, `B2`, or `C`. Downstream tensor/batch paths use canonical long-form `mask_level` names listed below. |
 
-## Four-level Mask Semantics
+## Legacy Short Mask Semantics
 
-The mask is defined over ligand atom indices.
+The legacy short API in `src/covalent_ext/masking.py` remains available for
+backward compatibility. It is intentionally not reinterpreted when long-form
+mask levels are added.
 
 | Mask | Masked atoms | Visible/fixed atoms |
 | --- | --- | --- |
@@ -35,6 +37,22 @@ The mask is defined over ligand atom indices.
 | `B` | `linker_atoms + warhead_atoms` | `scaffold_atoms` |
 | `B2` | `scaffold_atoms` | `linker_atoms + warhead_atoms` |
 | `C` | all ligand atoms | none |
+
+## Canonical Long-Form Mask Semantics
+
+The canonical downstream mask levels are long-form names. These names are used
+by tensor materialization, batch adapter, and masked-loss smoke evidence.
+
+| Mask level | Target/masked atoms | Context/visible atoms | Use case |
+| --- | --- | --- | --- |
+| `A_warhead_only` | `warhead_atoms` | `scaffold_atoms + linker_atoms` | warhead replacement |
+| `B_linker_warhead` | `linker_atoms + warhead_atoms` | `scaffold_atoms` | grow linker and warhead from known scaffold |
+| `B2_scaffold_warhead` | `scaffold_atoms + warhead_atoms` | `linker_atoms` | co-design scaffold and warhead around linker geometry |
+| `B3_scaffold_only` | `scaffold_atoms` | `linker_atoms + warhead_atoms` | scaffold hopping with fixed linker-warhead geometry |
+| `C_scaffold_linker_warhead` | `scaffold_atoms + linker_atoms + warhead_atoms` | none | de novo full covalent ligand generation |
+
+`B3_scaffold_only` is additive. It does not rename or replace
+`B2_scaffold_warhead`.
 
 The resulting `lig_fixed` vector follows DiffSBDD inpainting semantics:
 

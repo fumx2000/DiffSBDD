@@ -1,13 +1,24 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 import torch
 
-from covalent_ext.schema import MaskResult, MaskType
+from covalent_ext.schema import LongFormMaskLevel, MaskResult, MaskType
 
 
-def _normalize_atom_indices(name: str, atoms: Sequence[int], num_ligand_atoms: int) -> tuple[int, ...]:
+LONG_FORM_MASK_COMPONENTS: dict[LongFormMaskLevel, dict[str, tuple[str, ...]]] = {
+    "A_warhead_only": {"target": ("warhead",), "context": ("scaffold", "linker")},
+    "B_linker_warhead": {"target": ("linker", "warhead"), "context": ("scaffold",)},
+    "B2_scaffold_warhead": {"target": ("scaffold", "warhead"), "context": ("linker",)},
+    "B3_scaffold_only": {"target": ("scaffold",), "context": ("linker", "warhead")},
+    "C_scaffold_linker_warhead": {"target": ("scaffold", "linker", "warhead"), "context": ()},
+}
+
+
+def _normalize_atom_indices(name: str, atoms: Sequence[int] | None, num_ligand_atoms: int) -> tuple[int, ...]:
+    if atoms is None:
+        raise ValueError(f"{name} is missing")
     out = tuple(int(atom) for atom in atoms)
     invalid = [atom for atom in out if atom < 0 or atom >= num_ligand_atoms]
     if invalid:
@@ -18,10 +29,11 @@ def _normalize_atom_indices(name: str, atoms: Sequence[int], num_ligand_atoms: i
 
 
 def _validate_partition(
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
+    scaffold_atoms: Sequence[int] | None,
+    linker_atoms: Sequence[int] | None,
+    warhead_atoms: Sequence[int] | None,
     num_ligand_atoms: int,
+    require_nonempty_regions: bool = False,
 ) -> tuple[tuple[int, ...], tuple[int, ...], tuple[int, ...]]:
     if num_ligand_atoms <= 0:
         raise ValueError("num_ligand_atoms must be positive")
@@ -43,11 +55,23 @@ def _validate_partition(
             seen[atom] = group_name
     if overlaps:
         raise ValueError("atom groups must be disjoint: " + "; ".join(overlaps))
+    if require_nonempty_regions:
+        empty = [
+            name
+            for name, group_atoms in (
+                ("scaffold_atoms", scaffold),
+                ("linker_atoms", linker),
+                ("warhead_atoms", warhead),
+            )
+            if not group_atoms
+        ]
+        if empty:
+            raise ValueError("atom groups must be nonempty for long-form masks: " + ", ".join(empty))
 
     return scaffold, linker, warhead
 
 
-def make_mask_result(mask_type: MaskType, visible_atoms: Sequence[int], num_ligand_atoms: int) -> MaskResult:
+def make_mask_result(mask_type: str, visible_atoms: Sequence[int], num_ligand_atoms: int) -> MaskResult:
     visible = tuple(sorted(int(atom) for atom in visible_atoms))
     all_atoms = set(range(num_ligand_atoms))
     visible_set = set(visible)
@@ -95,6 +119,89 @@ def build_four_level_mask(
     return make_mask_result(mask_type, visible_atoms, num_ligand_atoms)
 
 
+def _atoms_for_components(
+    components: Sequence[str],
+    scaffold: Sequence[int],
+    linker: Sequence[int],
+    warhead: Sequence[int],
+) -> tuple[int, ...]:
+    groups = {
+        "scaffold": tuple(scaffold),
+        "linker": tuple(linker),
+        "warhead": tuple(warhead),
+    }
+    atoms: list[int] = []
+    for component in components:
+        atoms.extend(groups[component])
+    return tuple(atoms)
+
+
+def build_long_form_mask(
+    mask_level: LongFormMaskLevel,
+    scaffold_atoms: Sequence[int] | None,
+    linker_atoms: Sequence[int] | None,
+    warhead_atoms: Sequence[int] | None,
+    num_ligand_atoms: int,
+) -> MaskResult:
+    if mask_level not in LONG_FORM_MASK_COMPONENTS:
+        raise ValueError(f"unsupported mask_level: {mask_level}")
+    scaffold, linker, warhead = _validate_partition(
+        scaffold_atoms,
+        linker_atoms,
+        warhead_atoms,
+        num_ligand_atoms,
+        require_nonempty_regions=True,
+    )
+    context_components = LONG_FORM_MASK_COMPONENTS[mask_level]["context"]
+    visible_atoms = _atoms_for_components(context_components, scaffold, linker, warhead)
+    return make_mask_result(mask_level, visible_atoms, num_ligand_atoms)
+
+
+def mask_warhead_long_form(
+    scaffold_atoms: Sequence[int],
+    linker_atoms: Sequence[int],
+    warhead_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
+    return build_long_form_mask("A_warhead_only", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
+
+
+def mask_linker_and_warhead_long_form(
+    scaffold_atoms: Sequence[int],
+    linker_atoms: Sequence[int],
+    warhead_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
+    return build_long_form_mask("B_linker_warhead", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
+
+
+def mask_scaffold_and_warhead_long_form(
+    scaffold_atoms: Sequence[int],
+    linker_atoms: Sequence[int],
+    warhead_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
+    return build_long_form_mask("B2_scaffold_warhead", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
+
+
+def mask_scaffold_only_long_form(
+    scaffold_atoms: Sequence[int],
+    linker_atoms: Sequence[int],
+    warhead_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
+    return build_long_form_mask("B3_scaffold_only", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
+
+
+def mask_whole_ligand_long_form(
+    scaffold_atoms: Sequence[int],
+    linker_atoms: Sequence[int],
+    warhead_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
+    return build_long_form_mask("C_scaffold_linker_warhead", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
+
+
 def mask_warhead(
     scaffold_atoms: Sequence[int],
     linker_atoms: Sequence[int],
@@ -138,3 +245,10 @@ MASK_BUILDERS = {
     "C": mask_whole_ligand,
 }
 
+LONG_FORM_MASK_BUILDERS: dict[LongFormMaskLevel, Callable[[Sequence[int], Sequence[int], Sequence[int], int], MaskResult]] = {
+    "A_warhead_only": mask_warhead_long_form,
+    "B_linker_warhead": mask_linker_and_warhead_long_form,
+    "B2_scaffold_warhead": mask_scaffold_and_warhead_long_form,
+    "B3_scaffold_only": mask_scaffold_only_long_form,
+    "C_scaffold_linker_warhead": mask_whole_ligand_long_form,
+}

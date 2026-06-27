@@ -6,6 +6,13 @@ from typing import Literal, Sequence, TypedDict
 import torch
 
 MaskType = Literal["A", "B", "B2", "C"]
+LongFormMaskLevel = Literal[
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "B3_scaffold_only",
+    "C_scaffold_linker_warhead",
+]
 
 
 class ProteinPocket(TypedDict, total=False):
@@ -51,6 +58,5 @@ class CovalentSample:
 class MaskResult:
     visible_atoms: tuple[int, ...]
     masked_atoms: tuple[int, ...]
-    mask_type: MaskType
+    mask_type: str
     lig_fixed: torch.Tensor
-
