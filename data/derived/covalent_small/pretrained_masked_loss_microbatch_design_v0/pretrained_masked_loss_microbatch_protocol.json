@@ -1,0 +1,192 @@
+{
+  "data_source_evidence": {
+    "fixture_candidates": [
+      "example/3rfm.pdb",
+      "example/3rfm_B_CFF.sdf",
+      "example/3rfm_demo_one_step.sdf",
+      "example/5ndu.pdb",
+      "example/5ndu_C_8V2.sdf",
+      "example/covalent_A_demo.sdf",
+      "example/covalent_B2_demo.sdf",
+      "example/covalent_B_demo.sdf",
+      "example/covalent_C_demo.sdf",
+      "example/fragments.sdf"
+    ],
+    "input_source_rationale": "Real covalent artifacts exist, but the checkpoint-compatible pretrained model currently uses the Step 11F synthetic 10D shape-only contract; real covalent feature semantics are not reconciled yet.",
+    "real_covalent_sample_available": true,
+    "real_covalent_sample_candidates": [
+      "data/derived/covalent_small/training_tensor_materialized_v0/sample_index.csv",
+      "data/derived/covalent_small/training_tensor_materialized_v0/manifest.json",
+      "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_manifest.json",
+      "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_sample_index.csv",
+      "data/derived/covalent_small/real_training_dataset_package_review_only/real_training_dataset_file_index.csv",
+      "data/derived/covalent_small/packaging_real_review_only",
+      "data/derived/covalent_small/training_tensor_materialized_v0/samples/BTK_C481_6DI9_pre_reaction.npz",
+      "data/derived/covalent_small/training_tensor_materialized_v0/samples/KRAS_G12C_5F2E_pre_reaction.npz",
+      "data/derived/covalent_small/training_tensor_materialized_v0/samples/KRAS_G12C_6OIM_pre_reaction.npz"
+    ],
+    "real_covalent_sample_checkpoint_compatible": false,
+    "recommended_microbatch_input_source": "synthetic_10d_shape_contract",
+    "schema_sources": [
+      "src/covalent_ext/schema.py",
+      "src/covalent_ext/masking.py"
+    ],
+    "synthetic_10d_contract_available": true,
+    "synthetic_contract_available": true
+  },
+  "decision": {
+    "design_status": "microbatch_dry_run_design_ready",
+    "finetune_allowed": false,
+    "formal_training_allowed": false,
+    "loss_decrease_required": false,
+    "microbatch_backward_dry_run_allowed": true,
+    "optimizer_step_allowed": false,
+    "quality_claim_allowed": false,
+    "recommended_next_step": "pretrained_masked_loss_microbatch_backward_dry_run",
+    "this_design_creates_optimizer": false,
+    "this_design_executes_backward": false,
+    "this_design_saves_checkpoint": false,
+    "this_design_saves_model": false,
+    "training_allowed": false
+  },
+  "loss_evidence": {
+    "all_loss_values_positive": true,
+    "finite_loss_count": 4,
+    "loss_table_present": true,
+    "loss_table_row_count": 4,
+    "loss_value_scale_warning": "monitor_gradient_norm_for_large_C_level_loss",
+    "loss_values_by_level": {
+      "A_warhead_only": 24.993852615356445,
+      "B2_scaffold_warhead": 16.925447463989258,
+      "B_linker_warhead": 64.95052337646484,
+      "C_scaffold_linker_warhead": 508.4341735839844
+    },
+    "mask_levels": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "max_loss": 508.4341735839844,
+    "min_loss": 16.925447463989258
+  },
+  "previous_stage": "pretrained_masked_loss_smoke_v0",
+  "protocol": {
+    "allowed_device_default": "cpu",
+    "allowed_mask_levels": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "backward_allowed_next_step": true,
+    "checkpoint_save_allowed_next_step": false,
+    "delete_model_after_each_mask_level": true,
+    "finetune_allowed_next_step": false,
+    "formal_training_allowed_next_step": false,
+    "fresh_model_per_mask_level": true,
+    "loss_source": "Step 11F masked_loss_total_dry scalar per mask level",
+    "mask_levels_for_backward_dry_run": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "microbatch_backward_policy": "isolated_backward_per_mask_level",
+    "microbatch_input_source": "synthetic_10d_shape_contract",
+    "model_save_allowed_next_step": false,
+    "non_claims": [
+      "loss decrease is not required",
+      "gradient coverage of every parameter is not required",
+      "training quality is not proven",
+      "generation quality is not proven"
+    ],
+    "optimizer_allowed_next_step": false,
+    "optimizer_step_allowed_next_step": false,
+    "optional_device": "cuda:0 only if explicitly requested later",
+    "pass_conditions": [
+      "loss finite",
+      "loss requires grad",
+      "reverse pass invoked exactly once",
+      "no optimizer object",
+      "no optimizer step",
+      "at least one parameter has finite nonzero grad",
+      "grad_nan_count equals 0",
+      "grad_inf_count equals 0"
+    ],
+    "proposed_next_stage": "pretrained_masked_loss_microbatch_dry_run_v0",
+    "recommended_mask_level_sequence": [
+      "A_warhead_only",
+      "C_scaffold_linker_warhead",
+      "B_linker_warhead",
+      "B2_scaffold_warhead"
+    ],
+    "required_gradient_stats": [
+      "parameter_count",
+      "parameters_with_grad_count",
+      "parameters_with_finite_grad_count",
+      "grad_nan_count",
+      "grad_inf_count",
+      "total_grad_norm",
+      "max_abs_grad",
+      "zero_grad_parameter_count",
+      "selected_loss_value"
+    ],
+    "reverse_pass_invocations_per_mask_level": 1,
+    "step11f_loss_scale_reference": {
+      "A_warhead_only": 24.993852615356445,
+      "B2_scaffold_warhead": 16.925447463989258,
+      "B_linker_warhead": 64.95052337646484,
+      "C_scaffold_linker_warhead": 508.4341735839844
+    },
+    "strict_load_fresh_model_per_mask_level": true,
+    "trainer_fit_allowed_next_step": false,
+    "training_step_allowed_next_step": false,
+    "zero_grad_after_measurement": true
+  },
+  "risk_register": [
+    {
+      "blocks_11H": false,
+      "description": "Synthetic 10D contract is not the same as real covalent data feature semantics.",
+      "mitigation": "Use Step 11H only for gradient plumbing; keep real feature mapping as a later gate.",
+      "risk_id": "R1_synthetic_10d_semantics",
+      "severity": "high"
+    },
+    {
+      "blocks_11H": false,
+      "description": "The microbatch dry run may expose detached loss or in-place operation issues.",
+      "mitigation": "Require loss.requires_grad, finite gradients, and isolated fresh model per mask level.",
+      "risk_id": "R2_reverse_pass_surface",
+      "severity": "medium"
+    },
+    {
+      "blocks_11H": false,
+      "description": "C mask loss scale is larger than other mask levels and may amplify gradients.",
+      "mitigation": "Log total grad norm and max absolute grad for every mask level.",
+      "risk_id": "R3_large_C_level_loss_scale",
+      "severity": "medium"
+    },
+    {
+      "blocks_11H": false,
+      "description": "No optimizer step means 11H cannot prove parameter update behavior.",
+      "mitigation": "Keep 11H as backward-only; require a later explicit optimizer smoke gate.",
+      "risk_id": "R4_no_parameter_update_claim",
+      "severity": "low"
+    },
+    {
+      "blocks_11H": false,
+      "description": "Fresh model per mask level is slower but reduces gradient contamination.",
+      "mitigation": "Accept slower runtime for the first pretrained microbatch dry run.",
+      "risk_id": "R5_fresh_model_runtime",
+      "severity": "low"
+    },
+    {
+      "blocks_11H": false,
+      "description": "Real covalent feature mapping and loader integration remain unresolved for checkpoint-compatible 10D inputs.",
+      "mitigation": "Do not claim real-data training readiness until a real feature mapping gate passes.",
+      "risk_id": "R6_real_covalent_loader_gap",
+      "severity": "high"
+    }
+  ],
+  "stage": "pretrained_masked_loss_microbatch_design_v0"
+}
