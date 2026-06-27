@@ -1,0 +1,241 @@
+{
+  "decision": {
+    "checkpoint_save_allowed_next_step": false,
+    "design_status": "optimizer_smoke_design_ready",
+    "finetune_allowed": false,
+    "formal_training_allowed": false,
+    "loss_decrease_required": false,
+    "model_save_allowed_next_step": false,
+    "optimizer_step_smoke_allowed": true,
+    "quality_claim_allowed": false,
+    "recommended_next_step": "single_optimizer_step_smoke",
+    "this_design_creates_optimizer": false,
+    "this_design_runs_backward": false,
+    "this_design_runs_optimizer_step": false,
+    "training_allowed": false
+  },
+  "input_policy": {
+    "all_mask_levels_have_backward_evidence": true,
+    "mask_levels_for_optimizer_smoke": [
+      "A_warhead_only"
+    ],
+    "not_formal_training": true,
+    "optimizer_smoke_input_source": "synthetic_10d_shape_contract",
+    "optional_expand_to_all_levels_after_first_pass": true,
+    "quality_claim_allowed": false,
+    "selected_initial_grad_norm": 118.79651159480801,
+    "selected_initial_mask_level": "A_warhead_only",
+    "selection_reason": "largest_observed_grad_norm_and_simple_warhead_mask"
+  },
+  "optimizer_config": {
+    "base_lr_config_source": "configs/crossdock_fullatom_cond.yml",
+    "base_lr_from_config": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "gradient_accumulation_allowed": false,
+    "gradient_clipping_allowed": false,
+    "lr": 1e-06,
+    "mixed_precision_allowed": false,
+    "optimizer_class": "AdamW",
+    "optimizer_import_path_next_step": "torch.optim.AdamW",
+    "recommendation_reason": "Use a tiny learning rate for plumbing-only parameter delta evidence; no loss decrease or quality claim is expected.",
+    "scheduler_allowed": false,
+    "weight_decay": 0.0
+  },
+  "previous_stage": "pretrained_masked_loss_microbatch_backward_dry_run_v0",
+  "protocol": {
+    "backward_policy": "single backward",
+    "forbidden_next_step": [
+      "trainer.fit",
+      "training_step",
+      "scheduler",
+      "multiple optimizer steps",
+      "checkpoint save",
+      "model save",
+      "writing .pt/.ckpt/.pth/.pkl artifacts",
+      "using Step 10W checkpoint"
+    ],
+    "input_source": "synthetic_10d_shape_contract",
+    "model_policy": "fresh_strict_loaded_pretrained_model",
+    "non_claims": [
+      "not formal training",
+      "loss decrease is not required",
+      "no generation quality claim",
+      "no real covalent data-loader training claim"
+    ],
+    "optimizer_config": {
+      "base_lr_config_source": "configs/crossdock_fullatom_cond.yml",
+      "base_lr_from_config": 0.001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "gradient_accumulation_allowed": false,
+      "gradient_clipping_allowed": false,
+      "lr": 1e-06,
+      "mixed_precision_allowed": false,
+      "optimizer_class": "AdamW",
+      "optimizer_import_path_next_step": "torch.optim.AdamW",
+      "recommendation_reason": "Use a tiny learning rate for plumbing-only parameter delta evidence; no loss decrease or quality claim is expected.",
+      "scheduler_allowed": false,
+      "weight_decay": 0.0
+    },
+    "optimizer_policy": "single AdamW optimizer for smoke only",
+    "optimizer_step_call_count_next_step": 1,
+    "optimizer_step_policy": "single optimizer.step exactly once",
+    "parameter_delta_policy": {
+      "record_only_summary": true,
+      "save_full_tensors": false,
+      "summary_fields": [
+        "sampled_parameter_names",
+        "parameter_delta_l2_total",
+        "parameter_delta_max_abs",
+        "changed_parameter_count",
+        "unchanged_parameter_count",
+        "finite_parameter_delta"
+      ]
+    },
+    "pass_conditions": [
+      "loss finite",
+      "loss.requires_grad true",
+      "backward_success true",
+      "optimizer_created true",
+      "optimizer_step_called true",
+      "optimizer_step_call_count equals 1",
+      "at least one parameter changed",
+      "parameter_delta_l2_total finite positive",
+      "parameter_delta_max_abs finite positive",
+      "no NaN/Inf in changed parameters",
+      "no checkpoint/model saved"
+    ],
+    "proposed_next_stage": "optimizer_step_smoke_v0",
+    "selected_mask_level": "A_warhead_only",
+    "step11h_gradient_reference": {
+      "A_warhead_only": 118.79651159480801,
+      "B2_scaffold_warhead": 50.883000892148154,
+      "B_linker_warhead": 46.53674739523468,
+      "C_scaffold_linker_warhead": 40.13544704767323
+    },
+    "zero_grad_policy": [
+      "optimizer.zero_grad(set_to_none=True) before forward",
+      "compute differentiable masked loss",
+      "backward once",
+      "capture selected parameter snapshots before step",
+      "optimizer.step once",
+      "compare parameter delta summaries",
+      "optimizer.zero_grad(set_to_none=True) after measurement"
+    ]
+  },
+  "risk_register": [
+    {
+      "blocks_11J": false,
+      "description": "Synthetic 10D contract still does not prove real covalent feature semantics.",
+      "mitigation": "Keep Step 11J as optimizer plumbing only and retain no quality claims.",
+      "risk_id": "R1_synthetic_10d_contract",
+      "severity": "high"
+    },
+    {
+      "blocks_11J": false,
+      "description": "The optimizer step will change pretrained weights in memory only.",
+      "mitigation": "Do not save checkpoint/model artifacts; discard model after measurement.",
+      "risk_id": "R2_in_memory_pretrained_weight_update",
+      "severity": "medium"
+    },
+    {
+      "blocks_11J": false,
+      "description": "Too-large learning rate may perturb parameters more than needed for a smoke test.",
+      "mitigation": "Use AdamW with lr=1e-6 and weight_decay=0.0 for the first step smoke.",
+      "risk_id": "R3_lr_too_large",
+      "severity": "medium"
+    },
+    {
+      "blocks_11J": false,
+      "description": "Too-small learning rate may produce parameter deltas near floating-point precision.",
+      "mitigation": "Require positive finite parameter delta summaries and report unchanged parameter counts.",
+      "risk_id": "R4_lr_too_small",
+      "severity": "low"
+    },
+    {
+      "blocks_11J": false,
+      "description": "AdamW state creation alone does not prove scheduler, clipping, accumulation, or loop readiness.",
+      "mitigation": "Defer scheduler, clipping, and accumulation to later explicit gates.",
+      "risk_id": "R5_optimizer_state_not_training_loop_readiness",
+      "severity": "medium"
+    },
+    {
+      "blocks_11J": false,
+      "description": "No scheduler, mixed precision, gradient accumulation, or clipping will be tested.",
+      "mitigation": "State these as exclusions in the Step 11J report.",
+      "risk_id": "R6_scheduler_clipping_accumulation_untested",
+      "severity": "low"
+    },
+    {
+      "blocks_11J": false,
+      "description": "Real covalent loader and feature mapping remain outside this optimizer smoke.",
+      "mitigation": "Keep synthetic shape-only labels and require later real-data mapping gates.",
+      "risk_id": "R7_real_covalent_loader_unresolved",
+      "severity": "high"
+    },
+    {
+      "blocks_11J": false,
+      "description": "Parameter delta evidence must not write tensor dumps or model snapshots.",
+      "mitigation": "Record only scalar summaries and sampled parameter names.",
+      "risk_id": "R8_parameter_delta_tensor_leak",
+      "severity": "medium"
+    }
+  ],
+  "stage": "optimizer_smoke_design_v0",
+  "step11h_gradient_evidence": {
+    "all_backward_success": true,
+    "all_grad_finite": true,
+    "all_have_nonzero_grad": true,
+    "grad_inf_count_total": 0,
+    "grad_nan_count_total": 0,
+    "grad_norm_by_level": {
+      "A_warhead_only": 118.79651159480801,
+      "B2_scaffold_warhead": 50.883000892148154,
+      "B_linker_warhead": 46.53674739523468,
+      "C_scaffold_linker_warhead": 40.13544704767323
+    },
+    "gradient_scale_warning": "monitor_optimizer_step_size_for_large_gradient_norm",
+    "gradient_table_present": true,
+    "gradient_table_row_count": 4,
+    "loss_values_by_level": {
+      "A_warhead_only": 3.3604235649108887,
+      "B2_scaffold_warhead": 1.6261783838272095,
+      "B_linker_warhead": 1.626440405845642,
+      "C_scaffold_linker_warhead": 1.1443536281585693
+    },
+    "mask_levels": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "max_abs_grad_by_level": {
+      "A_warhead_only": 32.380165100097656,
+      "B2_scaffold_warhead": 9.721502304077148,
+      "B_linker_warhead": 10.102252960205078,
+      "C_scaffold_linker_warhead": 7.900495529174805
+    },
+    "max_abs_grad_overall": 32.380165100097656,
+    "max_grad_norm": 118.79651159480801,
+    "min_grad_norm": 40.13544704767323,
+    "parameters_with_grad_by_level": {
+      "A_warhead_only": 111,
+      "B2_scaffold_warhead": 111,
+      "B_linker_warhead": 111,
+      "C_scaffold_linker_warhead": 111
+    },
+    "parameters_with_nonzero_grad_by_level": {
+      "A_warhead_only": 111,
+      "B2_scaffold_warhead": 111,
+      "B_linker_warhead": 111,
+      "C_scaffold_linker_warhead": 111
+    }
+  }
+}
