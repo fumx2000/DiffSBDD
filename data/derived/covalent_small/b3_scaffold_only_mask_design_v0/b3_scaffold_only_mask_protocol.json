@@ -1,0 +1,520 @@
+{
+  "b3_invariants": [
+    {
+      "description": "target_components must equal scaffold",
+      "invariant_id": "B3_I01_target_exactly_scaffold",
+      "required": true
+    },
+    {
+      "description": "context_components must equal linker plus warhead",
+      "invariant_id": "B3_I02_context_exactly_linker_warhead",
+      "required": true
+    },
+    {
+      "description": "target_atoms_count must be greater than zero",
+      "invariant_id": "B3_I03_target_count_positive",
+      "required": true
+    },
+    {
+      "description": "context_atoms_count must be greater than zero",
+      "invariant_id": "B3_I04_context_count_positive",
+      "required": true
+    },
+    {
+      "description": "linker_atoms_count must be greater than zero",
+      "invariant_id": "B3_I05_linker_count_positive",
+      "required": true
+    },
+    {
+      "description": "warhead_atoms_count must be greater than zero",
+      "invariant_id": "B3_I06_warhead_count_positive",
+      "required": true
+    },
+    {
+      "description": "scaffold_atoms_count must be greater than zero",
+      "invariant_id": "B3_I07_scaffold_count_positive",
+      "required": true
+    },
+    {
+      "description": "target and context atom sets must be disjoint",
+      "invariant_id": "B3_I08_disjoint",
+      "required": true
+    },
+    {
+      "description": "target plus context covers all scaffold/linker/warhead ligand atoms",
+      "invariant_id": "B3_I09_cover_assigned_regions",
+      "required": true
+    },
+    {
+      "description": "warhead atoms must remain visible in context",
+      "invariant_id": "B3_I10_warhead_visible",
+      "required": true
+    },
+    {
+      "description": "linker atoms must remain visible in context",
+      "invariant_id": "B3_I11_linker_visible",
+      "required": true
+    },
+    {
+      "description": "scaffold atoms must not leak into context",
+      "invariant_id": "B3_I12_no_scaffold_context_leak",
+      "required": true
+    },
+    {
+      "description": "covalent atom-pair labels stay available as conditioning/evaluation metadata, not target leakage",
+      "invariant_id": "B3_I13_covalent_labels_metadata_only",
+      "required": true
+    },
+    {
+      "description": "B3 must not alter A/B/B2/C semantics",
+      "invariant_id": "B3_I14_preserve_existing_levels",
+      "required": true
+    },
+    {
+      "description": "B3 must fail safely if scaffold/linker/warhead labels are missing or empty",
+      "invariant_id": "B3_I15_fail_safe_missing_labels",
+      "required": true
+    }
+  ],
+  "b3_semantics": {
+    "context_components": [
+      "linker",
+      "warhead"
+    ],
+    "context_description": "linker and warhead atoms stay visible; covalent-reactive end geometry remains conditioning context",
+    "mask_level": "B3_scaffold_only",
+    "primary_design_use": "scaffold_hopping_with_fixed_linker_warhead",
+    "relation_to_B2": {
+      "B2_scaffold_warhead": "predict scaffold and warhead from linker context",
+      "B3_scaffold_only": "predict scaffold from linker and warhead context",
+      "complementary_to_B2": true,
+      "does_not_replace_B2": true
+    },
+    "relation_to_current_four_level": {
+      "A_B_B2_C_remain_unchanged": true,
+      "B3_added_as_fifth_level": true,
+      "existing_b3_named_level_present": false
+    },
+    "scaffold_hopping_value": [
+      "scaffold hopping",
+      "core replacement",
+      "BBB and permeability exploration while preserving linker-warhead geometry",
+      "metabolic stability exploration while preserving covalent reaction geometry",
+      "selectivity and patent-space exploration around fixed linker-warhead context"
+    ],
+    "target_components": [
+      "scaffold"
+    ],
+    "target_description": "scaffold atoms are hidden and predicted"
+  },
+  "decision": {
+    "b3_scaffold_only_mask_implementation_allowed": true,
+    "checkpoint_saved": false,
+    "design_status": "b3_scaffold_only_mask_design_ready",
+    "existing_b3_named_level_present": false,
+    "finetune_allowed": false,
+    "formal_training_allowed": false,
+    "model_saved": false,
+    "quality_claim_allowed": false,
+    "real_training_allowed": false,
+    "recommended_next_step": "b3_scaffold_only_mask_implementation",
+    "tensor_dump_saved": false,
+    "this_design_creates_optimizer": false,
+    "this_design_modifies_mask_logic": false,
+    "this_design_runs_backward": false,
+    "this_design_runs_model": false,
+    "this_design_runs_optimizer_step": false,
+    "training_allowed": false
+  },
+  "existing_mask_schema_inspection": {
+    "b3_already_implemented": false,
+    "current_b2_context_components": [
+      "linker"
+    ],
+    "current_b2_name": "B2_scaffold_warhead",
+    "current_b2_target_components": [
+      "scaffold",
+      "warhead"
+    ],
+    "existing_four_level_contract_detected": true,
+    "existing_mask_levels_detected": [
+      "A_warhead_only",
+      "B_linker_warhead",
+      "B2_scaffold_warhead",
+      "C_scaffold_linker_warhead"
+    ],
+    "existing_masking_files_found": {
+      "batch_adapter": true,
+      "data_schema_doc": true,
+      "mask_tests": true,
+      "masking": true,
+      "schema": true
+    },
+    "existing_short_mask_tokens_detected": [
+      "A",
+      "B",
+      "B2",
+      "C"
+    ],
+    "implementation_files_to_touch_next": [
+      "src/covalent_ext/masking.py",
+      "src/covalent_ext/schema.py",
+      "src/covalent_ext/batch_adapter.py",
+      "tests/test_covalent_masking.py",
+      "relevant covalent_ext mask sweep tests",
+      "docs/covalent_data_schema.md"
+    ],
+    "manual_review_required": true,
+    "source_inspection_notes": [
+      "batch_adapter and tensor materialization outputs use four long-form mask level names.",
+      "legacy masking.py and docs/covalent_data_schema.md still expose short A/B/B2/C naming.",
+      "legacy masking.py includes mask_scaffold for B2; additive implementation should protect current downstream B2_scaffold_warhead semantics."
+    ]
+  },
+  "five_level_mask_table": [
+    {
+      "context_components": [
+        "scaffold",
+        "linker"
+      ],
+      "mask_level": "A_warhead_only",
+      "target_components": [
+        "warhead"
+      ],
+      "use_case": "warhead replacement"
+    },
+    {
+      "context_components": [
+        "scaffold"
+      ],
+      "mask_level": "B_linker_warhead",
+      "target_components": [
+        "linker",
+        "warhead"
+      ],
+      "use_case": "grow linker and warhead from known scaffold"
+    },
+    {
+      "context_components": [
+        "linker"
+      ],
+      "mask_level": "B2_scaffold_warhead",
+      "target_components": [
+        "scaffold",
+        "warhead"
+      ],
+      "use_case": "co-design scaffold and warhead around linker geometry"
+    },
+    {
+      "context_components": [
+        "linker",
+        "warhead"
+      ],
+      "mask_level": "B3_scaffold_only",
+      "target_components": [
+        "scaffold"
+      ],
+      "use_case": "scaffold hopping with fixed linker-warhead geometry"
+    },
+    {
+      "context_components": [],
+      "mask_level": "C_scaffold_linker_warhead",
+      "target_components": [
+        "scaffold",
+        "linker",
+        "warhead"
+      ],
+      "use_case": "de novo full covalent ligand generation"
+    }
+  ],
+  "implementation_protocol": {
+    "add_new_mask_level": "B3_scaffold_only",
+    "allowed_next_step_files": [
+      "src/covalent_ext/masking.py",
+      "relevant covalent_ext tests",
+      "docs and derived report outputs"
+    ],
+    "context_components": [
+      "linker",
+      "warhead"
+    ],
+    "do_not_change_A_B_B2_C_semantics": true,
+    "do_not_rename_existing_B2": true,
+    "five_level_table": [
+      {
+        "context_components": [
+          "scaffold",
+          "linker"
+        ],
+        "mask_level": "A_warhead_only",
+        "target_components": [
+          "warhead"
+        ],
+        "use_case": "warhead replacement"
+      },
+      {
+        "context_components": [
+          "scaffold"
+        ],
+        "mask_level": "B_linker_warhead",
+        "target_components": [
+          "linker",
+          "warhead"
+        ],
+        "use_case": "grow linker and warhead from known scaffold"
+      },
+      {
+        "context_components": [
+          "linker"
+        ],
+        "mask_level": "B2_scaffold_warhead",
+        "target_components": [
+          "scaffold",
+          "warhead"
+        ],
+        "use_case": "co-design scaffold and warhead around linker geometry"
+      },
+      {
+        "context_components": [
+          "linker",
+          "warhead"
+        ],
+        "mask_level": "B3_scaffold_only",
+        "target_components": [
+          "scaffold"
+        ],
+        "use_case": "scaffold hopping with fixed linker-warhead geometry"
+      },
+      {
+        "context_components": [],
+        "mask_level": "C_scaffold_linker_warhead",
+        "target_components": [
+          "scaffold",
+          "linker",
+          "warhead"
+        ],
+        "use_case": "de novo full covalent ligand generation"
+      }
+    ],
+    "forbidden_next_step_actions": [
+      "modify DiffSBDD or diffusion source",
+      "run model execution",
+      "run gradient pass",
+      "create update controller",
+      "run parameter update",
+      "save checkpoint/model/tensor artifact"
+    ],
+    "implementation_policy": "additive_only",
+    "invariants": [
+      {
+        "description": "target_components must equal scaffold",
+        "invariant_id": "B3_I01_target_exactly_scaffold",
+        "required": true
+      },
+      {
+        "description": "context_components must equal linker plus warhead",
+        "invariant_id": "B3_I02_context_exactly_linker_warhead",
+        "required": true
+      },
+      {
+        "description": "target_atoms_count must be greater than zero",
+        "invariant_id": "B3_I03_target_count_positive",
+        "required": true
+      },
+      {
+        "description": "context_atoms_count must be greater than zero",
+        "invariant_id": "B3_I04_context_count_positive",
+        "required": true
+      },
+      {
+        "description": "linker_atoms_count must be greater than zero",
+        "invariant_id": "B3_I05_linker_count_positive",
+        "required": true
+      },
+      {
+        "description": "warhead_atoms_count must be greater than zero",
+        "invariant_id": "B3_I06_warhead_count_positive",
+        "required": true
+      },
+      {
+        "description": "scaffold_atoms_count must be greater than zero",
+        "invariant_id": "B3_I07_scaffold_count_positive",
+        "required": true
+      },
+      {
+        "description": "target and context atom sets must be disjoint",
+        "invariant_id": "B3_I08_disjoint",
+        "required": true
+      },
+      {
+        "description": "target plus context covers all scaffold/linker/warhead ligand atoms",
+        "invariant_id": "B3_I09_cover_assigned_regions",
+        "required": true
+      },
+      {
+        "description": "warhead atoms must remain visible in context",
+        "invariant_id": "B3_I10_warhead_visible",
+        "required": true
+      },
+      {
+        "description": "linker atoms must remain visible in context",
+        "invariant_id": "B3_I11_linker_visible",
+        "required": true
+      },
+      {
+        "description": "scaffold atoms must not leak into context",
+        "invariant_id": "B3_I12_no_scaffold_context_leak",
+        "required": true
+      },
+      {
+        "description": "covalent atom-pair labels stay available as conditioning/evaluation metadata, not target leakage",
+        "invariant_id": "B3_I13_covalent_labels_metadata_only",
+        "required": true
+      },
+      {
+        "description": "B3 must not alter A/B/B2/C semantics",
+        "invariant_id": "B3_I14_preserve_existing_levels",
+        "required": true
+      },
+      {
+        "description": "B3 must fail safely if scaffold/linker/warhead labels are missing or empty",
+        "invariant_id": "B3_I15_fail_safe_missing_labels",
+        "required": true
+      }
+    ],
+    "pass_conditions": [
+      "B3 mask can be built on synthetic covalent sample",
+      "B3 target atom count greater than zero",
+      "B3 context atom count greater than zero",
+      "target and context disjoint",
+      "warhead visible in context",
+      "linker visible in context",
+      "scaffold hidden in target",
+      "A/B/B2/C outputs unchanged relative to previous expected semantics",
+      "no training action",
+      "no checkpoint/model/tensor artifact"
+    ],
+    "proposed_next_stage": "b3_scaffold_only_mask_implementation_v0",
+    "target_components": [
+      "scaffold"
+    ]
+  },
+  "previous_stage": "tiny_training_dry_run_v0",
+  "risk_register": [
+    {
+      "blocks_11N": false,
+      "description": "B3 depends on reliable scaffold/linker/warhead atom labels.",
+      "mitigation": "Fail safely when any region is missing or empty; add fixture coverage.",
+      "risk_id": "B3_R01_region_labels",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "B3 can be confused with current B2 if names are unclear.",
+      "mitigation": "Keep B2 name and semantics unchanged; add explicit B2-vs-B3 table tests.",
+      "risk_id": "B3_R02_b2_confusion",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "B3 preserves warhead/linker and may overfit fixed reactive geometry.",
+      "mitigation": "Track geometry metrics separately and avoid quality claims.",
+      "risk_id": "B3_R03_fixed_reactive_geometry",
+      "severity": "medium"
+    },
+    {
+      "blocks_11N": false,
+      "description": "Scaffold-only target may be too large or too diverse.",
+      "mitigation": "Start with smoke counts and later stratify scaffold sizes.",
+      "risk_id": "B3_R04_large_scaffold_space",
+      "severity": "medium"
+    },
+    {
+      "blocks_11N": false,
+      "description": "Generated scaffold can be disconnected if linker attachment constraints are weak.",
+      "mitigation": "Require attachment metadata and connectivity checks before real training.",
+      "risk_id": "B3_R05_disconnected_scaffold",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "B3 does not prove generated scaffold is chemically valid.",
+      "mitigation": "Keep implementation smoke separate from chemistry validity gates.",
+      "risk_id": "B3_R06_chemical_validity_not_proven",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "B3 does not prove BBB, metabolic, or selectivity improvement.",
+      "mitigation": "Forbid property claims until downstream evaluation exists.",
+      "risk_id": "B3_R07_property_claims_not_proven",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "Adding B3 changes task sampling distribution later.",
+      "mitigation": "Require schedule design before any real training loop includes B3.",
+      "risk_id": "B3_R08_sampling_distribution_shift",
+      "severity": "medium"
+    },
+    {
+      "blocks_11N": false,
+      "description": "Current synthetic 10D path does not prove real feature semantics.",
+      "mitigation": "Require real covalent feature mapping and loader gate before real data use.",
+      "risk_id": "B3_R09_synthetic_semantics_gap",
+      "severity": "high"
+    },
+    {
+      "blocks_11N": false,
+      "description": "Real covalent loader gate is still required before real training.",
+      "mitigation": "Keep B3 implementation and real loader readiness as separate gates.",
+      "risk_id": "B3_R10_real_loader_gap",
+      "severity": "high"
+    }
+  ],
+  "smoke_roadmap": [
+    {
+      "execution_boundary": "no model forward or gradient pass",
+      "purpose": "add B3 to mask logic and tests",
+      "stage": "b3_scaffold_only_mask_implementation_v0",
+      "step": "Step 11N"
+    },
+    {
+      "execution_boundary": "mask construction only",
+      "purpose": "run mask sweep including A/B/B2/B3/C and verify target/context counts",
+      "stage": "b3_scaffold_only_mask_sweep_v0",
+      "step": "Step 11O"
+    },
+    {
+      "execution_boundary": "no parameter update",
+      "purpose": "strict-loaded model with B3 synthetic finite loss",
+      "stage": "b3_pretrained_masked_loss_smoke_v0",
+      "step": "Step 11P"
+    },
+    {
+      "execution_boundary": "no parameter update",
+      "purpose": "B3 loss requires gradient and gradient values are finite",
+      "stage": "b3_backward_smoke_v0",
+      "step": "Step 11Q"
+    },
+    {
+      "execution_boundary": "no saved artifacts",
+      "purpose": "one controlled parameter update on B3",
+      "stage": "b3_single_optimizer_step_smoke_v0",
+      "step": "Step 11R"
+    },
+    {
+      "execution_boundary": "synthetic-only evidence",
+      "purpose": "optional three-step B3 tiny loop",
+      "stage": "b3_tiny_training_dry_run_v0",
+      "step": "Step 11S"
+    },
+    {
+      "execution_boundary": "separate approval gate",
+      "purpose": "gate real feature mapping and loader readiness before real data use",
+      "stage": "real_covalent_feature_mapping_loader_gate",
+      "step": "Then"
+    }
+  ],
+  "stage": "b3_scaffold_only_mask_design_v0"
+}

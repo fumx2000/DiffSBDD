@@ -1,0 +1,55 @@
+{
+  "all_checks_passed": true,
+  "b3_context_components": [
+    "linker",
+    "warhead"
+  ],
+  "b3_invariants_written": 15,
+  "b3_primary_use": "scaffold_hopping_with_fixed_linker_warhead",
+  "b3_scaffold_only_mask_implementation_allowed": true,
+  "b3_target_components": [
+    "scaffold"
+  ],
+  "blocking_reasons": [],
+  "checkpoint_saved": false,
+  "current_mask_levels_detected": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "C_scaffold_linker_warhead"
+  ],
+  "current_short_mask_tokens_detected": [
+    "A",
+    "B",
+    "B2",
+    "C"
+  ],
+  "design_status": "b3_scaffold_only_mask_design_ready",
+  "do_not_change_existing_four_level_semantics": true,
+  "do_not_rename_existing_b2": true,
+  "existing_b3_named_level_present": false,
+  "finetune_allowed": false,
+  "five_level_mask_design_ready": true,
+  "forbidden_artifacts_created": false,
+  "formal_training_allowed": false,
+  "implementation_protocol_written": true,
+  "model_saved": false,
+  "new_mask_level": "B3_scaffold_only",
+  "original_source_files_modified": false,
+  "previous_stage": "tiny_training_dry_run_v0",
+  "proposed_next_stage": "b3_scaffold_only_mask_implementation_v0",
+  "quality_claim_allowed": false,
+  "real_training_allowed": false,
+  "recommended_next_step": "b3_scaffold_only_mask_implementation",
+  "smoke_roadmap_written": true,
+  "stage": "b3_scaffold_only_mask_design_v0",
+  "step11l_validated": true,
+  "tensor_dump_saved": false,
+  "this_design_creates_optimizer": false,
+  "this_design_modifies_mask_logic": false,
+  "this_design_runs_backward": false,
+  "this_design_runs_model": false,
+  "this_design_runs_optimizer_step": false,
+  "tiny_training_loop_plumbing_proven": true,
+  "training_allowed": false
+}
