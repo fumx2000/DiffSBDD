@@ -1,0 +1,91 @@
+{
+  "all_batch_adapter_rows_passed": true,
+  "all_checks_passed": true,
+  "all_mask_sweep_rows_passed": true,
+  "b2_b3_contrast_passed": true,
+  "b3_explicit_key_adapter_valid": true,
+  "b3_fallback_adapter_valid": true,
+  "b3_pretrained_masked_loss_smoke_allowed": true,
+  "b3_scaffold_only_mask_sweep_passed": true,
+  "backward_called": false,
+  "batch_adapter_sweep_row_count": 6,
+  "blocking_reasons": [],
+  "canonical_b3_name": "B3_scaffold_only",
+  "canonical_five_level_mask_contract_proven": true,
+  "canonical_mask_level_count": 5,
+  "canonical_mask_levels": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "B3_scaffold_only",
+    "C_scaffold_linker_warhead"
+  ],
+  "checkpoint_saved": false,
+  "expected_counts_by_mask_level": {
+    "A_warhead_only": {
+      "context_count": 5,
+      "target_count": 2
+    },
+    "B2_scaffold_warhead": {
+      "context_count": 2,
+      "target_count": 5
+    },
+    "B3_scaffold_only": {
+      "context_count": 4,
+      "target_count": 3
+    },
+    "B_linker_warhead": {
+      "context_count": 3,
+      "target_count": 4
+    },
+    "C_scaffold_linker_warhead": {
+      "context_count": 0,
+      "target_count": 7
+    }
+  },
+  "finetune_allowed": false,
+  "five_level_mask_sweep_passed": true,
+  "five_level_sweep_row_count": 5,
+  "forbidden_artifacts_created": false,
+  "formal_training_allowed": false,
+  "legacy_short_name_ambiguity_detected": true,
+  "legacy_short_name_preserved": true,
+  "model_forward_called": false,
+  "model_saved": false,
+  "observed_counts_by_mask_level": {
+    "A_warhead_only": {
+      "context_count": 5,
+      "target_count": 2
+    },
+    "B2_scaffold_warhead": {
+      "context_count": 2,
+      "target_count": 5
+    },
+    "B3_scaffold_only": {
+      "context_count": 4,
+      "target_count": 3
+    },
+    "B_linker_warhead": {
+      "context_count": 3,
+      "target_count": 4
+    },
+    "C_scaffold_linker_warhead": {
+      "context_count": 0,
+      "target_count": 7
+    }
+  },
+  "optimizer_created": false,
+  "optimizer_step_called": false,
+  "original_diffsbdd_source_modified": false,
+  "previous_stage": "b3_scaffold_only_mask_implementation_v0",
+  "quality_claim_allowed": false,
+  "recommended_next_step": "b3_pretrained_masked_loss_smoke",
+  "short_alias_b3_added": false,
+  "short_alias_b3_deferred": true,
+  "stage": "b3_scaffold_only_mask_sweep_v0",
+  "step11n_validated": true,
+  "tensor_dump_saved": false,
+  "trainer_fit_called": false,
+  "training_allowed": false,
+  "training_step_called": false
+}
