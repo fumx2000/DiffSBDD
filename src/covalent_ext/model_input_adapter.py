@@ -34,6 +34,14 @@ REQUIRED_MODEL_INPUT_KEYS = {
     "training_executed",
 }
 
+CANONICAL_MASK_LEVEL_REACTIVE_REGION = {
+    "A_warhead_only": "target",
+    "B_linker_warhead": "target",
+    "B2_scaffold_warhead": "target",
+    "B3_scaffold_only": "context",
+    "C_scaffold_linker_warhead": "target",
+}
+
 
 def _mask_coords(coords: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
     return coords * mask.to(dtype=coords.dtype).unsqueeze(-1)
@@ -82,7 +90,46 @@ def build_covalent_model_input_v0(adapted_batch: dict[str, Any]) -> dict[str, An
     }
 
 
-def validate_covalent_model_input_v0(model_input: dict[str, Any]) -> tuple[bool, list[str]]:
+def expected_reactive_atom_region_for_mask_level_v0(mask_level: str) -> str:
+    if mask_level not in CANONICAL_MASK_LEVEL_REACTIVE_REGION:
+        raise ValueError(f"unsupported_mask_level:{mask_level}")
+    return CANONICAL_MASK_LEVEL_REACTIVE_REGION[mask_level]
+
+
+def validate_reactive_atom_region_for_mask_level_v0(model_input: dict[str, Any], mask_level: str) -> tuple[bool, list[str]]:
+    reasons: list[str] = []
+    try:
+        expected_region = expected_reactive_atom_region_for_mask_level_v0(mask_level)
+    except ValueError:
+        return False, [f"unsupported_mask_level:{mask_level}"]
+    ligand_mask = model_input["ligand_mask"].to(dtype=torch.bool)
+    context_mask = model_input["ligand_context_mask"].to(dtype=torch.bool)
+    target_mask = model_input["ligand_target_mask"].to(dtype=torch.bool)
+    reactive = model_input["ligand_reactive_atom_index"]
+    batch_size = int(model_input["batch_size"])
+    for idx in range(batch_size):
+        atom_idx = int(reactive[idx].item())
+        if atom_idx < 0 or atom_idx >= ligand_mask.shape[1] or not bool(ligand_mask[idx, atom_idx].item()):
+            reasons.append(f"reactive_not_in_ligand:{idx}")
+            continue
+        in_target = bool(target_mask[idx, atom_idx].item())
+        in_context = bool(context_mask[idx, atom_idx].item())
+        if expected_region == "target":
+            if not in_target:
+                reasons.append(f"reactive_not_in_expected_target:{idx}")
+            if in_context:
+                reasons.append(f"reactive_unexpectedly_in_context:{idx}")
+        elif expected_region == "context":
+            if not in_context:
+                reasons.append(f"reactive_not_in_expected_context:{idx}")
+            if in_target:
+                reasons.append(f"reactive_unexpectedly_in_target:{idx}")
+        else:
+            reasons.append(f"unsupported_expected_reactive_region:{expected_region}")
+    return not reasons, reasons
+
+
+def validate_covalent_model_input_v0(model_input: dict[str, Any], mask_level: str | None = None) -> tuple[bool, list[str]]:
     reasons: list[str] = []
     missing = sorted(REQUIRED_MODEL_INPUT_KEYS - set(model_input))
     if missing:
@@ -125,11 +172,16 @@ def validate_covalent_model_input_v0(model_input: dict[str, Any]) -> tuple[bool,
         reasons.append("context_target_not_subset_ligand")
     if (target_mask.sum(dim=1) == 0).any():
         reasons.append("empty_target_mask")
-    reactive = model_input["ligand_reactive_atom_index"]
-    for idx in range(batch_size):
-        atom_idx = int(reactive[idx].item())
-        if atom_idx < 0 or atom_idx >= ligand_mask.shape[1] or not bool(target_mask[idx, atom_idx].item()):
-            reasons.append(f"reactive_not_in_target:{idx}")
+    if mask_level is None:
+        reactive = model_input["ligand_reactive_atom_index"]
+        for idx in range(batch_size):
+            atom_idx = int(reactive[idx].item())
+            if atom_idx < 0 or atom_idx >= ligand_mask.shape[1] or not bool(target_mask[idx, atom_idx].item()):
+                reasons.append(f"reactive_not_in_target:{idx}")
+    else:
+        reactive_valid, reactive_reasons = validate_reactive_atom_region_for_mask_level_v0(model_input, mask_level)
+        if not reactive_valid:
+            reasons.extend(reactive_reasons)
     if not torch.isfinite(ligand_x[ligand_mask]).all():
         reasons.append("ligand_x_not_finite")
     if not torch.isfinite(protein_x[protein_mask]).all():

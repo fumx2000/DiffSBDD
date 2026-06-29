@@ -16,7 +16,11 @@ from covalent_ext.diffsbdd_input_adapter import (
     build_diffsbdd_like_input_from_covalent_v0,
     validate_diffsbdd_like_input_v0,
 )
-from covalent_ext.model_input_adapter import build_covalent_model_input_v0, validate_covalent_model_input_v0
+from covalent_ext.model_input_adapter import (
+    build_covalent_model_input_v0,
+    expected_reactive_atom_region_for_mask_level_v0,
+    validate_covalent_model_input_v0,
+)
 from covalent_ext.npz_dataset import CovalentNPZDataset, NPZ_REQUIRED_KEYS, covalent_npz_collate_fn
 
 
@@ -496,21 +500,8 @@ def run_real_covalent_batch_adapter_gate_v0(selected_artifact: dict[str, Any] | 
         adapted = adapt_covalent_batch_for_model_v0(batch, mask_level=level)
         adapted_valid, adapted_reasons = validate_adapted_covalent_batch_v0(adapted)
         model_input = build_covalent_model_input_v0(adapted)
-        model_input_valid_raw, model_input_reasons_raw = validate_covalent_model_input_v0(model_input)
-        b3_aware_override = False
-        model_input_reasons = list(model_input_reasons_raw)
-        if level == "B3_scaffold_only" and not model_input_valid_raw:
-            allowed = {f"reactive_not_in_target:{idx}" for idx in range(int(model_input["batch_size"]))}
-            reactive_in_context = True
-            reactive_not_in_target = True
-            for idx in range(int(model_input["batch_size"])):
-                atom_idx = int(model_input["ligand_reactive_atom_index"][idx].item())
-                reactive_in_context = reactive_in_context and bool(model_input["ligand_context_mask"][idx, atom_idx].item())
-                reactive_not_in_target = reactive_not_in_target and not bool(model_input["ligand_target_mask"][idx, atom_idx].item())
-            if set(model_input_reasons_raw).issubset(allowed) and reactive_in_context and reactive_not_in_target:
-                b3_aware_override = True
-                model_input_reasons = []
-        model_input_valid = bool(model_input_valid_raw or b3_aware_override)
+        expected_reactive_atom_region = expected_reactive_atom_region_for_mask_level_v0(level)
+        model_input_valid, model_input_reasons = validate_covalent_model_input_v0(model_input, mask_level=level)
         diffsbdd_like = build_diffsbdd_like_input_from_covalent_v0(model_input)
         diffsbdd_valid, diffsbdd_reasons = validate_diffsbdd_like_input_v0(diffsbdd_like)
         level_passed = bool(adapted_valid and model_input_valid and diffsbdd_valid)
@@ -519,8 +510,9 @@ def run_real_covalent_batch_adapter_gate_v0(selected_artifact: dict[str, Any] | 
         level_results[level] = {
             "adapted_valid": adapted_valid,
             "adapted_reasons": adapted_reasons,
-            "model_input_valid_raw": model_input_valid_raw,
-            "model_input_b3_aware_override": b3_aware_override,
+            "model_input_validator_mask_level_aware": True,
+            "model_input_b3_aware_override": False,
+            "expected_reactive_atom_region": expected_reactive_atom_region,
             "model_input_valid": model_input_valid,
             "model_input_reasons": model_input_reasons,
             "diffsbdd_like_valid": diffsbdd_valid,

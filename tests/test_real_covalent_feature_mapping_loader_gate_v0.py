@@ -32,6 +32,14 @@ from covalent_ext.real_covalent_feature_mapping_loader_gate import (  # noqa: E4
     run_real_covalent_batch_adapter_gate_v0,
     validate_step11r_outputs_v0,
 )
+from covalent_ext.batch_adapter import adapt_covalent_batch_for_model_v0  # noqa: E402
+from covalent_ext.model_input_adapter import (  # noqa: E402
+    build_covalent_model_input_v0,
+    expected_reactive_atom_region_for_mask_level_v0,
+    validate_covalent_model_input_v0,
+)
+from covalent_ext.npz_dataset import CovalentNPZDataset, covalent_npz_collate_fn  # noqa: E402
+from torch.utils.data import DataLoader  # noqa: E402
 
 import check_real_covalent_feature_mapping_loader_gate_v0 as script  # noqa: E402
 
@@ -127,13 +135,61 @@ def test_real_batch_adapter_and_model_input_mapping_gate_pass():
     for level, result in gate["level_results"].items():
         assert result["adapted_valid"] is True
         assert result["model_input_valid"] is True
+        assert result["model_input_validator_mask_level_aware"] is True
+        assert result["model_input_b3_aware_override"] is False
         assert result["diffsbdd_like_valid"] is True
         assert result["target_atom_count"] > 0
         assert result["ligand_feature_dim"] == 11
         assert result["pocket_feature_dim"] == 11
         if level == "B3_scaffold_only":
-            assert result["model_input_valid_raw"] is False
-            assert result["model_input_b3_aware_override"] is True
+            assert result["expected_reactive_atom_region"] == "context"
+        else:
+            assert result["expected_reactive_atom_region"] == "target"
+
+
+def test_mask_level_aware_reactive_atom_region_helpers_and_validation():
+    expected_regions = {
+        "A_warhead_only": "target",
+        "B_linker_warhead": "target",
+        "B2_scaffold_warhead": "target",
+        "B3_scaffold_only": "context",
+        "C_scaffold_linker_warhead": "target",
+    }
+    for level, expected in expected_regions.items():
+        assert expected_reactive_atom_region_for_mask_level_v0(level) == expected
+    for unsupported in ["B3", "B2", "mask_scaffold", "legacy_short_B2"]:
+        try:
+            expected_reactive_atom_region_for_mask_level_v0(unsupported)
+        except ValueError as exc:
+            assert str(exc) == f"unsupported_mask_level:{unsupported}"
+        else:
+            raise AssertionError(f"unsupported mask level unexpectedly accepted: {unsupported}")
+
+    discovery = discover_existing_real_covalent_artifacts_v0()
+    dataset = CovalentNPZDataset(discovery["selected"]["sample_index_csv"])
+    batch = next(iter(DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0, collate_fn=covalent_npz_collate_fn)))
+    for level in CANONICAL_MASK_LEVELS:
+        adapted = adapt_covalent_batch_for_model_v0(batch, mask_level=level)
+        model_input = build_covalent_model_input_v0(adapted)
+        assert validate_covalent_model_input_v0(model_input, mask_level=level) == (True, [])
+
+    b3_adapted = adapt_covalent_batch_for_model_v0(batch, mask_level="B3_scaffold_only")
+    b3_input = build_covalent_model_input_v0(b3_adapted)
+    assert validate_covalent_model_input_v0(b3_input, mask_level="B3_scaffold_only") == (True, [])
+    b3_bad = dict(b3_input)
+    b3_bad["ligand_context_mask"] = b3_input["ligand_context_mask"].clone()
+    b3_bad["ligand_target_mask"] = b3_input["ligand_target_mask"].clone()
+    for idx in range(int(b3_bad["batch_size"])):
+        atom_idx = int(b3_bad["ligand_reactive_atom_index"][idx].item())
+        b3_bad["ligand_context_mask"][idx, atom_idx] = False
+        b3_bad["ligand_target_mask"][idx, atom_idx] = True
+    valid, reasons = validate_covalent_model_input_v0(b3_bad, mask_level="B3_scaffold_only")
+    assert valid is False
+    assert "reactive_not_in_expected_context:0" in reasons
+    assert "reactive_unexpectedly_in_target:0" in reasons
+    valid, reasons = validate_covalent_model_input_v0(b3_input, mask_level="B3")
+    assert valid is False
+    assert reasons == ["unsupported_mask_level:B3"]
 
 
 def test_missing_artifact_path_blocks_cleanly_without_synthetic_pass():
