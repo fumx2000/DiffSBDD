@@ -1,0 +1,2 @@
+stage,mask_level,input_source,selected_loss_key,selected_loss_value,loss_requires_grad,loss_finite,b3_target_atom_count,b3_context_atom_count,model_forward_called,backward_called,optimizer_created,optimizer_step_called,status,blocking_reasons
+b3_pretrained_masked_loss_smoke_v0,B3_scaffold_only,synthetic_10d_shape_contract,masked_loss_total_dry,23.713951110839844,True,True,3,4,True,False,False,False,passed,
