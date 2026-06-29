@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import ast
 import csv
 import functools
-import importlib
 import json
 import math
 import subprocess
@@ -18,30 +18,29 @@ if str(SRC_DIR) not in sys.path:
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-O = "opti" + "mizer"
-O_STEP = O + "_step"
-STEP_MODULE_STEM = "b3_single_" + O_STEP + "_smoke"
-_smoke = importlib.import_module("covalent_ext." + STEP_MODULE_STEM)
-BWD = _smoke.BWD
-FORBIDDEN_ARTIFACT_SUFFIXES = _smoke.FORBIDDEN_ARTIFACT_SUFFIXES
-LEARNING_RATE = _smoke.LEARNING_RATE
-MANIFEST_JSON = _smoke.MANIFEST_JSON
-MASK_LEVEL = _smoke.MASK_LEVEL
-OPTIMIZER_TYPE = _smoke.OPTIMIZER_TYPE
-OUTPUT_ROOT = _smoke.OUTPUT_ROOT
-REPORT_CSV = _smoke.REPORT_CSV
-SUMMARY_MD = _smoke.SUMMARY_MD
-TR_FIT = _smoke.TR_FIT
-UPDATE_TABLE_CSV = _smoke.UPDATE_TABLE_CSV
-WEIGHT_DECAY = _smoke.WEIGHT_DECAY
-build_b3_single_update_smoke_decision_v0 = _smoke.build_b3_single_update_smoke_decision_v0
-build_b3_single_update_smoke_v0 = _smoke.build_b3_single_update_smoke_v0
-run_b3_single_update_smoke_v0 = _smoke.run_b3_single_update_smoke_v0
-validate_step11q_outputs_v0 = _smoke.validate_step11q_outputs_v0
-B3_STEP_PASSED = "b3_single_" + O_STEP + "_smoke_passed"
-B3_STEP_DEBUG = "b3_single_" + O_STEP + "_debug"
+from covalent_ext.b3_single_optimizer_step_smoke import (  # noqa: E402
+    FORBIDDEN_ARTIFACT_SUFFIXES,
+    LEARNING_RATE,
+    MANIFEST_JSON,
+    MASK_LEVEL,
+    OPTIMIZER_TYPE,
+    OUTPUT_ROOT,
+    REPORT_CSV,
+    SUMMARY_MD,
+    UPDATE_TABLE_CSV,
+    WEIGHT_DECAY,
+    build_b3_single_optimizer_step_smoke_decision_v0,
+    build_b3_single_optimizer_step_smoke_v0,
+    run_b3_single_optimizer_step_smoke_v0,
+    validate_step11q_outputs_v0,
+)
 
-script = importlib.import_module("check_b3_single_" + O_STEP + "_smoke_v0")  # noqa: E402
+import check_b3_single_optimizer_step_smoke_v0 as script  # noqa: E402
+
+
+STEP_MODULE_STEM = "b3_single_optimizer_step_smoke"
+B3_STEP_PASSED = "b3_single_optimizer_step_smoke_passed"
+B3_STEP_DEBUG = "b3_single_optimizer_step_debug"
 
 
 def _read_csv(path: str | Path) -> list[dict[str, str]]:
@@ -51,7 +50,7 @@ def _read_csv(path: str | Path) -> list[dict[str, str]]:
 
 @functools.lru_cache(maxsize=1)
 def _cached_result_json_text() -> str:
-    return json.dumps(build_b3_single_update_smoke_v0(device="cpu"), default=str)
+    return json.dumps(build_b3_single_optimizer_step_smoke_v0(device="cpu"), default=str)
 
 
 def _cached_result() -> dict:
@@ -68,17 +67,17 @@ def test_validate_step11q_outputs_success_and_gradient_table_contract():
     assert math.isfinite(float(rows[0]["selected_loss_value"]))
     assert rows[0]["loss_requires_grad"] == "True"
     assert rows[0]["loss_finite"] == "True"
-    assert rows[0][BWD + "_called"] == "True"
-    assert rows[0][BWD + "_call_count"] == "1"
-    assert rows[0][BWD + "_success"] == "True"
+    assert rows[0]["backward_called"] == "True"
+    assert rows[0]["backward_call_count"] == "1"
+    assert rows[0]["backward_success"] == "True"
     assert rows[0]["finite_nonzero_grad_exists"] == "True"
-    assert rows[0][O + "_created"] == "False"
-    assert rows[0][O_STEP + "_called"] == "False"
+    assert rows[0]["optimizer_created"] == "False"
+    assert rows[0]["optimizer_step_called"] == "False"
     assert rows[0]["status"] == "passed"
 
 
-def test_run_b3_single_update_smoke_updates_parameters_once():
-    result = run_b3_single_update_smoke_v0(device="cpu")
+def test_run_b3_single_optimizer_step_smoke_updates_parameters_once():
+    result = run_b3_single_optimizer_step_smoke_v0(device="cpu")
 
     assert result["step11q_validated"] is True
     assert result["mask_level"] == MASK_LEVEL
@@ -95,15 +94,15 @@ def test_run_b3_single_update_smoke_updates_parameters_once():
     assert math.isfinite(float(result["selected_loss_value"]))
     assert result["loss_requires_grad"] is True
     assert result["loss_finite"] is True
-    assert result[O + "_type"] == OPTIMIZER_TYPE
+    assert result["optimizer_type"] == OPTIMIZER_TYPE
     assert result["learning_rate"] == LEARNING_RATE
     assert result["weight_decay"] == WEIGHT_DECAY
-    assert result[O + "_created"] is True
-    assert result[BWD + "_called"] is True
-    assert result[BWD + "_call_count"] == 1
-    assert result[BWD + "_success"] is True
-    assert result[O_STEP + "_called"] is True
-    assert result[O_STEP + "_call_count"] == 1
+    assert result["optimizer_created"] is True
+    assert result["backward_called"] is True
+    assert result["backward_call_count"] == 1
+    assert result["backward_success"] is True
+    assert result["optimizer_step_called"] is True
+    assert result["optimizer_step_call_count"] == 1
     assert result["finite_nonzero_grad_exists"] is True
     assert result["trainable_parameter_count"] > 0
     assert result["parameters_with_grad_count"] > 0
@@ -130,10 +129,10 @@ def test_run_b3_single_update_smoke_updates_parameters_once():
 
 
 def test_decision_recommends_real_loader_gate_not_synthetic_loop_mainline():
-    result = run_b3_single_update_smoke_v0(device="cpu")
-    decision = build_b3_single_update_smoke_decision_v0(result)
+    result = run_b3_single_optimizer_step_smoke_v0(device="cpu")
+    decision = build_b3_single_optimizer_step_smoke_decision_v0(result)
     blocked = dict(result, status="blocked", parameter_update_nonzero=False)
-    blocked_decision = build_b3_single_update_smoke_decision_v0(blocked)
+    blocked_decision = build_b3_single_optimizer_step_smoke_decision_v0(blocked)
 
     assert decision[B3_STEP_PASSED] is True
     assert decision["b3_parameter_update_contract_proven"] is True
@@ -155,7 +154,7 @@ def test_decision_recommends_real_loader_gate_not_synthetic_loop_mainline():
 def test_manifest_contract_and_safety_boundary():
     manifest = _cached_result()["manifest"]
 
-    assert manifest["stage"] == "b3_single_" + O_STEP + "_smoke_v0"
+    assert manifest["stage"] == "b3_single_optimizer_step_smoke_v0"
     assert manifest["previous_stage"] == "b3_backward_smoke_v0"
     assert manifest["step11q_validated"] is True
     assert manifest["mask_level"] == MASK_LEVEL
@@ -176,12 +175,12 @@ def test_manifest_contract_and_safety_boundary():
     assert manifest["optimizer_type"] == OPTIMIZER_TYPE
     assert manifest["learning_rate"] == LEARNING_RATE
     assert manifest["weight_decay"] == WEIGHT_DECAY
-    assert manifest[O + "_created"] is True
-    assert manifest[BWD + "_called"] is True
-    assert manifest[BWD + "_call_count"] == 1
-    assert manifest[BWD + "_success"] is True
-    assert manifest[O_STEP + "_called"] is True
-    assert manifest[O_STEP + "_call_count"] == 1
+    assert manifest["optimizer_created"] is True
+    assert manifest["backward_called"] is True
+    assert manifest["backward_call_count"] == 1
+    assert manifest["backward_success"] is True
+    assert manifest["optimizer_step_called"] is True
+    assert manifest["optimizer_step_call_count"] == 1
     assert manifest["finite_nonzero_grad_exists"] is True
     assert manifest["trainable_parameter_count"] > 0
     assert manifest["parameters_with_grad_count"] > 0
@@ -213,7 +212,7 @@ def test_manifest_contract_and_safety_boundary():
         "checkpoint_save_allowed",
         "model_save_allowed",
         "training_step_called",
-        TR_FIT + "_called",
+        "trainer_fit_called",
         "checkpoint_saved",
         "model_saved",
         "tensor_dump_saved",
@@ -239,12 +238,12 @@ def test_update_table_contract():
     assert row["optimizer_type"] == OPTIMIZER_TYPE
     assert row["learning_rate"] == LEARNING_RATE
     assert row["weight_decay"] == WEIGHT_DECAY
-    assert row[BWD + "_called"] is True
-    assert row[BWD + "_call_count"] == 1
-    assert row[BWD + "_success"] is True
-    assert row[O + "_created"] is True
-    assert row[O_STEP + "_called"] is True
-    assert row[O_STEP + "_call_count"] == 1
+    assert row["backward_called"] is True
+    assert row["backward_call_count"] == 1
+    assert row["backward_success"] is True
+    assert row["optimizer_created"] is True
+    assert row["optimizer_step_called"] is True
+    assert row["optimizer_step_call_count"] == 1
     assert row["finite_nonzero_grad_exists"] is True
     assert row["sampled_parameter_count"] > 0
     assert float(row["sampled_parameter_delta_l2"]) > 0.0
@@ -260,7 +259,7 @@ def test_update_table_contract():
 
 
 def test_script_writes_report_manifest_update_table_and_summary(tmp_path, monkeypatch):
-    output_root = tmp_path / ("b3_single_" + O_STEP + "_smoke_v0")
+    output_root = tmp_path / ("b3_single_optimizer_step_smoke_v0")
     report_csv = output_root / "report.csv"
     manifest_json = output_root / "manifest.json"
     update_csv = output_root / "update.csv"
@@ -315,33 +314,47 @@ def test_no_protected_source_modification():
 
 
 def test_no_forbidden_execution_calls_in_step11r_files():
-    forbidden = [
-        "torch." + "save",
-        "trainer." + "fit",
-        "training_" + "step(",
-        "save_" + "checkpoint",
-        "load_from_" + "checkpoint",
-    ]
     files = [
-        "src/covalent_ext/" + STEP_MODULE_STEM + ".py",
-        "scripts/check_b3_single_" + O_STEP + "_smoke_v0.py",
-        "tests/test_b3_single_" + O_STEP + "_smoke_v0.py",
+        "src/covalent_ext/b3_single_optimizer_step_smoke.py",
+        "scripts/check_b3_single_optimizer_step_smoke_v0.py",
+        "tests/test_b3_single_optimizer_step_smoke_v0.py",
     ]
     for relative in files:
-        text = (REPO_ROOT / relative).read_text(encoding="utf-8")
-        for snippet in forbidden:
-            assert snippet not in text
+        tree = ast.parse((REPO_ROOT / relative).read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            assert not (
+                isinstance(func, ast.Attribute)
+                and isinstance(func.value, ast.Name)
+                and func.value.id == "torch"
+                and func.attr == "save"
+            )
+            assert not (
+                isinstance(func, ast.Attribute)
+                and isinstance(func.value, ast.Name)
+                and func.value.id == "trainer"
+                and func.attr == "fit"
+            )
+            assert not (isinstance(func, ast.Name) and func.id in {"training_step", "save_checkpoint", "load_from_checkpoint"})
+            assert not (isinstance(func, ast.Attribute) and func.attr in {"training_step", "save_checkpoint", "load_from_checkpoint"})
 
 
 def test_controlled_optimizer_and_backward_call_locations_are_single_module_calls():
-    module_text = (REPO_ROOT / "src/covalent_ext" / (STEP_MODULE_STEM + ".py")).read_text(encoding="utf-8")
-    script_text = (REPO_ROOT / "scripts" / ("check_b3_single_" + O_STEP + "_smoke_v0.py")).read_text(encoding="utf-8")
-    test_text = (REPO_ROOT / "tests" / ("test_b3_single_" + O_STEP + "_smoke_v0.py")).read_text(encoding="utf-8")
-    opt_call = "optimizer" + ".step"
+    def call_counts(relative: str) -> tuple[int, int]:
+        tree = ast.parse((REPO_ROOT / relative).read_text(encoding="utf-8"))
+        backward_calls = 0
+        optimizer_step_calls = 0
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+                continue
+            if isinstance(node.func.value, ast.Name) and node.func.value.id == "loss_tensor" and node.func.attr == "backward":
+                backward_calls += 1
+            if isinstance(node.func.value, ast.Name) and node.func.value.id == "optimizer" and node.func.attr == "step":
+                optimizer_step_calls += 1
+        return backward_calls, optimizer_step_calls
 
-    assert module_text.count(opt_call) == 1
-    assert script_text.count(opt_call) == 0
-    assert test_text.count(opt_call) == 0
-    assert module_text.count("." + BWD + "(") == 1
-    assert script_text.count("." + BWD + "(") == 0
-    assert test_text.count("." + BWD + "(") == 0
+    assert call_counts("src/covalent_ext/b3_single_optimizer_step_smoke.py") == (1, 1)
+    assert call_counts("scripts/check_b3_single_optimizer_step_smoke_v0.py") == (0, 0)
+    assert call_counts("tests/test_b3_single_optimizer_step_smoke_v0.py") == (0, 0)

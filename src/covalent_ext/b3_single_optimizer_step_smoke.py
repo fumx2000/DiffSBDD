@@ -15,12 +15,6 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from covalent_ext.b3_backward_smoke import (  # noqa: E402
-    BWD,
-    GRADIENT_TABLE_CSV as STEP11Q_GRADIENT_TABLE_CSV,
-    MANIFEST_JSON as STEP11Q_MANIFEST_JSON,
-    SUMMARY_MD as STEP11Q_SUMMARY_MD,
-)
 from covalent_ext.b3_pretrained_masked_loss_smoke import (  # noqa: E402
     B3_EXPECTED_CONTEXT_COUNT,
     B3_EXPECTED_TARGET_COUNT,
@@ -47,23 +41,18 @@ from covalent_ext.pretrained_masked_loss_smoke import (  # noqa: E402
     build_strict_loaded_checkpoint_compatible_model_for_masked_loss_v0,
 )
 
-
-O = "opti" + "mizer"
-O_STEP = O + "_step"
-TR_FIT = "trainer" + "_fit"
-
-STAGE = "b3_single_" + O_STEP + "_smoke_v0"
+STAGE = "b3_single_optimizer_step_smoke_v0"
 PREVIOUS_STAGE = "b3_backward_smoke_v0"
 STEP11Q_MANIFEST_JSON = Path("data/derived/covalent_small/b3_backward_smoke_v0/b3_backward_smoke_manifest.json")
 STEP11Q_GRADIENT_TABLE_CSV = Path(
     "data/derived/covalent_small/b3_backward_smoke_v0/b3_backward_smoke_gradient_table.csv"
 )
 STEP11Q_SUMMARY_MD = Path("docs/b3_backward_smoke_v0_summary.md")
-OUTPUT_ROOT = Path("data/derived/covalent_small/b3_single_" + O_STEP + "_smoke_v0")
-REPORT_CSV = OUTPUT_ROOT / ("b3_single_" + O_STEP + "_smoke_report.csv")
-MANIFEST_JSON = OUTPUT_ROOT / ("b3_single_" + O_STEP + "_smoke_manifest.json")
-UPDATE_TABLE_CSV = OUTPUT_ROOT / ("b3_single_" + O_STEP + "_update_table.csv")
-SUMMARY_MD = Path("docs/b3_single_" + O_STEP + "_smoke_v0_summary.md")
+OUTPUT_ROOT = Path("data/derived/covalent_small/b3_single_optimizer_step_smoke_v0")
+REPORT_CSV = OUTPUT_ROOT / ("b3_single_optimizer_step_smoke_report.csv")
+MANIFEST_JSON = OUTPUT_ROOT / ("b3_single_optimizer_step_smoke_manifest.json")
+UPDATE_TABLE_CSV = OUTPUT_ROOT / ("b3_single_optimizer_step_update_table.csv")
+SUMMARY_MD = Path("docs/b3_single_optimizer_step_smoke_v0_summary.md")
 OPTIMIZER_TYPE = "AdamW"
 LEARNING_RATE = 1e-6
 WEIGHT_DECAY = 0.0
@@ -152,9 +141,9 @@ def validate_step11q_outputs_v0() -> bool:
         "selected_loss_key": "masked_loss_total_dry",
         "loss_requires_grad": True,
         "loss_finite": True,
-        BWD + "_called": True,
-        BWD + "_call_count": 1,
-        BWD + "_success": True,
+        "backward_called": True,
+        "backward_call_count": 1,
+        "backward_success": True,
         "finite_nonzero_grad_exists": True,
         "grad_nan_count": 0,
         "grad_inf_count": 0,
@@ -165,17 +154,17 @@ def validate_step11q_outputs_v0() -> bool:
         "b3_backward_smoke_passed": True,
         "b3_backward_gradient_contract_proven": True,
         "b3_finite_nonzero_gradient_proven": True,
-        "b3_single_" + O_STEP + "_smoke_allowed": True,
+        "b3_single_optimizer_step_smoke_allowed": True,
         "recommended_next_step": STAGE.replace("_v0", ""),
         "training_allowed": False,
         "formal_training_allowed": False,
         "finetune_allowed": False,
         "quality_claim_allowed": False,
         "parameter_update_allowed": False,
-        O + "_created": False,
-        O_STEP + "_called": False,
+        "optimizer_created": False,
+        "optimizer_step_called": False,
         "training_step_called": False,
-        TR_FIT + "_called": False,
+        "trainer_fit_called": False,
         "checkpoint_saved": False,
         "model_saved": False,
         "tensor_dump_saved": False,
@@ -199,12 +188,12 @@ def validate_step11q_outputs_v0() -> bool:
             "selected_loss_key": "masked_loss_total_dry",
             "loss_requires_grad": "True",
             "loss_finite": "True",
-            BWD + "_called": "True",
-            BWD + "_call_count": "1",
-            BWD + "_success": "True",
+            "backward_called": "True",
+            "backward_call_count": "1",
+            "backward_success": "True",
             "finite_nonzero_grad_exists": "True",
-            O + "_created": "False",
-            O_STEP + "_called": "False",
+            "optimizer_created": "False",
+            "optimizer_step_called": "False",
             "status": "passed",
         }
         for key, expected in expected_row.items():
@@ -219,7 +208,7 @@ def validate_step11q_outputs_v0() -> bool:
         "B3 Backward Smoke",
         MASK_LEVEL,
         "backward_call_count: 1",
-        "b3_single_" + O_STEP + "_smoke",
+        "b3_single_optimizer_step_smoke",
         "not training",
     ]:
         _expect(snippet in summary, f"step11q_summary_missing:{snippet}", blockers)
@@ -236,13 +225,13 @@ def build_adamw_optimizer_for_b3_smoke_v0(model: Any) -> dict[str, Any]:
     optimizer = torch.optim.AdamW(trainable_parameters, lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
     return {
         "optimizer": optimizer,
-        O + "_created": not blockers,
-        O + "_type": OPTIMIZER_TYPE,
+        "optimizer_created": not blockers,
+        "optimizer_type": OPTIMIZER_TYPE,
         "learning_rate": LEARNING_RATE,
         "weight_decay": WEIGHT_DECAY,
-        O + "_param_group_count": len(optimizer.param_groups),
-        O + "_parameter_count": sum(int(parameter.numel()) for group in optimizer.param_groups for parameter in group["params"]),
-        O + "_state_pre_step_count": len(optimizer.state),
+        "optimizer_param_group_count": len(optimizer.param_groups),
+        "optimizer_parameter_count": sum(int(parameter.numel()) for group in optimizer.param_groups for parameter in group["params"]),
+        "optimizer_state_pre_step_count": len(optimizer.state),
         "blocking_reasons": blockers,
     }
 
@@ -315,7 +304,7 @@ def compute_parameter_update_stats_v0(snapshot: dict[str, Any], model: Any) -> d
     }
 
 
-def run_b3_single_update_smoke_v0(
+def run_b3_single_optimizer_step_smoke_v0(
     device: str = "cpu",
     checkpoint_path: str | Path = CHECKPOINT_PATH,
     config_preview_path: str | Path = CONFIG_PREVIEW_PATH,
@@ -343,16 +332,16 @@ def run_b3_single_update_smoke_v0(
         "selected_loss_value": math.nan,
         "loss_requires_grad": False,
         "loss_finite": False,
-        O + "_type": "",
+        "optimizer_type": "",
         "learning_rate": 0.0,
         "weight_decay": 0.0,
-        O + "_created": False,
-        BWD + "_called": False,
-        BWD + "_call_count": 0,
-        BWD + "_success": False,
-        O_STEP + "_called": False,
-        O_STEP + "_call_count": 0,
-        O_STEP + "_success": False,
+        "optimizer_created": False,
+        "backward_called": False,
+        "backward_call_count": 0,
+        "backward_success": False,
+        "optimizer_step_called": False,
+        "optimizer_step_call_count": 0,
+        "optimizer_step_success": False,
         "finite_nonzero_grad_exists": False,
         "trainable_parameter_count": 0,
         "parameters_with_grad_count": 0,
@@ -371,7 +360,7 @@ def run_b3_single_update_smoke_v0(
         "b3_reactive_atom_in_context": False,
         "b3_reactive_atom_in_target": False,
         "training_step_called": False,
-        TR_FIT + "_called": False,
+        "trainer_fit_called": False,
         "checkpoint_saved": False,
         "model_saved": False,
         "tensor_dump_saved": False,
@@ -409,13 +398,13 @@ def run_b3_single_update_smoke_v0(
         optimizer_bundle = build_adamw_optimizer_for_b3_smoke_v0(model)
         optimizer = optimizer_bundle["optimizer"]
         for key in [
-            O + "_created",
-            O + "_type",
+            "optimizer_created",
+            "optimizer_type",
             "learning_rate",
             "weight_decay",
-            O + "_param_group_count",
-            O + "_parameter_count",
-            O + "_state_pre_step_count",
+            "optimizer_param_group_count",
+            "optimizer_parameter_count",
+            "optimizer_state_pre_step_count",
         ]:
             result[key] = optimizer_bundle.get(key, result.get(key))
         blockers.extend(optimizer_bundle.get("blocking_reasons", []))
@@ -461,22 +450,22 @@ def run_b3_single_update_smoke_v0(
                 blockers.append("loss_tensor_not_finite")
             else:
                 loss_tensor.backward()
-                result[BWD + "_called"] = True
-                result[BWD + "_call_count"] = 1
-                result[BWD + "_success"] = True
+                result["backward_called"] = True
+                result["backward_call_count"] = 1
+                result["backward_success"] = True
                 result.update(collect_gradient_stats_v0(model))
                 snapshot = capture_parameter_sample_for_update_v0(model)
                 result["sampled_parameter_count"] = int(snapshot.get("sampled_parameter_count", 0))
                 result["sampled_parameter_names"] = snapshot.get("sampled_parameter_names", [])
                 optimizer.step()
-                result[O_STEP + "_called"] = True
-                result[O_STEP + "_call_count"] = 1
-                result[O_STEP + "_success"] = True
-                result[O + "_state_post_step_count"] = len(optimizer.state)
+                result["optimizer_step_called"] = True
+                result["optimizer_step_call_count"] = 1
+                result["optimizer_step_success"] = True
+                result["optimizer_state_post_step_count"] = len(optimizer.state)
                 result.update(compute_parameter_update_stats_v0(snapshot, model))
                 optimizer.zero_grad(set_to_none=True)
     except Exception as exc:
-        blockers.append(f"b3_single_" + O_STEP + "_failed:{type(exc).__name__}:{exc}")
+        blockers.append(f"b3_single_optimizer_step_failed:{type(exc).__name__}:{exc}")
     finally:
         del optimizer
         del model
@@ -491,11 +480,11 @@ def run_b3_single_update_smoke_v0(
         "loss_computed",
         "loss_requires_grad",
         "loss_finite",
-        O + "_created",
-        BWD + "_called",
-        BWD + "_success",
-        O_STEP + "_called",
-        O_STEP + "_success",
+        "optimizer_created",
+        "backward_called",
+        "backward_success",
+        "optimizer_step_called",
+        "optimizer_step_success",
         "finite_nonzero_grad_exists",
         "parameter_update_finite",
         "parameter_update_nonzero",
@@ -505,18 +494,18 @@ def run_b3_single_update_smoke_v0(
         if result.get(field_name) is not True:
             blockers.append(f"{field_name}_not_true")
     expected_values = {
-        O + "_type": OPTIMIZER_TYPE,
+        "optimizer_type": OPTIMIZER_TYPE,
         "learning_rate": LEARNING_RATE,
         "weight_decay": WEIGHT_DECAY,
-        BWD + "_call_count": 1,
-        O_STEP + "_call_count": 1,
+        "backward_call_count": 1,
+        "optimizer_step_call_count": 1,
         "grad_nan_count": 0,
         "grad_inf_count": 0,
         "b3_target_atom_count": B3_EXPECTED_TARGET_COUNT,
         "b3_context_atom_count": B3_EXPECTED_CONTEXT_COUNT,
         "b3_reactive_atom_in_target": False,
         "training_step_called": False,
-        TR_FIT + "_called": False,
+        "trainer_fit_called": False,
         "checkpoint_saved": False,
         "model_saved": False,
         "tensor_dump_saved": False,
@@ -536,20 +525,20 @@ def run_b3_single_update_smoke_v0(
     return result
 
 
-def build_b3_single_update_smoke_decision_v0(step_result: dict[str, Any]) -> dict[str, Any]:
+def build_b3_single_optimizer_step_smoke_decision_v0(step_result: dict[str, Any]) -> dict[str, Any]:
     passed = bool(
         step_result.get("status") == "passed"
-        and step_result.get(O_STEP + "_call_count") == 1
+        and step_result.get("optimizer_step_call_count") == 1
         and step_result.get("parameter_update_finite")
         and step_result.get("parameter_update_nonzero")
     )
     return {
-        "b3_single_" + O_STEP + "_smoke_passed": passed,
+        "b3_single_optimizer_step_smoke_passed": passed,
         "b3_parameter_update_contract_proven": passed,
         "b3_finite_nonzero_parameter_update_proven": passed,
         "b3_tiny_loop_optional": passed,
         "real_covalent_feature_mapping_loader_gate_allowed": passed,
-        "recommended_next_step": "real_covalent_feature_mapping_loader_gate" if passed else "b3_single_" + O_STEP + "_debug",
+        "recommended_next_step": "real_covalent_feature_mapping_loader_gate" if passed else "b3_single_optimizer_step_debug",
         "training_allowed": False,
         "formal_training_allowed": False,
         "finetune_allowed": False,
@@ -559,9 +548,9 @@ def build_b3_single_update_smoke_decision_v0(step_result: dict[str, Any]) -> dic
     }
 
 
-def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
-    step_result = run_b3_single_update_smoke_v0(device=device)
-    decision = build_b3_single_update_smoke_decision_v0(step_result)
+def build_b3_single_optimizer_step_smoke_v0(device: str = "cpu") -> dict[str, Any]:
+    step_result = run_b3_single_optimizer_step_smoke_v0(device=device)
+    decision = build_b3_single_optimizer_step_smoke_decision_v0(step_result)
     source_modified = _source_diff_exists()
     forbidden_artifacts = _forbidden_artifacts_created()
     blockers = list(step_result.get("blocking_reasons", []))
@@ -570,7 +559,9 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
     if forbidden_artifacts:
         blockers.append("forbidden_artifacts_created")
     blockers = sorted(set(reason for reason in blockers if reason))
-    all_checks_passed = bool(decision["b3_single_" + O_STEP + "_smoke_passed"] and not source_modified and not forbidden_artifacts and not blockers)
+    all_checks_passed = bool(
+        decision["b3_single_optimizer_step_smoke_passed"] and not source_modified and not forbidden_artifacts and not blockers
+    )
     manifest = {
         "stage": STAGE,
         "previous_stage": PREVIOUS_STAGE,
@@ -590,16 +581,16 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
         "selected_loss_value": step_result["selected_loss_value"],
         "loss_requires_grad": step_result["loss_requires_grad"],
         "loss_finite": step_result["loss_finite"],
-        "optimizer_type": step_result[O + "_type"],
+        "optimizer_type": step_result["optimizer_type"],
         "learning_rate": step_result["learning_rate"],
         "weight_decay": step_result["weight_decay"],
-        O + "_created": step_result[O + "_created"],
-        BWD + "_called": step_result[BWD + "_called"],
-        BWD + "_call_count": step_result[BWD + "_call_count"],
-        BWD + "_success": step_result[BWD + "_success"],
-        O_STEP + "_called": step_result[O_STEP + "_called"],
-        O_STEP + "_call_count": step_result[O_STEP + "_call_count"],
-        O_STEP + "_success": step_result[O_STEP + "_success"],
+        "optimizer_created": step_result["optimizer_created"],
+        "backward_called": step_result["backward_called"],
+        "backward_call_count": step_result["backward_call_count"],
+        "backward_success": step_result["backward_success"],
+        "optimizer_step_called": step_result["optimizer_step_called"],
+        "optimizer_step_call_count": step_result["optimizer_step_call_count"],
+        "optimizer_step_success": step_result["optimizer_step_success"],
         "finite_nonzero_grad_exists": step_result["finite_nonzero_grad_exists"],
         "trainable_parameter_count": step_result["trainable_parameter_count"],
         "parameters_with_grad_count": step_result["parameters_with_grad_count"],
@@ -619,7 +610,7 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
         "b3_reactive_atom_in_target": step_result["b3_reactive_atom_in_target"],
         **decision,
         "training_step_called": False,
-        TR_FIT + "_called": False,
+        "trainer_fit_called": False,
         "checkpoint_saved": False,
         "model_saved": False,
         "tensor_dump_saved": False,
@@ -637,15 +628,15 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
             "selected_loss_value": step_result["selected_loss_value"],
             "loss_requires_grad": step_result["loss_requires_grad"],
             "loss_finite": step_result["loss_finite"],
-            "optimizer_type": step_result[O + "_type"],
+            "optimizer_type": step_result["optimizer_type"],
             "learning_rate": step_result["learning_rate"],
             "weight_decay": step_result["weight_decay"],
-            BWD + "_called": step_result[BWD + "_called"],
-            BWD + "_call_count": step_result[BWD + "_call_count"],
-            BWD + "_success": step_result[BWD + "_success"],
-            O + "_created": step_result[O + "_created"],
-            O_STEP + "_called": step_result[O_STEP + "_called"],
-            O_STEP + "_call_count": step_result[O_STEP + "_call_count"],
+            "backward_called": step_result["backward_called"],
+            "backward_call_count": step_result["backward_call_count"],
+            "backward_success": step_result["backward_success"],
+            "optimizer_created": step_result["optimizer_created"],
+            "optimizer_step_called": step_result["optimizer_step_called"],
+            "optimizer_step_call_count": step_result["optimizer_step_call_count"],
             "finite_nonzero_grad_exists": step_result["finite_nonzero_grad_exists"],
             "sampled_parameter_count": step_result["sampled_parameter_count"],
             "sampled_parameter_delta_l2": step_result["sampled_parameter_delta_l2"],
@@ -687,18 +678,18 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
                 "loss_finite": step_result["loss_finite"],
             },
             "controlled_backward": {
-                BWD + "_called": step_result[BWD + "_called"],
-                BWD + "_call_count": step_result[BWD + "_call_count"],
-                BWD + "_success": step_result[BWD + "_success"],
+                "backward_called": step_result["backward_called"],
+                "backward_call_count": step_result["backward_call_count"],
+                "backward_success": step_result["backward_success"],
                 "finite_nonzero_grad_exists": step_result["finite_nonzero_grad_exists"],
             },
-            O_STEP: {
-                "optimizer_type": step_result[O + "_type"],
+            "optimizer_step": {
+                "optimizer_type": step_result["optimizer_type"],
                 "learning_rate": step_result["learning_rate"],
                 "weight_decay": step_result["weight_decay"],
-                O + "_created": step_result[O + "_created"],
-                O_STEP + "_called": step_result[O_STEP + "_called"],
-                O_STEP + "_call_count": step_result[O_STEP + "_call_count"],
+                "optimizer_created": step_result["optimizer_created"],
+                "optimizer_step_called": step_result["optimizer_step_called"],
+                "optimizer_step_call_count": step_result["optimizer_step_call_count"],
             },
             "parameter_update_stats": {
                 "sampled_parameter_count": step_result["sampled_parameter_count"],
@@ -711,7 +702,7 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
             "decision": decision,
             "safety_boundary": {
                 "training_step_called": False,
-                TR_FIT + "_called": False,
+                "trainer_fit_called": False,
                 "checkpoint_saved": False,
                 "model_saved": False,
                 "tensor_dump_saved": False,
@@ -719,9 +710,4 @@ def build_b3_single_update_smoke_v0(device: str = "cpu") -> dict[str, Any]:
                 "forbidden_artifacts_created": forbidden_artifacts,
             },
         },
-    }
-
-
-globals()["run_b3_single_" + O_STEP + "_smoke_v0"] = run_b3_single_update_smoke_v0
-globals()["build_b3_single_" + O_STEP + "_smoke_decision_v0"] = build_b3_single_update_smoke_decision_v0
-globals()["build_b3_single_" + O_STEP + "_smoke_v0"] = build_b3_single_update_smoke_v0
+}

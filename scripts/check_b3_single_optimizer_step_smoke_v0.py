@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import importlib
 import json
 import sys
 from pathlib import Path
@@ -15,20 +14,19 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-O = "opti" + "mizer"
-O_STEP = O + "_step"
-_smoke = importlib.import_module("covalent_ext.b3_single_" + O_STEP + "_smoke")
-BWD = _smoke.BWD
-MANIFEST_JSON = _smoke.MANIFEST_JSON
-MASK_LEVEL = _smoke.MASK_LEVEL
-PREVIOUS_STAGE = _smoke.PREVIOUS_STAGE
-REPORT_CSV = _smoke.REPORT_CSV
-STAGE = _smoke.STAGE
-SUMMARY_MD = _smoke.SUMMARY_MD
-TR_FIT = _smoke.TR_FIT
-UPDATE_TABLE_CSV = _smoke.UPDATE_TABLE_CSV
-build_b3_single_update_smoke_v0 = _smoke.build_b3_single_update_smoke_v0
-B3_STEP_PASSED = "b3_single_" + O_STEP + "_smoke_passed"
+from covalent_ext.b3_single_optimizer_step_smoke import (  # noqa: E402
+    MANIFEST_JSON,
+    MASK_LEVEL,
+    PREVIOUS_STAGE,
+    REPORT_CSV,
+    STAGE,
+    SUMMARY_MD,
+    UPDATE_TABLE_CSV,
+    build_b3_single_optimizer_step_smoke_v0,
+)
+
+
+B3_STEP_PASSED = "b3_single_optimizer_step_smoke_passed"
 
 
 REPORT_COLUMNS = [
@@ -53,12 +51,12 @@ UPDATE_TABLE_COLUMNS = [
     "optimizer_type",
     "learning_rate",
     "weight_decay",
-    BWD + "_called",
-    BWD + "_call_count",
-    BWD + "_success",
-    O + "_created",
-    O_STEP + "_called",
-    O_STEP + "_call_count",
+    "backward_called",
+    "backward_call_count",
+    "backward_success",
+    "optimizer_created",
+    "optimizer_step_called",
+    "optimizer_step_call_count",
     "finite_nonzero_grad_exists",
     "sampled_parameter_count",
     "sampled_parameter_delta_l2",
@@ -158,7 +156,7 @@ def build_report_rows(result: dict[str, Any]) -> list[dict[str, str]]:
             "stage": STAGE,
             "previous_stage": PREVIOUS_STAGE,
             "section": "controlled_backward",
-            "status": "passed" if manifest[BWD + "_success"] and manifest[BWD + "_call_count"] == 1 else "blocked",
+            "status": "passed" if manifest["backward_success"] and manifest["backward_call_count"] == 1 else "blocked",
             "evidence": _json_text(sections["controlled_backward"]),
             "decision": "Exactly one controlled reverse pass was executed.",
             "blocking_reasons": blockers,
@@ -167,11 +165,11 @@ def build_report_rows(result: dict[str, Any]) -> list[dict[str, str]]:
         {
             "stage": STAGE,
             "previous_stage": PREVIOUS_STAGE,
-            "section": O_STEP,
+            "section": "optimizer_step",
             "status": "passed"
-            if manifest[O + "_created"] and manifest[O_STEP + "_called"] and manifest[O_STEP + "_call_count"] == 1
+            if manifest["optimizer_created"] and manifest["optimizer_step_called"] and manifest["optimizer_step_call_count"] == 1
             else "blocked",
-            "evidence": _json_text(sections[O_STEP]),
+            "evidence": _json_text(sections["optimizer_step"]),
             "decision": "Exactly one AdamW update was executed.",
             "blocking_reasons": blockers,
             "recommended_next_step": recommended,
@@ -233,7 +231,7 @@ def write_summary(result: dict[str, Any], output_md: str | Path) -> None:
         f"- selected_loss_value: {manifest['selected_loss_value']}",
         f"- loss_requires_grad: {str(manifest['loss_requires_grad']).lower()}",
         f"- loss_finite: {str(manifest['loss_finite']).lower()}",
-        f"- {BWD}_call_count: {manifest[BWD + '_call_count']}",
+        f"- backward_call_count: {manifest['backward_call_count']}",
         f"- finite_nonzero_grad_exists: {str(manifest['finite_nonzero_grad_exists']).lower()}",
         f"- total_grad_norm: {manifest['total_grad_norm']}",
         f"- max_abs_grad: {manifest['max_abs_grad']}",
@@ -242,8 +240,8 @@ def write_summary(result: dict[str, Any], output_md: str | Path) -> None:
         f"- optimizer_type: {manifest['optimizer_type']}",
         f"- learning_rate: {manifest['learning_rate']}",
         f"- weight_decay: {manifest['weight_decay']}",
-        f"- {O}_created: {str(manifest[O + '_created']).lower()}",
-        f"- {O_STEP}_call_count: {manifest[O_STEP + '_call_count']}",
+        f"- optimizer_created: {str(manifest['optimizer_created']).lower()}",
+        f"- optimizer_step_call_count: {manifest['optimizer_step_call_count']}",
         f"- sampled_parameter_count: {manifest['sampled_parameter_count']}",
         f"- sampled_parameter_delta_l2: {manifest['sampled_parameter_delta_l2']}",
         f"- sampled_parameter_delta_max_abs: {manifest['sampled_parameter_delta_max_abs']}",
@@ -263,7 +261,7 @@ def write_summary(result: dict[str, Any], output_md: str | Path) -> None:
         "",
         "## Safety Boundary",
         f"- training_step_called: {str(manifest['training_step_called']).lower()}",
-        f"- {TR_FIT}_called: {str(manifest[TR_FIT + '_called']).lower()}",
+        f"- trainer_fit_called: {str(manifest['trainer_fit_called']).lower()}",
         f"- checkpoint_saved: {str(manifest['checkpoint_saved']).lower()}",
         f"- model_saved: {str(manifest['model_saved']).lower()}",
         f"- tensor_dump_saved: {str(manifest['tensor_dump_saved']).lower()}",
@@ -282,7 +280,7 @@ def write_summary(result: dict[str, Any], output_md: str | Path) -> None:
 
 
 def run(device: str = "cpu") -> int:
-    result = build_b3_single_update_smoke_v0(device=device)
+    result = build_b3_single_optimizer_step_smoke_v0(device=device)
     write_csv(build_report_rows(result), REPORT_CSV, REPORT_COLUMNS)
     write_json(result["manifest"], MANIFEST_JSON)
     write_csv(result["update_table_rows"], UPDATE_TABLE_CSV, UPDATE_TABLE_COLUMNS)

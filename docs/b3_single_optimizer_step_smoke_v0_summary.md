@@ -14,13 +14,13 @@ It computes the B3 masked loss, executes exactly one controlled reverse pass, an
 - pretrained_weights_loaded: true
 - pretrained_base_integration_proven: true
 - selected_loss_key: masked_loss_total_dry
-- selected_loss_value: 89.24312591552734
+- selected_loss_value: 56.48944091796875
 - loss_requires_grad: true
 - loss_finite: true
 - backward_call_count: 1
 - finite_nonzero_grad_exists: true
-- total_grad_norm: 2391.156354662466
-- max_abs_grad: 1133.984130859375
+- total_grad_norm: 1759.8633698920275
+- max_abs_grad: 901.70703125
 
 ## Optimizer Update
 - optimizer_type: AdamW
@@ -29,7 +29,7 @@ It computes the B3 masked loss, executes exactly one controlled reverse pass, an
 - optimizer_created: true
 - optimizer_step_call_count: 1
 - sampled_parameter_count: 20
-- sampled_parameter_delta_l2: 0.00024675636571797375
+- sampled_parameter_delta_l2: 0.0002467561893466044
 - sampled_parameter_delta_max_abs: 1.0132789611816406e-06
 - updated_parameter_tensors_count: 20
 - parameter_update_finite: true
