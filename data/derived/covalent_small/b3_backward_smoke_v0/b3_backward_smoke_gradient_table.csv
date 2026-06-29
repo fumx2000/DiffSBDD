@@ -1,0 +1,2 @@
+stage,mask_level,input_source,selected_loss_key,selected_loss_value,loss_requires_grad,loss_finite,backward_called,backward_call_count,backward_success,finite_nonzero_grad_exists,trainable_parameter_count,parameters_with_grad_count,total_grad_norm,max_abs_grad,grad_nan_count,grad_inf_count,optimizer_created,optimizer_step_called,status,blocking_reasons
+b3_backward_smoke_v0,B3_scaffold_only,synthetic_10d_shape_contract,masked_loss_total_dry,26.204837799072266,True,True,True,1,True,True,1005418,111,1153.4507620392994,651.8541259765625,0,0,False,False,passed,
