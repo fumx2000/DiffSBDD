@@ -1,0 +1,381 @@
+{
+  "actual_leakage_matrix_written": false,
+  "actual_split_assignments_written": false,
+  "all_checks_passed": true,
+  "all_source_adapters_output_canonical_raw_records": true,
+  "allowed_git_outputs_for_design_stage": [
+    "csv",
+    "json",
+    "md",
+    "py"
+  ],
+  "already_exact_present_fields": [
+    "sample_id",
+    "ligand_reactive_atom_index"
+  ],
+  "ambiguous_covalent_bond_records_deferred": true,
+  "architecture_layers": [
+    "source_specific_raw_adapters",
+    "canonical_raw_covalent_record_schema",
+    "common_enrichment_pipeline"
+  ],
+  "authoritative_metadata_required_for_final_split": true,
+  "backward_called": false,
+  "blocking_reasons": [],
+  "candidate_id_parsing_fields": [
+    "parent_complex_id",
+    "mask_parent_id",
+    "source_dataset",
+    "source_pdb_id",
+    "pdb_id",
+    "target_name",
+    "reactive_residue_type",
+    "reactive_residue_id",
+    "protein_family"
+  ],
+  "canonical_mask_level_count": 5,
+  "canonical_mask_levels": [
+    "A_warhead_only",
+    "B_linker_warhead",
+    "B2_scaffold_warhead",
+    "B3_scaffold_only",
+    "C_scaffold_linker_warhead"
+  ],
+  "canonical_raw_covalent_record_fields": [
+    "source_dataset",
+    "source_record_id",
+    "source_version",
+    "source_license_or_usage_note",
+    "source_url_or_local_path",
+    "pdb_id",
+    "chain_id",
+    "residue_id",
+    "residue_type",
+    "ligand_id",
+    "ligand_structure_path",
+    "protein_structure_path",
+    "complex_structure_path",
+    "covalent_bond_annotation_raw",
+    "raw_warhead_annotation",
+    "raw_reaction_annotation",
+    "raw_quality_flags"
+  ],
+  "canonical_raw_record_schema_required": true,
+  "cdhit_or_equivalent_required_for_sequence_cluster": true,
+  "cdhit_run": false,
+  "checkpoint_path": "checkpoints/crossdocked_fullatom_cond.ckpt",
+  "checkpoint_save_allowed": false,
+  "checkpoint_saved": false,
+  "common_enrichment_pipeline_required": true,
+  "common_enrichment_pipeline_steps": [
+    "ligand identity enrichment",
+    "protein identity enrichment",
+    "covalent identity enrichment",
+    "geometry/diversity enrichment",
+    "quality control enrichment",
+    "leakage metadata enrichment"
+  ],
+  "coordinate_geometry_calculation_run": false,
+  "coordinate_geometry_required": true,
+  "covalent_identity_enrichment_fields": [
+    "reactive_residue_type",
+    "reactive_residue_id",
+    "reactive_residue_chain",
+    "protein_reactive_atom_name",
+    "covalent_bond_atom_pair",
+    "warhead_type",
+    "reaction_family",
+    "post_to_pre_reconstruction_template_id"
+  ],
+  "covalent_identity_required_methods": [
+    "LINK/CONECT/covalent annotation parsing",
+    "residue atom identification",
+    "ligand reactive atom validation",
+    "warhead SMARTS library",
+    "reaction family classifier",
+    "reconstruction template registry"
+  ],
+  "current_sample_count": 3,
+  "data_downloaded": false,
+  "direct_mixture_without_adapter_allowed": false,
+  "download_requires_incremental_manifest": true,
+  "download_requires_license_usage_audit": true,
+  "download_requires_raw_data_not_in_git_policy": true,
+  "download_requires_resume_and_checksum_policy": true,
+  "download_requires_source_adapter_design": true,
+  "download_requires_storage_policy": true,
+  "duplicate_detection_across_sources_required": true,
+  "duplicate_records_across_sources_flagged": true,
+  "duplicate_resolution_policy_required": true,
+  "enriched_sample_index_for_split_written": false,
+  "enriched_sample_index_written": false,
+  "enrichment_field_derivation_plan_defined": true,
+  "enrichment_output_schema_defined": true,
+  "enrichment_quality_policy_defined": true,
+  "enrichment_reports_written": false,
+  "external_network_called": false,
+  "filter_policy_name": "drop_non_checkpoint_vocab_pocket_atoms_before_checkpoint_compatible_one_hot",
+  "final_split_created": false,
+  "finetune_allowed": false,
+  "forbidden_artifacts_created": false,
+  "formal_training_allowed": false,
+  "future_candidate_id_mapping_report_required": true,
+  "future_covalent_identity_enrichment_report_required": true,
+  "future_deferred_records_report_required": true,
+  "future_enriched_sample_index_for_split_required": true,
+  "future_enrichment_outputs_required": [
+    "enriched_sample_index_for_split.csv",
+    "enriched_split_metadata_inventory.csv",
+    "metadata_derivation_manifest.json",
+    "metadata_gap_report.csv",
+    "candidate_id_mapping_report.csv",
+    "ligand_identity_enrichment_report.csv",
+    "protein_identity_enrichment_report.csv",
+    "covalent_identity_enrichment_report.csv",
+    "geometry_diversity_enrichment_report.csv",
+    "multi_source_duplicate_report.csv",
+    "deferred_records_report.csv",
+    "source_adapter_coverage_report.csv"
+  ],
+  "future_geometry_diversity_enrichment_report_required": true,
+  "future_ligand_identity_enrichment_report_required": true,
+  "future_metadata_derivation_manifest_required": true,
+  "future_metadata_gap_report_required": true,
+  "future_multi_source_duplicate_report_required": true,
+  "future_protein_identity_enrichment_report_required": true,
+  "future_source_adapter_coverage_report_required": true,
+  "geometry_diversity_enrichment_fields": [
+    "ligand_reactive_atom_to_cys_sg_distance",
+    "warhead_orientation_descriptor",
+    "linker_length_bin",
+    "pocket_geometry_bin",
+    "target_context_atom_count",
+    "target_mask_atom_count"
+  ],
+  "geometry_diversity_required_methods": [
+    "3D coordinate extraction",
+    "Cys SG distance calculation",
+    "warhead orientation vector descriptor",
+    "linker atom graph distance/binning",
+    "local pocket geometry descriptor/binning",
+    "mask atom count consistency check"
+  ],
+  "heterogeneous_datasets_can_share_common_enrichment_pipeline": true,
+  "heuristic_metadata_allowed_for_final_split": false,
+  "heuristic_metadata_allowed_for_inventory_only": true,
+  "input_source": "real_covalent_training_tensor_materialized_v0",
+  "large_binary_structures_must_not_be_committed": true,
+  "large_scale_data_transition_plan_defined": true,
+  "license_or_usage_note_required": true,
+  "ligand_identity_enrichment_fields": [
+    "canonical_pre_reaction_smiles",
+    "ligand_inchikey",
+    "ligand_inchikey_connectivity_layer",
+    "ligand_ecfp4_fingerprint",
+    "bemis_murcko_scaffold_smiles",
+    "scaffold_id",
+    "ligand_heavy_atom_count"
+  ],
+  "ligand_identity_required_methods": [
+    "RDKit canonicalization",
+    "RDKit InChIKey",
+    "RDKit Morgan fingerprint radius=2 / ECFP4",
+    "RDKit Murcko scaffold",
+    "ligand sanitization status",
+    "pre-reaction ligand reconstruction validation"
+  ],
+  "ligand_sanitization_fail_records_deferred": true,
+  "loss_compute_called": false,
+  "low_confidence_records_deferred": true,
+  "manual_override_allowed_with_audit": true,
+  "manual_override_requires_reason": true,
+  "metadata_completeness_ratio_text": "2/38",
+  "metadata_derivation_manifest_written": false,
+  "metadata_enrichment_concept_defined": true,
+  "metadata_enrichment_creates_authoritative_metadata_for_split": true,
+  "metadata_enrichment_definition": "convert_thin_materialization_index_into_authoritative_leakage_aware_split_metadata",
+  "metadata_enrichment_design_contract_defined": true,
+  "metadata_enrichment_enables_cys_train_ready_inventory": true,
+  "metadata_enrichment_enables_leakage_aware_split": true,
+  "metadata_enrichment_enables_scaffold_target_warhead_diversity_reports": true,
+  "metadata_enrichment_is_required_because_current_metadata_completeness": "2/38",
+  "metadata_enrichment_not_equal_to_downloading": true,
+  "metadata_enrichment_not_equal_to_split_implementation": true,
+  "metadata_enrichment_not_equal_to_training": true,
+  "metadata_gap_level": "severe",
+  "missing_authoritative_metadata_blocks_final_split": true,
+  "missing_authoritative_metadata_blocks_training": true,
+  "missing_required_metadata_field_count": 36,
+  "model_forward_called": false,
+  "model_save_allowed": false,
+  "model_saved": false,
+  "multi_source_adapter_architecture_defined": true,
+  "non_cys_data_bulk_cleaning_policy": "identify_classify_defer_until_template_gate",
+  "non_cys_records_identified_but_deferred_for_v1": true,
+  "npz_contents_read": false,
+  "npz_created": false,
+  "npz_files_loaded": false,
+  "one_pot_merge_before_normalization_allowed": false,
+  "optimizer_created": false,
+  "optimizer_step_called": false,
+  "original_diffsbdd_source_modified": false,
+  "parameter_update_allowed": false,
+  "pdb_parser_required_for_protein_identity": true,
+  "planned_source_adapter_display_names": [
+    "CovPDB",
+    "CovBinderInPDB",
+    "CovalentInDB",
+    "PDB/mmCIF direct",
+    "local curated"
+  ],
+  "planned_source_adapters": [
+    "covpdb_adapter",
+    "covbinderinpdb_adapter",
+    "covalentindb_adapter",
+    "pdb_direct_adapter",
+    "local_curated_adapter"
+  ],
+  "present_required_metadata_field_count": 2,
+  "previous_stage": "real_covalent_split_metadata_inventory_gate_v0",
+  "protein_identity_enrichment_fields": [
+    "chain_id",
+    "uniprot_id",
+    "protein_sequence",
+    "protein_sequence_hash",
+    "protein_sequence_cluster_0p90",
+    "protein_family",
+    "binding_site_residue_set_hash",
+    "local_pocket_signature"
+  ],
+  "protein_identity_required_methods": [
+    "PDB/mmCIF parser",
+    "SEQRES/ATOM sequence extraction",
+    "SIFTS or equivalent PDB-to-UniProt mapping",
+    "CD-HIT or equivalent sequence clustering at 0.90",
+    "pocket residue set extraction"
+  ],
+  "protein_mapping_fail_records_deferred": true,
+  "quality_claim_allowed": false,
+  "raw_downloads_must_not_be_committed": true,
+  "rdkit_processing_run": false,
+  "rdkit_required_for_ligand_identity": true,
+  "reaction_family_classifier_required": true,
+  "ready_to_design_multi_source_ingestion": true,
+  "ready_to_download_large_scale_data_now": false,
+  "real_covalent_split_metadata_enrichment_design_gate_passed": true,
+  "recommended_data_sources_for_next_design": [
+    "CovPDB",
+    "CovBinderInPDB",
+    "CovalentInDB",
+    "PDB/mmCIF direct",
+    "local curated"
+  ],
+  "recommended_next_step": "real_covalent_multi_source_dataset_ingestion_design_gate",
+  "reconstruction_template_registry_required": true,
+  "required_source_adapter_design_defined": true,
+  "required_split_metadata_field_count": 38,
+  "selected_artifact_is_real_covalent": true,
+  "selected_artifact_is_synthetic_only": false,
+  "selected_sample_index": "data/derived/covalent_small/training_tensor_materialized_v0/sample_index.csv",
+  "source_adapter_count": 5,
+  "source_adapter_design_details": {
+    "covalentindb_adapter": {
+      "expected_inputs": [
+        "inhibitor-target metadata",
+        "available cocrystal structures"
+      ],
+      "expected_outputs": [
+        "canonical raw covalent records"
+      ],
+      "purpose": "covalent inhibitor/target database",
+      "risk": [
+        "entries may lack 3D protein-ligand complex",
+        "entries may lack exact atom mapping"
+      ]
+    },
+    "covbinderinpdb_adapter": {
+      "expected_inputs": [
+        "source table",
+        "PDB IDs",
+        "ligand/binder annotations"
+      ],
+      "expected_outputs": [
+        "canonical raw covalent records"
+      ],
+      "purpose": "covalent binder annotations in PDB",
+      "risk": [
+        "duplicate PDB entries",
+        "annotation ambiguity"
+      ]
+    },
+    "covpdb_adapter": {
+      "expected_inputs": [
+        "source table",
+        "structure files",
+        "covalent bond annotations if available"
+      ],
+      "expected_outputs": [
+        "canonical raw covalent records"
+      ],
+      "purpose": "covalent protein-ligand complex source",
+      "risk": [
+        "source format/version differences",
+        "ligand reconstruction uncertainty"
+      ]
+    },
+    "local_curated_adapter": {
+      "expected_inputs": [
+        "local curated files",
+        "current sample index"
+      ],
+      "expected_outputs": [
+        "canonical raw covalent records"
+      ],
+      "purpose": "keep current BTK/KRAS examples and future NLRP3 curated examples compatible",
+      "risk": [
+        "manual curation must be flagged and versioned"
+      ]
+    },
+    "pdb_direct_adapter": {
+      "expected_inputs": [
+        "PDB IDs",
+        "mmCIF/PDB files",
+        "LINK/CONECT records",
+        "ligand CCD IDs"
+      ],
+      "expected_outputs": [
+        "canonical raw covalent records"
+      ],
+      "purpose": "direct PDB/mmCIF structure harvesting",
+      "risk": [
+        "biological assembly ambiguity",
+        "covalent LINK parsing ambiguity",
+        "modified residues"
+      ]
+    }
+  },
+  "source_adapter_quality_flags_required": true,
+  "source_dataset_provenance_required": true,
+  "source_priority_policy_required": true,
+  "source_specific_adapter_required": true,
+  "source_specific_field_mapping_required": true,
+  "source_specific_raw_adapters": [
+    "CovPDB adapter",
+    "CovBinderInPDB adapter",
+    "CovalentInDB adapter",
+    "PDB/mmCIF direct adapter",
+    "local curated covalent examples adapter"
+  ],
+  "source_version_tracking_required": true,
+  "stage": "real_covalent_split_metadata_enrichment_design_gate_v0",
+  "step12b_mask_level_aware_validator_validated": true,
+  "step12n_split_metadata_inventory_gate_validated": true,
+  "tensor_dump_saved": false,
+  "train_ready_scope_v1": "cys_with_known_reconstruction_template_only",
+  "trainer_fit_called": false,
+  "training_allowed": false,
+  "training_step_called": false,
+  "uniprot_mapping_required": true,
+  "uniprot_mapping_run": false,
+  "warhead_smarts_library_required": true
+}
