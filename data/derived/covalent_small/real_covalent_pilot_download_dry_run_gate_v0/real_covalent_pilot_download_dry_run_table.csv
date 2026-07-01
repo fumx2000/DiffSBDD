@@ -1,0 +1,10 @@
+job_id,source_name,job_type,pdb_id,sample_id,dry_run_status,schema_valid,source_policy_valid,url_string_valid,local_output_path_valid,checksum_policy_valid,provenance_policy_valid,blocked_source_policy_valid,network_called,file_downloaded,raw_dir_created,raw_file_written,adapter_run,ready_for_execution_after_dry_run,blocking_reasons
+pdb_mmcif_direct_6DI9,PDB/mmCIF direct,pdb_mmcif_download,6DI9,,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+pdb_mmcif_direct_5F2E,PDB/mmCIF direct,pdb_mmcif_download,5F2E,,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+pdb_mmcif_direct_6OIM,PDB/mmCIF direct,pdb_mmcif_download,6OIM,,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+local_curated_BTK_C481_6DI9_pre_reaction,local curated,local_curated_register_existing_sample,6DI9,BTK_C481_6DI9_pre_reaction,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+local_curated_KRAS_G12C_5F2E_pre_reaction,local curated,local_curated_register_existing_sample,5F2E,KRAS_G12C_5F2E_pre_reaction,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+local_curated_KRAS_G12C_6OIM_pre_reaction,local curated,local_curated_register_existing_sample,6OIM,KRAS_G12C_6OIM_pre_reaction,passed,True,True,True,True,True,True,True,False,False,False,False,False,True,[]
+blocked_covpdb,CovPDB,blocked_source_no_pilot_download,,,blocked_as_expected,True,True,True,True,True,True,True,False,False,False,False,False,False,[]
+blocked_covbinderinpdb,CovBinderInPDB,blocked_source_no_pilot_download,,,blocked_as_expected,True,True,True,True,True,True,True,False,False,False,False,False,False,[]
+blocked_covalentindb,CovalentInDB,blocked_source_no_pilot_download,,,blocked_as_expected,True,True,True,True,True,True,True,False,False,False,False,False,False,[]
