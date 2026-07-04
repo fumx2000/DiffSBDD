@@ -261,10 +261,36 @@ def test_script_writes_review_outputs_without_creating_new_checkpoint(review_res
 
 
 def test_no_forbidden_artifacts_or_source_modifications():
-    forbidden_suffixes = [".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".ckpt", ".pth"]
+    forbidden_suffixes = [".pt", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".ckpt", ".pth"]
     for suffix in forbidden_suffixes:
-        assert not list(RUN_ROOT.rglob(f"*{suffix}"))
-    assert sorted(str(path) for path in RUN_ROOT.rglob("*.pt")) == [str(CHECKPOINT_PATH)]
+        paths = sorted(str(path) for path in RUN_ROOT.rglob(f"*{suffix}"))
+        if suffix == ".pt":
+            assert paths in ([], [str(CHECKPOINT_PATH)])
+        else:
+            assert paths == []
+
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--name-only"],
+        cwd=REPO_ROOT,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    tracked = subprocess.run(
+        ["git", "ls-files", str(RUN_ROOT)],
+        cwd=REPO_ROOT,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    forbidden_paths = [
+        path
+        for path in staged.stdout.splitlines() + tracked.stdout.splitlines()
+        if Path(path).suffix in forbidden_suffixes
+    ]
+    assert forbidden_paths == []
 
     diff = subprocess.run(
         ["git", "diff", "--", "equivariant_diffusion/", "lightning_modules.py"],

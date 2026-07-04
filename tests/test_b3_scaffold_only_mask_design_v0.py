@@ -57,8 +57,17 @@ def test_existing_mask_schema_inspection_returns_evidence():
     assert evidence["current_b2_name"] == "B2_scaffold_warhead"
     assert evidence["current_b2_target_components"] == ["scaffold", "warhead"]
     assert evidence["current_b2_context_components"] == ["linker"]
-    assert evidence["b3_already_implemented"] is False
-    assert "src/covalent_ext/masking.py" in evidence["implementation_files_to_touch_next"]
+    assert evidence["b3_already_implemented"] is True
+    assert NEW_MASK_LEVEL == "B3_scaffold_only"
+    assert "scaffold_only" in NEW_MASK_LEVEL
+    assert build_five_level_mask_table_v0()[3]["mask_level"] == NEW_MASK_LEVEL
+    assert [row["mask_level"] for row in build_five_level_mask_table_v0()] == [
+        "A_warhead_only",
+        "B_linker_warhead",
+        "B2_scaffold_warhead",
+        NEW_MASK_LEVEL,
+        "C_scaffold_linker_warhead",
+    ]
 
 
 def test_b3_semantics_are_scaffold_only_with_linker_warhead_context():
