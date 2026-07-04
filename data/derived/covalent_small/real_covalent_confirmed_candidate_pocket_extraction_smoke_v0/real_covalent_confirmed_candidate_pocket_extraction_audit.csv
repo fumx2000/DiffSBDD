@@ -1,0 +1,4 @@
+review_row_id,pdb_id,pocket_extraction_contract_id,protein_atom_input_row_count,ligand_atom_input_row_count,ligand_heavy_atom_count,pocket_atom_row_count,within_radius_atom_count,force_included_covalent_residue_atom_count,force_included_endpoint_atom_count,covalent_endpoint_in_pocket,covalent_residue_atoms_in_pocket,min_pocket_distance_angstrom,max_pocket_distance_angstrom,pocket_radius_angstrom,pocket_extraction_passed,blocking_reasons
+HR_0002,6DI9,POCKET_CONTRACT_0001_HR_0002,2047,33,33,224,198,36,1,True,True,1.8053,23.6915,8.0,True,
+HR_0003,5F2E,POCKET_CONTRACT_0002_HR_0003,1217,30,30,254,254,6,1,True,True,1.7554,7.9686,8.0,True,
+HR_0004,6OIM,POCKET_CONTRACT_0003_HR_0004,1336,41,41,263,263,6,1,True,True,1.8054,7.9963,8.0,True,
