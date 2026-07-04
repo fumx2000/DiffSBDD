@@ -1,0 +1,4 @@
+review_row_id,pdb_id,raw_path,protein_endpoint_recovered,ligand_endpoint_recovered,expected_protein_endpoint_atom_site_id,recovered_protein_endpoint_atom_site_id,expected_ligand_endpoint_atom_site_id,recovered_ligand_endpoint_atom_site_id,expected_protein_endpoint_altloc,recovered_protein_endpoint_altloc,expected_ligand_endpoint_altloc,recovered_ligand_endpoint_altloc,protein_endpoint_coordinate_matches_step13i,ligand_endpoint_coordinate_matches_step13i,endpoint_recovery_passed,blocking_reasons
+HR_0002,6DI9,data/raw/covalent_sources/pdb_mmcif_direct/structures/6DI9.cif.gz,True,True,659,659,2070,2070,B,B,,,True,True,True,
+HR_0003,5F2E,data/raw/covalent_sources/pdb_mmcif_direct/structures/5F2E.cif.gz,True,True,105,105,1498,1498,,,,,True,True,True,
+HR_0004,6OIM,data/raw/covalent_sources/pdb_mmcif_direct/structures/6OIM.cif.gz,True,True,93,93,1373,1373,,,,,True,True,True,
