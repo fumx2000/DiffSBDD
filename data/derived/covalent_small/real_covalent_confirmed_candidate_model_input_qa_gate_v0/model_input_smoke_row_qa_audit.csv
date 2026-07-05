@@ -1,0 +1,4 @@
+model_input_smoke_row_id,sample_index_row_id,review_row_id,pdb_id,row_identity_validated,cys_sg_scope_validated,sample_contract_consistency_validated,sample_index_consistency_validated,ligand_counts_validated,endpoint_counts_validated,pocket_dependency_validated,ligand_topology_dependency_validated,mask_fields_validated,feature_semantics_status_validated,tensor_status_validated,loader_training_boundary_validated,model_input_smoke_row_qa_passed,blocking_reasons
+RMI_SMOKE_000001,RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,True,True,True,True,True,
+RMI_SMOKE_000002,RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,True,True,True,True,True,
+RMI_SMOKE_000003,RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,True,True,True,True,True,
