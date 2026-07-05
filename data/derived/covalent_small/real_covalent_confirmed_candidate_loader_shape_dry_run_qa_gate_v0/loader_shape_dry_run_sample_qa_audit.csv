@@ -1,0 +1,4 @@
+loader_shape_dry_run_sample_id,model_input_smoke_row_id,sample_index_row_id,review_row_id,pdb_id,sample_audit_row_found,expected_identity_validated,sample_shape_dry_run_passed,dataset_row_found,loader_batch_seen,cys_sg_scope_validated,ligand_counts_validated,endpoint_counts_validated,canonical_masks_validated,transient_tensors_created_in_step13z,tensor_artifact_written,model_forward_called,loss_compute_called,training_ready,sample_qa_passed,blocking_reasons
+LSDR_DESIGN_000001,RMI_SMOKE_000001,RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,True,True,False,False,False,False,True,
+LSDR_DESIGN_000002,RMI_SMOKE_000002,RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,True,True,False,False,False,False,True,
+LSDR_DESIGN_000003,RMI_SMOKE_000003,RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,True,True,False,False,False,False,True,
