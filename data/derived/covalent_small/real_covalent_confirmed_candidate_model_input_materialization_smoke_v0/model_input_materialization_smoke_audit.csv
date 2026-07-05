@@ -1,0 +1,4 @@
+model_input_smoke_row_id,sample_index_row_id,review_row_id,pdb_id,sample_contract_row_found,sample_index_row_found,pocket_dependency_path_exists,ligand_topology_paths_exist,ligand_counts_match_sample_contract,endpoint_counts_validated,mask_contract_validated,feature_semantics_audit_required,model_input_smoke_row_written,tensor_artifact_written,loader_shape_dry_run_performed,training_ready,materialization_smoke_passed,blocking_reasons
+RMI_SMOKE_000001,RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,True,False,False,False,True,
+RMI_SMOKE_000002,RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,True,False,False,False,True,
+RMI_SMOKE_000003,RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,True,False,False,False,True,
