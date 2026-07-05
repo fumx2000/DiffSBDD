@@ -1,0 +1,4 @@
+review_row_id,pdb_id,expected_step8_sample_name,atom_rows_observed,atom_rows_expected,bond_rows_observed,bond_rows_expected,endpoint_atom_true_count,endpoint_touching_bond_true_count,warhead_atom_true_count,linker_atom_true_count,scaffold_atom_true_count,warhead_bond_true_count,linker_bond_true_count,scaffold_bond_true_count,cross_boundary_or_unassigned_bond_count,atom_group_partition_passed,topology_smoke_retry_passed,blocking_reasons
+HR_0002,6DI9,BTK_C481_6DI9_pre_reaction,33,33,35,35,1,1,4,7,22,3,7,22,3,True,True,
+HR_0003,5F2E,KRAS_G12C_5F2E_pre_reaction,30,30,33,33,1,1,4,4,22,3,4,24,2,True,True,
+HR_0004,6OIM,KRAS_G12C_6OIM_pre_reaction,41,41,45,45,1,1,4,7,30,3,7,33,2,True,True,
