@@ -1,0 +1,19 @@
+boundary_item,current_step_status,allowed_next_step_status,forbidden_current_step,forbidden_next_step,rationale
+adapter_implementation,not_executed_or_not_allowed,allowed_only_under_src_covalent_ext_in_next_smoke,True,False,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+adapter_instantiation,not_executed_or_not_allowed,allowed_only_in_next_adapter_implementation_smoke,True,False,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+torch_import,not_executed_or_not_allowed,allowed_only_if_needed_in_next_adapter_implementation_smoke,True,False,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+tensor_creation,not_executed_or_not_allowed,allowed_only_transient_in_next_adapter_implementation_smoke,True,False,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+dataloader_modification,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+original_diffsbdd_source_modification,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+model_forward_call,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+loss_compute,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+backward_call,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+optimizer_creation,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+trainer_fit,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+checkpoint_load,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+checkpoint_save,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+pt_npz_artifact_creation,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+rdkit_or_sdf_access,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+raw_mmcif_access,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+training_claim,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
+feature_semantics_audit,not_executed_or_not_allowed,required_before_training_not_completed,True,False,Step 13AB is design-only; next step may implement only a minimal external covalent_ext adapter and still cannot train.
