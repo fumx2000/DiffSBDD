@@ -267,7 +267,12 @@ def _ligand_rows_by_review() -> dict[str, list[dict[str, str]]]:
 
 
 def _allowed_discovery_paths() -> list[Path]:
-    roots = [Path("docs"), Path("data/derived")]
+    roots = [
+        Path("data/derived/covalent_small/dataset_index_review_only"),
+        Path("data/derived/covalent_small/loader_dry_run_review_only"),
+        Path("data/derived/covalent_small/packaging_real_review_only/metadata"),
+        Path("data/derived/covalent_small/pre_reaction_graph"),
+    ]
     paths: list[Path] = []
     for root in roots:
         if not root.exists():
