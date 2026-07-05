@@ -1,0 +1,4 @@
+sample_index_row_id,review_row_id,pdb_id,candidate_contract_row_found,mask_task_contract_validated,ligand_atom_count_matches_candidate_contract,ligand_bond_count_matches_candidate_contract,endpoint_counts_validated,canonical_mask_count_validated,b3_scaffold_only_included,sample_index_row_materialized,model_input_materialized,training_ready,materialization_smoke_passed,blocking_reasons
+RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,False,False,True,
+RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,False,False,True,
+RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,False,False,True,
