@@ -1,0 +1,4 @@
+batch_index,loader_shape_dry_run_sample_id,model_input_smoke_row_id,batch_size,collate_status,batch_shape_checked,batch_order_validated,model_forward_called,loss_compute_called,backward_called,optimizer_step_called,training_step_called,batch_audit_passed,blocking_reasons
+0,LSDR_DESIGN_000001,RMI_SMOKE_000001,1,single_sample_collate_no_padding_no_training,True,True,False,False,False,False,False,True,
+1,LSDR_DESIGN_000002,RMI_SMOKE_000002,1,single_sample_collate_no_padding_no_training,True,True,False,False,False,False,False,True,
+2,LSDR_DESIGN_000003,RMI_SMOKE_000003,1,single_sample_collate_no_padding_no_training,True,True,False,False,False,False,False,True,
