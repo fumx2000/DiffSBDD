@@ -1,0 +1,6 @@
+canonical_mask_task_name,display_alias,task_description,masked_groups,preserved_groups,task_order,active_in_v1,source_of_truth_status,training_use_status
+warhead_only,A,V1 canonical mask task `warhead_only`; alias `A` is display-only.,warhead,linker;scaffold,1,True,long_semantic_name_source_of_truth_alias_display_only,not_training_input_yet
+linker_plus_warhead,B,V1 canonical mask task `linker_plus_warhead`; alias `B` is display-only.,linker;warhead,scaffold,2,True,long_semantic_name_source_of_truth_alias_display_only,not_training_input_yet
+scaffold_plus_warhead,B2,V1 canonical mask task `scaffold_plus_warhead`; alias `B2` is display-only.,scaffold;warhead,linker,3,True,long_semantic_name_source_of_truth_alias_display_only,not_training_input_yet
+scaffold_only,B3,V1 canonical mask task `scaffold_only`; alias `B3` is display-only.,scaffold,linker;warhead,4,True,long_semantic_name_source_of_truth_alias_display_only,not_training_input_yet
+scaffold_plus_linker_plus_warhead,C,V1 canonical mask task `scaffold_plus_linker_plus_warhead`; alias `C` is display-only.,scaffold;linker;warhead,none,5,True,long_semantic_name_source_of_truth_alias_display_only,not_training_input_yet
