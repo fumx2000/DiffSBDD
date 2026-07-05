@@ -1,0 +1,4 @@
+adapter_design_sample_id,loader_shape_dry_run_sample_id,model_input_smoke_row_id,sample_index_row_id,review_row_id,pdb_id,adapter_input_row_found,cys_sg_scope_validated,ligand_counts_validated,endpoint_counts_validated,canonical_masks_validated,adapter_input_audit_passed,blocking_reasons
+DSBDD_ADAPTER_DESIGN_000001,LSDR_DESIGN_000001,RMI_SMOKE_000001,RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,
+DSBDD_ADAPTER_DESIGN_000002,LSDR_DESIGN_000002,RMI_SMOKE_000002,RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,
+DSBDD_ADAPTER_DESIGN_000003,LSDR_DESIGN_000003,RMI_SMOKE_000003,RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,
