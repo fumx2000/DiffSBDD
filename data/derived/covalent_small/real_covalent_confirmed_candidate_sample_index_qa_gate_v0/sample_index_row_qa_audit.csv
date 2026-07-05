@@ -1,0 +1,4 @@
+sample_index_row_id,review_row_id,pdb_id,row_identity_validated,lineage_validated,cys_sg_scope_validated,mask_task_names_validated,mask_task_aliases_validated,b3_scaffold_only_included,no_extra_mask_tasks,topology_counts_match_candidate_contract,endpoint_counts_validated,topology_table_paths_exist,topology_table_counts_match_sample_index,readiness_safety_fields_validated,sample_index_row_qa_passed,blocking_reasons
+RSIDX_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,True,True,True,True,True,
+RSIDX_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,True,True,True,True,True,
+RSIDX_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,True,True,True,True,True,
