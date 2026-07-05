@@ -1,0 +1,15 @@
+boundary_item,current_step_status,allowed_next_step_status,forbidden_current_step,forbidden_next_step,rationale
+loader_instantiation,not_executed_or_not_allowed,allowed_only_for_shape_dry_run_execution_smoke,True,False,Next step may instantiate only for shape inspection.
+torch_tensor_creation,not_executed_or_not_allowed,allowed_only_for_shape_dry_run_execution_smoke,True,False,Next step may create transient tensors only if required for shape inspection.
+dataloader_modification,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Design and execution smoke must not edit dataloader code.
+forward_call,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not call model forward.
+loss_compute,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not compute loss.
+backward_call,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not run backward.
+optimizer_creation,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not create optimizers.
+trainer_fit,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not train.
+checkpoint_save,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not save checkpoints.
+pt_npz_artifact_creation,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Shape dry run must not create persistent PT or NPZ artifacts.
+rdkit_or_sdf_access,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Loader shape smoke must use existing CSV/JSON dependencies only.
+raw_mmcif_access,not_executed_or_not_allowed,forbidden_in_next_step,True,True,Raw structure parsing is outside this path.
+training_claim,not_executed_or_not_allowed,forbidden_in_next_step,True,True,No training readiness claim is allowed.
+feature_semantics_audit,required_before_training_not_completed,remains_required_before_training,False,False,Feature semantics audit remains required before formal training.
