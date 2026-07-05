@@ -21,6 +21,7 @@ from covalent_ext.diffsbdd_model_instantiation import (
     MODEL_MODULE_NAME,
     _constructor_kwargs,
 )
+from covalent_ext.biopython_compat import patch_biopython_polypeptide_three_to_one
 from covalent_ext.pretrained_checkpoint_architecture_reconciliation import (
     infer_architecture_from_state_shapes_v0,
 )
@@ -418,6 +419,7 @@ def _instantiate_model_with_temp_dataset(config_dict: dict[str, Any], dataset_in
     previous = constants.dataset_params.get(config_dict["dataset"])
     constants.dataset_params[config_dict["dataset"]] = dataset_info
     try:
+        patch_biopython_polypeptide_three_to_one()
         module = importlib.import_module(MODEL_MODULE_NAME)
         model_class = getattr(module, MODEL_CLASS_NAME)
         with contextlib.redirect_stdout(io.StringIO()):

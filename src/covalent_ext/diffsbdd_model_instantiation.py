@@ -9,6 +9,8 @@ from typing import Any
 
 import yaml
 
+from covalent_ext.biopython_compat import patch_biopython_polypeptide_three_to_one
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -55,6 +57,7 @@ def _load_yaml_config() -> dict[str, Any]:
 
 
 def inspect_diffsbdd_model_constructor_v0() -> dict[str, Any]:
+    patch_biopython_polypeptide_three_to_one()
     module = importlib.import_module(MODEL_MODULE_NAME)
     model_class = getattr(module, MODEL_CLASS_NAME)
     signature = inspect.signature(model_class.__init__)
@@ -263,6 +266,7 @@ def try_instantiate_diffsbdd_model_without_checkpoint_v0(device: str = "cpu") ->
             result["blocking_reasons"].append("config_not_ready")
         return result
     try:
+        patch_biopython_polypeptide_three_to_one()
         module = importlib.import_module(MODEL_MODULE_NAME)
         model_class = getattr(module, MODEL_CLASS_NAME)
         result["model_class_imported"] = True

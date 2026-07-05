@@ -11,7 +11,14 @@ from tqdm import tqdm
 import numpy as np
 
 from Bio.PDB import PDBParser
-from Bio.PDB.Polypeptide import three_to_one, is_aa
+from Bio.PDB.Polypeptide import is_aa
+try:
+    from Bio.PDB.Polypeptide import three_to_one
+except ImportError:
+    from Bio.PDB.Polypeptide import protein_letters_3to1
+
+    def three_to_one(resname):
+        return protein_letters_3to1.get(str(resname or "").strip().upper(), "X")
 from rdkit import Chem
 from scipy.ndimage import gaussian_filter
 
