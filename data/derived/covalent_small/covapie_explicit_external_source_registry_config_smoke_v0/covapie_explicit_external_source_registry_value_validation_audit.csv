@@ -1,0 +1,13 @@
+validation_item,validation_status,validation_passed,blocking_reasons
+source_slot_id_allowed,passed,True,
+source_slot_id_unique,passed,True,
+source_name_non_empty,passed,True,
+source_family_allowed,passed,True,
+source_priority_integer_positive,passed,True,
+source_metadata_index_url_or_local_path_non_empty,passed,True,
+source_access_method_allowed,passed,True,
+source_version_or_download_date_non_empty,passed,True,
+expected_metadata_artifact_type_allowed,passed,True,
+expected_candidate_unit_covalent_event,passed,True,
+citation_or_license_note_non_empty,passed,True,
+manual_source_verification_status_allowed,passed,True,

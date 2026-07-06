@@ -1,0 +1,9 @@
+enabled_source_audit_item,enabled_source_count,audit_status,audit_passed,blocking_reasons
+enabled_source_count,1,passed,True,
+exactly_one_enabled_for_first_smoke,1,passed,True,
+enabled_source_verified,1,passed,True,
+enabled_source_specialized_priority,1,passed,True,
+enabled_source_artifact_type_allowed,1,passed,True,
+enabled_source_access_method_allowed,1,passed,True,
+enabled_source_not_raw_artifact,1,passed,True,
+enabled_source_ready_for_download_smoke,1,passed,True,

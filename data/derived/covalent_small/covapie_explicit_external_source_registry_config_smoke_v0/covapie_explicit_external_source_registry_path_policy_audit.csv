@@ -1,0 +1,9 @@
+path_policy_item,path_policy_status,path_policy_passed,blocking_reasons
+metadata_index_path_is_under_metadata_root,passed,True,
+raw_structure_root_separate,passed,True,
+local_metadata_path_not_opened,passed,True,
+local_metadata_path_existence_not_required_current_step,passed,True,
+no_raw_suffix_in_metadata_config,passed,True,
+expected_artifact_type_csv,passed,True,
+future_metadata_download_smoke_may_block_if_missing,passed,True,
+no_url_verification_current_step,passed,True,

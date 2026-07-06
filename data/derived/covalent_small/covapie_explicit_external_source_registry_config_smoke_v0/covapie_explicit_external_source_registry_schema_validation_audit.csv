@@ -1,0 +1,13 @@
+required_column,column_present,schema_validation_status,schema_validation_passed,blocking_reasons
+source_slot_id,True,present,True,
+source_name,True,present,True,
+source_family,True,present,True,
+source_priority,True,present,True,
+source_metadata_index_url_or_local_path,True,present,True,
+source_access_method,True,present,True,
+source_version_or_download_date,True,present,True,
+expected_metadata_artifact_type,True,present,True,
+expected_candidate_unit,True,present,True,
+citation_or_license_note,True,present,True,
+enabled_for_download_smoke,True,present,True,
+manual_source_verification_status,True,present,True,
