@@ -1,0 +1,8 @@
+sharding_item,rule_value,current_step_status,future_smoke_status,rationale,design_contract_passed
+shard_size_initial_smoke,5,design_only,five_samples_per_shard,small deterministic shards,True
+single_sample_failure_isolation,true,design_only,isolate_failures,one failure should not hide others,True
+partial_success_allowed,true,design_only,write_partial_success,audit skipped/failed samples,True
+deterministic_sample_order,true,design_only,stable_sort_by_candidate_id,reproducibility,True
+per_sample_report_required,true,design_only,write_per_sample_audit,debuggability,True
+aggregate_report_required,true,design_only,write_aggregate_report,batch summary,True
+rerun_id_required,true,design_only,include_rerun_id,trace repeated smoke runs,True
