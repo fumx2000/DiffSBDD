@@ -1,0 +1,11 @@
+git_safety_item,command_or_check,required_status,current_step_status,git_safety_audit_passed,blocking_reasons
+forbidden_suffix_check,find output root forbidden suffixes,none,passed,True,
+raw_directory_not_staged,git diff --cached --name-only -- data/raw/covalent_sources,empty,passed,True,
+raw_directory_not_tracked,git ls-files data/raw/covalent_sources,empty,passed,True,
+protected_source_diff_empty,git diff -- equivariant_diffusion/ lightning_modules.py,empty,passed,True,
+original_dataloader_diff_empty,git diff -- dataset.py data/prepare_crossdocked.py,empty,passed,True,
+metadata_csv_is_allowed_input_artifact,data/derived/covalent_small/external_metadata_index/covpdb/covpdb_complexes_metadata_manual.csv,read local metadata csv only,passed,True,
+generated_large_file_check,find output_root large files,no large binaries,passed,True,
+exact_file_stage_policy,git add explicit step files only,exact file list,declared,True,
+post_commit_clean_status_policy,git status --short --untracked-files=all,clean,declared,True,
+no_bulk_rename_policy,git diff --name-status,no mass rename,declared,True,

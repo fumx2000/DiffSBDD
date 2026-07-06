@@ -1,0 +1,2 @@
+sample_rows_probe_status,sample_rows_probe_executed,sampled_row_count,total_rows_scanned,sample_limit,first_5_pdb_ids,first_5_het_codes,sample_rows_probe_passed,blocking_reasons
+sample_rows_read,True,5,25,5,1A3B;1A3E;1A46;1A54;1A5G,T29;T16;00K;MDC;00L,True,

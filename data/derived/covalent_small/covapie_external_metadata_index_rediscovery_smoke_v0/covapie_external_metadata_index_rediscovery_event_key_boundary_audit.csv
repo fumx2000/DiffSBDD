@@ -1,0 +1,9 @@
+event_key_boundary_item,event_key_materialized_current_step,candidate_metadata_materialized,candidate_allowlist_materialized,event_key_boundary_audit_passed,blocking_reasons
+no_pdb_id_only_join,False,False,False,True,
+minimal_event_key_carried_forward,False,False,False,True,
+preferred_event_key_carried_forward,False,False,False,True,
+one_row_one_covalent_event,False,False,False,True,
+event_key_not_materialized_current_step,False,False,False,True,
+candidate_metadata_not_materialized_current_step,False,False,False,True,
+allowlist_not_materialized_current_step,False,False,False,True,
+ambiguous_events_not_resolved_current_step,False,False,False,True,
