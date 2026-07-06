@@ -1,0 +1,2 @@
+shard_id,shard_plan_created,shard_size,candidate_count,candidate_ids,shard_status,shard_audit_passed,blocking_reasons
+no_shard_missing_or_invalid_metadata,False,5,0,,blocked_missing_metadata,True,

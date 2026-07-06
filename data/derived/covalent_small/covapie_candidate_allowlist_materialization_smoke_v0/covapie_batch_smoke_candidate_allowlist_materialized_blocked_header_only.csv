@@ -1,0 +1,1 @@
+candidate_id,source_dataset_name,source_dataset_version,source_file_relative_path,pdb_id,ligand_id,chain_id,residue_name,residue_index,residue_atom_name,covalent_bond_atom_pair,restoration_policy_id,manual_review_status,include_in_smoke,exclusion_reason
