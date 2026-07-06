@@ -1,0 +1,11 @@
+raw_artifact_item,raw_artifact_status,raw_artifact_safety_passed,blocking_reasons
+zip_downloaded,False,True,
+pdb_downloaded,False,True,
+mmcif_downloaded,False,True,
+cif_downloaded,False,True,
+sdf_downloaded,False,True,
+mol2_downloaded,False,True,
+gz_downloaded,False,True,
+raw_structure_downloaded,False,True,
+raw_ligand_downloaded,False,True,
+raw_artifact_opened,False,True,

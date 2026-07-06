@@ -1,0 +1,2 @@
+url,http_status_or_error,content_type_if_available,byte_count,fetched,allowed_html_page,raw_artifact,page_fetch_passed,blocking_reasons
+https://drug-discovery.vm.uni-freiburg.de/covpdb/complexes_list/initial=Allsortedby=protein_id,200,text/html; charset=utf-8,36255,True,True,False,True,

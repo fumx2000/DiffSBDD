@@ -1,0 +1,2 @@
+allowed_domain,fetched_urls,blocked_urls,raw_download_urls_attempted,forbidden_suffix_urls_seen,forbidden_suffix_urls_fetched,network_scope_passed,blocking_reasons
+drug-discovery.vm.uni-freiburg.de,"[""https://drug-discovery.vm.uni-freiburg.de/covpdb/complexes_list/initial=Allsortedby=protein_id""]",[],[],[],[],True,

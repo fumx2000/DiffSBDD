@@ -1,0 +1,2 @@
+complexes_pages_attempted,complexes_pages_parsed,rows_parsed,columns_detected,show_card_links_detected,ligand_links_detected,parse_status,parse_passed,blocking_reasons
+1,1,25,19,25,25,covpdb_complex_rows_parsed,True,

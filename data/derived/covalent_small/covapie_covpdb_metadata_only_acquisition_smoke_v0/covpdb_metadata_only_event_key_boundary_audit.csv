@@ -1,0 +1,8 @@
+event_key_boundary_item,event_key_boundary_value,event_key_boundary_passed,blocking_reasons
+event_identity_key_policy,no_pdb_id_only_join,True,
+minimal_event_key,pdb_id+ligand_id+chain_id+residue_name+residue_index+residue_atom_name,True,
+preferred_event_key,pdb_id+ligand_id+chain_id+residue_name+residue_index+residue_atom_name+covalent_bond_atom_pair,True,
+event_key_materialized_current_step,False,True,
+candidate_metadata_materialized,False,True,
+allowlist_materialized,False,True,
+ambiguous_events_not_resolved_current_step,True,True,

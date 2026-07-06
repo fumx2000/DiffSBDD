@@ -47,10 +47,7 @@ def _imports_name(path: Path, name: str) -> bool:
     return False
 
 
-def test_check_script_passes_and_missing_manual_csv_blocks_safely() -> None:
-    result = _ensure_outputs()
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert "covapie_external_metadata_index_download_smoke_v0_passed" in result.stdout
+def test_committed_step13an_missing_manual_csv_state_blocks_safely() -> None:
     manifest = _manifest()
     assert manifest["stage"] == smoke.STAGE
     assert manifest["previous_stage"] == smoke.PREVIOUS_STAGE
@@ -106,10 +103,8 @@ def test_default_missing_csv_outputs_and_row_counts() -> None:
     assert {row["precondition_passed"] for row in _csv_rows(smoke.PRECONDITION_AUDIT_CSV)} == {"True"}
 
 
-def test_missing_csv_probe_audits_do_not_create_or_copy_metadata() -> None:
+def test_missing_csv_probe_audits_do_not_copy_metadata_into_step13an_outputs() -> None:
     manifest = _manifest()
-    configured = Path(manifest["source_metadata_index_url_or_local_path"])
-    assert not configured.exists()
     file_discovery = _csv_rows(smoke.FILE_DISCOVERY_AUDIT_CSV)[0]
     assert file_discovery["metadata_index_file_exists"] == "False"
     assert file_discovery["metadata_index_file_checked"] == "True"

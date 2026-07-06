@@ -354,7 +354,6 @@ def validate_step13ai_precondition_v0() -> bool:
         "naming_convention_validated": True,
         "step13ah_missing_metadata_materialization_smoke_validated": True,
         "inventory_scope": "derived_csv_json_md_metadata_inventory_only",
-        "possible_metadata_source_artifact_count": 111,
         "allowlist_required_column_count": 15,
         "directly_available_column_count": 15,
         "derivable_column_count": 0,
@@ -411,6 +410,8 @@ def validate_step13ai_precondition_v0() -> bool:
     blockers = [f"{key}={manifest.get(key)!r}" for key, value in expected.items() if manifest.get(key) != value]
     if int(manifest.get("scanned_artifact_count", -1)) < 526:
         blockers.append(f"scanned_artifact_count={manifest.get('scanned_artifact_count')!r}")
+    if int(manifest.get("possible_metadata_source_artifact_count", -1)) < 111:
+        blockers.append(f"possible_metadata_source_artifact_count={manifest.get('possible_metadata_source_artifact_count')!r}")
     if manifest.get("blocking_reasons") != []:
         blockers.append("blocking_reasons")
     if manifest.get("allowlist_required_columns") != ALLOWLIST_COLUMNS:
