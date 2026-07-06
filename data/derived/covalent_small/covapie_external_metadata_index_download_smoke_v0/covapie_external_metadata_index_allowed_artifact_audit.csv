@@ -1,0 +1,9 @@
+allowed_artifact_item,audit_status,allowed_artifact_audit_passed,blocking_reasons
+expected_artifact_type_csv_allowed,passed,True,
+configured_path_suffix_csv,passed,True,
+configured_path_under_metadata_root,passed,True,
+raw_zip_forbidden,passed,True,
+raw_pdb_forbidden,passed,True,
+raw_mmcif_cif_gz_forbidden,passed,True,
+raw_sdf_mol2_forbidden,passed,True,
+no_raw_artifact_copied,passed,True,

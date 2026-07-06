@@ -1,0 +1,2 @@
+header_probe_status,header_probe_executed,column_count,column_names,header_probe_passed,blocking_reasons
+not_available_missing_manual_metadata_index,False,0,,True,missing_manual_metadata_index_csv

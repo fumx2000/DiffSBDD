@@ -1,0 +1,2 @@
+sample_rows_probe_status,sample_rows_probe_executed,sampled_row_count,total_rows_scanned,sample_limit,sample_rows_probe_passed,blocking_reasons
+not_available_missing_manual_metadata_index,False,0,0,5,True,missing_manual_metadata_index_csv
