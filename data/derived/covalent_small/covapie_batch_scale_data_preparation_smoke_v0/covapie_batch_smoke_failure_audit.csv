@@ -1,0 +1,2 @@
+failure_code,failure_category,severity,skip_or_block,affected_candidate_count,failure_audit_passed,blocking_reasons
+missing_candidate_allowlist,input_source,blocking_for_smoke_not_training,block_smoke,0,True,missing_explicit_candidate_allowlist

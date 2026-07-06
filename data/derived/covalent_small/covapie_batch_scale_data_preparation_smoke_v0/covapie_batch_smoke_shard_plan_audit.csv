@@ -1,0 +1,2 @@
+shard_id,shard_candidate_ids,shard_size,candidate_count,shard_plan_created,sharding_status,sharding_audit_passed,blocking_reasons
+no_shard_missing_allowlist,,5,0,False,blocked_missing_allowlist,True,missing_allowlist_no_shard_plan_created
