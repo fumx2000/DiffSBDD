@@ -1,0 +1,4 @@
+batch_index,adapter_design_sample_id,review_row_id,batch_size,collate_status,adapter_batch_built,batch_field_count,batch_shape_checked,batch_order_validated,model_forward_called,loss_compute_called,backward_called,optimizer_step_called,training_step_called,single_sample_batch_audit_passed,qa_passed,blocking_reasons
+0,DSBDD_ADAPTER_DESIGN_000001,HR_0002,1,external_adapter_single_sample_collate_no_padding_no_training,True,14,True,True,False,False,False,False,False,True,True,
+1,DSBDD_ADAPTER_DESIGN_000002,HR_0003,1,external_adapter_single_sample_collate_no_padding_no_training,True,14,True,True,False,False,False,False,False,True,True,
+2,DSBDD_ADAPTER_DESIGN_000003,HR_0004,1,external_adapter_single_sample_collate_no_padding_no_training,True,14,True,True,False,False,False,False,False,True,True,

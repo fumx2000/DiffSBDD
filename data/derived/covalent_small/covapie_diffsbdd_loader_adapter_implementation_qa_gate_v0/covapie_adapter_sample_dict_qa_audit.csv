@@ -1,0 +1,4 @@
+adapter_design_sample_id,review_row_id,sample_dict_audit_row_found,adapter_sample_built,metadata_present,adapter_fields_present,adapter_field_count,canonical_mask_task_count,auxiliary_label_count,step13ac_sample_dict_audit_passed,qa_passed,blocking_reasons
+DSBDD_ADAPTER_DESIGN_000001,HR_0002,True,True,True,True,14,5,3,True,True,
+DSBDD_ADAPTER_DESIGN_000002,HR_0003,True,True,True,True,14,5,3,True,True,
+DSBDD_ADAPTER_DESIGN_000003,HR_0004,True,True,True,True,14,5,3,True,True,

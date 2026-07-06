@@ -1,0 +1,4 @@
+adapter_design_sample_id,review_row_id,pdb_id,input_audit_row_found,expected_identity_validated,cys_sg_scope_validated,ligand_counts_validated,endpoint_counts_validated,canonical_masks_validated,step13ac_input_audit_passed,qa_passed,blocking_reasons
+DSBDD_ADAPTER_DESIGN_000001,HR_0002,6DI9,True,True,True,True,True,True,True,True,
+DSBDD_ADAPTER_DESIGN_000002,HR_0003,5F2E,True,True,True,True,True,True,True,True,
+DSBDD_ADAPTER_DESIGN_000003,HR_0004,6OIM,True,True,True,True,True,True,True,True,
