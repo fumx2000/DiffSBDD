@@ -1,0 +1,13 @@
+manifest_field,manifest_field_required,current_step_written,value_rule,contract_passed,blocking_reasons
+stage,True,False,future metadata index download smoke manifest field,True,
+source_slot_id,True,False,future metadata index download smoke manifest field,True,
+source_name,True,False,future metadata index download smoke manifest field,True,
+source_family,True,False,future metadata index download smoke manifest field,True,
+source_version_or_download_date,True,False,future metadata index download smoke manifest field,True,
+source_metadata_index_url_or_local_path,True,False,future metadata index download smoke manifest field,True,
+local_metadata_index_path,True,False,future metadata index download smoke manifest field,True,
+metadata_artifact_type,True,False,future metadata index download smoke manifest field,True,
+file_size_bytes,True,False,future metadata index download smoke manifest field,True,
+checksum_optional,False,False,future metadata index download smoke manifest field,True,
+download_timestamp_utc,True,False,future metadata index download smoke manifest field,True,
+download_status,True,False,future metadata index download smoke manifest field,True,

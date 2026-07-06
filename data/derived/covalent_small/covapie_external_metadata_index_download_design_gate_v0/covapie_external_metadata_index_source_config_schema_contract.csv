@@ -1,0 +1,13 @@
+config_field,required_before_download_smoke,allowed_values_or_rule,current_step_value,current_step_configured,config_contract_passed,blocking_reasons
+source_slot_id,True,one of Step 13AJ source registry source_slot_id values,,False,True,
+source_name,True,user configured source name; no current-step verification,,False,True,
+source_family,True,specialized_covalent_protein_ligand_database preferred; pdb_covalent_annotation_fallback allowed later,,False,True,
+source_priority,True,specialized sources before pdb fallback,,False,True,
+source_metadata_index_url_or_local_path,True,future URL or local path; not accessed in this design gate,,False,True,
+source_access_method,True,future controlled method such as configured_url or local_file,,False,True,
+source_version_or_download_date,True,"future version, release, or UTC download date",,False,True,
+expected_metadata_artifact_type,True,"csv, tsv, json, or jsonl for first smoke",,False,True,
+expected_candidate_unit,True,covalent_ligand_residue_event,,False,True,
+citation_or_license_note,True,required before download smoke or commit of downloaded metadata,,False,True,
+enabled_for_download_smoke,True,exactly one manually verified source may be enabled in first smoke,,False,True,
+manual_source_verification_status,True,must be verified_by_user_or_pipeline before smoke,,False,True,

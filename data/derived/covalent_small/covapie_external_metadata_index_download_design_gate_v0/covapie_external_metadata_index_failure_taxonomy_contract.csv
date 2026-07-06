@@ -1,0 +1,13 @@
+failure_mode,failure_description,recommended_handling,blocking_for_download_smoke_or_materialization,failure_taxonomy_passed,blocking_reasons
+source_config_missing,source config missing,block download smoke until registry configuration exists,True,True,
+source_unverified,source unverified,block download smoke until manual source verification,True,True,
+network_attempted_in_design_gate,network attempted in design gate,fail design gate boundary,True,True,
+metadata_download_attempted_in_design_gate,metadata download attempted in design gate,fail design gate boundary,True,True,
+raw_structure_download_attempted,raw structure download attempted,fail design gate boundary,True,True,
+unsupported_metadata_artifact_type,unsupported metadata artifact type,defer or add parser gate,True,True,
+raw_structure_artifact_received_instead_of_metadata,raw structure artifact received instead of metadata,reject artifact and do not parse,True,True,
+schema_probe_missing,schema probe missing,block mapping gate,True,True,
+event_key_fields_missing,event key fields missing,block candidate metadata materialization,True,True,
+candidate_count_below_10,candidate count below 10,block 10-30 smoke materialization,True,True,
+manual_review_missing,manual review missing,do not include in smoke,True,True,
+training_attempted_too_early,training attempted too early,fail boundary audit,True,True,

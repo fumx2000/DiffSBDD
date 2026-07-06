@@ -1,0 +1,11 @@
+candidate_filter_rule,rule_description,current_step_filter_executed,candidate_filter_contract_passed,blocking_reasons
+cys_sg_only_current_phase,current CovaPIE scope remains CYS/SG,False,True,
+min_candidates_10,future smoke target minimum 10 included candidates,False,True,
+max_candidates_30,future smoke target maximum 30 included candidates,False,True,
+shard_size_5,future shard planning uses shard size 5,False,True,
+specialized_source_priority,specialized covalent source before fallback,False,True,
+exclude_non_cys_sg,exclude non-CYS/SG in current phase,False,True,
+exclude_missing_bond_pair,exclude rows missing covalent bond atom pair unless reviewed later,False,True,
+exclude_ambiguous_event_key,exclude ambiguous event keys,False,True,
+require_manual_review_before_include,manual review required before include_in_smoke,False,True,
+no_training_readiness_claim,candidate filter does not imply training readiness,False,True,

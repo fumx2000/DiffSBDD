@@ -1,0 +1,13 @@
+schema_probe_rule,rule_description,current_step_probe_executed,schema_probe_contract_passed,blocking_reasons
+probe_file_exists,future probe confirms metadata index file exists,False,True,
+probe_file_suffix_allowed,future probe confirms suffix is allowed metadata type,False,True,
+probe_row_count_or_record_count,future probe records row or record count,False,True,
+probe_column_names,future probe records metadata column names,False,True,
+probe_candidate_like_fields,future probe checks candidate-like fields,False,True,
+probe_allowlist_field_overlap,future probe checks overlap with 15 allowlist columns,False,True,
+probe_event_key_field_overlap,future probe checks minimal/preferred event key fields,False,True,
+probe_raw_structure_suffix_absent,future probe rejects raw structure suffixes,False,True,
+probe_no_raw_content_parse,future probe must not parse raw structures,False,True,
+probe_no_rdkit_biopdb_gemmi,future probe must not use structure toolkits,False,True,
+probe_no_candidate_metadata_materialization,future probe does not materialize candidate metadata,False,True,
+probe_ready_for_mapping_gate,future probe can allow mapping gate if schema is usable,False,True,

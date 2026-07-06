@@ -1,0 +1,9 @@
+event_key_mapping_rule,required_fields_or_policy,rule_description,event_key_mapping_contract_passed,blocking_reasons
+no_pdb_id_only_join,pdb_id is insufficient,joining by pdb_id alone remains forbidden,True,
+minimal_event_key_fields_required,pdb_id+ligand_id+chain_id+residue_name+residue_index+residue_atom_name,minimal event key is carried forward from Step 13AJ,True,
+preferred_event_key_fields_required,pdb_id+ligand_id+chain_id+residue_name+residue_index+residue_atom_name+covalent_bond_atom_pair,preferred key includes covalent bond atom pair,True,
+ligand_instance_disambiguation_required,ligand_id plus instance evidence,ambiguous ligand instances block materialization,True,
+chain_residue_disambiguation_required,chain_id+residue_name+residue_index+residue_atom_name,reactive residue must be unambiguous,True,
+bond_pair_disambiguation_required,covalent_bond_atom_pair,explicit bond pair is preferred and required before materialization,True,
+multi_event_pdb_requires_multiple_rows,pdb_id+ligand_id+chain_id+residue_name+residue_index+residue_atom_name+covalent_bond_atom_pair,one PDB can yield multiple covalent ligand-residue event rows,True,
+ambiguous_event_blocks_materialization,explicit exclusion_reason required,ambiguous event keys block materialization,True,

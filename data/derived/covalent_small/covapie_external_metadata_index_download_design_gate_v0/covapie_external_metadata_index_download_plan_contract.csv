@@ -1,0 +1,11 @@
+download_plan_rule,rule_description,current_step_executed,network_or_download_used,required_before_download_smoke,plan_contract_passed,blocking_reasons
+source_config_required,source registry configuration must exist before download smoke,False,False,True,True,
+source_manual_verification_required,user or pipeline must verify source identity before smoke,False,False,True,True,
+specialized_covalent_db_priority,specialized covalent database source slots have priority,False,False,True,True,
+metadata_index_only_download,future smoke downloads metadata index only,False,False,True,True,
+no_raw_structure_download,raw structure download remains forbidden,False,False,True,True,
+no_pdb_id_only_join,pdb_id-only joins remain forbidden,False,False,True,True,
+event_key_fields_required,minimal and preferred event key fields must be probed,False,False,True,True,
+checksum_or_size_record_required,future manifest records checksum or size,False,False,True,True,
+schema_probe_required_after_download,schema probe follows metadata index download,False,False,True,True,
+download_smoke_limited_to_one_enabled_source,first smoke uses one enabled source,False,False,True,True,

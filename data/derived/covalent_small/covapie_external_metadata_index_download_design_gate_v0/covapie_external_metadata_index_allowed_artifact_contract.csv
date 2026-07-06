@@ -1,0 +1,11 @@
+artifact_type,file_suffix_or_type,allowed_for_metadata_index_download_smoke,requires_extra_parser_gate,raw_structure_artifact,current_step_downloaded,allowed_artifact_contract_passed,blocking_reasons
+csv_metadata_index,.csv,True,False,False,False,True,
+tsv_metadata_index,.tsv,True,False,False,False,True,
+json_metadata_index,.json,True,False,False,False,True,
+jsonl_metadata_index,.jsonl,True,False,False,False,True,
+xlsx_metadata_index_deferred,.xlsx,False,True,False,False,True,
+html_table_metadata_index_deferred,html_table,False,True,False,False,True,
+zip_archive_forbidden_current_smoke,.zip,False,True,False,False,True,
+raw_pdb_forbidden,.pdb,False,False,True,False,True,
+raw_mmcif_forbidden,.mmcif;.cif;.gz,False,False,True,False,True,
+raw_sdf_mol2_forbidden,.sdf;.mol2,False,False,True,False,True,

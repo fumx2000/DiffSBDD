@@ -1,0 +1,9 @@
+path_rule,path_or_policy,current_step_written,contract_passed,blocking_reasons
+external_metadata_index_root,data/derived/covalent_small/external_metadata_index,False,True,
+source_specific_metadata_index_dir,data/derived/covalent_small/external_metadata_index/<source_slot_id>/,False,True,
+raw_structure_root_separate,data/raw/covalent_sources,False,True,
+no_raw_files_under_metadata_index_root,forbid pdb/cif/mmcif/sdf/mol2/gz under metadata index root,False,True,
+metadata_index_manifest_path,data/derived/covalent_small/external_metadata_index/<source_slot_id>/metadata_index_download_manifest.json,False,True,
+metadata_index_schema_probe_path,data/derived/covalent_small/external_metadata_index/<source_slot_id>/metadata_index_schema_probe.csv,False,True,
+downloaded_file_relative_path_policy,record local metadata index path after future download smoke,False,True,
+no_forbidden_suffix_commit_policy,".pt,.ckpt,.pth,.pkl,.lmdb,.tar,.zip,.tgz,.npz,.pdb,.cif,.mmcif,.sdf,.mol2,.gz",False,True,
