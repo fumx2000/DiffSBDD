@@ -1,0 +1,9 @@
+acquisition_method_rule,rule_description,current_step_status,network_or_download_used,contract_passed,blocking_reasons
+source_registry_config_required,configure source slot names and access paths before any external metadata acquisition,design_only,False,True,
+metadata_index_download_design_required,design external metadata index download separately before using network access,design_only,False,True,
+no_raw_download_current_step,current step does not download raw structures,design_only,False,True,
+metadata_only_stage_before_raw,metadata index must be assembled and reviewed before raw download,design_only,False,True,
+field_mapping_stage_before_materialization,map external fields to 15 allowlist columns before materialization,design_only,False,True,
+event_key_validation_before_materialization,validate event identity key before materialization,design_only,False,True,
+manual_review_before_smoke_include,manual review is required before include_in_smoke=true,design_only,False,True,
+raw_download_requires_valid_allowlist,raw download requires materialized reviewed allowlist,design_only,False,True,

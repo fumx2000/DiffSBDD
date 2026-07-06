@@ -1,0 +1,13 @@
+candidate_selection_rule,rule_description,current_step_executed,future_selection_required,selection_contract_passed,blocking_reasons
+min_included_candidates_10,target at least 10 reviewed included candidates for batch smoke,False,True,True,
+max_included_candidates_30,target at most 30 reviewed included candidates for batch smoke,False,True,True,
+shard_size_5,future shard planning uses shard size 5,False,True,True,
+cys_sg_only,current phase only allows CYS/SG covalent events,False,True,True,
+specialized_covalent_database_priority,specialized covalent databases are preferred over blind PDB-wide scan,False,True,True,
+pdb_fallback_only_after_specialized_db,PDB covalent annotation fallback is used only after specialized source attempts,False,True,True,
+one_row_one_covalent_event,one row represents one covalent ligand-residue event,False,True,True,
+known_restoration_template_required,known restoration template is required,False,True,True,
+covalent_bond_atom_pair_required,explicit covalent bond atom pair is required,False,True,True,
+ligand_topology_evidence_required,ligand topology evidence is required before downstream materialization,False,True,True,
+manual_review_required,manual review is required before include_in_smoke,False,True,True,
+duplicates_and_ambiguous_events_excluded,duplicate or ambiguous event keys are excluded,False,True,True,

@@ -1,0 +1,9 @@
+download_boundary_rule,rule_description,download_allowed_current_step,future_gate_or_evidence_required,contract_passed,blocking_reasons
+no_external_download_current_step,no external metadata or source access is performed,False,future_explicit_gate_required,True,
+no_raw_structure_download_current_step,no structure files are downloaded,False,future_explicit_gate_required,True,
+no_structure_parse_current_step,no SDF/PDB/mmCIF/gzip parsing is performed,False,future_explicit_gate_required,True,
+future_metadata_index_download_requires_gate,metadata index download requires a future design and smoke gate,False,future_explicit_gate_required,True,
+future_raw_download_requires_materialized_allowlist,raw download requires reviewed allowlist rows,False,future_explicit_gate_required,True,
+future_raw_download_records_source_file_relative_path,future download must fill source_file_relative_path after local download,False,future_explicit_gate_required,True,
+future_download_manifest_required,future download must write a manifest,False,future_explicit_gate_required,True,
+future_download_checksum_or_size_audit_required,future download must record checksum or size evidence,False,future_explicit_gate_required,True,

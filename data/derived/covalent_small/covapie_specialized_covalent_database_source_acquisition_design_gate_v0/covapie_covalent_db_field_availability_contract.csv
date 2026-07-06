@@ -1,0 +1,16 @@
+allowlist_column,likely_external_db_direct_field,likely_pdb_or_structure_annotation_field,likely_covapie_generated_field,manual_review_or_policy_required,acquisition_status_current_step,field_contract_passed
+candidate_id,False,False,True,False,design_only_not_verified,True
+source_dataset_name,False,False,True,False,design_only_not_verified,True
+source_dataset_version,False,False,True,False,design_only_not_verified,True
+source_file_relative_path,False,False,True,False,design_only_not_verified,True
+pdb_id,True,False,False,False,design_only_not_verified,True
+ligand_id,True,True,False,False,design_only_not_verified,True
+chain_id,True,True,False,False,design_only_not_verified,True
+residue_name,True,True,False,False,design_only_not_verified,True
+residue_index,True,True,False,False,design_only_not_verified,True
+residue_atom_name,True,True,False,False,design_only_not_verified,True
+covalent_bond_atom_pair,True,True,False,False,design_only_not_verified,True
+restoration_policy_id,False,False,True,False,design_only_not_verified,True
+manual_review_status,False,False,False,True,design_only_not_verified,True
+include_in_smoke,False,False,True,False,design_only_not_verified,True
+exclusion_reason,False,False,True,False,design_only_not_verified,True
