@@ -1,0 +1,16 @@
+forbidden_suffix,searched_under_inventory_root,matching_file_count,files_read,policy,forbidden_audit_passed
+.pt,True,0,False,do_not_read_or_commit,True
+.ckpt,True,0,False,do_not_read_or_commit,True
+.pth,True,0,False,do_not_read_or_commit,True
+.pkl,True,0,False,do_not_read_or_commit,True
+.lmdb,True,0,False,do_not_read_or_commit,True
+.tar,True,0,False,do_not_read_or_commit,True
+.zip,True,0,False,do_not_read_or_commit,True
+.tgz,True,0,False,do_not_read_or_commit,True
+.npz,True,3,False,do_not_read_or_commit,True
+.pdb,True,3,False,do_not_read_or_commit,True
+.cif,True,0,False,do_not_read_or_commit,True
+.mmcif,True,0,False,do_not_read_or_commit,True
+.sdf,True,9,False,do_not_read_or_commit,True
+.mol2,True,0,False,do_not_read_or_commit,True
+.gz,True,0,False,do_not_read_or_commit,True
