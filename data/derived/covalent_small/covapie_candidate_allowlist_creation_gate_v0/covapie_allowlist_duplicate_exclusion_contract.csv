@@ -1,0 +1,9 @@
+contract_item,contract_requirement,current_step_status,raw_content_read_current_step,contract_passed
+unique_candidate_id,candidate_id must be unique,contract_only_no_candidate_rows,False,True
+duplicate_pdb_ligand_chain_residue_flag,duplicate pdb/ligand/chain/residue must be flagged,contract_only_no_candidate_rows,False,True
+duplicate_source_file_path_flag,duplicate source file path must be flagged,contract_only_no_candidate_rows,False,True
+duplicate_covalent_bond_atom_pair_flag,duplicate covalent bond atom pair must be flagged,contract_only_no_candidate_rows,False,True
+excluded_rows_not_counted_in_10_to_30,excluded rows do not count toward the 10-30 included range,contract_only_no_candidate_rows,False,True
+included_rows_empty_exclusion_reason,included rows require empty exclusion_reason,contract_only_no_candidate_rows,False,True
+invalid_rows_block_raw_read_smoke,invalid rows block raw-read smoke,contract_only_no_candidate_rows,False,True
+exclusion_reason_taxonomy_required,exclusion reason taxonomy is required,contract_only_no_candidate_rows,False,True

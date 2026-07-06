@@ -1,0 +1,9 @@
+contract_item,contract_requirement,current_step_status,raw_content_read_current_step,contract_passed
+relative_path_only,source paths must be relative,contract_only_no_raw_content_read,False,True
+no_parent_directory_escape,source paths must not contain parent directory escape,contract_only_no_raw_content_read,False,True
+no_absolute_path,source paths must not be absolute,contract_only_no_raw_content_read,False,True
+no_raw_file_copy,raw file copies are forbidden,contract_only_no_raw_content_read,False,True
+no_raw_file_content_read_current_step,raw file content is not read in this step,contract_only_no_raw_content_read,False,True
+raw_directory_not_tracked,raw directory remains untracked,contract_only_no_raw_content_read,False,True
+allowed_future_raw_read_requires_gate,future raw read requires a dedicated gate,contract_only_no_raw_content_read,False,True
+forbidden_suffix_not_committable,forbidden suffix artifacts are not committable,contract_only_no_raw_content_read,False,True

@@ -1,0 +1,16 @@
+allowlist_column,required,dtype_family,empty_allowed_for_included_rows,validation_rule,contract_passed
+candidate_id,True,string,False,non-empty and unique,True
+source_dataset_name,True,string,False,non-empty,True
+source_dataset_version,True,string,False,non-empty,True
+source_file_relative_path,True,string,False,relative path only and no parent directory escape,True
+pdb_id,True,string,False,non-empty,True
+ligand_id,True,string,False,non-empty,True
+chain_id,True,string,False,non-empty,True
+residue_name,True,string,False,must be CYS for current phase,True
+residue_index,True,string_or_int,False,non-empty,True
+residue_atom_name,True,string,False,must be SG for current phase,True
+covalent_bond_atom_pair,True,string,False,non-empty,True
+restoration_policy_id,True,string,False,known restoration template required,True
+manual_review_status,True,enum,False,reviewed_pass or approved_for_smoke for included rows,True
+include_in_smoke,True,boolean_like,False,true or false,True
+exclusion_reason,True,string,True,empty required for included rows and non-empty allowed for excluded rows,True
