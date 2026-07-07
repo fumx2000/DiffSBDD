@@ -1,0 +1,6 @@
+card_index,complex_card_url,content_type_allowed,full_html_written,raw_html_artifact_written,forbidden_suffix_url_requested,forbidden_suffix_links_detected_count,forbidden_suffix_links_followed,external_raw_links_followed,raw_structure_downloaded,raw_ligand_downloaded,html_safety_qa_passed,qa_comment
+1,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2037,True,False,False,False,0,False,False,False,False,True,metadata_only_html_safety_preserved
+2,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2034,True,False,False,False,0,False,False,False,False,True,metadata_only_html_safety_preserved
+3,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1,True,False,False,False,0,False,False,False,False,True,metadata_only_html_safety_preserved
+4,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1614,True,False,False,False,0,False,False,False,False,True,metadata_only_html_safety_preserved
+5,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2,True,False,False,False,0,False,False,False,False,True,metadata_only_html_safety_preserved

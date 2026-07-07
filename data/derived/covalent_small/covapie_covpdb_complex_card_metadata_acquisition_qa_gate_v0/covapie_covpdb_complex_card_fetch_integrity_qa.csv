@@ -1,0 +1,6 @@
+card_index,pdb_id,het_code,complex_card_url,fetch_attempted,fetch_succeeded,http_status_or_error,content_type,byte_count_positive,html_sha256_present,url_allowed,fetch_integrity_passed,qa_comment
+1,1A3B,T29,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2037,True,True,200,text/html; charset=utf-8,True,True,True,True,covpdb_card_html_fetch_confirmed
+2,1A3E,T16,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2034,True,True,200,text/html; charset=utf-8,True,True,True,True,covpdb_card_html_fetch_confirmed
+3,1A46,00K,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1,True,True,200,text/html; charset=utf-8,True,True,True,True,covpdb_card_html_fetch_confirmed
+4,1A54,MDC,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1614,True,True,200,text/html; charset=utf-8,True,True,True,True,covpdb_card_html_fetch_confirmed
+5,1A5G,00L,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2,True,True,200,text/html; charset=utf-8,True,True,True,True,covpdb_card_html_fetch_confirmed

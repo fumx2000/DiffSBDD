@@ -1,0 +1,11 @@
+label_category,cards_checked,found_count,not_found_count,example_card_indices,example_snippet_count,label_inventory_summary_passed,qa_interpretation
+chain,5,5,0,1;2;3,5,True,labels_are_weak_evidence_not_event_field_resolution
+residue,5,5,0,1;2;3,5,True,labels_are_weak_evidence_not_event_field_resolution
+residue_name,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+residue_index,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+residue_atom,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+covalent_bond,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+ligand_atom,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+protein_atom,5,0,5,,0,True,labels_are_weak_evidence_not_event_field_resolution
+mechanism,5,5,0,1;2;3,5,True,labels_are_weak_evidence_not_event_field_resolution
+warhead,5,5,0,1;2;3,5,True,labels_are_weak_evidence_not_event_field_resolution

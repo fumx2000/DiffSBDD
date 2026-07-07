@@ -1,0 +1,2 @@
+snippet_source,row_count,max_snippet_length,all_snippets_le_240,full_html_absent,evidence_snippet_safety_qa_passed,qa_comment
+step13as_evidence_snippet_audit,20,209,True,True,True,short_metadata_snippets_only_no_full_html

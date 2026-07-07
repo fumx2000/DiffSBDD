@@ -1,0 +1,6 @@
+target_field,found_count,not_found_count,ambiguous_count,parse_failed_count,total_cards_checked,parsed_values_observed,evidence_snippet_count,materialization_blocking_if_missing,event_field_status_summary_passed,qa_interpretation
+chain_id,0,5,0,0,5,,0,True,True,complex_card_text_fetch_succeeded_but_event_key_fields_not_explicitly_parsed
+residue_name,0,5,0,0,5,,0,True,True,complex_card_text_fetch_succeeded_but_event_key_fields_not_explicitly_parsed
+residue_index,0,5,0,0,5,,0,True,True,complex_card_text_fetch_succeeded_but_event_key_fields_not_explicitly_parsed
+residue_atom_name,0,5,0,0,5,,0,True,True,complex_card_text_fetch_succeeded_but_event_key_fields_not_explicitly_parsed
+covalent_bond_atom_pair,0,5,0,0,5,,0,True,True,complex_card_text_fetch_succeeded_but_event_key_fields_not_explicitly_parsed
