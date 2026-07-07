@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,primary_fetch_succeeded,fallback_fetch_attempted,fallback_fetch_succeeded,byte_count_positive,line_count_positive,raw_sha256_present,raw_ligand_downloaded,archive_downloaded,download_integrity_qa_passed,qa_comment
+1A3B,T29,mmcif,True,False,False,True,True,True,False,False,True,mmcif_primary_download_verified
+1A3E,T16,mmcif,True,False,False,True,True,True,False,False,True,mmcif_primary_download_verified
+1A46,00K,mmcif,True,False,False,True,True,True,False,False,True,mmcif_primary_download_verified
+1A54,MDC,mmcif,True,False,False,True,True,True,False,False,True,mmcif_primary_download_verified
+1A5G,00L,mmcif,True,False,False,True,True,True,False,False,True,mmcif_primary_download_verified

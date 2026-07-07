@@ -1,0 +1,6 @@
+pdb_id,het_code,struct_conn_loop_found,struct_conn_row_count,het_code_in_struct_conn_count,covalent_like_struct_conn_count,protein_ligand_candidate_count,struct_conn_coverage_status,struct_conn_coverage_qa_passed,qa_comment
+1A3B,T29,True,5,1,1,1,preferred_candidate_available,True,preferred_candidate_available
+1A3E,T16,True,5,1,1,1,preferred_candidate_available,True,preferred_candidate_available
+1A46,00K,True,18,1,1,1,preferred_candidate_available,True,preferred_candidate_available
+1A54,MDC,False,0,0,0,0,blocked_unresolved_no_connectivity,True,unresolved_is_expected_for_1A54_MDC
+1A5G,00L,True,19,1,1,1,preferred_candidate_available,True,preferred_candidate_available
