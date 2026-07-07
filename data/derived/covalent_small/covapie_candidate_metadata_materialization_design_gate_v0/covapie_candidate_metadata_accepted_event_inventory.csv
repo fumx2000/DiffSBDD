@@ -1,0 +1,5 @@
+pdb_id,het_code,chain_id,residue_name,residue_index,residue_atom_name,ligand_atom_name,covalent_bond_atom_pair,raw_connection_source,candidate_confidence,accepted_for_future_candidate_metadata,accepted_for_future_automatic_allowlist,future_candidate_metadata_id_preview,accepted_event_inventory_passed
+1A3B,T29,H,SER,195,OG,B,OG-B,mmcif_struct_conn,explicit_covalent_like_struct_conn,True,True,covpdb::1A3B::T29::H:SER195:OG-B,True
+1A3E,T16,H,SER,195,OG,B,OG-B,mmcif_struct_conn,explicit_covalent_like_struct_conn,True,True,covpdb::1A3E::T16::H:SER195:OG-B,True
+1A46,00K,H,SER,195,OG,C,OG-C,mmcif_struct_conn,explicit_covalent_like_struct_conn,True,True,covpdb::1A46::00K::H:SER195:OG-C,True
+1A5G,00L,H,SER,195,OG,C,OG-C,mmcif_struct_conn,explicit_covalent_like_struct_conn,True,True,covpdb::1A5G::00L::H:SER195:OG-C,True

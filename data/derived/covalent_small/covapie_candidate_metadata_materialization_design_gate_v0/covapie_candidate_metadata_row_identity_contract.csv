@@ -1,0 +1,5 @@
+identity_contract_item,contract_value,deterministic,blocks_materialization_if_violated,row_identity_contract_passed
+candidate_metadata_id_format,covpdb::{pdb_id}::{het_code}::{chain_id}:{residue_name}{residue_index}:{residue_atom_name}-{ligand_atom_name},True,True,True
+one_row_per_accepted_preferred_event,4 accepted events produce 4 future IDs,True,True,True
+unresolved_event_has_no_candidate_metadata_id,1A54/MDC excluded,True,True,True
+duplicate_id_blocks_materialization,future IDs must be unique,True,True,True

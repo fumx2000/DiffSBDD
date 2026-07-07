@@ -1,0 +1,6 @@
+planned_step,planned_action,allowed_inputs,allowed_outputs,blocked_outputs,required_preconditions,materialization_smoke_plan_passed
+first4_candidate_metadata_materialization_smoke,ready_next,Step13AW preferred acceptance QA;Step13AO metadata CSV;Step13AX design contracts,candidate_metadata_smoke_csv_json_md_for_4_accepted_events,allowlist;sample_index;final_dataset;split;leakage_matrix;training,Step13AX all_checks_passed,True
+candidate_metadata_qa_gate,qa_after_smoke,candidate metadata smoke artifacts,qa_audits_reports_manifest,allowlist;training,candidate metadata smoke passed,True
+candidate_allowlist_materialization_design_gate,blocked_until_candidate_metadata_qa,candidate metadata QA outputs,allowlist design contracts only,allowlist materialization;training,candidate metadata QA passed,True
+batch_scale_raw_read_design_gate,blocked,future design artifacts,design contracts only,batch raw read;training,first4 candidate metadata QA and allowlist design,True
+training,blocked,none_current_step,none,forward;loss;backward;optimizer;trainer.fit;checkpoint,feature semantics audit;leakage split design;dataset materialization;training gate,True

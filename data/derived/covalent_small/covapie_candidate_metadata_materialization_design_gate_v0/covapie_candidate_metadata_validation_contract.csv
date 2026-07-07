@@ -1,0 +1,7 @@
+validation_item,validation_rule,applies_to,blocks_materialization_if_failed,validation_contract_passed
+accepted_event_count,exactly_4,accepted preferred events,True,True
+unresolved_event_exclusion,1A54_MDC_excluded,unresolved event,True,True
+candidate_metadata_id_unique,no_duplicate_ids,future candidate metadata rows,True,True
+candidate_metadata_not_materialized,design_gate_only,current step,True,True
+allowlist_not_materialized,blocked_until_candidate_metadata_qa,current step,True,True
+training_boundary,ready_to_train_now_false,current step,True,True
