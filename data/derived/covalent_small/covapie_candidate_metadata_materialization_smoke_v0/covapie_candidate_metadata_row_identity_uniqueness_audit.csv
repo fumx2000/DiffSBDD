@@ -1,0 +1,8 @@
+row_identity_check_item,observed_status,candidate_metadata_id_count,duplicate_candidate_metadata_id_count,row_identity_uniqueness_audit_passed,blocking_reasons
+deterministic_id_format,True,4,0,True,
+candidate_metadata_id_unique,True,4,0,True,
+candidate_metadata_id_count,True,4,0,True,
+duplicate_candidate_metadata_id_count,True,4,0,True,
+no_whitespace_in_ids,True,4,0,True,
+unresolved_event_has_no_id,True,4,0,True,
+row_identity_uniqueness_audit_passed,True,4,0,True,

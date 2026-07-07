@@ -1,0 +1,5 @@
+pdb_id,het_code,future_candidate_metadata_id_preview,materialized_candidate_metadata_id,materialized,id_matches_design_preview,accepted_for_future_candidate_metadata,current_step_materialization_allowed,accepted_event_materialization_audit_passed
+1A3B,T29,covpdb::1A3B::T29::H:SER195:OG-B,covpdb::1A3B::T29::H:SER195:OG-B,True,True,True,True,True
+1A3E,T16,covpdb::1A3E::T16::H:SER195:OG-B,covpdb::1A3E::T16::H:SER195:OG-B,True,True,True,True,True
+1A46,00K,covpdb::1A46::00K::H:SER195:OG-C,covpdb::1A46::00K::H:SER195:OG-C,True,True,True,True,True
+1A5G,00L,covpdb::1A5G::00L::H:SER195:OG-C,covpdb::1A5G::00L::H:SER195:OG-C,True,True,True,True,True

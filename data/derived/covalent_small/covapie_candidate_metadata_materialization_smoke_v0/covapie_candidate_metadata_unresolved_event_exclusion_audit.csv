@@ -1,0 +1,2 @@
+pdb_id,het_code,resolution_status,reason_unresolved,candidate_metadata_materialized,candidate_allowlist_materialized,exclusion_preserved,unresolved_event_exclusion_audit_passed
+1A54,MDC,raw_no_connectivity_records_found,raw_no_connectivity_records_found,False,False,True,True

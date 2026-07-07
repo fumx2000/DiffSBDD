@@ -1,0 +1,9 @@
+validation_item,validation_status,validation_audit_passed,blocking_reasons
+row_count_is_four,passed,True,
+only_accepted_preferred_events_materialized,passed,True,
+unresolved_event_excluded,passed,True,
+schema_compliant,passed,True,
+source_traceability_complete,passed,True,
+no_allowlist_materialized,passed,True,
+no_sample_index_or_final_dataset,passed,True,
+no_training_boundary_violation,passed,True,
