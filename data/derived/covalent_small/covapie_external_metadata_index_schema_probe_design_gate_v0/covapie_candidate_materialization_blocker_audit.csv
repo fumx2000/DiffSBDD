@@ -1,0 +1,10 @@
+blocker_name,blocker_type,candidate_metadata_materialized,candidate_allowlist_materialized,materialization_blocker_audit_passed,blocking_reasons
+missing_chain_id,critical_event_key,False,False,True,
+missing_residue_name,critical_event_key,False,False,True,
+missing_residue_index,critical_event_key,False,False,True,
+missing_residue_atom_name,critical_event_key,False,False,True,
+missing_covalent_bond_atom_pair,critical_event_key,False,False,True,
+source_file_relative_path_not_available_before_raw_download,deferred_or_policy,False,False,True,
+manual_review_status_not_assigned,deferred_or_policy,False,False,True,
+include_in_smoke_not_assigned,deferred_or_policy,False,False,True,
+exclusion_reason_not_assigned,deferred_or_policy,False,False,True,

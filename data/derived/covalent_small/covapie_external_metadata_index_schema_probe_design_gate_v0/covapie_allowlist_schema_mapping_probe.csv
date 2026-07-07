@@ -1,0 +1,16 @@
+allowlist_column,mapping_status,observed_source_columns,proposed_mapping_rule,materialization_ready,blocker_reason,schema_mapping_probe_passed
+candidate_id,generated_future,,future generated after event key is valid,False,event_key_not_materializable,True
+source_dataset_name,direct_available,source_dataset_name,source_dataset_name <- source_dataset_name,True,,True
+source_dataset_version,direct_available,source_dataset_version,source_dataset_version <- source_dataset_version,True,,True
+source_file_relative_path,missing_deferred,,defer until raw structure path exists in a later raw-read/annotation gate,False,raw_structure_path_not_available,True
+pdb_id,direct_available,pdb_id,pdb_id <- pdb_id,True,,True
+ligand_id,direct_available,het_code;covpdb_ligand_id,ligand_id_candidate_het_code <- het_code; covpdb_ligand_id retained as supporting source id; ambiguous_source_choice,True,ambiguous_source_choice,True
+chain_id,missing_critical,,must come from complex card/residue metadata or later raw structure annotation,False,missing_chain_id,True
+residue_name,missing_critical,,must come from complex card/residue metadata or later raw structure annotation,False,missing_residue_name,True
+residue_index,missing_critical,,must come from complex card/residue metadata or later raw structure annotation,False,missing_residue_index,True
+residue_atom_name,missing_critical,,must come from complex card/residue metadata or later raw structure annotation,False,missing_residue_atom_name,True
+covalent_bond_atom_pair,missing_critical,,must come from complex card bond metadata or later raw structure annotation,False,missing_covalent_bond_atom_pair,True
+restoration_policy_id,generated_future,,future assigned after residue and bond evidence are known,False,residue_bond_evidence_missing,True
+manual_review_status,generated_future,,future manual or pipeline review field,False,review_not_assigned,True
+include_in_smoke,generated_future,,future smoke selection field,False,selection_not_assigned,True
+exclusion_reason,generated_future,,future selection or rejection field,False,selection_not_assigned,True
