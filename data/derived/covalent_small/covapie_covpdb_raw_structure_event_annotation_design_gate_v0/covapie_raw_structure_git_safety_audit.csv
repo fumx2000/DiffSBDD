@@ -1,0 +1,8 @@
+git_safety_item,command_or_check,required_status,current_step_status,git_safety_audit_passed,blocking_reasons
+forbidden_suffix_under_step13au_output_root,scan output root,false,passed,True,
+raw_files_staged,git diff --cached data/raw/covalent_sources,false,passed,True,
+raw_files_tracked,git ls-files data/raw/covalent_sources,false,passed,True,
+metadata_csv_hash_unchanged,sha256 metadata csv,c31d836c01291057b35279bc4fc4c2de35eaaa064e4e7c9ac6d314006cd66365,passed,True,
+step13at_artifacts_unchanged,git diff step13at root,empty,passed,True,
+protected_source_diff,git diff equivariant_diffusion/ lightning_modules.py,empty,passed,True,
+original_dataloader_diff,git diff dataset.py data/prepare_crossdocked.py,empty,passed,True,

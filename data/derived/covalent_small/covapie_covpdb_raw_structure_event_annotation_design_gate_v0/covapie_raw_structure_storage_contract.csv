@@ -1,0 +1,5 @@
+storage_contract_item,contract_value,raw_files_must_remain_untracked,git_add_allowed,git_commit_allowed,storage_contract_passed,blocking_reasons
+raw_storage_root,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/,True,False,False,True,
+raw_files_git_policy,untracked_only_no_git_add_no_commit,True,False,False,True,
+allowed_file_count_next_smoke,5,True,False,False,True,
+forbidden_storage_locations,data/derived;repo_root;tracked_paths,True,False,False,True,

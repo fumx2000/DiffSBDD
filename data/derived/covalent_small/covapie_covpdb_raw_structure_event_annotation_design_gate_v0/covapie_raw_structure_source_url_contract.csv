@@ -1,0 +1,11 @@
+card_index,pdb_id,het_code,url_role,source_domain,url_template,resolved_url,allowed_for_next_smoke,accessed_current_step,source_url_contract_passed,blocking_reasons
+1,1A3B,T29,primary_mmcif,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.cif,https://files.rcsb.org/download/1A3B.cif,True,False,True,
+1,1A3B,T29,fallback_pdb,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.pdb,https://files.rcsb.org/download/1A3B.pdb,True,False,True,
+2,1A3E,T16,primary_mmcif,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.cif,https://files.rcsb.org/download/1A3E.cif,True,False,True,
+2,1A3E,T16,fallback_pdb,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.pdb,https://files.rcsb.org/download/1A3E.pdb,True,False,True,
+3,1A46,00K,primary_mmcif,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.cif,https://files.rcsb.org/download/1A46.cif,True,False,True,
+3,1A46,00K,fallback_pdb,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.pdb,https://files.rcsb.org/download/1A46.pdb,True,False,True,
+4,1A54,MDC,primary_mmcif,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.cif,https://files.rcsb.org/download/1A54.cif,True,False,True,
+4,1A54,MDC,fallback_pdb,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.pdb,https://files.rcsb.org/download/1A54.pdb,True,False,True,
+5,1A5G,00L,primary_mmcif,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.cif,https://files.rcsb.org/download/1A5G.cif,True,False,True,
+5,1A5G,00L,fallback_pdb,files.rcsb.org,https://files.rcsb.org/download/{pdb_id}.pdb,https://files.rcsb.org/download/1A5G.pdb,True,False,True,

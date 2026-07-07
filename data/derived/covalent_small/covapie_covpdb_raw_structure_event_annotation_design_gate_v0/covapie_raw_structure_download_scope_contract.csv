@@ -1,0 +1,6 @@
+card_index,pdb_id,het_code,allowed_for_next_smoke,preferred_format,fallback_format,max_structure_count,ligand_sdf_allowed,archive_download_allowed,recursive_crawling_allowed,web_link_following_allowed,download_scope_contract_passed,blocking_reasons
+1,1A3B,T29,True,mmcif,pdb,5,False,False,False,False,True,
+2,1A3E,T16,True,mmcif,pdb,5,False,False,False,False,True,
+3,1A46,00K,True,mmcif,pdb,5,False,False,False,False,True,
+4,1A54,MDC,True,mmcif,pdb,5,False,False,False,False,True,
+5,1A5G,00L,True,mmcif,pdb,5,False,False,False,False,True,

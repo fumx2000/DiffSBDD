@@ -1,0 +1,6 @@
+parser_priority,parser_source,parser_role,allowed_in_first_raw_annotation_smoke,fallback_only,contract_status,parser_priority_contract_passed,blocking_reasons
+1,mmcif_struct_conn,extract_explicit_protein_ligand_covalent_connection,True,False,preferred,True,
+2,mmcif_atom_site,validate_partner_atoms_exist_and_metadata_counts_only,True,False,validation,True,
+3,pdb_link,fallback_parse_explicit_LINK_records,True,True,fallback,True,
+4,pdb_conect,fallback_only_if_serial_maps_to_atom_records,True,True,fallback,True,
+5,coordinate_distance_fallback,future_design_only_not_allowed_first_smoke,False,True,not_allowed_first_smoke,True,
