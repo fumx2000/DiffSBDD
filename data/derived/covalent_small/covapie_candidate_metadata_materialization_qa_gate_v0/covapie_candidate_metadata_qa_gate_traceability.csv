@@ -1,0 +1,5 @@
+candidate_metadata_id,pdb_id,het_code,source_step13ay_traceability_passed,source_step13ax_accepted_event_found,source_step13aw_preferred_event_found,source_metadata_csv_row_found,source_metadata_csv_row_key,traceability_qa_passed,qa_comment
+covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,True,True,True,True,CovPDB::covpdb_web_metadata_smoke_2026-07-06::1::1A3B::T29,True,traceability_complete
+covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,True,True,True,True,CovPDB::covpdb_web_metadata_smoke_2026-07-06::2::1A3E::T16,True,traceability_complete
+covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,True,True,True,True,CovPDB::covpdb_web_metadata_smoke_2026-07-06::3::1A46::00K,True,traceability_complete
+covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,True,True,True,True,CovPDB::covpdb_web_metadata_smoke_2026-07-06::5::1A5G::00L,True,traceability_complete

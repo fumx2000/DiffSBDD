@@ -1,0 +1,5 @@
+candidate_metadata_id,pdb_id,het_code,row_index,column_count,schema_column_order_matches,id_matches_expected,pair_is_allowed,pair_is_not_unresolved,required_boolean_fields_valid,training_ready_false,content_integrity_passed,qa_comment
+covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,1,33,True,True,True,True,True,True,True,candidate_metadata_row_valid
+covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,2,33,True,True,True,True,True,True,True,candidate_metadata_row_valid
+covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,3,33,True,True,True,True,True,True,True,candidate_metadata_row_valid
+covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,4,33,True,True,True,True,True,True,True,candidate_metadata_row_valid
