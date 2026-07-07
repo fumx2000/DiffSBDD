@@ -1,0 +1,9 @@
+git_safety_item,command_or_check,required_status,current_step_status,git_safety_audit_passed,blocking_reasons
+raw_files_under_allowed_storage_root,storage audit,true,passed,True,
+raw_files_untracked,git ls-files raw root,true,passed,True,
+raw_files_not_staged,git diff --cached raw root,true,passed,True,
+raw_files_not_copied_to_derived,scan derived output,true,passed,True,
+metadata_csv_hash_unchanged,sha256 metadata csv,c31d836c01291057b35279bc4fc4c2de35eaaa064e4e7c9ac6d314006cd66365,passed,True,
+step13au_artifacts_unchanged,git diff step13au,empty,passed,True,
+protected_source_diff_empty,git diff protected source,empty,passed,True,
+original_dataloader_diff_empty,git diff dataloader,empty,passed,True,

@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,link_record_count,conect_record_count,het_code_in_link_count,protein_ligand_link_candidate_count,pdb_link_conect_inventory_passed
+1A3B,T29,mmcif,0,0,0,0,True
+1A3E,T16,mmcif,0,0,0,0,True
+1A46,00K,mmcif,0,0,0,0,True
+1A54,MDC,mmcif,0,0,0,0,True
+1A5G,00L,mmcif,0,0,0,0,True

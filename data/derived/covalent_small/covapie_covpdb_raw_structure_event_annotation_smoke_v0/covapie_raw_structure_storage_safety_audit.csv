@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,selected_raw_path,under_allowed_raw_storage_root,suffix_allowed,raw_file_exists,raw_file_untracked,raw_file_not_staged,raw_file_not_committed,raw_file_not_copied_to_derived,storage_safety_passed
+1A3B,T29,mmcif,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A3B.cif,True,True,True,True,True,True,True,True
+1A3E,T16,mmcif,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A3E.cif,True,True,True,True,True,True,True,True
+1A46,00K,mmcif,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A46.cif,True,True,True,True,True,True,True,True
+1A54,MDC,mmcif,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A54.cif,True,True,True,True,True,True,True,True
+1A5G,00L,mmcif,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A5G.cif,True,True,True,True,True,True,True,True

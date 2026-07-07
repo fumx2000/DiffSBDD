@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,atom_site_loop_found,atom_site_row_count,het_code_atom_site_count,candidate_partner_validation_attempted,protein_partner_atom_exists_count,ligand_partner_atom_exists_count,atom_site_validation_passed
+1A3B,T29,mmcif,True,2606,34,True,1,1,True
+1A3E,T16,mmcif,True,2566,35,True,1,1,True
+1A46,00K,mmcif,True,2503,38,True,1,1,True
+1A54,MDC,mmcif,True,2817,36,False,0,0,True
+1A5G,00L,mmcif,True,2513,42,True,1,1,True

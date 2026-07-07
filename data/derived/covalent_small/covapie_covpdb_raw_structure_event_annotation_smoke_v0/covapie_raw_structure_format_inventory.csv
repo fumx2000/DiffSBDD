@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,parser_used,struct_conn_loop_found,struct_conn_row_count,atom_site_loop_found,atom_site_row_count,pdb_link_row_count,pdb_conect_row_count,format_inventory_passed
+1A3B,T29,mmcif,mmcif,True,5,True,2606,0,0,True
+1A3E,T16,mmcif,mmcif,True,5,True,2566,0,0,True
+1A46,00K,mmcif,mmcif,True,18,True,2503,0,0,True
+1A54,MDC,mmcif,mmcif,False,0,True,2817,0,0,True
+1A5G,00L,mmcif,mmcif,True,19,True,2513,0,0,True

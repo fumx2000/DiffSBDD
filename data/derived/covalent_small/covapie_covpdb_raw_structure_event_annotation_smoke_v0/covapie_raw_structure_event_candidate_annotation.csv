@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,raw_connection_source,candidate_index,candidate_found,conn_type_or_record_type,chain_id,residue_name,residue_index,residue_atom_name,ligand_atom_name,covalent_bond_atom_pair,protein_partner_atom_exists,ligand_partner_atom_exists,candidate_confidence,manual_review_required,candidate_annotation_passed
+1A3B,T29,mmcif,mmcif_struct_conn,1,True,covale,H,SER,195,OG,B,OG-B,True,True,explicit_covalent_like_struct_conn,False,True
+1A3E,T16,mmcif,mmcif_struct_conn,1,True,covale,H,SER,195,OG,B,OG-B,True,True,explicit_covalent_like_struct_conn,False,True
+1A46,00K,mmcif,mmcif_struct_conn,1,True,covale,H,SER,195,OG,C,OG-C,True,True,explicit_covalent_like_struct_conn,False,True
+1A54,MDC,mmcif,,0,False,,,,,,,,False,False,none,False,True
+1A5G,00L,mmcif,mmcif_struct_conn,1,True,covale,H,SER,195,OG,C,OG-C,True,True,explicit_covalent_like_struct_conn,False,True

@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,struct_conn_loop_found,struct_conn_row_count,het_code_in_struct_conn_count,covalent_like_struct_conn_count,protein_ligand_candidate_count,struct_conn_inventory_passed
+1A3B,T29,mmcif,True,5,1,1,1,True
+1A3E,T16,mmcif,True,5,1,1,1,True
+1A46,00K,mmcif,True,18,1,1,1,True
+1A54,MDC,mmcif,False,0,0,0,0,True
+1A5G,00L,mmcif,True,19,1,1,1,True

@@ -1,0 +1,6 @@
+pdb_id,het_code,selected_raw_format,raw_connection_source,candidate_count,preferred_fields_found_count,minimal_fields_found_count,chain_id_status,residue_name_status,residue_index_status,residue_atom_name_status,ligand_atom_name_status,covalent_bond_atom_pair_status,resolution_status,candidate_metadata_can_materialize_current_step,allowlist_can_materialize_current_step,future_candidate_metadata_possible,future_automatic_allowlist_possible,manual_review_required,event_key_resolution_audit_passed
+1A3B,T29,mmcif,mmcif_struct_conn,1,6,4,found,found,found,found,found,found,raw_resolves_preferred_event_key,False,False,True,True,False,True
+1A3E,T16,mmcif,mmcif_struct_conn,1,6,4,found,found,found,found,found,found,raw_resolves_preferred_event_key,False,False,True,True,False,True
+1A46,00K,mmcif,mmcif_struct_conn,1,6,4,found,found,found,found,found,found,raw_resolves_preferred_event_key,False,False,True,True,False,True
+1A54,MDC,mmcif,,0,0,0,not_found,not_found,not_found,not_found,not_found,not_found,raw_no_connectivity_records_found,False,False,False,False,False,True
+1A5G,00L,mmcif,mmcif_struct_conn,1,6,4,found,found,found,found,found,found,raw_resolves_preferred_event_key,False,False,True,True,False,True
