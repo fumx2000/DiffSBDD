@@ -1,0 +1,2 @@
+failure_reason,observed_count,blocks_candidate_metadata,recommended_handling
+card_no_event_key_fields_found,5,True,record_status_and_defer_materialization

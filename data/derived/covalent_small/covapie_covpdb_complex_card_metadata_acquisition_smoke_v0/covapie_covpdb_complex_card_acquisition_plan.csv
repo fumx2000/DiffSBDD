@@ -1,0 +1,6 @@
+card_index,pdb_id,het_code,covpdb_ligand_id,complex_card_url,url_allowed,attempt_planned,within_first_5_limit,source_record_url_ignored,source_page_url_ignored,acquisition_plan_passed,blocking_reasons
+1,1A3B,T29,COVPDB1333,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2037,True,True,True,True,True,True,
+2,1A3E,T16,COVPDB1330,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2034,True,True,True,True,True,True,
+3,1A46,00K,COVPDB1,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1,True,True,True,True,True,True,
+4,1A54,MDC,COVPDB1089,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1614,True,True,True,True,True,True,
+5,1A5G,00L,COVPDB2,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2,True,True,True,True,True,True,

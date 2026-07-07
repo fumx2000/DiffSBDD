@@ -1,0 +1,9 @@
+readiness_item,current_step_status,readiness_boundary_passed,blocking_reasons
+ready_for_covapie_covpdb_complex_card_metadata_acquisition_qa_gate,True,True,
+ready_for_covapie_candidate_metadata_materialization,False,True,
+ready_for_covapie_candidate_allowlist_materialization_smoke,False,True,
+ready_for_covapie_batch_scale_raw_read_smoke,False,True,
+ready_for_training,False,True,
+ready_to_train_now,False,True,
+feature_semantics_audit_required_before_training,True,True,
+leakage_split_design_required_before_training,True,True,

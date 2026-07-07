@@ -1,0 +1,11 @@
+git_safety_item,command_or_check,required_status,current_step_status,git_safety_audit_passed,blocking_reasons
+forbidden_suffix_under_step13as_output_root,find output root forbidden suffixes,none,passed,True,
+raw_files_not_staged,git diff --cached --name-only -- data/raw/covalent_sources,empty,passed,True,
+raw_files_not_tracked,git ls-files data/raw/covalent_sources,empty,passed,True,
+metadata_csv_unchanged_policy,data/derived/covalent_small/external_metadata_index/covpdb/covpdb_complexes_metadata_manual.csv,read_only_input,declared,True,
+step13ao_artifacts_unchanged_policy,data/derived/covalent_small/covapie_covpdb_metadata_only_acquisition_smoke_v0,read_only_input,declared,True,
+step13ap_artifacts_unchanged_policy,data/derived/covalent_small/covapie_external_metadata_index_rediscovery_smoke_v0,read_only_input,declared,True,
+step13aq_artifacts_unchanged_policy,data/derived/covalent_small/covapie_external_metadata_index_schema_probe_design_gate_v0,read_only_input,declared,True,
+step13ar_artifacts_unchanged_policy,data/derived/covalent_small/covapie_covpdb_complex_card_metadata_probe_design_gate_v0,read_only_input,declared,True,
+protected_source_diff_empty,git diff -- equivariant_diffusion/ lightning_modules.py,empty,passed,True,
+original_dataloader_diff_empty,git diff -- dataset.py data/prepare_crossdocked.py,empty,passed,True,

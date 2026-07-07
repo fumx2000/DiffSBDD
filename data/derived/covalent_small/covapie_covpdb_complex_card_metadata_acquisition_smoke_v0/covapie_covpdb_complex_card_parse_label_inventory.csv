@@ -1,0 +1,51 @@
+card_index,pdb_id,het_code,label_category,label_text_normalized,label_found,evidence_snippet_truncated,parse_label_inventory_passed
+1,1A3B,T29,chain,chain,True,A: 7 #Rotatable Bonds: 12 TPSA: 168.84 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 18.08 - Boronic Acid Binding Affinity - Group Pharmaceutic,True
+1,1A3B,T29,residue,residue,True,BD: 6 HBA: 7 #Rotatable Bonds: 12 TPSA: 168.84 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 18.08 - Boronic Acid Binding Affinity - Group Pha,True
+1,1A3B,T29,residue_name,residue_name,False,,True
+1,1A3B,T29,residue_index,residue_index,False,,True
+1,1A3B,T29,residue_atom,residue_atom,False,,True
+1,1A3B,T29,covalent_bond,covalent_bond,False,,True
+1,1A3B,T29,ligand_atom,ligand_atom,False,,True
+1,1A3B,T29,protein_atom,protein_atom,False,,True
+1,1A3B,T29,mechanism,mechanism,True,91.23737 logP: 0.01857 HBD: 6 HBA: 7 #Rotatable Bonds: 12 TPSA: 168.84 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 18.08 - Boronic Acid Bindin,True
+1,1A3B,T29,warhead,warhead,True,nds: 12 TPSA: 168.84 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 18.08 - Boronic Acid Binding Affinity - Group Pharmaceutical Bioinformatics,True
+2,1A3E,T16,chain,chain,True,A: 6 #Rotatable Bonds: 14 TPSA: 136.04 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 19.59 - Boronic Acid Binding Affinity - Group Pharmaceutic,True
+2,1A3E,T16,residue,residue,True,BD: 4 HBA: 6 #Rotatable Bonds: 14 TPSA: 136.04 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 19.59 - Boronic Acid Binding Affinity - Group Pha,True
+2,1A3E,T16,residue_name,residue_name,False,,True
+2,1A3E,T16,residue_index,residue_index,False,,True
+2,1A3E,T16,residue_atom,residue_atom,False,,True
+2,1A3E,T16,covalent_bond,covalent_bond,False,,True
+2,1A3E,T16,ligand_atom,ligand_atom,False,,True
+2,1A3E,T16,protein_atom,protein_atom,False,,True
+2,1A3E,T16,mechanism,mechanism,True,: 615.0751 logP: 1.467 HBD: 4 HBA: 6 #Rotatable Bonds: 14 TPSA: 136.04 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 19.59 - Boronic Acid Bindin,True
+2,1A3E,T16,warhead,warhead,True,nds: 14 TPSA: 136.04 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Borylation SER 195 H 19.59 - Boronic Acid Binding Affinity - Group Pharmaceutical Bioinformatics,True
+3,1A46,00K,chain,chain,True,A: 7 #Rotatable Bonds: 11 TPSA: 150.86 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 22.86 - Ketone Binding Affinity Database Name,True
+3,1A46,00K,residue,residue,True,BD: 4 HBA: 7 #Rotatable Bonds: 11 TPSA: 150.86 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 22.86 - Ketone Binding Affinity Data,True
+3,1A46,00K,residue_name,residue_name,False,,True
+3,1A46,00K,residue_index,residue_index,False,,True
+3,1A46,00K,residue_atom,residue_atom,False,,True
+3,1A46,00K,covalent_bond,covalent_bond,False,,True
+3,1A46,00K,ligand_atom,ligand_atom,False,,True
+3,1A46,00K,protein_atom,protein_atom,False,,True
+3,1A46,00K,mechanism,mechanism,True,t: 526.3268 logP: 0.78 HBD: 4 HBA: 7 #Rotatable Bonds: 11 TPSA: 150.86 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 22.86 - Ketone,True
+3,1A46,00K,warhead,warhead,True,nds: 11 TPSA: 150.86 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 22.86 - Ketone Binding Affinity Database Name Value PDBBind Ki,True
+4,1A54,MDC,chain,chain,True,HBA: 6 #Rotatable Bonds: 6 TPSA: 99.93 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Michael Addition CYS 197 A 18.46 17.18 Vinyl Carbonyl Binding Affinity - Group,True
+4,1A54,MDC,residue,residue,True,HBD: 1 HBA: 6 #Rotatable Bonds: 6 TPSA: 99.93 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Michael Addition CYS 197 A 18.46 17.18 Vinyl Carbonyl Binding Affinity,True
+4,1A54,MDC,residue_name,residue_name,False,,True
+4,1A54,MDC,residue_index,residue_index,False,,True
+4,1A54,MDC,residue_atom,residue_atom,False,,True
+4,1A54,MDC,covalent_bond,covalent_bond,False,,True
+4,1A54,MDC,ligand_atom,ligand_atom,False,,True
+4,1A54,MDC,protein_atom,protein_atom,False,,True
+4,1A54,MDC,mechanism,mechanism,True,: 381.13248 logP: 1.7652 HBD: 1 HBA: 6 #Rotatable Bonds: 6 TPSA: 99.93 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Michael Addition CYS 197 A 18.46 17.18 Vinyl Car,True
+4,1A54,MDC,warhead,warhead,True,Bonds: 6 TPSA: 99.93 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Michael Addition CYS 197 A 18.46 17.18 Vinyl Carbonyl Binding Affinity - Group Pharmaceutical Bi,True
+5,1A5G,00L,chain,chain,True,A: 7 #Rotatable Bonds: 13 TPSA: 186.74 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 21.55 - Ketone Binding Affinity Database Name,True
+5,1A5G,00L,residue,residue,True,BD: 6 HBA: 7 #Rotatable Bonds: 13 TPSA: 186.74 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 21.55 - Ketone Binding Affinity Data,True
+5,1A5G,00L,residue_name,residue_name,False,,True
+5,1A5G,00L,residue_index,residue_index,False,,True
+5,1A5G,00L,residue_atom,residue_atom,False,,True
+5,1A5G,00L,covalent_bond,covalent_bond,False,,True
+5,1A5G,00L,ligand_atom,ligand_atom,False,,True
+5,1A5G,00L,protein_atom,protein_atom,False,,True
+5,1A5G,00L,mechanism,mechanism,True,6.31726 logP: -0.17573 HBD: 6 HBA: 7 #Rotatable Bonds: 13 TPSA: 186.74 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 21.55 - Ketone,True
+5,1A5G,00L,warhead,warhead,True,nds: 13 TPSA: 186.74 Covalent Mechanism Reaction Name Residue Chain ID SASA pKa Warhead Name Warhead Structure Hemi(thio)acetalization SER 195 H 21.55 - Ketone Binding Affinity Database Name Value PDBBind Ki,True
