@@ -1,0 +1,9 @@
+parse_strategy_item,parse_strategy_rule,parse_strategy_contract_passed,blocking_reasons
+html_text_only,Read only HTML/text from allowed complex-card URL.,True,
+visible_text_and_tables,Extract visible text and HTML tables.,True,
+candidate_labels,Search labels: chain;residue;residue name;residue number;atom;covalent bond;ligand atom;protein atom;mechanism;warhead.,True,
+short_evidence_snippets,Keep raw evidence snippets short and metadata-only.,True,
+unresolved_if_ambiguous,"If chain/residue/bond cannot be unambiguously parsed, mark card as unresolved.",True,
+no_pdb_id_inference,Never infer missing chain/residue/bond from pdb_id alone.,True,
+no_bond_fabrication,Never fabricate covalent_bond_atom_pair.,True,
+ambiguous_excluded,Ambiguous cards stay excluded from materialization.,True,

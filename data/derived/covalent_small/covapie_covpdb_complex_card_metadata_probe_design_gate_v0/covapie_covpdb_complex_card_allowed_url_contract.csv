@@ -1,0 +1,11 @@
+url_contract_item,contract_value,contract_status,allowed_url_contract_passed,blocking_reasons
+source_url_policy,URLs already present in covpdb_complex_card_url or source_record_url from committed metadata CSV,design_contract_only_no_fetch,True,
+allowed_domain,drug-discovery.vm.uni-freiburg.de,design_contract_only_no_fetch,True,
+allowed_path_prefix,/covpdb/complex_card/,design_contract_only_no_fetch,True,
+forbidden_raw_suffix_filter,.zip;.pdb;.ent;.cif;.mmcif;.sdf;.mol2;.gz,design_contract_only_no_fetch,True,
+maximum_cards_first_smoke,5,design_contract_only_no_fetch,True,
+recursive_crawling,not_allowed,design_contract_only_no_fetch,True,
+download_links,do_not_follow,design_contract_only_no_fetch,True,
+external_raw_links,do_not_follow_rcsb_or_pdbe_raw_links,design_contract_only_no_fetch,True,
+observed_complex_card_url_count,25,design_contract_only_no_fetch,True,
+observed_first_5_complex_card_urls,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2037;https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2034;https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1;https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1614;https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2,design_contract_only_no_fetch,True,
