@@ -3,7 +3,6 @@ from __future__ import annotations
 import ast
 import csv
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -46,24 +45,13 @@ SYNTHETIC_HTML = """
 """
 
 
-def _ensure_outputs() -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [sys.executable, "scripts/check_covapie_covpdb_metadata_only_acquisition_smoke_v0.py"],
-        check=False,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-
-
 def _csv_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
 
 def _manifest() -> dict:
-    if not smoke.MANIFEST_JSON.is_file():
-        _ensure_outputs()
+    assert smoke.MANIFEST_JSON.is_file(), "Committed Step 13AO manifest is required; tests must not rerun the check script"
     return json.loads(smoke.MANIFEST_JSON.read_text(encoding="utf-8"))
 
 
@@ -173,47 +161,41 @@ def test_fetch_failure_blocks_safely_and_writes_no_fake_metadata(tmp_path: Path)
 
 def test_no_forbidden_runtime_imports_except_allowed_urllib() -> None:
     module_path = Path("src/covalent_ext/covapie_covpdb_metadata_only_acquisition_smoke.py")
-    script_path = Path("scripts/check_covapie_covpdb_metadata_only_acquisition_smoke_v0.py")
     for name in ["torch", "rdkit", "gemmi", "Bio", "requests", "selenium", "playwright", "gzip"]:
         assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
     assert _imports_name(module_path, "urllib")
-    for path in [module_path, script_path]:
-        text = path.read_text(encoding="utf-8")
-        tree = ast.parse(text)
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "run":
-                call_text = ast.get_source_segment(text, node) or ""
-                assert "curl" not in call_text
-                assert "wget" not in call_text
+    text = module_path.read_text(encoding="utf-8")
+    tree = ast.parse(text)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "run":
+            call_text = ast.get_source_segment(text, node) or ""
+            assert "curl" not in call_text
+            assert "wget" not in call_text
 
 
-def test_check_script_outputs_real_or_safe_blocked_artifacts() -> None:
-    result = _ensure_outputs()
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert "covapie_covpdb_metadata_only_acquisition_smoke_v0_passed" in result.stdout
+def test_committed_step13ao_artifacts_are_present_and_read_only() -> None:
     manifest = _manifest()
     assert manifest["stage"] == smoke.STAGE
     assert manifest["previous_stage"] == smoke.PREVIOUS_STAGE
     assert manifest["project_name"] == "CovaPIE"
-    assert manifest["enabled_source_name"] == "CovPDB"
-    assert manifest["network_access_used"] is True
-    assert manifest["raw_structure_downloaded"] is False
-    assert manifest["raw_ligand_downloaded"] is False
-    assert manifest["forbidden_raw_artifact_downloaded"] is False
-    assert manifest["candidate_metadata_materialized"] is False
-    assert manifest["candidate_allowlist_materialized"] is False
+    assert manifest["metadata_csv_written"] is True
+    assert manifest["metadata_csv_row_count"] == 25
+    assert manifest["metadata_csv_column_count"] == 19
+    assert manifest["covpdb_metadata_only_acquisition_smoke_passed"] is True
+    assert manifest["ready_for_covapie_external_metadata_index_download_smoke_rerun"] is True
     assert manifest["ready_for_training"] is False
     assert manifest["ready_to_train_now"] is False
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["all_checks_passed"] is True
-    if manifest["metadata_csv_written"]:
-        assert manifest["metadata_csv_row_count"] >= 1
-        assert manifest["metadata_csv_column_count"] == 19
-        assert smoke.METADATA_CSV.is_file()
-    else:
-        assert manifest["blocking_reasons"]
+    assert smoke.METADATA_CSV.is_file()
+    rows = _csv_rows(smoke.METADATA_CSV)
+    assert len(rows) == 25
+    assert list(rows[0]) == smoke.METADATA_COLUMNS
+    assert [(row["pdb_id"], row["het_code"]) for row in rows[:5]] == [
+        ("1A3B", "T29"),
+        ("1A3E", "T16"),
+        ("1A46", "00K"),
+        ("1A54", "MDC"),
+        ("1A5G", "00L"),
+    ]
 
 
 def test_output_audits_masks_feature_leakage_and_boundaries() -> None:
