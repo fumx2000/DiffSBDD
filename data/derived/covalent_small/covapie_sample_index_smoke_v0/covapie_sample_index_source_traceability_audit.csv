@@ -1,0 +1,5 @@
+extracted_event_id,allowlist_entry_id,pdb_id,het_code,sample_index_rows_for_event,source_event_table_found,source_protein_atom_rows_found,source_ligand_atom_rows_found,step13bf_event_qa_found,step13bf_atom_qa_found,step13bf_geometry_qa_found,step13bg_mask_expansion_contract_found,traceability_qa_passed,qa_comment
+extracted_event::covpdb::1A3B::T29::H:SER195:OG-B,allowlist::covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,5,True,True,True,True,True,True,True,True,source_traceability_validated
+extracted_event::covpdb::1A3E::T16::H:SER195:OG-B,allowlist::covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,5,True,True,True,True,True,True,True,True,source_traceability_validated
+extracted_event::covpdb::1A46::00K::H:SER195:OG-C,allowlist::covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,5,True,True,True,True,True,True,True,True,source_traceability_validated
+extracted_event::covpdb::1A5G::00L::H:SER195:OG-C,allowlist::covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,5,True,True,True,True,True,True,True,True,source_traceability_validated
