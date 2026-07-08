@@ -15,25 +15,19 @@ if str(SRC_ROOT) not in sys.path:
 from covalent_ext import covapie_candidate_allowlist_materialization_smoke as smoke
 
 
-def _ensure_outputs() -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [sys.executable, "scripts/check_covapie_candidate_allowlist_materialization_smoke_v0.py"],
-        check=False,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
+ROOT = Path("data/derived/covalent_small/covapie_candidate_allowlist_materialization_smoke_v0")
 
 
 def _csv_rows(path: Path) -> list[dict[str, str]]:
+    assert path.is_file(), f"missing artifact: {path}"
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
 
 def _manifest() -> dict:
-    if not smoke.MANIFEST_JSON.is_file():
-        _ensure_outputs()
-    return json.loads(smoke.MANIFEST_JSON.read_text(encoding="utf-8"))
+    path = ROOT / "covapie_candidate_allowlist_materialization_smoke_manifest.json"
+    assert path.is_file(), "Run the Step 13BB check script before artifact tests"
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _imports_name(path: Path, name: str) -> bool:
@@ -47,241 +41,208 @@ def _imports_name(path: Path, name: str) -> bool:
     return False
 
 
-def _write_metadata(path: Path, rows: list[dict[str, str]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=smoke.ALLOWLIST_COLUMNS)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow(row)
-
-
-def _valid_rows(count: int = 10) -> list[dict[str, str]]:
-    rows = []
-    for index in range(count):
-        rows.append(
-            {
-                "candidate_id": f"CAND_{index + 1:03d}",
-                "source_dataset_name": "curated_covapie_metadata",
-                "source_dataset_version": "v0",
-                "source_file_relative_path": f"curated/pdb_{index + 1:03d}.cif",
-                "pdb_id": f"P{index + 1:03d}",
-                "ligand_id": f"L{index + 1:03d}",
-                "chain_id": "A",
-                "residue_name": "CYS",
-                "residue_index": str(100 + index),
-                "residue_atom_name": "SG",
-                "covalent_bond_atom_pair": f"SG-C{index + 1}",
-                "restoration_policy_id": "known_restoration_template_v1",
-                "manual_review_status": "reviewed_pass" if index % 2 == 0 else "approved_for_smoke",
-                "include_in_smoke": "true",
-                "exclusion_reason": "",
-            }
-        )
-    return rows
-
-
-def test_check_script_passes_missing_metadata_mode() -> None:
-    result = _ensure_outputs()
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert "covapie_candidate_allowlist_materialization_smoke_v0_passed" in result.stdout
+def test_step13ba_precondition_and_readiness() -> None:
+    manifest13ba = json.loads(smoke.STEP13BA_MANIFEST_JSON.read_text(encoding="utf-8"))
     manifest = _manifest()
+    precondition = _csv_rows(ROOT / "covapie_candidate_allowlist_smoke_precondition_audit.csv")
+    assert manifest13ba["stage"] == smoke.PREVIOUS_STAGE
+    assert manifest13ba["all_checks_passed"] is True
+    assert manifest13ba["ready_for_covapie_candidate_allowlist_materialization_smoke"] is True
+    assert manifest13ba["candidate_allowlist_materialized"] is False
+    assert manifest13ba["allowlist_schema_field_count"] == 25
+    assert manifest13ba["allowlist_candidate_preview_row_count"] == 4
+    assert {row["precondition_passed"] for row in precondition} == {"True"}
     assert manifest["stage"] == smoke.STAGE
     assert manifest["previous_stage"] == smoke.PREVIOUS_STAGE
-    assert manifest["project_name"] == "CovaPIE"
-    assert manifest["step13ag_allowlist_creation_gate_validated"] is True
-    assert manifest["naming_convention_validated"] is True
+    assert manifest["step13ba_candidate_allowlist_materialization_design_gate_validated"] is True
     assert manifest["all_checks_passed"] is True
-    assert manifest["materialization_status"] == "blocked_due_to_missing_explicit_metadata"
-    assert manifest["blocking_reasons"] == ["missing_explicit_candidate_metadata"]
+    assert manifest["blocking_reasons"] == []
 
 
-def test_covapie_naming_and_no_runtime_imports() -> None:
-    text = smoke.NAMING_CONVENTION_MD.read_text(encoding="utf-8")
-    assert "CovaPIE" in text
-    assert "CovaGEN" in text
-    assert smoke.validate_covapie_naming_convention_v0() is True
-    module_path = Path("src/covalent_ext/covapie_candidate_allowlist_materialization_smoke.py")
-    script_path = Path("scripts/check_covapie_candidate_allowlist_materialization_smoke_v0.py")
-    for name in ["torch", "rdkit", "gzip", "gemmi", "Bio"]:
-        assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
-
-
-def test_missing_metadata_outputs_are_blocked_header_only() -> None:
+def test_allowlist_smoke_csv_and_json_are_four_rows_with_schema_order() -> None:
+    rows = _csv_rows(ROOT / "covapie_candidate_allowlist_smoke.csv")
+    json_rows = json.loads((ROOT / "covapie_candidate_allowlist_smoke.json").read_text(encoding="utf-8"))
+    schema_rows = _csv_rows(smoke.STEP13BA_SCHEMA_CONTRACT_CSV)
+    expected_columns = [row["allowlist_field"] for row in schema_rows]
     manifest = _manifest()
-    assert manifest["input_metadata_exists"] is False
-    assert manifest["input_metadata_read"] is False
-    assert manifest["input_metadata_row_count"] == 0
-    assert manifest["included_candidate_count"] == 0
-    assert manifest["metadata_schema_validated"] is False
-    assert manifest["candidate_validation_passed"] is False
-    assert manifest["duplicate_exclusion_validation_passed"] is False
-    assert manifest["shard_plan_created"] is False
-    assert manifest["shard_count"] == 0
-    assert manifest["materialized_allowlist_written"] is False
-    assert manifest["materialized_allowlist_path"] == ""
-    assert manifest["blocked_header_only_written"] is True
-    blocked_path = Path(manifest["blocked_header_only_path"])
-    assert blocked_path == smoke.BLOCKED_HEADER_ONLY_CSV
-    with blocked_path.open(newline="", encoding="utf-8") as handle:
-        rows = list(csv.reader(handle))
-    assert rows == [smoke.ALLOWLIST_COLUMNS]
-    assert not smoke.MATERIALIZED_ALLOWLIST_CSV.exists()
-    assert manifest["candidate_rows_materialized"] is False
-    assert manifest["candidate_allowlist_created"] is False
+    assert expected_columns == smoke.ALLOWLIST_FIELDS
+    assert len(rows) == 4
+    assert len(json_rows) == 4
+    assert list(rows[0].keys()) == expected_columns
+    assert all(set(row.keys()) == set(expected_columns) for row in json_rows)
+    assert all(len(row) == 25 for row in json_rows)
+    assert manifest["materialized_allowlist_row_count"] == 4
+    assert manifest["materialized_allowlist_column_count"] == 25
+    assert manifest["allowlist_csv_written"] is True
+    assert manifest["allowlist_json_written"] is True
+
+
+def test_allowlist_identity_values_are_expected_and_exclude_1a54_mdc() -> None:
+    rows = _csv_rows(ROOT / "covapie_candidate_allowlist_smoke.csv")
+    expected_candidate_ids = [
+        "covpdb::1A3B::T29::H:SER195:OG-B",
+        "covpdb::1A3E::T16::H:SER195:OG-B",
+        "covpdb::1A46::00K::H:SER195:OG-C",
+        "covpdb::1A5G::00L::H:SER195:OG-C",
+    ]
+    expected_allowlist_ids = [f"allowlist::{candidate_id}" for candidate_id in expected_candidate_ids]
+    assert [row["allowlist_entry_id"] for row in rows] == expected_allowlist_ids
+    assert [row["candidate_metadata_id"] for row in rows] == expected_candidate_ids
+    assert len({row["allowlist_entry_id"] for row in rows}) == 4
+    assert [(row["pdb_id"], row["het_code"]) for row in rows] == [
+        ("1A3B", "T29"),
+        ("1A3E", "T16"),
+        ("1A46", "00K"),
+        ("1A5G", "00L"),
+    ]
+    assert ("1A54", "MDC") not in {(row["pdb_id"], row["het_code"]) for row in rows}
+    for row in rows:
+        assert all(value != "" for value in row.values())
+        assert row["project_name"] == "CovaPIE"
+        assert row["source_name"] == "covpdb"
+        assert row["source_database"] == "CovPDB"
+        assert row["source_stage"] == smoke.STAGE
+        assert row["candidate_metadata_qa_status"] == "passed"
+        assert row["allowlist_entry_status"] == "allowlisted_for_future_batch_raw_read_design"
+        assert row["allowlist_reason"] == "candidate_metadata_qa_passed_and_event_key_resolved"
+        assert row["unresolved_exclusion_status"] == "not_unresolved_accepted_preferred_event"
+        assert row["manual_review_required"] == "false"
+        assert row["ready_for_training"] == "false"
+
+
+def test_qa_audit_and_unresolved_exclusion_audit() -> None:
+    qa = _csv_rows(ROOT / "covapie_candidate_allowlist_smoke_qa_audit.csv")
+    unresolved = _csv_rows(ROOT / "covapie_candidate_allowlist_unresolved_exclusion_audit.csv")
+    manifest = _manifest()
+    assert len(qa) == 4
+    assert {row["column_count"] for row in qa} == {"25"}
+    for key in [
+        "schema_column_order_matches",
+        "allowlist_id_matches_design_preview",
+        "allowlist_id_deterministic",
+        "candidate_metadata_id_matches",
+        "pair_is_allowed",
+        "pair_is_not_unresolved",
+        "source_candidate_metadata_found",
+        "source_candidate_preview_found",
+        "source_step13az_qa_found",
+        "required_boolean_fields_valid",
+        "ready_for_training_false",
+        "qa_audit_passed",
+    ]:
+        assert {row[key] for row in qa} == {"True"}
+    assert unresolved == [
+        {
+            "pdb_id": "1A54",
+            "het_code": "MDC",
+            "resolution_status": "raw_no_connectivity_records_found",
+            "reason_unresolved": "raw_no_connectivity_records_found",
+            "present_in_candidate_metadata": "False",
+            "present_in_candidate_allowlist": "False",
+            "allowlist_entry_materialized": "False",
+            "exclusion_preserved": "True",
+            "unresolved_exclusion_audit_passed": "True",
+            "qa_comment": "unresolved_case_remains_blocked",
+        }
+    ]
+    assert manifest["schema_content_identity_traceability_qa_passed"] is True
+    assert manifest["unresolved_exclusion_preserved"] is True
+
+
+def test_boundary_git_safety_training_blockers_and_readiness() -> None:
+    boundary = _csv_rows(ROOT / "covapie_candidate_allowlist_boundary_safety.csv")
+    git_safety = _csv_rows(ROOT / "covapie_candidate_allowlist_git_safety.csv")
+    blockers = _csv_rows(ROOT / "covapie_candidate_allowlist_training_blockers.csv")
+    manifest = _manifest()
+    by_boundary = {row["boundary_item"]: row for row in boundary}
+    assert by_boundary["candidate_allowlist_materialization"]["current_step_status"] == "executed_first4_smoke_only"
+    assert by_boundary["candidate_metadata_materialization"]["current_step_status"] == "not_executed_current_step"
+    for item in ["sample_index", "final_dataset", "split_assignments", "leakage_matrix", "training"]:
+        assert by_boundary[item]["current_step_status"] == "blocked_current_step"
+    for item in ["network_access", "raw_download", "raw_text_read", "rdkit_biopdb_gemmi", "torch_model_training"]:
+        assert by_boundary[item]["current_step_status"] == "not_executed_or_not_allowed"
+    assert {row["boundary_safety_passed"] for row in boundary} == {"True"}
+    assert {row["git_safety_audit_passed"] for row in git_safety} == {"True"}
+    assert [row["training_blocker_item"] for row in blockers[:5]] == [
+        "mask_warhead_only_A",
+        "mask_linker_plus_warhead_B",
+        "mask_scaffold_plus_warhead_B2",
+        "mask_scaffold_only_B3",
+        "mask_scaffold_plus_linker_plus_warhead_C",
+    ]
+    assert {row["training_blocker_passed"] for row in blockers} == {"True"}
+    assert manifest["candidate_allowlist_materialized"] is True
+    assert manifest["candidate_allowlist_materialized_current_step"] is True
+    assert manifest["candidate_metadata_materialized_current_step"] is False
+    assert manifest["sample_index_written"] is False
+    assert manifest["final_dataset_written"] is False
+    assert manifest["split_assignments_written"] is False
+    assert manifest["leakage_matrix_written"] is False
+    assert manifest["ready_for_covapie_candidate_allowlist_qa_gate"] is True
+    assert manifest["ready_for_covapie_batch_scale_raw_read_design_gate"] is False
     assert manifest["ready_for_covapie_batch_scale_raw_read_smoke"] is False
-
-
-def test_actual_missing_metadata_row_counts_and_audits() -> None:
-    manifest = _manifest()
-    assert manifest["covapie_allowlist_materialization_precondition_audit_row_count"] == len(_csv_rows(smoke.PRECONDITION_AUDIT_CSV)) == 7
-    assert manifest["covapie_allowlist_materialization_input_discovery_audit_row_count"] == len(_csv_rows(smoke.INPUT_DISCOVERY_AUDIT_CSV)) == 1
-    assert manifest["covapie_allowlist_materialization_schema_audit_row_count"] == len(_csv_rows(smoke.SCHEMA_AUDIT_CSV)) == 15
-    assert manifest["covapie_allowlist_materialization_candidate_validation_audit_row_count"] == len(_csv_rows(smoke.CANDIDATE_VALIDATION_AUDIT_CSV)) == 12
-    assert manifest["covapie_allowlist_materialization_duplicate_exclusion_audit_row_count"] == len(_csv_rows(smoke.DUPLICATE_EXCLUSION_AUDIT_CSV)) == 8
-    assert manifest["covapie_allowlist_materialization_shard_plan_audit_row_count"] == len(_csv_rows(smoke.SHARD_PLAN_AUDIT_CSV)) == 1
-    assert manifest["covapie_allowlist_materialization_output_audit_row_count"] == len(_csv_rows(smoke.OUTPUT_AUDIT_CSV)) == 1
-    assert manifest["covapie_allowlist_materialization_execution_boundary_audit_row_count"] == len(_csv_rows(smoke.EXECUTION_BOUNDARY_AUDIT_CSV)) == 24
-    assert manifest["covapie_allowlist_materialization_git_safety_audit_row_count"] == len(_csv_rows(smoke.GIT_SAFETY_AUDIT_CSV)) == 10
-    assert manifest["covapie_allowlist_materialization_mask_scope_audit_row_count"] == len(_csv_rows(smoke.MASK_SCOPE_AUDIT_CSV)) == 5
-    assert manifest["covapie_allowlist_materialization_feature_semantics_audit_row_count"] == len(_csv_rows(smoke.FEATURE_SEMANTICS_AUDIT_CSV)) == 12
-    assert manifest["covapie_allowlist_materialization_leakage_split_audit_row_count"] == len(_csv_rows(smoke.LEAKAGE_SPLIT_AUDIT_CSV)) == 12
-    discovery = _csv_rows(smoke.INPUT_DISCOVERY_AUDIT_CSV)[0]
-    assert discovery["materialization_status"] == "blocked_due_to_missing_explicit_metadata"
-    assert discovery["discovery_audit_passed"] == "True"
-    assert discovery["blocking_reasons"] == "missing_explicit_candidate_metadata"
-    schema = _csv_rows(smoke.SCHEMA_AUDIT_CSV)
-    assert {row["schema_audit_status"] for row in schema} == {"not_applicable_missing_metadata"}
-    assert {row["schema_audit_passed"] for row in schema} == {"True"}
-    candidate = _csv_rows(smoke.CANDIDATE_VALIDATION_AUDIT_CSV)
-    assert {row["validation_status"] for row in candidate} == {"not_evaluated_missing_metadata"}
-    assert {row["validation_audit_passed"] for row in candidate} == {"True"}
-
-
-def test_synthetic_valid_metadata_materializes_allowlist(tmp_path: Path) -> None:
-    input_path = tmp_path / "input" / "covapie_candidate_metadata_for_allowlist.csv"
-    output_root = tmp_path / "out"
-    rows = list(reversed(_valid_rows(10)))
-    _write_metadata(input_path, rows)
-    result = smoke.run_covapie_candidate_allowlist_materialization_smoke_v0(input_path, output_root)
-    manifest = result["manifest"]
-    assert manifest["input_metadata_exists"] is True
-    assert manifest["input_metadata_read"] is True
-    assert manifest["input_metadata_row_count"] == 10
-    assert manifest["included_candidate_count"] == 10
-    assert manifest["materialization_status"] == "materialized_allowlist_validated"
-    assert manifest["metadata_schema_validated"] is True
-    assert manifest["candidate_validation_passed"] is True
-    assert manifest["duplicate_exclusion_validation_passed"] is True
-    assert manifest["shard_plan_created"] is True
-    assert manifest["shard_count"] == 2
-    assert manifest["materialized_allowlist_written"] is True
-    assert manifest["blocked_header_only_written"] is False
-    assert manifest["candidate_rows_materialized"] is True
-    assert manifest["candidate_allowlist_created"] is True
-    assert manifest["ready_for_covapie_batch_scale_raw_read_smoke"] is True
-    materialized = Path(manifest["materialized_allowlist_path"])
-    materialized_rows = _csv_rows(materialized)
-    assert len(materialized_rows) == 10
-    assert list(materialized_rows[0]) == smoke.ALLOWLIST_COLUMNS
-    assert [row["candidate_id"] for row in materialized_rows] == sorted(row["candidate_id"] for row in rows)
-    assert all(row["residue_name"] == "CYS" and row["residue_atom_name"] == "SG" for row in materialized_rows)
-    assert not Path(manifest["blocked_header_only_path"]).exists() if manifest["blocked_header_only_path"] else True
-    assert manifest["raw_data_read"] is False
-
-
-def test_synthetic_invalid_metadata_blocks_materialization(tmp_path: Path) -> None:
-    input_path = tmp_path / "input" / "covapie_candidate_metadata_for_allowlist.csv"
-    output_root = tmp_path / "out"
-    rows = _valid_rows(10)
-    rows[1]["candidate_id"] = rows[0]["candidate_id"]
-    rows[2]["residue_name"] = "SER"
-    rows[3]["source_file_relative_path"] = "../unsafe.cif"
-    rows[4]["manual_review_status"] = "not_reviewed"
-    _write_metadata(input_path, rows)
-    result = smoke.run_covapie_candidate_allowlist_materialization_smoke_v0(input_path, output_root)
-    manifest = result["manifest"]
-    assert manifest["input_metadata_exists"] is True
-    assert manifest["input_metadata_read"] is True
-    assert manifest["materialization_status"] == "blocked_due_to_invalid_metadata"
-    assert manifest["metadata_schema_validated"] is True
-    assert manifest["candidate_validation_passed"] is False
-    assert manifest["duplicate_exclusion_validation_passed"] is False
-    assert manifest["materialized_allowlist_written"] is False
-    assert manifest["blocked_header_only_written"] is True
-    assert manifest["blocking_reasons"] == ["invalid_metadata"]
-    candidate = {row["validation_item"]: row for row in result["candidate_rows"]}
-    assert candidate["candidate_id_non_empty_unique"]["validation_audit_passed"] is False
-    assert candidate["source_file_relative_path_safe"]["validation_audit_passed"] is False
-    assert candidate["cys_sg_only_scope"]["validation_audit_passed"] is False
-    assert candidate["manual_review_status_allowed"]["validation_audit_passed"] is False
-    duplicate = {row["duplicate_exclusion_item"]: row for row in result["duplicate_rows"]}
-    assert duplicate["unique_candidate_id"]["duplicate_audit_passed"] is False
-
-
-def test_canonical_masks_feature_semantics_and_leakage_boundaries() -> None:
-    manifest = _manifest()
+    assert manifest["ready_for_training"] is False
+    assert manifest["ready_to_train_now"] is False
+    assert manifest["recommended_next_step"] == "covapie_candidate_allowlist_qa_gate"
     assert manifest["canonical_mask_task_count"] == 5
-    assert manifest["canonical_mask_task_names"] == smoke.CANONICAL_MASK_TASK_NAMES
-    assert manifest["canonical_mask_task_aliases"] == smoke.CANONICAL_MASK_TASK_ALIASES
+    assert manifest["canonical_mask_task_names"] == [
+        "warhead_only",
+        "linker_plus_warhead",
+        "scaffold_plus_warhead",
+        "scaffold_only",
+        "scaffold_plus_linker_plus_warhead",
+    ]
+    assert manifest["canonical_mask_task_aliases"] == ["A", "B", "B2", "B3", "C"]
     assert manifest["b3_scaffold_only_included"] is True
     assert manifest["no_extra_mask_tasks_added"] is True
-    mask = _csv_rows(smoke.MASK_SCOPE_AUDIT_CSV)
-    assert [row["canonical_mask_task_name"] for row in mask] == smoke.CANONICAL_MASK_TASK_NAMES
-    assert [row["display_alias"] for row in mask] == smoke.CANONICAL_MASK_TASK_ALIASES
-    assert {row["mask_scope_status"] for row in mask} == {"preserved_from_step13ag"}
-    assert {row["mask_scope_audit_passed"] for row in mask} == {"True"}
-    feature = _csv_rows(smoke.FEATURE_SEMANTICS_AUDIT_CSV)
-    assert {row["audit_required_before_training"] for row in feature} == {"True"}
-    assert {row["fully_audited_claimed"] for row in feature} == {"False"}
-    assert {row["blocking_for_allowlist_materialization_smoke"] for row in feature} == {"False"}
-    assert {row["training_ready"] for row in feature} == {"False"}
-    leakage = _csv_rows(smoke.LEAKAGE_SPLIT_AUDIT_CSV)
-    assert {row["current_step_status"] for row in leakage} == {"placeholder_only_no_split_written"}
-    assert {row["blocking_for_training"] for row in leakage} == {"True"}
+    assert manifest["feature_semantics_audit_required_before_training"] is True
+    assert manifest["leakage_split_design_required_before_training"] is True
 
 
-def test_execution_git_and_manifest_safety_boundaries() -> None:
-    boundary = {row["boundary_item"]: row for row in _csv_rows(smoke.EXECUTION_BOUNDARY_AUDIT_CSV)}
-    assert boundary["allowlist_materialization_smoke"]["current_step_status"] == "executed_metadata_preflight_only"
-    assert boundary["input_metadata_csv_read"]["current_step_status"] == "executed_only_if_metadata_exists_else_not_executed"
-    assert boundary["candidate_row_materialization"]["current_step_status"] == "executed_only_if_metadata_valid_else_not_executed"
-    for item in smoke.EXECUTION_BOUNDARY_ITEMS[3:]:
-        assert boundary[item]["current_step_status"] == "not_executed_or_not_allowed"
-        assert boundary[item]["execution_boundary_passed"] == "True"
-    git_rows = {row["git_safety_item"]: row for row in _csv_rows(smoke.GIT_SAFETY_AUDIT_CSV)}
-    assert ".pt" in git_rows["forbidden_suffix_check"]["command_or_check"]
-    assert ".ckpt" in git_rows["forbidden_suffix_check"]["command_or_check"]
-    assert ".npz" in git_rows["forbidden_suffix_check"]["command_or_check"]
-    assert ".sdf" in git_rows["forbidden_suffix_check"]["command_or_check"]
-    assert {row["git_safety_audit_passed"] for row in git_rows.values()} == {"True"}
+def test_no_forbidden_imports_outputs_or_raw_tracking() -> None:
+    module_path = Path("src/covalent_ext/covapie_candidate_allowlist_materialization_smoke.py")
+    script_path = Path("scripts/check_covapie_candidate_allowlist_materialization_smoke_v0.py")
+    for name in ["urllib", "requests", "torch", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright"]:
+        assert not _imports_name(module_path, name)
+        assert not _imports_name(script_path, name)
+    forbidden = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
+    assert [path for path in ROOT.rglob("*") if path.is_file() and path.suffix.lower() in forbidden] == []
+    forbidden_names = {
+        "sample_index.csv",
+        "sample_index.json",
+        "final_dataset.csv",
+        "final_dataset.json",
+        "split_assignments.csv",
+        "split_assignments.json",
+        "leakage_matrix.csv",
+        "leakage_matrix.json",
+    }
+    assert not any(path.name in forbidden_names for path in ROOT.rglob("*"))
+    raw_root = Path("data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0")
+    tracked = subprocess.run(["git", "ls-files", str(raw_root)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
+    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", str(raw_root)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
+    assert tracked == []
+    assert staged == []
     manifest = _manifest()
     for key in [
+        "network_access_used",
+        "urllib_used",
+        "requests_used",
+        "browser_used",
+        "raw_structure_downloaded",
+        "raw_ligand_downloaded",
+        "archive_downloaded",
+        "raw_file_created",
         "raw_data_read",
-        "raw_file_copied",
         "sdf_read",
-        "sdf_generated",
-        "sdf_modified",
-        "sdf_copied",
         "pdb_read",
-        "pdb_generated",
         "mmcif_text_read",
         "gzip_open_used",
         "rdkit_used",
         "biopdb_parser_used",
         "gemmi_used",
-        "atom_site_text_scan_run",
-        "sample_index_written",
-        "final_dataset_written",
-        "split_assignments_written",
-        "leakage_matrix_written",
-        "adapter_instantiated",
         "torch_imported",
         "torch_tensor_created",
-        "tensor_artifact_written",
-        "npz_created",
-        "pt_created",
         "checkpoint_loaded",
         "model_forward_called",
         "loss_compute_called",
@@ -290,16 +251,4 @@ def test_execution_git_and_manifest_safety_boundaries() -> None:
         "trainer_fit_called",
         "training_allowed",
     ]:
-        assert manifest[key] is False
-
-
-def test_readiness_boundary() -> None:
-    manifest = _manifest()
-    assert manifest["allowlist_materialization_smoke_preflight_passed"] is True
-    assert manifest["covapie_candidate_allowlist_materialization_smoke_passed"] is False
-    assert manifest["ready_for_covapie_batch_scale_raw_read_smoke"] is False
-    assert manifest["ready_for_training"] is False
-    assert manifest["ready_to_train_now"] is False
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["recommended_next_step"] == "provide_explicit_candidate_metadata_for_allowlist"
+        assert manifest[key] is False, key

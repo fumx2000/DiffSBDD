@@ -14,6 +14,7 @@ PROJECT_NAME = "CovaPIE"
 
 STEP13AH_ROOT = Path("data/derived/covalent_small/covapie_candidate_allowlist_materialization_smoke_v0")
 STEP13AH_MANIFEST_JSON = STEP13AH_ROOT / "covapie_candidate_allowlist_materialization_smoke_manifest.json"
+STEP13AH_BLOCKED_HEADER_ONLY_CSV = STEP13AH_ROOT / "covapie_batch_smoke_candidate_allowlist_materialized_blocked_header_only.csv"
 STEP13AG_ROOT = Path("data/derived/covalent_small/covapie_candidate_allowlist_creation_gate_v0")
 STEP13AG_MANIFEST_JSON = STEP13AG_ROOT / "covapie_candidate_allowlist_creation_gate_manifest.json"
 STEP13AG_TEMPLATE_CSV = STEP13AG_ROOT / "templates/covapie_batch_smoke_candidate_allowlist_template.csv"
@@ -306,6 +307,19 @@ def validate_step13ah_precondition_v0() -> bool:
         "b3_scaffold_only_included": True,
         "no_extra_mask_tasks_added": True,
     }
+    blockers = _legacy_step13ah_manifest_blockers(manifest, expected)
+    with STEP13AG_TEMPLATE_CSV.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.reader(handle))
+    if rows != [ALLOWLIST_COLUMNS]:
+        blockers.append("step13ag_template_header_only_contract")
+    if blockers and _manifest_is_newer_or_unrelated_for_step13ai(manifest):
+        blockers = _newer_or_unrelated_manifest_compat_blockers(manifest)
+    if blockers:
+        raise ValueError("Step 13AH precondition failed: " + ";".join(blockers))
+    return True
+
+
+def _legacy_step13ah_manifest_blockers(manifest: dict[str, Any], expected: dict[str, Any]) -> list[str]:
     blockers = [f"{key}={manifest.get(key)!r}" for key, value in expected.items() if manifest.get(key) != value]
     if manifest.get("blocking_reasons") != ["missing_explicit_candidate_metadata"]:
         blockers.append("blocking_reasons")
@@ -313,13 +327,58 @@ def validate_step13ah_precondition_v0() -> bool:
         blockers.append("canonical_mask_task_names")
     if manifest.get("canonical_mask_task_aliases") != CANONICAL_MASK_TASK_ALIASES:
         blockers.append("canonical_mask_task_aliases")
-    with STEP13AG_TEMPLATE_CSV.open(newline="", encoding="utf-8") as handle:
-        rows = list(csv.reader(handle))
-    if rows != [ALLOWLIST_COLUMNS]:
-        blockers.append("step13ag_template_header_only_contract")
-    if blockers:
-        raise ValueError("Step 13AH precondition failed: " + ";".join(blockers))
-    return True
+    return blockers
+
+
+def _manifest_is_newer_or_unrelated_for_step13ai(manifest: dict[str, Any]) -> bool:
+    allowed_newer_stages = {
+        "covapie_candidate_allowlist_materialization_design_gate_v0",
+        "covapie_candidate_allowlist_materialization_smoke_v0",
+        "covapie_candidate_metadata_materialization_qa_gate_v0",
+        "covapie_candidate_metadata_materialization_smoke_v0",
+    }
+    return manifest.get("stage") in allowed_newer_stages and manifest.get("recommended_next_step") != "provide_explicit_candidate_metadata_for_allowlist"
+
+
+def _newer_or_unrelated_manifest_compat_blockers(manifest: dict[str, Any]) -> list[str]:
+    expected = {
+        "stage": "covapie_candidate_allowlist_materialization_smoke_v0",
+        "previous_stage": "covapie_candidate_allowlist_materialization_design_gate_v0",
+        "project_name": PROJECT_NAME,
+        "all_checks_passed": True,
+        "candidate_allowlist_materialized": True,
+        "candidate_allowlist_materialized_current_step": True,
+        "sample_index_written": False,
+        "final_dataset_written": False,
+        "split_assignments_written": False,
+        "leakage_matrix_written": False,
+        "ready_for_covapie_candidate_allowlist_qa_gate": True,
+        "ready_for_covapie_batch_scale_raw_read_design_gate": False,
+        "ready_for_training": False,
+        "ready_to_train_now": False,
+        "feature_semantics_audit_required_before_training": True,
+        "leakage_split_design_required_before_training": True,
+    }
+    blockers = [f"ignored_newer_or_unrelated_{key}={manifest.get(key)!r}" for key, value in expected.items() if manifest.get(key) != value]
+    if not STEP13AH_BLOCKED_HEADER_ONLY_CSV.is_file():
+        blockers.append("legacy_blocked_header_only_artifact_missing")
+    else:
+        with STEP13AH_BLOCKED_HEADER_ONLY_CSV.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.reader(handle))
+        if not rows or rows[0] != ALLOWLIST_COLUMNS:
+            blockers.append("legacy_blocked_header_only_header_contract")
+    if manifest.get("canonical_mask_task_names") != CANONICAL_MASK_TASK_NAMES:
+        blockers.append("ignored_newer_or_unrelated_canonical_mask_task_names")
+    if manifest.get("canonical_mask_task_aliases") != CANONICAL_MASK_TASK_ALIASES:
+        blockers.append("ignored_newer_or_unrelated_canonical_mask_task_aliases")
+    return blockers
+
+
+def ignored_newer_or_unrelated_stage_manifest_count_v0() -> int:
+    if not STEP13AH_MANIFEST_JSON.is_file():
+        return 0
+    manifest = _load_json(STEP13AH_MANIFEST_JSON)
+    return int(_manifest_is_newer_or_unrelated_for_step13ai(manifest))
 
 
 def build_precondition_rows(output_root: Path) -> list[dict[str, Any]]:
@@ -627,6 +686,7 @@ def run_covapie_metadata_source_inventory_gate_v0(output_root: str | Path = OUTP
         "project_name": PROJECT_NAME,
         "naming_convention_validated": naming_convention_validated,
         "step13ah_missing_metadata_materialization_smoke_validated": True,
+        "ignored_newer_or_unrelated_stage_manifest_count": ignored_newer_or_unrelated_stage_manifest_count_v0(),
         "inventory_scope": "derived_csv_json_md_metadata_inventory_only",
         "inventory_root": str(INVENTORY_ROOT),
         "scanned_allowed_suffixes": ALLOWED_SUFFIXES,

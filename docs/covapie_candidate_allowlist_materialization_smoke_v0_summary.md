@@ -1,34 +1,26 @@
 # CovaPIE Candidate Allowlist Materialization Smoke v0 Summary
 
-This is CovaPIE candidate allowlist materialization smoke.
-It only reads explicit metadata CSV if provided.
-It does not search raw data or invent candidates.
-It does not read raw structure contents.
-It does not read SDF, PDB, mmCIF, or gzip files.
-It does not use RDKit, Bio.PDB, or gemmi.
-It does not write sample index, final dataset, split assignment, or leakage matrix.
-It does not import torch or create tensors.
-It does not load checkpoint, call model forward, compute loss, backward, optimizer, trainer.fit, or training.
-If metadata is missing, it is intentionally blocked and asks for explicit candidate metadata.
-If metadata is valid, the next step is batch-scale raw-read smoke.
-It keeps feature semantics audit and leakage/split design required before training.
+Step 13BB materializes a first-four candidate allowlist smoke artifact from the Step 13BA design preview.
+It writes CSV/JSON allowlist smoke rows only for the four eligible entries and preserves the unresolved `1A54/MDC` exclusion.
+It does not download raw data, read raw `.cif/.pdb/.mmcif/.sdf/.gz` text, use RDKit/Bio.PDB/gemmi/gzip/torch, instantiate models, compute loss, or train.
+It does not write sample_index, final_dataset, split assignments, or leakage matrix.
+The five canonical masks remain unchanged, including `scaffold_only / B3`.
+Feature semantics audit and leakage/split design remain required before formal training, fine-tuning, or real parameter updates.
 
-input_metadata_path: `data/derived/covalent_small/covapie_candidate_allowlist_materialization_smoke_v0/input/covapie_candidate_metadata_for_allowlist.csv`
-input_metadata_exists: `False`
-input_metadata_read: `False`
-input_metadata_row_count: `0`
-included_candidate_count: `0`
-materialization_status: `blocked_due_to_missing_explicit_metadata`
-materialized_allowlist_written: `False`
-materialized_allowlist_path: ``
-blocked_header_only_written: `True`
-blocked_header_only_path: `data/derived/covalent_small/covapie_candidate_allowlist_materialization_smoke_v0/covapie_batch_smoke_candidate_allowlist_materialized_blocked_header_only.csv`
-candidate_rows_materialized: `False`
-candidate_allowlist_created: `False`
-ready_for_covapie_batch_scale_raw_read_smoke: `False`
+Materialized allowlist entry IDs:
+- `allowlist::covpdb::1A3B::T29::H:SER195:OG-B`
+- `allowlist::covpdb::1A3E::T16::H:SER195:OG-B`
+- `allowlist::covpdb::1A46::00K::H:SER195:OG-C`
+- `allowlist::covpdb::1A5G::00L::H:SER195:OG-C`
+
+materialized_allowlist_row_count: `4`
+materialized_allowlist_column_count: `25`
+candidate_allowlist_materialized: `True`
+candidate_allowlist_materialized_current_step: `True`
+candidate_metadata_materialized_current_step: `False`
+ready_for_covapie_candidate_allowlist_qa_gate: `True`
+ready_for_covapie_batch_scale_raw_read_design_gate: `False`
 ready_for_training: `False`
 ready_to_train_now: `False`
-feature_semantics_audit_required_before_training: `True`
-leakage_split_design_required_before_training: `True`
-recommended_next_step: `provide_explicit_candidate_metadata_for_allowlist`
-blocking_reasons: `['missing_explicit_candidate_metadata']`
+recommended_next_step: `covapie_candidate_allowlist_qa_gate`
+blocking_reasons: `[]`

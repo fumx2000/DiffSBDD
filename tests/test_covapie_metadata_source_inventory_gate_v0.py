@@ -56,9 +56,19 @@ def test_check_script_passes_and_validates_step13ah_precondition() -> None:
     assert manifest["previous_stage"] == gate.PREVIOUS_STAGE
     assert manifest["project_name"] == "CovaPIE"
     assert manifest["step13ah_missing_metadata_materialization_smoke_validated"] is True
+    assert manifest["ignored_newer_or_unrelated_stage_manifest_count"] == 1
     assert manifest["naming_convention_validated"] is True
     assert manifest["all_checks_passed"] is True
     assert manifest["blocking_reasons"] == []
+
+
+def test_step13bb_manifest_is_ignored_as_newer_or_unrelated_precondition() -> None:
+    step13bb_manifest = json.loads(gate.STEP13AH_MANIFEST_JSON.read_text(encoding="utf-8"))
+    assert step13bb_manifest["stage"] == "covapie_candidate_allowlist_materialization_smoke_v0"
+    assert step13bb_manifest["previous_stage"] == "covapie_candidate_allowlist_materialization_design_gate_v0"
+    assert step13bb_manifest["candidate_allowlist_materialized"] is True
+    assert gate.ignored_newer_or_unrelated_stage_manifest_count_v0() == 1
+    assert gate.validate_step13ah_precondition_v0() is True
 
 
 def test_step13ag_template_and_covapie_naming_and_no_runtime_imports() -> None:

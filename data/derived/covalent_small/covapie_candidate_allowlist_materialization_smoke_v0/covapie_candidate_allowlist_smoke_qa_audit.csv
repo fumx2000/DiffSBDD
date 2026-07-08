@@ -1,0 +1,5 @@
+allowlist_entry_id,candidate_metadata_id,pdb_id,het_code,row_index,column_count,schema_column_order_matches,allowlist_id_matches_design_preview,allowlist_id_deterministic,candidate_metadata_id_matches,pair_is_allowed,pair_is_not_unresolved,source_candidate_metadata_found,source_candidate_preview_found,source_step13az_qa_found,required_boolean_fields_valid,ready_for_training_false,qa_audit_passed,qa_comment
+allowlist::covpdb::1A3B::T29::H:SER195:OG-B,covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,1,25,True,True,True,True,True,True,True,True,True,True,True,True,allowlist_smoke_row_valid
+allowlist::covpdb::1A3E::T16::H:SER195:OG-B,covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,2,25,True,True,True,True,True,True,True,True,True,True,True,True,allowlist_smoke_row_valid
+allowlist::covpdb::1A46::00K::H:SER195:OG-C,covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,3,25,True,True,True,True,True,True,True,True,True,True,True,True,allowlist_smoke_row_valid
+allowlist::covpdb::1A5G::00L::H:SER195:OG-C,covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,4,25,True,True,True,True,True,True,True,True,True,True,True,True,allowlist_smoke_row_valid
