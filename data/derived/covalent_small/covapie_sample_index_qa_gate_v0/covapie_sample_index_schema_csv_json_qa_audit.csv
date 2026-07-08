@@ -1,0 +1,13 @@
+qa_item,expected_status,observed_status,schema_csv_json_qa_passed,qa_comment
+csv_row_count,20,20,True,schema_csv_json_validated
+csv_column_count,31,31,True,schema_csv_json_validated
+json_row_count,20,20,True,schema_csv_json_validated
+json_records_are_dicts,list_of_dicts,list_of_dicts,True,schema_csv_json_validated
+csv_column_order_matches_contract,schema_contract_order,"[""sample_id"", ""extracted_event_id"", ""allowlist_entry_id"", ""candidate_metadata_id"", ""pdb_id"", ""het_code"", ""chain_id"", ""residue_name"", ""residue_index"", ""residue_atom_name"", ""ligand_atom_name"", ""covalent_bond_atom_pair"", ""covalent_bond_distance_angstrom"", ""protein_pocket_atom_table_path"", ""ligand_atom_table_path"", ""protein_atom_row_count_for_event"", ""ligand_atom_row_count_for_event"", ""mask_task_name"", ""mask_task_alias"", ""mask_task_semantic_description"", ""conditioning_mode"", ""covalent_residue_conditioned"", ""scaffold_linker_warhead_annotation_status"", ""warhead_type_label_status"", ""ligand_residue_atom_pair_label_status"", ""pre_post_geometry_label_status"", ""feature_semantics_audit_required_before_training"", ""leakage_split_design_required_before_training"", ""split_assignment_status"", ""sample_index_materialized_current_step"", ""ready_for_training""]",True,schema_csv_json_validated
+json_field_order_matches_contract,schema_contract_order,"[""sample_id"", ""extracted_event_id"", ""allowlist_entry_id"", ""candidate_metadata_id"", ""pdb_id"", ""het_code"", ""chain_id"", ""residue_name"", ""residue_index"", ""residue_atom_name"", ""ligand_atom_name"", ""covalent_bond_atom_pair"", ""covalent_bond_distance_angstrom"", ""protein_pocket_atom_table_path"", ""ligand_atom_table_path"", ""protein_atom_row_count_for_event"", ""ligand_atom_row_count_for_event"", ""mask_task_name"", ""mask_task_alias"", ""mask_task_semantic_description"", ""conditioning_mode"", ""covalent_residue_conditioned"", ""scaffold_linker_warhead_annotation_status"", ""warhead_type_label_status"", ""ligand_residue_atom_pair_label_status"", ""pre_post_geometry_label_status"", ""feature_semantics_audit_required_before_training"", ""leakage_split_design_required_before_training"", ""split_assignment_status"", ""sample_index_materialized_current_step"", ""ready_for_training""]",True,schema_csv_json_validated
+csv_json_content_identical,normalized_equal,normalized_equal,True,schema_csv_json_validated
+no_extra_csv_columns,no_extra,[],True,schema_csv_json_validated
+no_extra_json_fields,no_extra,[],True,schema_csv_json_validated
+no_missing_fields,none_missing,[],True,schema_csv_json_validated
+all_materialized_previous_step,true,"[""True""]",True,schema_csv_json_validated
+all_ready_for_training_false,false,"[""False""]",True,schema_csv_json_validated
