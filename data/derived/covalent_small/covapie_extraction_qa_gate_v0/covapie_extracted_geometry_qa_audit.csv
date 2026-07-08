@@ -1,0 +1,5 @@
+extracted_event_id,pdb_id,het_code,residue_atom_xyz_present,ligand_atom_xyz_present,recomputed_distance_angstrom,event_table_distance_angstrom,distance_absolute_delta,distance_recompute_matches_event_table,distance_plausibility_status,geometry_qa_passed,qa_comment
+extracted_event::covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,True,True,1.601,1.601,0.000350,True,plausible_covalent_distance,True,geometry_validated
+extracted_event::covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,True,True,1.572,1.572,0.000226,True,plausible_covalent_distance,True,geometry_validated
+extracted_event::covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,True,True,1.776,1.776,0.000096,True,plausible_covalent_distance,True,geometry_validated
+extracted_event::covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,True,True,1.821,1.821,0.000172,True,plausible_covalent_distance,True,geometry_validated
