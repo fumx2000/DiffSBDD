@@ -1,0 +1,9 @@
+group_type,group_id,related_split_unit_id,sample_rows_in_group,unique_split_unit_count,mask_task_count,all_rows_bound_to_one_unit,no_row_level_split_assignment,no_real_split_assignment_written,group_integrity_qa_passed,qa_comment
+parent_event,extracted_event::covpdb::1A3B::T29::H:SER195:OG-B,COVAPIE_SPLIT_UNIT_SMOKE_000001,5,1,5,True,True,True,True,parent event group remains bound to one split unit
+parent_event,extracted_event::covpdb::1A3E::T16::H:SER195:OG-B,COVAPIE_SPLIT_UNIT_SMOKE_000002,5,1,5,True,True,True,True,parent event group remains bound to one split unit
+parent_event,extracted_event::covpdb::1A46::00K::H:SER195:OG-C,COVAPIE_SPLIT_UNIT_SMOKE_000003,5,1,5,True,True,True,True,parent event group remains bound to one split unit
+parent_event,extracted_event::covpdb::1A5G::00L::H:SER195:OG-C,COVAPIE_SPLIT_UNIT_SMOKE_000004,5,1,5,True,True,True,True,parent event group remains bound to one split unit
+candidate_metadata,covpdb::1A3B::T29::H:SER195:OG-B,COVAPIE_SPLIT_UNIT_SMOKE_000001,5,1,5,True,True,True,True,candidate metadata group remains bound to one split unit
+candidate_metadata,covpdb::1A3E::T16::H:SER195:OG-B,COVAPIE_SPLIT_UNIT_SMOKE_000002,5,1,5,True,True,True,True,candidate metadata group remains bound to one split unit
+candidate_metadata,covpdb::1A46::00K::H:SER195:OG-C,COVAPIE_SPLIT_UNIT_SMOKE_000003,5,1,5,True,True,True,True,candidate metadata group remains bound to one split unit
+candidate_metadata,covpdb::1A5G::00L::H:SER195:OG-C,COVAPIE_SPLIT_UNIT_SMOKE_000004,5,1,5,True,True,True,True,candidate metadata group remains bound to one split unit

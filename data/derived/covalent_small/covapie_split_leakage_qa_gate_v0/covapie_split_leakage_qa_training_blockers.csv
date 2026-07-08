@@ -1,0 +1,16 @@
+training_blocker_item,required_status,current_step_status,training_blocker_passed,qa_comment
+no_real_train_val_test_split,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+no_split_assignments,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+no_leakage_matrix,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+no_final_dataset,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+no_dataloader_smoke,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+no_training,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+smoke_size_too_small_for_real_split,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+scaffold_linker_warhead_annotation_required,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+warhead_type_label_required,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+ligand_residue_atom_pair_label_audit_required,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+pre_post_geometry_label_audit_required,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+feature_semantics_audit_required,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+feature_semantics_fully_audited_claimed_false,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+leakage_split_qa_required_before_final_dataset,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
+ready_for_training_false,blocking_or_false_until_future_gate,passed,True,training remains blocked after split/leakage QA gate
