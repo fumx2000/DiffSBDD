@@ -1,0 +1,11 @@
+tensor_policy_smoke_item,design_contract_row_found,observed_shape_or_dtype_evidence,checkpoint_compatibility_risk,current_step_tensorized,ready_for_actual_tensor_smoke,tensor_policy_smoke_passed,qa_comment
+coordinate_dtype_candidate,True,"coordinate_like_columns=['x', 'y', 'z'];values_read_as_csv_strings",medium,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+coordinate_shape_candidate,True,protein_rows=1071;ligand_rows=149;coordinate_columns=3,medium,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+atom_feature_dtype_candidate,True,categorical candidate columns observed as CSV strings,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+atom_feature_shape_candidate,True,protein_headers=23;ligand_headers=23,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+mask_selector_dtype_candidate,True,mask_task_name and mask_task_alias observed as metadata selectors,medium,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+mask_boolean_dtype_candidate,True,boolean mask tensors not written; group label smoke still required,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+auxiliary_label_dtype_candidate,True,auxiliary label dtype blocked pending label semantics,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+variable_size_collate_policy_candidate,True,variable-size row counts observed in metadata preview,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+batch_index_policy_candidate,True,getitem_index observed in metadata preview without tensorization,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created
+tensor_shape_dtype_resolution_smoke_required,True,policy smoke complete without tensor artifacts,high,False,False,True,shape/dtype evidence is CSV-level only; no tensor or numpy object created

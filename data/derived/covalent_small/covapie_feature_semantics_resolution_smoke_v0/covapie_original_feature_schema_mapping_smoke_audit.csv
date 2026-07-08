@@ -1,0 +1,13 @@
+mapping_smoke_item,design_contract_row_found,static_evidence_rechecked,evidence_summary,training_final_status,actual_tensor_smoke_allowed,mapping_smoke_passed,qa_comment
+original_dataset_py_feature_symbols,True,True,bytes=2693,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_prepare_crossdocked_feature_symbols,True,True,bytes=1896,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_lightning_batch_key_symbols,True,True,bytes=38178,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_equivariant_diffusion_feature_symbols,True,True,bytes=103798,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_atom_encoder_candidate_symbols,True,True,lightning_modules.py:88;equivariant_diffusion:45;src/covalent_ext:414,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_atom_decoder_candidate_symbols,True,True,lightning_modules.py:31;equivariant_diffusion:11;src/covalent_ext:82,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_residue_encoder_candidate_symbols,True,True,lightning_modules.py:25;equivariant_diffusion:48;src/covalent_ext:1185,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_feature_dimension_candidate_symbols,True,True,lightning_modules.py:49;equivariant_diffusion:138;src/covalent_ext:36,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_one_hot_feature_candidate_symbols,True,True,lightning_modules.py:53;equivariant_diffusion:53;src/covalent_ext:371,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_unknown_atom_candidate_symbols,True,True,equivariant_diffusion:18;src/covalent_ext:1623,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_feature_schema_mapping_not_training_final,True,True,feature_semantics_known_for_training=false,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
+original_checkpoint_compatibility_requires_static_mapping,True,True,checkpoint compatibility requires static mapping before runtime smoke,not_training_final,False,True,static evidence supports candidate mapping only; no training-final claim
