@@ -1,0 +1,9 @@
+compatibility_item,expected_status,observed_status,checkpoint_loaded,model_forward_called,original_dataloader_modified,compatibility_smoke_passed,qa_comment
+original_diffsbbd_model_unchanged,no_diff,no_diff,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+original_diffsbbd_dataloader_unchanged,no_diff,no_diff,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+original_loss_unchanged,no_diff,no_diff,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+checkpoint_path_reference_only,reference_only,reference_only,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+checkpoint_not_loaded,false,false,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+no_model_forward,false,false,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+covapie_adapter_future_optional,design_future_only,design_future_only,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
+checkpoint_compatibility_preserved_current_step,true,true,False,False,False,True,checkpoint compatibility preserved because no checkpoint/model/dataloader runtime path executed
