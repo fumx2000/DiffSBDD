@@ -1,0 +1,13 @@
+blocker_item,expected_status,observed_status,preserved_in_all_getitems,blocker_runtime_qa_passed,qa_comment
+feature_semantics_known_for_training_false,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+unknown_atom_feature_policy_finalized_for_training_false,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+ready_for_training_false,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_torch_import,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_tensor_creation,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_numpy_output,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_checkpoint_load,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_model_forward,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_loss_compute,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_actual_dataloader_smoke,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_real_dataloader,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary
+no_training,false,false,True,True,blocker/runtime QA preserves no torch/numpy/checkpoint/model/loss/training boundary

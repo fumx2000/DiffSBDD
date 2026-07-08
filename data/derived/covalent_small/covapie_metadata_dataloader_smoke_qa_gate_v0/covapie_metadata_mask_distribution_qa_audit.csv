@@ -1,0 +1,6 @@
+mask_task_name,mask_task_alias,observed_row_count,expected_row_count,observed_unique_event_count,expected_unique_event_count,mask_task_name_is_source_of_truth,mask_task_alias_is_display_only,mask_distribution_qa_passed,qa_comment
+warhead_only,A,4,4,4,4,True,True,True,mask distribution QA preserves canonical five masks
+linker_plus_warhead,B,4,4,4,4,True,True,True,mask distribution QA preserves canonical five masks
+scaffold_plus_warhead,B2,4,4,4,4,True,True,True,mask distribution QA preserves canonical five masks
+scaffold_only,B3,4,4,4,4,True,True,True,mask distribution QA preserves canonical five masks
+scaffold_plus_linker_plus_warhead,C,4,4,4,4,True,True,True,mask distribution QA preserves canonical five masks

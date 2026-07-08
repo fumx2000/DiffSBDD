@@ -1,0 +1,9 @@
+shim_api_item,expected_status,observed_status,shim_api_qa_passed,qa_comment
+shim_class_exists,class exists,class importable,True,metadata-only shim API QA passed
+shim_no_torch_dataset_inheritance,no torch Dataset inheritance,pure Python class,True,metadata-only shim API QA passed
+shim_len_returns_20,20,20,True,metadata-only shim API QA passed
+shim_getitem_returns_dict,dict,dict,True,metadata-only shim API QA passed
+shim_getitem_first_middle_last_valid,indices 0/10/19 valid,valid,True,metadata-only shim API QA passed
+shim_out_of_range_raises_index_error,IndexError,IndexError checked,True,metadata-only shim API QA passed
+shim_no_tensor_or_numpy_values,no torch or numpy values,metadata only,True,metadata-only shim API QA passed
+shim_no_collate_or_dataloader,no collate_fn or dataloader,no collate/DataLoader,True,metadata-only shim API QA passed

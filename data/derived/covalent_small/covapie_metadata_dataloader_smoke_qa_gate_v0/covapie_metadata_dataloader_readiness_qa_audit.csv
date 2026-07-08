@@ -1,0 +1,9 @@
+readiness_item,expected_status,observed_status,readiness_qa_passed,qa_comment
+metadata_dataloader_smoke_validated,true,True,True,metadata smoke QA passed
+metadata_dataloader_smoke_preview_not_rewritten_current_step,true,True,True,preview remains previous-step artifact
+actual_dataloader_smoke_still_blocked,true,True,True,actual dataloader smoke blocked
+real_dataloader_still_blocked,true,True,True,real dataloader blocked
+torch_tensor_checkpoint_model_training_still_blocked,true,True,True,runtime/training blocked
+feature_semantics_training_blockers_preserved,true,True,True,feature semantics blockers preserved
+ready_for_actual_dataloader_design_gate,true,True,True,design gate allowed next
+ready_for_training_false,true,True,True,training remains blocked
