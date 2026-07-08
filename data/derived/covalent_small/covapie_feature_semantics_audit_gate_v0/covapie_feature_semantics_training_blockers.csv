@@ -1,0 +1,14 @@
+blocker_item,current_status,required_before_training,blocker_preserved,blocker_comment,training_blocker_passed
+feature_semantics_known_for_training_false,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+unknown_atom_feature_policy_not_finalized,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+scaffold_linker_warhead_annotation_required,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+warhead_type_label_required,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+ligand_residue_atom_pair_label_audit_required,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+pre_post_geometry_label_audit_required,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+pre_covalent_geometry_not_materialized,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+final_dataset_not_written,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+dataloader_smoke_not_run,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+no_training_current_step,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+ready_for_training_false,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+step12d_smoke_not_final_feature_semantics_audit,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True
+leakage_split_qa_completed_but_training_still_blocked,preserved_current_step,True,True,feature semantics audit documents the blocker without enabling training,True

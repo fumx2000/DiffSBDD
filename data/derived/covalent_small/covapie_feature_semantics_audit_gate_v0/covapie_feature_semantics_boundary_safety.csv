@@ -1,0 +1,22 @@
+boundary_item,current_step_status,boundary_safety_passed,qa_comment
+feature_semantics_audit_gate,executed_audit_gate_only,True,feature semantics audit gate boundary respected
+read_step13bl_qa_artifacts,executed_derived_csv_json_read_only,True,feature semantics audit gate boundary respected
+read_step13bk_smoke_artifacts,executed_derived_csv_json_read_only,True,feature semantics audit gate boundary respected
+read_step13bh_sample_index,executed_derived_csv_json_read_only,True,feature semantics audit gate boundary respected
+static_source_text_read,executed_static_text_read_only,True,feature semantics audit gate boundary respected
+final_dataset,blocked_current_step,True,feature semantics audit gate boundary respected
+new_sample_index,blocked_current_step,True,feature semantics audit gate boundary respected
+split_assignments,blocked_current_step,True,feature semantics audit gate boundary respected
+leakage_matrix,blocked_current_step,True,feature semantics audit gate boundary respected
+dataloader_smoke,blocked_current_step,True,feature semantics audit gate boundary respected
+training,blocked_current_step,True,feature semantics audit gate boundary respected
+raw_file_content_read,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+raw_cif_mmcif_sdf_pdb_gzip_read,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+mmcif_parse,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+atom_site_scan,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+struct_conn_scan,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+coordinate_extraction,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+network_access,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+raw_download,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+rdkit_biopdb_gemmi,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
+torch_model_training,not_executed_or_not_allowed,True,feature semantics audit gate boundary respected
