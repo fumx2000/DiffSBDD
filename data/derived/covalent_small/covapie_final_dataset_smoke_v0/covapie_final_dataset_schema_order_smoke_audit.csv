@@ -1,0 +1,2 @@
+audit_item,expected_status,observed_status,schema_field_count,schema_order_matches_contract,csv_json_consistent,schema_order_smoke_passed,qa_comment
+final_dataset_smoke_preview_schema_order,20_rows_45_fields_schema_order_matches_step13bn,20_rows_45_fields,45,True,True,True,CSV/JSON smoke preview normalized content and schema order validated
