@@ -1,0 +1,11 @@
+readiness_item,expected_status,observed_status,readiness_qa_passed,qa_comment
+dataloader_interface_smoke_preview_validated,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+actual_dataloader_smoke_not_written,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+real_dataloader_not_written,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+original_dataloader_not_modified,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+no_torch_tensor_checkpoint_model_loss_training,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+feature_semantics_known_for_training_false,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+unknown_atom_feature_policy_finalized_for_training_false,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+ready_for_dataloader_smoke_design_gate,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+actual_dataloader_smoke_still_blocked,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
+ready_for_training_false,true,True,True,"QA gate allows dataloader smoke design gate next, not actual dataloader smoke or training"
