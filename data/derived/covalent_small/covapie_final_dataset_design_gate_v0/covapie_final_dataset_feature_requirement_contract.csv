@@ -1,0 +1,14 @@
+requirement_name,current_status,required_for_final_dataset_smoke,required_for_training,blocker_before_training,requirement_contract_passed,design_comment
+feature_semantics_audit_completed,completed_current_step,True,True,False,True,requirement is explicit; blockers are preserved rather than removed
+feature_semantics_known_for_training_false,false_preserved,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+unknown_atom_feature_policy_not_finalized,false_preserved,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+canonical_masks_five_level_preserved,five_masks_preserved,True,True,False,True,requirement is explicit; blockers are preserved rather than removed
+b3_scaffold_only_preserved,scaffold_only_B3_preserved,True,True,False,True,requirement is explicit; blockers are preserved rather than removed
+scaffold_linker_warhead_annotation_required,required_before_training_not_materialized,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+warhead_type_label_required,required_before_training_not_materialized,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+ligand_residue_atom_pair_label_audit_required,audit_required_before_training,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+pre_post_geometry_label_audit_required,audit_required_before_training,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+pre_covalent_geometry_not_materialized,not_materialized_current_step,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+split_leakage_qa_completed,completed_step13bl,True,True,False,True,requirement is explicit; blockers are preserved rather than removed
+final_dataset_design_only_current_step,design_only_not_materialized,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
+ready_for_training_false,false_preserved,True,True,True,True,requirement is explicit; blockers are preserved rather than removed
