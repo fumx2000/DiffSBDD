@@ -1,0 +1,5 @@
+allowlist_entry_id,candidate_metadata_id,pdb_id,het_code,row_index,column_count,schema_column_order_matches,allowlist_entry_id_deterministic,allowlist_entry_id_unique,candidate_metadata_id_unique,observed_pair_expected,unresolved_1a54_mdc_absent,all_required_fields_non_empty,ready_for_training_false,schema_identity_qa_passed,qa_comment
+allowlist::covpdb::1A3B::T29::H:SER195:OG-B,covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,1,25,True,True,True,True,True,True,True,True,True,schema_identity_valid
+allowlist::covpdb::1A3E::T16::H:SER195:OG-B,covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,2,25,True,True,True,True,True,True,True,True,True,schema_identity_valid
+allowlist::covpdb::1A46::00K::H:SER195:OG-C,covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,3,25,True,True,True,True,True,True,True,True,True,schema_identity_valid
+allowlist::covpdb::1A5G::00L::H:SER195:OG-C,covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,4,25,True,True,True,True,True,True,True,True,True,schema_identity_valid

@@ -1,0 +1,5 @@
+allowlist_entry_id,candidate_metadata_id,pdb_id,het_code,step13ba_candidate_preview_found,step13bb_qa_audit_found,step13ay_candidate_metadata_found,step13az_content_integrity_found,step13az_traceability_found,step13az_unresolved_exclusion_boundary_found,traceability_qa_passed,qa_comment
+allowlist::covpdb::1A3B::T29::H:SER195:OG-B,covpdb::1A3B::T29::H:SER195:OG-B,1A3B,T29,True,True,True,True,True,True,True,traceability_complete
+allowlist::covpdb::1A3E::T16::H:SER195:OG-B,covpdb::1A3E::T16::H:SER195:OG-B,1A3E,T16,True,True,True,True,True,True,True,traceability_complete
+allowlist::covpdb::1A46::00K::H:SER195:OG-C,covpdb::1A46::00K::H:SER195:OG-C,1A46,00K,True,True,True,True,True,True,True,traceability_complete
+allowlist::covpdb::1A5G::00L::H:SER195:OG-C,covpdb::1A5G::00L::H:SER195:OG-C,1A5G,00L,True,True,True,True,True,True,True,traceability_complete

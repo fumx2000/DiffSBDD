@@ -1,0 +1,2 @@
+consistency_item,csv_row_count,json_row_count,json_is_list_of_dicts,json_fields_match_schema,no_extra_json_fields,no_missing_json_fields,csv_json_content_identical,csv_json_consistency_qa_passed,blocking_reasons
+allowlist_csv_json_full_content,4,4,True,True,True,True,True,True,
