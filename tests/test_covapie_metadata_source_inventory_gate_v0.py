@@ -36,6 +36,18 @@ def _manifest() -> dict:
     return json.loads(gate.MANIFEST_JSON.read_text(encoding="utf-8"))
 
 
+def _git_diff_name_only(paths: list[Path]) -> list[str]:
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "--", *[path.as_posix() for path in paths]],
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    assert result.returncode == 0, result.stderr
+    return [line for line in result.stdout.splitlines() if line]
+
+
 def _imports_name(path: Path, name: str) -> bool:
     tree = ast.parse(path.read_text(encoding="utf-8"))
     for node in ast.walk(tree):
@@ -56,10 +68,26 @@ def test_check_script_passes_and_validates_step13ah_precondition() -> None:
     assert manifest["previous_stage"] == gate.PREVIOUS_STAGE
     assert manifest["project_name"] == "CovaPIE"
     assert manifest["step13ah_missing_metadata_materialization_smoke_validated"] is True
-    assert manifest["ignored_newer_or_unrelated_stage_manifest_count"] == 1
+    assert gate.ignored_newer_or_unrelated_stage_manifest_count_v0() == 1
     assert manifest["naming_convention_validated"] is True
     assert manifest["all_checks_passed"] is True
     assert manifest["blocking_reasons"] == []
+
+
+def test_check_script_is_read_only_for_tracked_inventory_artifacts() -> None:
+    watched_paths = [
+        gate.OUTPUT_ROOT,
+        gate.SUMMARY_MD,
+        Path("data/derived/covalent_small/external_metadata_index/covpdb/covpdb_complexes_metadata_manual.csv"),
+        Path("data/derived/covalent_small/covapie_sample_index_design_gate_v0"),
+        Path("data/derived/covalent_small/covapie_extraction_qa_gate_v0"),
+        Path("data/derived/covalent_small/covapie_batch_raw_read_extraction_smoke_v0"),
+    ]
+    assert _git_diff_name_only(watched_paths) == []
+    result = _ensure_outputs()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "covapie_metadata_source_inventory_gate_v0_passed" in result.stdout
+    assert _git_diff_name_only(watched_paths) == []
 
 
 def test_step13bb_manifest_is_ignored_as_newer_or_unrelated_precondition() -> None:
