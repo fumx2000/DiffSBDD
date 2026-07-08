@@ -1,0 +1,11 @@
+api_contract_item,future_minimal_behavior,expected_input,expected_output,current_step_implemented,allowed_in_next_metadata_smoke,blocked_before_actual_dataloader_smoke,api_contract_passed
+metadata_dataset_constructor,load interface preview rows into a lightweight Python object,interface preview CSV/JSON path,metadata-only dataset shim,False,True,actual adapter design,True
+metadata_dataset_len,__len__ returns 20,loaded rows,integer row count,False,True,actual adapter design,True
+metadata_dataset_getitem_by_index,__getitem__(index) returns one Python dict,integer index,"dict[str, metadata scalar/list]",False,True,actual adapter design,True
+metadata_dataset_getitem_required_identity_keys,include row/sample/event identity,interface preview row,identity metadata keys,False,True,actual adapter design,True
+metadata_dataset_getitem_required_path_refs,include derived table path references only,interface preview row,path reference strings,False,True,raw read gate,True
+metadata_dataset_getitem_mask_task_keys,include canonical mask task name and display alias,interface preview row,mask metadata keys,False,True,tensor mask gate,True
+metadata_dataset_getitem_conditioning_keys,include conditioning mode and covalent residue flag,interface preview row,conditioning metadata keys,False,True,feature semantics gate,True
+metadata_dataset_getitem_blocker_flags,include training blocker flags,interface/final preview rows,bool/string blocker metadata,False,True,feature semantics gate,True
+metadata_dataset_no_tensor_outputs,return no tensors,metadata rows,Python dict only,False,True,tensorization gate,True
+metadata_dataset_no_collate_current_step,do not implement collate in design or next metadata smoke,none,not implemented,False,True,actual dataloader gate,True

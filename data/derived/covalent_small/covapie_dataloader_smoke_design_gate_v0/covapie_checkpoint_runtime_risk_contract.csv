@@ -1,0 +1,9 @@
+checkpoint_risk_item,current_status,next_metadata_smoke_status,risk_level,required_future_gate,checkpoint_runtime_risk_passed
+checkpoint_path_reference_only,path refs only,path refs only,medium,checkpoint compatibility gate,True
+checkpoint_not_loaded_current_step,not loaded,not loaded,high,checkpoint runtime gate,True
+checkpoint_not_loaded_next_metadata_smoke,not loaded,must remain not loaded,high,checkpoint runtime gate,True
+no_model_forward_current_step,not called,not called,high,model runtime gate,True
+no_model_forward_next_metadata_smoke,not called,must remain not called,high,model runtime gate,True
+original_diffsbbd_model_unchanged,no diff,no diff,high,model adapter design gate,True
+original_diffsbbd_dataloader_unchanged,no diff,no diff,high,dataloader adapter design gate,True
+future_checkpoint_compatibility_gate_required_before_model_runtime,required,required,high,checkpoint compatibility gate,True

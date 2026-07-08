@@ -1,0 +1,15 @@
+runtime_boundary_item,future_allowed_action,current_step_status,allowed_in_next_metadata_smoke,blocked_in_next_metadata_smoke,required_before_actual_dataloader_smoke,runtime_boundary_contract_passed
+future_smoke_reads_interface_preview,read Step 13BR interface preview CSV/JSON,design_only_not_executed,True,False,interface preview QA must pass,True
+future_smoke_reads_final_dataset_preview,read Step 13BO final dataset preview CSV/JSON,design_only_not_executed,True,False,final dataset smoke QA must pass,True
+future_smoke_constructs_metadata_dataset_shim,construct tiny metadata-only Dataset-like shim under src/covalent_ext,design_only_not_executed,True,False,additive shim only,True
+future_smoke_validates_len_getitem,validate len and getitem on Python metadata records,design_only_not_executed,True,False,metadata-only smoke design,True
+future_smoke_validates_python_dict_records,validate Python dict records with string/list/scalar metadata,design_only_not_executed,True,False,no tensor outputs,True
+future_smoke_no_torch_import,do not import torch,design_only_not_executed,False,True,actual torch gate,True
+future_smoke_no_tensor_creation,do not create tensors,design_only_not_executed,False,True,feature semantics and tensorization gate,True
+future_smoke_no_checkpoint_load,do not load checkpoints,design_only_not_executed,False,True,checkpoint runtime gate,True
+future_smoke_no_model_forward,do not call model forward,design_only_not_executed,False,True,model runtime gate,True
+future_smoke_no_loss_or_training,do not compute loss/backward/optimizer/trainer.fit,design_only_not_executed,False,True,training gate,True
+future_smoke_no_original_dataloader_modify,do not modify dataset.py or data/prepare_crossdocked.py,design_only_not_executed,False,True,adapter design gate,True
+future_smoke_no_raw_file_read,do not read raw structure files,design_only_not_executed,False,True,raw-read gate,True
+feature_semantics_blockers_preserved,carry feature semantics blockers into smoke output,design_only_not_executed,True,False,feature semantics audit before training,True
+actual_torch_dataloader_still_blocked,actual torch DataLoader smoke remains blocked,design_only_not_executed,False,True,future actual dataloader smoke gate,True

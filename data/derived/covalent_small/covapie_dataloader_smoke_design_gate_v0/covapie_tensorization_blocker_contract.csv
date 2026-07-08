@@ -1,0 +1,11 @@
+blocker_item,current_status,blocked_until_step,required_future_audit,blocker_contract_passed,qa_comment
+no_torch_import_current_step,torch_imported=false,metadata smoke design only,none,True,tensorization blocker is explicit and preserved before actual dataloader or training
+no_torch_import_next_metadata_smoke,must remain false,actual dataloader smoke gate,torch runtime design,True,tensorization blocker is explicit and preserved before actual dataloader or training
+no_tensor_creation_current_step,torch_tensor_created=false,metadata smoke design only,none,True,tensorization blocker is explicit and preserved before actual dataloader or training
+no_tensor_creation_next_metadata_smoke,must remain false,actual tensorization gate,feature semantics audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+protein_atom_feature_semantics_not_training_final,feature semantics not training-final,feature semantics audit gate,feature_semantics_audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+ligand_atom_feature_semantics_not_training_final,feature semantics not training-final,feature semantics audit gate,feature_semantics_audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+unknown_atom_feature_policy_not_finalized,unknown_atom_feature_policy_finalized_for_training=false,feature semantics audit gate,unknown atom policy audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+scaffold_linker_warhead_labels_not_materialized,labels not training materialized,label materialization gate,group label audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+warhead_type_labels_not_materialized,warhead type labels not materialized,label materialization gate,warhead type audit,True,tensorization blocker is explicit and preserved before actual dataloader or training
+pre_covalent_geometry_not_materialized,pre-covalent geometry not materialized,geometry materialization gate,pre/post geometry audit,True,tensorization blocker is explicit and preserved before actual dataloader or training

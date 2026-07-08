@@ -1,0 +1,9 @@
+batch_collate_item,current_step_status,next_metadata_smoke_policy,actual_dataloader_requirement,blocker_before_actual_dataloader_smoke,batch_collate_design_passed
+no_collate_current_step,no collate implementation,design only,actual collate gate,True,True
+no_collate_next_metadata_smoke,no collate implementation,list[dict] only if needed,actual collate gate,True,True
+future_metadata_batch_list,design_only,may group Python dict records as list,batch schema gate,True,True
+future_variable_size_atom_tables_blocked,design_only,path/count metadata only,tensor padding/collate design,True,True
+future_mask_boolean_tensor_blocked,design_only,mask name only,tensor mask materialization,True,True
+future_auxiliary_label_batch_blocked,design_only,blocker metadata only,auxiliary label materialization,True,True
+future_real_collate_requires_torch_gate,design_only,blocked,torch/import/collate gate,True,True
+future_training_batch_blocked,design_only,blocked,training readiness gate,True,True
