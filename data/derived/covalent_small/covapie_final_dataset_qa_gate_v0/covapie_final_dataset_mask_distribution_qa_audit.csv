@@ -1,0 +1,6 @@
+mask_task_name,mask_task_alias,observed_row_count,observed_unique_event_count,observed_unique_split_unit_count,expected_row_count,expected_unique_event_count,expected_unique_split_unit_count,alias_matches_canonical,b3_scaffold_only_included_when_applicable,no_extra_mask_tasks,mask_distribution_qa_passed,qa_comment
+warhead_only,A,4,4,4,4,4,4,True,True,True,True,five canonical masks preserved in Step 13BO smoke preview
+linker_plus_warhead,B,4,4,4,4,4,4,True,True,True,True,five canonical masks preserved in Step 13BO smoke preview
+scaffold_plus_warhead,B2,4,4,4,4,4,4,True,True,True,True,five canonical masks preserved in Step 13BO smoke preview
+scaffold_only,B3,4,4,4,4,4,4,True,True,True,True,five canonical masks preserved in Step 13BO smoke preview
+scaffold_plus_linker_plus_warhead,C,4,4,4,4,4,4,True,True,True,True,five canonical masks preserved in Step 13BO smoke preview

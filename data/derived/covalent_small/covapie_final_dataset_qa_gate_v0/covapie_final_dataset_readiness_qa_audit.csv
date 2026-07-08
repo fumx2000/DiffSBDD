@@ -1,0 +1,11 @@
+readiness_item,expected_status,observed_status,readiness_qa_passed,qa_comment
+final_dataset_smoke_preview_validated,true,true,True,readiness boundary preserved
+real_final_dataset_not_written,true,true,True,readiness boundary preserved
+generic_final_dataset_not_written,true,true,True,readiness boundary preserved
+final_dataset_smoke_preview_not_rewritten_current_step,true,true,True,readiness boundary preserved
+dataloader_smoke_not_written,true,true,True,readiness boundary preserved
+training_artifacts_not_written,true,true,True,readiness boundary preserved
+feature_semantics_known_for_training_false,true,true,True,readiness boundary preserved
+unknown_atom_feature_policy_finalized_for_training_false,true,true,True,readiness boundary preserved
+ready_for_dataloader_interface_design_gate,true,true,True,final dataset QA permits dataloader interface design gate only
+ready_for_training_false,true,true,True,readiness boundary preserved
