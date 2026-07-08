@@ -1,0 +1,16 @@
+leakage_rule_id,leakage_rule_description,applies_current_smoke,required_before_real_split,enforcement_level,expected_current_status,design_contract_passed
+same_extracted_event_id_same_split,Rows sharing extracted_event_id must stay in one split.,True,True,hard_constraint,design_only_not_assigned,True
+same_candidate_metadata_id_same_split,Rows sharing candidate_metadata_id must stay in one split.,True,True,hard_constraint,design_only_not_assigned,True
+same_pdb_id_same_split,Rows sharing PDB ID default to one split.,True,True,hard_constraint,design_only_not_assigned,True
+same_allowlist_entry_id_same_split,Rows sharing allowlist entry must stay in one split.,True,True,hard_constraint,design_only_not_assigned,True
+same_ligand_het_code_flagged_for_review,Ligand HET code overlap is reviewed before real split.,True,True,review_constraint,flagged_for_future_review,True
+same_covalent_residue_site_flagged_for_review,Covalent residue site overlap is reviewed before real split.,True,True,review_constraint,flagged_for_future_review,True
+same_covalent_bond_atom_pair_flagged_for_review,Covalent bond atom pair overlap is reviewed before real split.,True,True,review_constraint,flagged_for_future_review,True
+same_scaffold_future_same_or_grouped_split,Future scaffold identity should be grouped or blocked across splits.,False,True,future_constraint,future_required,True
+same_warhead_type_future_balance_or_group,Future warhead type should be grouped or balanced.,False,True,future_constraint,future_required,True
+protein_sequence_cluster_future_group_split,Future protein sequence clusters should control homolog leakage.,False,True,future_constraint,future_required,True
+pocket_similarity_cluster_future_group_split,Future pocket similarity clusters should control pocket leakage.,False,True,future_constraint,future_required,True
+mask_task_rows_bound_to_parent_event,All five mask rows for one event stay with the parent event.,True,True,hard_constraint,design_only_not_assigned,True
+no_random_row_level_split_allowed,Random row-level split is forbidden.,True,True,hard_constraint,forbidden,True
+no_training_until_feature_semantics_audit,Training remains blocked until feature semantics audit.,True,True,hard_constraint,training_blocked,True
+no_training_until_leakage_split_gate,Training remains blocked until leakage/split gates finish.,True,True,hard_constraint,training_blocked,True
