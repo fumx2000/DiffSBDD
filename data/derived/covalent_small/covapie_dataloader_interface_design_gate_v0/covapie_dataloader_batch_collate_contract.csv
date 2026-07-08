@@ -1,0 +1,11 @@
+batch_contract_item,future_batch_content,future_collate_requirement,current_step_status,blocker_before_interface_smoke,blocker_before_real_dataloader,batch_collate_contract_passed
+batch_sample_identity,sample_id and final_dataset_row_id metadata,preserve per-sample identity list,design_only_not_implemented,False,True,True
+batch_split_unit_metadata,split_unit_id metadata,preserve split unit grouping for leakage checks,design_only_not_implemented,False,True,True
+batch_protein_context,future protein atom table tensors,variable-size protein graph collation future,design_only_not_implemented,False,True,True
+batch_ligand_context,future ligand atom table tensors,variable-size ligand graph collation future,design_only_not_implemented,False,True,True
+batch_covalent_residue_conditioning,conditioning metadata or tensors,preserve covalent residue conditioning,design_only_not_implemented,False,True,True
+batch_mask_task_selection,canonical mask task selector,one task selector per sample,design_only_not_implemented,False,True,True
+batch_auxiliary_labels_future,future auxiliary labels,blocked until label semantics finalized,design_only_not_implemented,True,True,True
+batch_geometry_metadata,covalent geometry metadata,audit coordinate frame and units before tensorization,design_only_not_implemented,False,True,True
+batch_training_targets_future,future training targets,blocked until real dataloader/training gates,design_only_not_implemented,True,True,True
+batch_collate_not_implemented_current_step,policy only,no collate implementation current step,design_only_not_implemented,False,True,True

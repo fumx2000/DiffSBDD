@@ -1,0 +1,9 @@
+compatibility_item,expected_status,observed_status,compatibility_risk_level,required_future_action,checkpoint_compatibility_contract_passed
+original_diffsbbd_model_unchanged,no_diff,no_diff,low,keep original model source untouched,True
+original_diffsbbd_dataloader_unchanged,no_diff,no_diff,low,future adapter must be additive,True
+original_loss_unchanged,no_diff,no_diff,low,future loss integration requires separate gate,True
+checkpoint_path_reference_only,reference_only,reference_only,medium,do not load checkpoint during design gate,True
+checkpoint_not_loaded,false,false,low,checkpoint load requires later smoke gate,True
+no_model_forward,false,false,low,forward requires later high-risk step,True
+covapie_adapter_future_optional,design_future_only,design_future_only,medium,adapter must preserve checkpoint compatibility,True
+checkpoint_compatibility_preserved_current_step,true,true,low,current step is design only,True

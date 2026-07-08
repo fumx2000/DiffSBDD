@@ -1,0 +1,11 @@
+planned_step,planned_action,allowed_inputs,allowed_outputs_future_step,blocked_outputs_current_step,required_preconditions,smoke_plan_passed
+read_dataloader_interface_design_gate,read design contracts,13BQ contracts,interface_smoke_audit_future,real_dataloader;training,13BQ all_checks_passed,True
+read_final_dataset_smoke_preview,read 20-row preview,13BO preview,interface_smoke_preview_future,preview rewrite,13BP QA passed,True
+validate_input_source_paths,validate source paths,input source contract,path_validation_audit_future,raw reads,no raw files,True
+validate_field_mapping_contract,validate 45 field mappings,field mapping contract,field_mapping_audit_future,tensorization,schema QA passed,True
+validate_mask_interface_contract,validate five masks,mask interface contract,mask_audit_future,new masks,B3 included,True
+validate_no_tensorization_current_step,assert no tensors,boundary contract,tensor_boundary_audit_future,pt/npz/checkpoints,torch remains blocked,True
+write_dataloader_interface_smoke_preview_future_step,future CSV/JSON interface smoke,derived contracts,dataloader_interface_smoke_preview_future,actual dataloader,13BQ passed,True
+dataloader_interface_qa_gate_future_step,QA future interface smoke,future interface smoke outputs,qa_artifacts_future,model forward,interface smoke passed,True
+real_dataloader_smoke_blocked_until_interface_qa,block actual dataloader smoke,QA gate result,none_current_step,actual dataloader smoke,interface QA required,True
+training_blocked_until_real_dataloader_and_training_gates,block training,future gates,none_current_step,training,feature semantics and leakage gates required,True
