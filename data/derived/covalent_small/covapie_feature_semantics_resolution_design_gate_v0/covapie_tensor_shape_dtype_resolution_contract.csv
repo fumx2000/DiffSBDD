@@ -1,0 +1,11 @@
+tensor_policy_item,proposed_dtype_or_shape_policy,current_status,ready_for_resolution_smoke,ready_for_actual_tensor_smoke,checkpoint_compatibility_risk,tensor_policy_passed,qa_comment
+coordinate_dtype_candidate,"float-like coordinate dtype candidate, no numpy/torch import",candidate_policy_only,True,False,medium,True,shape and dtype policy is design-only; no tensor current step
+coordinate_shape_candidate,N atoms by 3 coordinate shape candidate,candidate_policy_only,True,False,medium,True,shape and dtype policy is design-only; no tensor current step
+atom_feature_dtype_candidate,categorical/int-like or one-hot candidate after schema resolution,candidate_policy_only,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+atom_feature_shape_candidate,N atoms by F feature shape candidate after vocab resolution,candidate_policy_only,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+mask_selector_dtype_candidate,string selector remains metadata-only until resolved,candidate_policy_only,True,False,medium,True,shape and dtype policy is design-only; no tensor current step
+mask_boolean_dtype_candidate,boolean mask dtype candidate after group labels exist,blocked_until_group_label_smoke,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+auxiliary_label_dtype_candidate,auxiliary labels require semantics and loss contract first,blocked_until_label_resolution_smoke,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+variable_size_collate_policy_candidate,future collate policy must keep variable-size samples explicit,candidate_policy_only,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+batch_index_policy_candidate,future batch index policy must be checkpoint-compatible,candidate_policy_only,True,False,high,True,shape and dtype policy is design-only; no tensor current step
+tensor_shape_dtype_resolution_smoke_required,future smoke validates shape/dtype policy without tensor artifacts,requires_future_smoke,True,False,high,True,shape and dtype policy is design-only; no tensor current step
