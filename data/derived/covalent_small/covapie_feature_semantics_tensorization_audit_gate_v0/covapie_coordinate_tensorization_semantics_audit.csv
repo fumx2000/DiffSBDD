@@ -1,0 +1,9 @@
+coordinate_item,source_fields_or_evidence,observed_status,future_tensor_key,semantics_confidence,current_step_tensorized,coordinate_audit_passed,qa_comment
+protein_xyz_source_path_refs,protein_pocket_atom_table_path,paths_present=True,protein_xyz,medium,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+ligand_xyz_source_path_refs,ligand_atom_table_path,paths_present=True,ligand_xyz,medium,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+coordinate_unit_angstrom_candidate,coordinate_unit,angstrom,coordinate_unit,medium,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+coordinate_frame_current_smoke,coordinate_frame_status,structure_coordinate_frame_inherited_not_finalized,coordinate_frame_status,medium,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+protein_atom_row_counts_available,protein_atom_row_count_for_event,positive_counts=True,num_protein_atoms,high,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+ligand_atom_row_counts_available,ligand_atom_row_count_for_event,positive_counts=True,num_ligand_atoms,high,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+coordinate_tensor_candidate_future,derived atom table refs and row counts,candidate_for_future_design_only,protein_xyz;ligand_xyz,medium,False,True,coordinate source is a future tensorization candidate only; no tensor current step
+coordinate_tensorization_still_requires_actual_smoke,current execution boundary,not_tensorized_current_step,protein_xyz;ligand_xyz,high,False,True,coordinate source is a future tensorization candidate only; no tensor current step

@@ -1,0 +1,11 @@
+atom_feature_item,source_or_evidence,observed_status,semantics_status,blocks_actual_tensor_dataloader_smoke,blocks_training,atom_feature_audit_passed,qa_comment
+protein_atom_feature_source_not_training_final,Step 13BM feature semantics blockers,not_training_final,blocked,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+ligand_atom_feature_source_not_training_final,Step 13BM feature semantics blockers,not_training_final,blocked,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+atom_element_symbol_semantics_partial,derived metadata/static feature search,partial_evidence_only,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+atom_type_encoder_mapping_not_locked,static atom encoder symbol search,not_locked,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+aromatic_formal_charge_hybridization_unknown_or_not_final,feature schema audit,unknown_or_not_final,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+residue_feature_semantics_not_final,feature semantics audit,not_training_final,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+ligand_feature_schema_not_final,feature semantics audit,not_training_final,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+protein_feature_schema_not_final,feature semantics audit,not_training_final,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+feature_dimension_not_training_final,static feature dimension symbol search,not_training_final,not_training_final,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke
+atom_feature_tensorization_blocked,current gate boundary,blocked_current_step,blocked,True,True,True,atom feature semantics remain blocked before actual tensor dataloader smoke

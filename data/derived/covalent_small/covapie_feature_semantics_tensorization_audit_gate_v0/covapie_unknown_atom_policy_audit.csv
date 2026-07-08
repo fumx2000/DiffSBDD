@@ -1,0 +1,9 @@
+unknown_policy_item,observed_status,required_resolution,blocks_actual_tensor_dataloader_smoke,blocks_training,unknown_policy_audit_passed,qa_comment
+unknown_atom_feature_policy_present_as_blocker,blocker_present,define explicit unknown atom policy,True,True,True,unknown atom policy remains unresolved for tensorization and training
+unknown_atom_feature_policy_finalized_for_training_false,unknown_atom_feature_policy_finalized_for_training=false,finalize unknown atom policy,True,True,True,unknown atom policy remains unresolved for tensorization and training
+unknown_element_handling_not_final,not_final,resolve unknown element handling,True,True,True,unknown atom policy remains unresolved for tensorization and training
+uncommon_ligand_atom_handling_not_final,not_final,resolve uncommon ligand atom policy,True,True,True,unknown atom policy remains unresolved for tensorization and training
+protein_unknown_residue_handling_not_final,not_final,resolve unknown residue policy,True,True,True,unknown atom policy remains unresolved for tensorization and training
+covalent_adduct_atom_mapping_unknown_policy_not_final,not_final,resolve covalent adduct atom mapping policy,True,True,True,unknown atom policy remains unresolved for tensorization and training
+unknown_policy_blocks_actual_tensor_smoke,blocked,unknown policy resolution gate,True,True,True,unknown atom policy remains unresolved for tensorization and training
+unknown_policy_blocks_training,blocked,formal training feature semantics audit,True,True,True,unknown atom policy remains unresolved for tensorization and training

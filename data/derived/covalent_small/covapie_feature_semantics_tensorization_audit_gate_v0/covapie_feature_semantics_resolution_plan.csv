@@ -1,0 +1,9 @@
+resolution_item,required_action,allowed_inputs_future_step,expected_future_output,blocked_outputs_current_step,resolution_plan_passed
+resolve_original_diffsbbd_feature_schema,map original DiffSBDD feature keys/dimensions without modifying source,static source refs; existing checkpoint compatibility evidence,feature schema mapping contract,actual dataloader smoke; tensors; training,True
+resolve_covapie_ligand_atom_feature_schema,define ligand atom feature schema and dtype policy,derived ligand atom tables; feature semantics audits,ligand feature schema contract,actual dataloader smoke; training,True
+resolve_covapie_protein_atom_feature_schema,define protein atom/residue feature schema and dtype policy,derived protein atom tables; feature semantics audits,protein feature schema contract,actual dataloader smoke; training,True
+resolve_unknown_atom_policy,define unknown/uncommon atom and residue handling,static searches; derived atom tables,unknown atom policy contract,actual dataloader smoke; training,True
+resolve_mask_group_label_materialization,materialize scaffold/linker/warhead group labels in a separate gate,mask contracts; final dataset smoke preview,group label materialization contract,boolean mask tensors; training,True
+resolve_auxiliary_label_semantics,settle warhead/covalent-pair/geometry auxiliary labels,feature semantics artifacts; final dataset smoke preview,auxiliary label semantics contract,loss targets; training,True
+resolve_tensor_shape_dtype_policy,"define tensor shape, dtype, padding/collate policy",feature schema contracts; coordinate candidates,tensor shape dtype policy contract,actual DataLoader tensors; training,True
+rerun_actual_dataloader_design_after_resolution,rerun/update actual dataloader design after blockers resolve,resolved feature semantics contracts,updated adapter smoke readiness contract,training,True
