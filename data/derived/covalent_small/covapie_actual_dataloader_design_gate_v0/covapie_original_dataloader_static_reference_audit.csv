@@ -1,0 +1,11 @@
+static_reference_item,source_path,expected_status,observed_status,static_reference_audit_passed,qa_comment
+dataset_py_exists,dataset.py,exists,exists,True,static source path available
+prepare_crossdocked_py_exists,data/prepare_crossdocked.py,exists,exists,True,static source path available
+lightning_modules_py_exists,lightning_modules.py,exists,exists,True,static source path available
+equivariant_diffusion_dir_exists,equivariant_diffusion,exists,exists,True,static source path available
+dataset_py_static_read_only,dataset.py,static_read_only,static_read_only_bytes=2693,True,read for design reference only; no import or modification
+prepare_crossdocked_static_read_only,data/prepare_crossdocked.py,static_read_only,static_read_only_bytes=1896,True,read for design reference only; no import or modification
+lightning_modules_static_read_only,lightning_modules.py,static_read_only,static_read_only_bytes=38178,True,read for design reference only; no import or modification
+equivariant_diffusion_static_read_only,equivariant_diffusion,static_read_only,static_read_only_py_files=4;bytes=103795,True,read for design reference only; no import or modification
+original_dataloader_no_diff,dataset.py;data/prepare_crossdocked.py,no_diff,no_diff,True,original DiffSBDD dataloader files unchanged
+protected_model_code_no_diff,lightning_modules.py;equivariant_diffusion/,no_diff,no_diff,True,protected DiffSBDD model code unchanged

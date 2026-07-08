@@ -1,0 +1,9 @@
+planned_step,planned_action,allowed_inputs,allowed_outputs_future_step,blocked_outputs_current_step,required_preconditions,future_smoke_plan_passed
+actual_dataloader_design_gate_current_step,design actual dataloader adapter only,Step 13BV QA artifacts; static DiffSBDD source references,design contracts,actual dataloader smoke; tensors; training,Step 13BV passed,True
+feature_semantics_resolution_gate_next_if_blocked,resolve tensorization semantics blockers,feature semantics audit artifacts; derived metadata,feature semantics tensorization audit outputs,actual tensor dataloader smoke; training,feature_semantics_known_for_training=false,True
+actual_dataloader_adapter_smoke_after_feature_resolution,instantiate additive adapter in smoke only,resolved feature semantics; derived atom tables,adapter smoke artifacts,model forward; loss; training,feature semantics tensorization audit passed,True
+actual_tensor_creation_smoke_after_feature_resolution,create transient tensors in smoke only,adapter smoke rows; derived atom tables,"shape audits, no persisted tensors",checkpoint/model/loss/training,adapter smoke passed,True
+checkpoint_compatibility_smoke_before_model_runtime,verify checkpoint-compatible batch keys,adapter/tensor smoke artifacts,checkpoint compatibility audit,model forward; loss; training,tensor smoke passed,True
+model_forward_smoke_after_checkpoint_compatibility,perform controlled forward smoke,checkpoint-compatible batch,forward smoke audit,loss/backward/optimizer/training,checkpoint compatibility passed,True
+loss_training_gate_after_forward_smoke,design/verify loss path separately,forward smoke evidence,loss gate artifacts,training,forward smoke passed,True
+formal_training_after_feature_semantics_audit_only,formal training only after all gates,"feature semantics, split/leakage, checkpoint, forward, loss gates",training run artifacts,current step training,all prior gates passed,True
