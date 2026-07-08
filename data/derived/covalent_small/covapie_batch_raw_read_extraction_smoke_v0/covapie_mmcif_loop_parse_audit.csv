@@ -1,0 +1,5 @@
+pdb_id,atom_site_loop_found,atom_site_row_count,atom_site_required_columns_found,struct_conn_loop_found,struct_conn_row_count,struct_conn_required_columns_found,parser_mode,mmcif_parse_status,mmcif_parse_blocking_reason,mmcif_loop_parse_audit_passed
+1A3B,True,2606,True,True,5,True,standard_library_mmcif_loop_parser,parse_success,,True
+1A3E,True,2566,True,True,5,True,standard_library_mmcif_loop_parser,parse_success,,True
+1A46,True,2503,True,True,18,True,standard_library_mmcif_loop_parser,parse_success,,True
+1A5G,True,2513,True,True,19,True,standard_library_mmcif_loop_parser,parse_success,,True

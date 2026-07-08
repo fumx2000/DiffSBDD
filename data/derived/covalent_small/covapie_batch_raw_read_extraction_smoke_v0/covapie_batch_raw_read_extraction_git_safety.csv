@@ -1,0 +1,11 @@
+git_safety_item,command_or_check,required_status,current_step_status,git_safety_audit_passed,blocking_reasons
+raw_files_untracked,git ls-files raw root,false,True,True,
+raw_files_unstaged,git diff --cached raw root,false,True,True,
+raw_files_not_modified,sha256 before/after read,unchanged,True,True,
+derived_output_no_forbidden_binary_artifacts,forbidden suffix scan,false,True,True,
+no_sample_final_split_leakage_artifacts,forbidden output name scan,false,True,True,
+metadata_csv_unchanged,data/derived/covalent_small/external_metadata_index/covpdb/covpdb_complexes_metadata_manual.csv,hash unchanged,True,True,
+step13bd_artifacts_unchanged,git diff step13bd root,empty,True,True,
+step13bc_artifacts_unchanged,git diff step13bc root,empty,True,True,
+protected_source_diff_empty,git diff equivariant_diffusion/ lightning_modules.py,empty,True,True,
+original_dataloader_diff_empty,git diff dataset.py data/prepare_crossdocked.py,empty,True,True,
