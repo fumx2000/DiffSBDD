@@ -1,0 +1,5 @@
+candidate_metadata_id,extracted_event_count,sample_rows_for_candidate,unique_split_unit_count,pdb_id,het_code,all_candidate_rows_bound_to_one_unit,no_candidate_level_leakage_in_smoke,candidate_group_integrity_passed,qa_comment
+covpdb::1A3B::T29::H:SER195:OG-B,1,5,1,1A3B,T29,True,True,True,candidate metadata rows remain bound to one smoke split unit
+covpdb::1A3E::T16::H:SER195:OG-B,1,5,1,1A3E,T16,True,True,True,candidate metadata rows remain bound to one smoke split unit
+covpdb::1A46::00K::H:SER195:OG-C,1,5,1,1A46,00K,True,True,True,candidate metadata rows remain bound to one smoke split unit
+covpdb::1A5G::00L::H:SER195:OG-C,1,5,1,1A5G,00L,True,True,True,candidate metadata rows remain bound to one smoke split unit
