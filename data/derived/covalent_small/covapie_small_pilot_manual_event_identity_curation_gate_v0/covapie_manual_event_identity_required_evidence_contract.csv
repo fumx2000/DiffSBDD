@@ -1,0 +1,11 @@
+evidence_item,acceptable_evidence_policy,required_for_ready_candidate,current_step_status,evidence_contract_passed,qa_comment
+covpdb_entry_annotation,CovPDB entry/card annotation may support identity but is not sufficient without event fields.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+visual_structure_review,Manual visual structure review may provide chain/residue/atom identity.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+step8_manual_reviewed_topology_evidence,Step8 reviewed topology evidence may support ligand atom and bond pair identity.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+confirmed_extraction_table,Confirmed extraction tables may provide authoritative event fields.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+residue_atom_pair_evidence,Residue atom identity must be supported by authoritative evidence.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+ligand_atom_pair_evidence,Ligand atom identity should be supported when available.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+cys_sg_scope_evidence,V1 ready candidates must support CYS/SG scope.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+ambiguous_chain_or_altloc_policy,Ambiguous chain or altloc events must be excluded or resolved before validation.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+uncertain_event_exclusion_policy,Uncertain events must remain excluded from ready candidates.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."
+provenance_required_for_ready_status,Ready status requires evidence_source_name and evidence_source_path_or_note.,True,template_only_not_validated,True,"This step records required evidence, but does not validate filled answers."

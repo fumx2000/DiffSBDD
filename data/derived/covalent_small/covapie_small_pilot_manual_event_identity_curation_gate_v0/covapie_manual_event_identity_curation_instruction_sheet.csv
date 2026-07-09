@@ -1,0 +1,13 @@
+instruction_item,instruction_text,applies_to_field,required_before_validation,instruction_passed,qa_comment
+fill_chain_id_from_structure_or_authoritative_annotation,Fill chain_id only from structure review or authoritative annotation.,chain_id,True,True,"Instruction is a curation rule, not a completed manual answer."
+fill_residue_name_prefer_CYS_for_v1,Fill residue_name and keep only CYS events eligible for V1 ready validation.,residue_name,True,True,"Instruction is a curation rule, not a completed manual answer."
+fill_residue_index_with_authoritative_numbering,Fill residue_index using authoritative residue numbering.,residue_index,True,True,"Instruction is a curation rule, not a completed manual answer."
+fill_residue_atom_name_prefer_SG_for_CYS_v1,Fill residue_atom_name and keep only SG events eligible for CYS V1.,residue_atom_name,True,True,"Instruction is a curation rule, not a completed manual answer."
+fill_ligand_atom_name_if_known,Fill ligand_atom_name when evidence identifies the covalent ligand atom.,ligand_atom_name,True,True,"Instruction is a curation rule, not a completed manual answer."
+fill_covalent_bond_atom_pair_as_residue_atom__ligand_atom,Record covalent_bond_atom_pair as residue_atom--ligand_atom.,covalent_bond_atom_pair,True,True,"Instruction is a curation rule, not a completed manual answer."
+derive_covalent_event_id_from_event_identity,"Derive covalent_event_id from PDB, ligand, chain, residue, atom, and bond pair fields.",covalent_event_id,True,True,"Instruction is a curation rule, not a completed manual answer."
+record_evidence_source_name,Record the evidence source name used for manual curation.,evidence_source_name,True,True,"Instruction is a curation rule, not a completed manual answer."
+record_evidence_source_path_or_note,Record a derived path or note sufficient for provenance.,evidence_source_path_or_note,True,True,"Instruction is a curation rule, not a completed manual answer."
+set_manual_review_status_only_after_review,Change manual_review_status only after manual evidence review.,manual_review_status,True,True,"Instruction is a curation rule, not a completed manual answer."
+exclude_uncertain_or_non_cys_events_for_v1,Set excluded_after_manual_review for uncertain or non-CYS/SG events in V1.,manual_review_status,True,True,"Instruction is a curation rule, not a completed manual answer."
+never_use_pdb_only_join,Never mark a candidate ready from PDB ID alone.,covalent_event_id,True,True,"Instruction is a curation rule, not a completed manual answer."

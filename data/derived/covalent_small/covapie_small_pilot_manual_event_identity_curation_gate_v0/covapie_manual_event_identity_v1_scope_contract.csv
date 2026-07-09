@@ -1,0 +1,9 @@
+scope_item,scope_policy,current_step_status,scope_contract_passed,qa_comment
+v1_residue_scope_cys_only,V1 ready candidates are limited to CYS residue events.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+v1_residue_atom_scope_sg,V1 ready candidates are limited to residue atom SG.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+non_cys_events_excluded_current_stage,Non-CYS events must be excluded from V1 validation.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+non_sg_cys_events_excluded_current_stage,CYS events not involving SG must be excluded from V1 validation.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+warhead_type_not_expanded_current_step,Warhead scope is not expanded by this curation template.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+future_cys_warhead_registry_after_small_batch_extraction,CYS warhead registry remains future work after small batch extraction.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+future_non_cys_residue_registry_after_cys_pipeline_stable,Non-CYS registry remains future work after CYS pipeline stabilization.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.
+no_training_scope_change_current_step,This gate does not change training scope or readiness.,declared_for_manual_curation_template_only,True,CYS/SG V1 boundary preserved.

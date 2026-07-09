@@ -1,0 +1,19 @@
+field_name,required_for_ready_candidate,prefilled_from_metadata_allowed,must_be_manual_or_authoritative,allowed_values_or_policy,field_contract_passed,qa_comment
+curation_candidate_id,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+source_profile,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+source_database,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+candidate_metadata_id,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+pdb_id,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+ligand_identifier,True,True,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+chain_id,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+residue_name,True,False,True,V1 ready candidates must be CYS,True,Manual curation template only; pending rows are not ready candidates.
+residue_index,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+residue_atom_name,True,False,True,V1 ready candidates must be SG,True,Manual curation template only; pending rows are not ready candidates.
+ligand_atom_name,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+covalent_bond_atom_pair,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+covalent_event_id,True,False,True,derive from event-level fields only; never PDB-only,True,Manual curation template only; pending rows are not ready candidates.
+evidence_source_name,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+evidence_source_path_or_note,True,False,True,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.
+evidence_provenance_status,True,False,False,pending_manual_evidence until authoritative evidence is recorded,True,Manual curation template only; pending rows are not ready candidates.
+manual_review_status,True,False,True,pending_manual_review;manually_curated_ready_for_validation;excluded_after_manual_review,True,Manual curation template only; pending rows are not ready candidates.
+curator_notes,False,False,False,required stable lineage or manual evidence policy,True,Manual curation template only; pending rows are not ready candidates.

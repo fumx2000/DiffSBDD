@@ -1,0 +1,11 @@
+readiness_item,observed_status,readiness_passed,next_required_gate,qa_comment
+manual_curation_template_written,true,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+manual_curation_rows_pending_review,25,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_candidate_count_current_step_zero,0,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_for_manual_curation_validation_gate,true,True,covapie_small_pilot_manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_for_manifest_rerun_gate_false,false,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_for_download_smoke_false,false,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_for_bulk_download_smoke_false,false,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+ready_for_actual_dataloader_false,false,True,manual_event_identity_validation_gate,"Readiness is limited to manual curation validation, not manifest rerun or training."
+training_still_blocked,false,True,feature_semantics_audit_and_leakage_split_design,"Readiness is limited to manual curation validation, not manifest rerun or training."
+feature_semantics_still_not_training_final,false,True,feature_semantics_audit_gate_before_training,"Readiness is limited to manual curation validation, not manifest rerun or training."
