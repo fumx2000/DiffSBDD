@@ -1,0 +1,5 @@
+readiness_item,observed_status,readiness_passed,next_required_gate,qa_comment
+ready_for_covapie_sample_preparation_execution_smoke,True,True,covapie_sample_preparation_execution_smoke,allowed next step
+ready_for_covapie_actual_dataloader_adapter_smoke,False,True,not_allowed_current_step,sample preparation execution smoke must run first
+ready_for_training,False,True,not_allowed_current_step,not a training sample
+ready_to_train_now,False,True,not_allowed_current_step,feature semantics and leakage/split gates remain required

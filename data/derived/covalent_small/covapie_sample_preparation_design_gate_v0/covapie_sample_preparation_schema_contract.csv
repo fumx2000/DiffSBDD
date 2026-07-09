@@ -1,0 +1,11 @@
+schema_item,required_in_next_execution_smoke,planned_minimum_fields,current_step_writes_this_schema,schema_contract_passed
+sample_preparation_execution_manifest_schema,True,sample_preparation_input_id;pdb_id;expected_het_id;execution_status;sample_artifact_root,False,True
+protein_atom_table_schema,True,atom_id;element;atom_name;residue_name;chain_id;residue_index;x;y;z,False,True
+ligand_atom_table_schema,True,atom_id;element;atom_name;ligand_comp_id;x;y;z,False,True
+pocket_atom_table_schema,True,pocket_atom_id;element;atom_name;distance_to_ligand;source_atom_id,False,True
+covalent_event_table_schema,True,pdb_id;expected_het_id;conn_id;conn_type_id;residue_atom_name;ligand_atom_name;covalent_bond_atom_pair,False,True
+ligand_residue_atom_pair_schema,True,residue_atom_name;ligand_atom_name;covalent_bond_atom_pair;validation_status,False,True
+sample_preparation_audit_schema,True,sample_preparation_input_id;raw_lookup_status;struct_conn_parse_status;artifact_write_status;audit_passed,False,True
+no_sample_index_current_stage,False,sample_index is not written in this design gate,False,True
+no_final_dataset_current_stage,False,final_dataset is not written in this design gate,False,True
+no_training_current_stage,False,training artifacts are not written in this design gate,False,True
