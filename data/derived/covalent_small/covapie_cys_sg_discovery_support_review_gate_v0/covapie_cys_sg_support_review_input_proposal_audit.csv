@@ -1,0 +1,11 @@
+input_audit_item,observed_status,input_audit_passed,qa_comment
+proposal_csv_exists,data/derived/covalent_small/covapie_cys_sg_discovery_download_smoke_v0/covapie_cys_sg_discovery_event_proposals.csv,True,
+proposal_json_exists,data/derived/covalent_small/covapie_cys_sg_discovery_download_smoke_v0/covapie_cys_sg_discovery_event_proposals.json,True,
+proposal_csv_json_consistent,proposal ids and row counts match,True,
+input_support_proposal_count,86,True,
+all_proposals_pending_manual_review,pending_manual_review,True,
+no_ready_candidates_in_input,ready false,True,
+expected_residue_name_cys,CYS,True,
+expected_residue_atom_sg,SG,True,
+input_contains_disulfide_rows,77,True,
+input_contains_covale_rows,9,True,

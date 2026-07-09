@@ -1,0 +1,11 @@
+decision_item,observed_status,decision_passed,qa_comment
+input_support_proposal_count,86,True,input proposals reviewed
+disulfide_excluded_count,77,True,SG-SG/CYS protein-protein rows excluded
+other_excluded_or_triage_count,0,True,non-matching rows not promoted
+ligand_covale_candidate_count,9,True,derived from support review rules
+unique_pdb_count_for_ligand_covale_candidates,9,True,"unique PDBs only a summary, not event identity"
+all_ligand_covale_candidates_pending_review,True,True,manual review retained
+no_ready_candidates_created,true,True,no ready candidates
+covpdb_annotation_alignment_required,true,True,next gate required before materialization
+small_pilot_threshold_20_status,below_threshold_needs_expansion_after_alignment,True,below_threshold_needs_expansion_after_alignment
+training_still_blocked,true,True,training blocked
