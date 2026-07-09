@@ -1,0 +1,13 @@
+criterion_id,criterion_description,applies_to_stage14l,applies_to_stage14n,required_before_manual_acceptance,required_before_dataset_ready,criterion_contract_passed,qa_comment
+require_cys_residue,Candidate must target CYS residue annotation.,True,True,True,True,True,
+require_covalent_reaction_annotation,Candidate must include covalent reaction annotation.,True,True,True,True,True,
+require_warhead_annotation,Candidate must include warhead annotation.,True,True,True,True,True,
+require_chain_and_residue_index,Candidate must include chain ID and residue index.,True,True,True,True,True,
+require_ligand_het_or_ccd_metadata,Candidate must include HET code or CCD ligand metadata.,True,True,True,True,True,
+require_no_duplicate_event_identity,Candidate must not duplicate another combined event identity.,True,True,True,True,True,
+require_not_disulfide_or_sg_sg,Candidate must not be a disulfide or protein-protein SG-SG event.,True,True,True,True,True,
+require_struct_conn_crosscheck_before_dataset_ready,Dataset-ready candidates require struct_conn cross-check; Step 14N rows still need future raw mmCIF cross-check.,True,True,False,True,True,
+require_manual_decision_before_ready,A human manual decision is required before any ready label.,True,True,True,True,True,
+require_feature_semantics_audit_before_training,Feature semantics audit remains required before training.,True,True,False,True,True,
+require_split_leakage_gate_before_training,Split/leakage design gate remains required before training.,True,True,False,True,True,
+do_not_train_from_review_template,Manual review template is not training input.,True,True,False,True,True,

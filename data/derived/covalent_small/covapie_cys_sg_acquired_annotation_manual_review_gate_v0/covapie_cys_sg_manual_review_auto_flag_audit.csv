@@ -1,0 +1,17 @@
+auto_flag_item,auto_flag_value,auto_flag_audit_passed,qa_comment
+total_manual_review_candidate_count,25,True,
+step14l_candidate_count,9,True,
+step14n_candidate_count,16,True,
+cys_candidate_count,25,True,
+pending_manual_review_count,25,True,
+ready_candidate_count_current_step,0,True,
+step14n_requires_struct_conn_crosscheck_count,16,True,
+duplicate_candidate_count,0,True,
+missing_reaction_count,0,True,
+missing_warhead_count,0,True,
+missing_chain_or_residue_index_count,0,True,
+missing_ccd_ligand_name_count,0,True,
+peptide_like_or_large_ligand_count,9,True,
+optional_covpdb_name_blank_count,16,True,Step 14N optional CovPDB names are intentionally blank if boilerplate was cleaned.
+manual_review_template_written,True,True,
+training_still_blocked,True,True,
