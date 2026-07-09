@@ -1,0 +1,33 @@
+discovery_item_or_pdb_id,pdb_id,raw_file_available,parse_attempted,parse_status,struct_conn_row_count,cys_sg_struct_conn_candidate_count,non_cys_sg_struct_conn_count,ambiguous_cys_sg_candidate_count,discovery_audit_passed,qa_comment
+1A3B,1A3B,True,True,parsed_struct_conn,5,4,1,4,True,Struct_conn parsed for discovery only.
+1A3E,1A3E,True,True,parsed_struct_conn,5,4,1,4,True,Struct_conn parsed for discovery only.
+1A46,1A46,True,True,parsed_struct_conn,18,4,14,4,True,Struct_conn parsed for discovery only.
+1A54,1A54,True,True,parsed_struct_conn,0,0,0,0,True,Struct_conn parsed for discovery only.
+1A5G,1A5G,True,True,parsed_struct_conn,19,4,15,4,True,Struct_conn parsed for discovery only.
+1A61,1A61,True,True,parsed_struct_conn,19,4,15,4,True,Struct_conn parsed for discovery only.
+1AD8,1AD8,True,True,parsed_struct_conn,13,4,9,4,True,Struct_conn parsed for discovery only.
+1AEC,1AEC,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AHT,1AHT,True,True,parsed_struct_conn,7,4,3,4,True,Struct_conn parsed for discovery only.
+1AI8,1AI8,True,True,parsed_struct_conn,6,4,2,4,True,Struct_conn parsed for discovery only.
+1AIM,1AIM,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1ARC,1ARC,True,True,parsed_struct_conn,4,3,1,3,True,Struct_conn parsed for discovery only.
+1AT3,1AT3,True,True,parsed_struct_conn,2,0,2,0,True,Struct_conn parsed for discovery only.
+1ATK,1ATK,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AU3,1AU3,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AU4,1AU4,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AU8,1AU8,True,True,parsed_struct_conn,4,3,1,3,True,Struct_conn parsed for discovery only.
+1AUJ,1AUJ,True,True,parsed_struct_conn,12,6,6,6,True,Struct_conn parsed for discovery only.
+1AWF,1AWF,True,True,parsed_struct_conn,7,4,3,4,True,Struct_conn parsed for discovery only.
+1AXB,1AXB,True,True,parsed_struct_conn,2,1,1,0,True,Struct_conn parsed for discovery only.
+1AY6,1AY6,True,True,parsed_struct_conn,6,4,2,4,True,Struct_conn parsed for discovery only.
+1AYU,1AYU,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AYV,1AYV,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1AYW,1AYW,True,True,parsed_struct_conn,4,4,0,4,True,Struct_conn parsed for discovery only.
+1B02,1B02,True,True,parsed_struct_conn,2,1,1,0,True,Struct_conn parsed for discovery only.
+raw_file_available_count,,,,summary,,,,,True,25
+parse_attempt_count,,,,summary,,,,,True,25
+parse_success_count,,,,summary,,,,,True,25
+struct_conn_rows_detected_count,,,,summary,,,,,True,163
+cys_sg_struct_conn_candidate_count,,,,summary,,,,,True,86
+non_cys_sg_struct_conn_count,,,,summary,,,,,True,77
+ambiguous_cys_sg_candidate_count,,,,summary,,,,,True,84

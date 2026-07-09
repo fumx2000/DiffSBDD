@@ -1,0 +1,11 @@
+readiness_item,observed_status,readiness_passed,next_required_gate,qa_comment
+discovery_download_completed,25,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+raw_files_untracked_uncommitted,true,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+struct_conn_discovery_completed,true,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+cys_sg_proposal_count_recorded,86,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+if_proposal_count_gt_0_then_support_review,true,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+if_proposal_count_eq_0_then_cys_sg_targeted_metadata_expansion,false,True,covapie_cys_sg_targeted_metadata_expansion_gate,Readiness remains discovery/review only; no training or sample manifest.
+if_proposal_count_ge_20_then_small_pilot_possible_after_review,true,True,manual_review_then_manifest_rerun_gate,Readiness remains discovery/review only; no training or sample manifest.
+small_pilot_download_smoke_still_false,false,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+actual_dataloader_still_false,false,True,covapie_cys_sg_discovery_support_review_gate,Readiness remains discovery/review only; no training or sample manifest.
+training_still_false,false,True,feature_semantics_audit_and_leakage_split_design,Readiness remains discovery/review only; no training or sample manifest.

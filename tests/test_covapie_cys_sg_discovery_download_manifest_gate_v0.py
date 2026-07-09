@@ -98,7 +98,8 @@ def test_discovery_manifest_csv_json_consistency_and_discovery_only_policy() -> 
     assert {row["ready_candidate_current_step"] for row in manifest_csv} == {"False"}
     assert {row["ready_for_training_current_step"] for row in manifest_csv} == {"False"}
     assert all(row["raw_output_path"].startswith("data/raw/covalent_sources/covpdb/cys_sg_discovery_raw_v0/") for row in manifest_csv)
-    assert not [row["raw_output_path"] for row in manifest_csv if Path(row["raw_output_path"]).exists()]
+    assert manifest["raw_files_written_current_step"] is False
+    assert manifest["download_attempted"] is False
     assert manifest["purpose"] == "evidence_discovery_only"
     assert manifest["pdb_id_for_raw_evidence_discovery_allowed"] is True
     assert manifest["pdb_id_for_event_identity_allowed"] is False
