@@ -1,0 +1,11 @@
+decision_diff_item,observed_value,expected_value,decision_diff_passed,blocking_reasons
+input_result_review_template_row_count,3,3,True,
+decision_input_row_count,3,3,True,
+accepted_for_future_ready_candidate_materialization_count,3,3,True,
+pending_result_review_count,0,0,True,
+rejected_result_review_count,0,0,True,
+needs_more_evidence_count,0,0,True,
+ready_candidate_count_current_step,0,0,True,
+ready_for_training_candidate_count_current_step,0,0,True,
+accepted_rows_match_expected_pairs,"[""6BV6/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]","[""6BV6/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]",True,
+step14u_artifacts_unchanged,True,True,True,
