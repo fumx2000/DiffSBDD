@@ -1,0 +1,9 @@
+pilot_scale_item,proposed_policy,current_step_status,future_step_allowed_after_gate,pilot_scale_contract_passed,qa_comment
+small_pilot_20_to_50_design,start with 20-50 metadata-selected candidates,design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+medium_pilot_200_to_500_design,scale only after small pilot success and failure review,design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+bulk_1000_plus_design_only,defer until medium pilot proves checksum/resume/storage behavior,design_only,False,True,Small pilot manifest gate is the next readiness boundary.
+pilot_success_metrics,"download success rate, checksum/size pass rate, extraction handoff readiness",design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+pilot_failure_thresholds,pause on repeated timeout/checksum/schema failures,design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+pilot_resume_policy,idempotent rerun with manifest status and temp-file cleanup,design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+pilot_storage_quota_policy,quota reviewed before each scale increase,design_only,True,True,Small pilot manifest gate is the next readiness boundary.
+pilot_no_training_policy,download pilots do not permit actual dataloader smoke or training,design_only,False,True,Small pilot manifest gate is the next readiness boundary.

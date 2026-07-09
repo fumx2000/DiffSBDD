@@ -1,0 +1,9 @@
+resume_checksum_item,proposed_policy,current_step_status,future_step_required,resume_checksum_contract_passed,qa_comment
+partial_file_detection_policy,detect temp suffix and undersized files before retry,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+temp_file_suffix_policy,write future downloads to .part or equivalent temporary path,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+atomic_rename_policy,rename only after checksum or size validation passes,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+checksum_field_policy,"record sha256 when source supports it, otherwise file size and resolver hash",design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+file_size_audit_policy,record byte count and reject empty or implausibly small files,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+retry_limit_policy,bounded retry count per row with failure taxonomy,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+idempotent_rerun_policy,completed rows are skipped unless checksum invalidates them,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.
+resume_manifest_update_policy,future manifests update status without losing failure history,design_only_no_files_downloaded,True,True,No raw files are downloaded in this design gate.

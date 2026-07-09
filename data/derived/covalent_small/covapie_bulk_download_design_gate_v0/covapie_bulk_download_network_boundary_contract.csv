@@ -1,0 +1,11 @@
+network_boundary_item,current_step_status,future_requirement,network_boundary_contract_passed,qa_comment
+network_disabled_current_step,not_executed_or_not_allowed,future explicit smoke gate required,True,No network access or download is performed in Step 14B.
+no_curl_current_step,not_executed_or_not_allowed,future implementation must avoid shell download unless explicitly gated,True,No network access or download is performed in Step 14B.
+no_wget_current_step,not_executed_or_not_allowed,future implementation must avoid shell download unless explicitly gated,True,No network access or download is performed in Step 14B.
+no_requests_or_urllib_current_step,not_imported_or_executed,future download smoke must record library and timeout policy,True,No network access or download is performed in Step 14B.
+no_download_current_step,not_executed_or_not_allowed,future small pilot download smoke required,True,No network access or download is performed in Step 14B.
+future_download_requires_explicit_smoke_gate,design_only,covapie_small_pilot_download_manifest_gate before download smoke,True,No network access or download is performed in Step 14B.
+future_download_must_have_timeout,design_only,required timeout in future download manifest/executor,True,No network access or download is performed in Step 14B.
+future_download_must_have_retry_limit,design_only,bounded retries only,True,No network access or download is performed in Step 14B.
+future_download_must_have_checksum_or_size_audit,design_only,checksum or size audit required,True,No network access or download is performed in Step 14B.
+future_download_must_not_stage_raw,design_only,raw files must remain untracked and unstaged,True,No network access or download is performed in Step 14B.

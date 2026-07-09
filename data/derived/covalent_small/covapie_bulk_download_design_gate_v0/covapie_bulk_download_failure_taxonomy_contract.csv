@@ -1,0 +1,13 @@
+failure_type,failure_category,future_detection_policy,current_step_status,blocks_pilot_success,failure_taxonomy_contract_passed,qa_comment
+metadata_missing_pdb_id,metadata_validation,reject row before manifest execution,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+invalid_pdb_id_format,metadata_validation,validate four-character PDB-like identifier before resolver use,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+network_timeout,network,record timeout and retry within bounded retry limit,design_only,False,True,Failure taxonomy is defined for future download/extraction gates.
+http_not_found,network,record permanent not found unless source later changes,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+checksum_mismatch,integrity,delete/quarantine temp file and retry if retries remain,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+empty_or_too_small_file,integrity,reject implausible file sizes,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+unsupported_structure_format,format,block unsupported suffixes before download,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+duplicate_candidate,candidate_policy,deduplicate by future event key before execution,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+raw_write_permission_error,filesystem,block pilot and report storage permissions,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+partial_download_leftover,resume,detect temp leftovers and clean or resume safely,design_only,False,True,Failure taxonomy is defined for future download/extraction gates.
+downstream_parse_failure,downstream_extraction,handoff failure to extraction QA taxonomy,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.
+downstream_extraction_failure,downstream_extraction,do not mark candidate ready for sample index,design_only,True,True,Failure taxonomy is defined for future download/extraction gates.

@@ -1,0 +1,15 @@
+manifest_field,field_purpose,required_in_future_manifest,current_step_value_policy,current_step_written,manifest_schema_contract_passed,qa_comment
+download_manifest_row_id,stable row identity,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+candidate_metadata_id,candidate metadata lineage,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+pdb_id,structure identifier,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+source_database,source resolver namespace,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+intended_structure_format,future format such as cif or pdb,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+intended_download_url_or_resolver,future URL or resolver expression,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+raw_output_path,future untracked raw output path,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+expected_checksum_field,checksum or expected hash field,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+download_status,future status enum,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+retry_count,future retry accounting,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+failure_reason,future failure taxonomy value,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+source_metadata_hash,metadata source version guard,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+downstream_extraction_status,future extraction handoff status,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.
+git_tracking_guard,raw file untracked/unstaged guard,True,schema_only,False,True,Schema contract only; no download manifest rows are written in Step 14B.

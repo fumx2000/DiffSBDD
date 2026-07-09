@@ -1,0 +1,11 @@
+storage_layout_item,proposed_path_or_policy,current_step_created,future_step_allowed,git_tracking_policy,storage_layout_contract_passed,qa_comment
+raw_storage_root_policy,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0,False,True,never_commit_raw_files,True,Future raw files stay under data/raw/covalent_sources and outside commits.
+raw_cif_subdir_policy,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/cif,False,True,never_commit_raw_cif,True,"A future gate may choose a CIF subdirectory, but this step creates none."
+raw_pdb_subdir_policy,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/pdb,False,True,never_commit_raw_pdb,True,"PDB files, if ever allowed, must remain untracked."
+download_log_subdir_policy,data/derived/covalent_small/covapie_bulk_download_design_gate_v0/future_download_logs,False,True,derived_csv_json_md_only,True,"Future logs should be derived metadata, not raw structures."
+checksum_subdir_policy,data/derived/covalent_small/covapie_bulk_download_design_gate_v0/future_checksums,False,True,derived_csv_json_md_only,True,Checksums should be metadata artifacts.
+failure_log_subdir_policy,data/derived/covalent_small/covapie_bulk_download_design_gate_v0/future_failure_logs,False,True,derived_csv_json_md_only,True,Failure logs should be explicit metadata.
+derived_output_separation_policy,data/derived/covalent_small/covapie_bulk_download_design_gate_v0,False,True,derived_outputs_only,True,Design outputs are separate from raw storage.
+git_ignore_raw_policy,data/raw/covalent_sources/**,False,True,raw_untracked_unstaged,True,Future download gates must verify raw remains outside git.
+no_raw_commit_policy,policy,False,True,raw_never_committed,True,No raw structure or ligand files may be committed.
+cleanup_policy_for_partial_downloads,temporary_suffix_then_atomic_rename,False,True,partial_files_never_committed,True,Partial downloads must be cleaned or quarantined in a future gate.
