@@ -1,0 +1,72 @@
+[
+  {
+    "download_or_reuse_policy": "download_if_missing_else_reuse_existing_raw",
+    "expected_het_id": "MDC",
+    "expected_raw_filename": "1a54.cif",
+    "expected_raw_relative_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/1a54.cif",
+    "pdb_id": "1A54",
+    "raw_acquisition_request_id": "CYS_SG_RAW_ACQ_REQUEST_000001",
+    "rcsb_mmcif_url": "https://files.rcsb.org/download/1A54.cif",
+    "ready_candidate_current_step": false,
+    "ready_for_training_current_step": false,
+    "request_contract_passed": true,
+    "request_scope": "raw_mmcif_acquisition_only_no_struct_conn_parse",
+    "source_raw_acquisition_plan_id": "CYS_SG_RAW_MMCIF_PLAN_000001"
+  },
+  {
+    "download_or_reuse_policy": "download_if_missing_else_reuse_existing_raw",
+    "expected_het_id": "JUG",
+    "expected_raw_filename": "6bv6.cif",
+    "expected_raw_relative_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif",
+    "pdb_id": "6BV6",
+    "raw_acquisition_request_id": "CYS_SG_RAW_ACQ_REQUEST_000002",
+    "rcsb_mmcif_url": "https://files.rcsb.org/download/6BV6.cif",
+    "ready_candidate_current_step": false,
+    "ready_for_training_current_step": false,
+    "request_contract_passed": true,
+    "request_scope": "raw_mmcif_acquisition_only_no_struct_conn_parse",
+    "source_raw_acquisition_plan_id": "CYS_SG_RAW_MMCIF_PLAN_000002"
+  },
+  {
+    "download_or_reuse_policy": "download_if_missing_else_reuse_existing_raw",
+    "expected_het_id": "JUG",
+    "expected_raw_filename": "6bv9.cif",
+    "expected_raw_relative_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv9.cif",
+    "pdb_id": "6BV9",
+    "raw_acquisition_request_id": "CYS_SG_RAW_ACQ_REQUEST_000003",
+    "rcsb_mmcif_url": "https://files.rcsb.org/download/6BV9.cif",
+    "ready_candidate_current_step": false,
+    "ready_for_training_current_step": false,
+    "request_contract_passed": true,
+    "request_scope": "raw_mmcif_acquisition_only_no_struct_conn_parse",
+    "source_raw_acquisition_plan_id": "CYS_SG_RAW_MMCIF_PLAN_000003"
+  },
+  {
+    "download_or_reuse_policy": "download_if_missing_else_reuse_existing_raw",
+    "expected_het_id": "JUG",
+    "expected_raw_filename": "6bv8.cif",
+    "expected_raw_relative_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv8.cif",
+    "pdb_id": "6BV8",
+    "raw_acquisition_request_id": "CYS_SG_RAW_ACQ_REQUEST_000004",
+    "rcsb_mmcif_url": "https://files.rcsb.org/download/6BV8.cif",
+    "ready_candidate_current_step": false,
+    "ready_for_training_current_step": false,
+    "request_contract_passed": true,
+    "request_scope": "raw_mmcif_acquisition_only_no_struct_conn_parse",
+    "source_raw_acquisition_plan_id": "CYS_SG_RAW_MMCIF_PLAN_000004"
+  },
+  {
+    "download_or_reuse_policy": "download_if_missing_else_reuse_existing_raw",
+    "expected_het_id": "JUG",
+    "expected_raw_filename": "6bv5.cif",
+    "expected_raw_relative_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv5.cif",
+    "pdb_id": "6BV5",
+    "raw_acquisition_request_id": "CYS_SG_RAW_ACQ_REQUEST_000005",
+    "rcsb_mmcif_url": "https://files.rcsb.org/download/6BV5.cif",
+    "ready_candidate_current_step": false,
+    "ready_for_training_current_step": false,
+    "request_contract_passed": true,
+    "request_scope": "raw_mmcif_acquisition_only_no_struct_conn_parse",
+    "source_raw_acquisition_plan_id": "CYS_SG_RAW_MMCIF_PLAN_000005"
+  }
+]
