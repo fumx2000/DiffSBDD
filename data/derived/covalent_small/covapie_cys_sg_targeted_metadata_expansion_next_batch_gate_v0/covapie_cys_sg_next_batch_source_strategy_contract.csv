@@ -1,0 +1,13 @@
+strategy_item,strategy_role,primary_source,secondary_source,network_required_next_step,raw_coordinate_required_next_step,strategy_contract_passed,qa_comment
+covpdb_targetable_residue_cys_page_primary,discover more CYS targetable residue complexes,CovPDB targetable residue CYS page,CovPDB complex cards,True,False,True,
+covpdb_cys_complex_listing_or_download_primary,enumerate additional CYS ligand covalent complex metadata,CovPDB CYS complex listing/download metadata,CovPDB residues list,True,False,True,
+covpdb_ligand_card_followup,follow ligand cards for additional bound PDB/complex links,CovPDB ligand cards,CovPDB complex cards,True,False,True,
+covpdb_complex_card_followup,extract event-level reaction/residue/chain/warhead metadata,CovPDB complex cards,manual review,True,False,True,
+rcsb_ccd_crosscheck,cross-check ligand identity and chemistry metadata,RCSB Chemical Component Dictionary,CovPDB ligand card,True,False,True,
+rcsb_mmcif_struct_conn_future_crosscheck,future raw-coordinate structural cross-check outside this gate,RCSB mmCIF struct_conn,manual review,True,True,True,
+exclude_existing_9_candidates,avoid duplicates from Step 14L,Step 14L acquired candidates,next-batch exclusion registry,False,False,True,
+exclude_disulfide_or_sg_sg,avoid non-ligand CYS SG-SG/disulfide events,event-level source filters,manual review,True,False,True,
+require_cys_sg_ligand_covale,keep scope to CYS SG ligand covale candidates,CovPDB/RCSB event annotation,manual review,True,False,True,
+manual_review_required_before_ready,prevent automatic ready labels,manual review,future QA gate,False,False,True,
+no_training_current_step,preserve no-training boundary,CovaPIE gate policy,feature semantics audit,False,False,True,
+small_pilot_threshold_20_required,expand from 9 toward 20 candidates,Step 14L counts,next batch smoke,False,False,True,

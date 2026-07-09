@@ -1,0 +1,10 @@
+exclusion_registry_id,exclusion_reason,pdb_id,ligand_identifier,suggested_ligand_comp_id,covpdb_complex_card_url,suggested_covalent_bond_atom_pair,covpdb_reaction_name,covpdb_warhead_name,exclusion_registry_passed,qa_comment
+CYS_SG_NEXT_EXCLUDE_000001,already_acquired_in_step14l,1AEC,COVPDB739,E64,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1078,SG--C2,Epoxide Opening,Epoxide,True,
+CYS_SG_NEXT_EXCLUDE_000002,already_acquired_in_step14l,1AIM,COVPDB1512,ZYA,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2301,SG--CM,Nucleophilic Aliphatic Subsititution,Halomethyl Carbonyl,True,
+CYS_SG_NEXT_EXCLUDE_000003,already_acquired_in_step14l,1ATK,COVPDB739,E64,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1076,SG--C2,Epoxide Opening,Epoxide,True,
+CYS_SG_NEXT_EXCLUDE_000004,already_acquired_in_step14l,1AU3,COVPDB1218,PCM,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1852,SG--C22,Hemi(thio)acetalization,Ketone,True,
+CYS_SG_NEXT_EXCLUDE_000005,already_acquired_in_step14l,1AU4,COVPDB956,INP,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1422,SG--C17,Hemi(thio)acetalization,Ketone,True,
+CYS_SG_NEXT_EXCLUDE_000006,already_acquired_in_step14l,1AYU,COVPDB953,INA,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1419,SG--C21,Nucleophilic Addition to a Double Bond,Hydrazide,True,
+CYS_SG_NEXT_EXCLUDE_000007,already_acquired_in_step14l,1AYV,COVPDB952,IN6,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1418,SG--C21,Nucleophilic Addition to a Double Bond,Hydrazide,True,
+CYS_SG_NEXT_EXCLUDE_000008,already_acquired_in_step14l,1AYW,COVPDB951,IN3,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=1417,SG--C21,Nucleophilic Addition to a Double Bond,Hydrazide,True,
+CYS_SG_NEXT_EXCLUDE_000009,already_acquired_in_step14l,1B02,COVPDB1415,UFP,https://drug-discovery.vm.uni-freiburg.de/covpdb/complex_card/pdb_ligand_id=2157,SG--C6,Nucleophilic Aromatic Substitution,Aryl Halide,True,

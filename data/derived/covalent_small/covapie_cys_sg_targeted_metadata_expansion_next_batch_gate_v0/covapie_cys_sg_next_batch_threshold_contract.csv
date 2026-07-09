@@ -1,0 +1,11 @@
+threshold_item,observed_status,threshold_contract_passed,qa_comment
+current_acquired_annotation_candidate_count_9,True,True,
+target_minimum_count_20,True,True,
+additional_candidate_needed_count_11,True,True,
+next_batch_minimum_new_candidate_target_11,True,True,
+if_next_batch_total_ge_20_then_manual_review_gate,contracted,True,
+if_next_batch_total_lt_20_then_repeat_next_batch_or_expand_source_registry,contracted,True,
+do_not_train_before_manual_review,true,True,
+do_not_train_before_feature_semantics_audit,true,True,
+do_not_use_acquisition_manifest_as_training_data,true,True,
+keep_existing_9_pending_manual_review,true,True,
