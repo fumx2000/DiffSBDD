@@ -1,0 +1,11 @@
+input_template_check,observed_status,expected_status,input_template_audit_passed,qa_comment
+template_exists,True,True,True,Step 14E template remains pending and unmodified.
+template_row_count_25,25,25,True,Step 14E template remains pending and unmodified.
+all_rows_pending_manual_review,True,True,True,Step 14E template remains pending and unmodified.
+ready_candidate_count_zero,0,0,True,Step 14E template remains pending and unmodified.
+source_profile_covpdb_manual_metadata_v0,{'covpdb_manual_metadata_v0'},covpdb_manual_metadata_v0,True,Step 14E template remains pending and unmodified.
+source_database_covpdb,{'CovPDB'},CovPDB,True,Step 14E template remains pending and unmodified.
+pdb_id_prefilled,True,True,True,Step 14E template remains pending and unmodified.
+ligand_identifier_prefilled,True,True,True,Step 14E template remains pending and unmodified.
+event_level_fields_blank_pending,True,True,True,Step 14E template remains pending and unmodified.
+v1_scope_cys_sg_pending,{'unknown_pending_manual_review'},unknown_pending_manual_review,True,Step 14E template remains pending and unmodified.

@@ -1,0 +1,11 @@
+validation_item,observed_status,validation_passed,qa_comment
+proposals_csv_json_consistent,True,True,CSV and JSON are written from the same proposal list.
+all_proposals_pending_manual_review,True,True,All proposals remain pending.
+no_ready_candidates_created,True,True,No proposal is a ready candidate.
+no_pdb_only_join_used,True,True,"Proposals require struct_conn evidence, never PDB ID alone."
+no_ligand_topology_auto_restore,True,True,No topology restoration is performed.
+v1_cys_sg_scope_preserved,True,True,Only CYS/SG proposals are emitted.
+raw_files_not_written,True,True,Raw files are read-only if present.
+raw_files_not_tracked_or_staged,True,True,Raw files remain untracked and unstaged.
+no_download_manifest_written,True,True,No download manifest artifact is written.
+validation_gate_still_required,True,True,A support review gate remains required before validation.

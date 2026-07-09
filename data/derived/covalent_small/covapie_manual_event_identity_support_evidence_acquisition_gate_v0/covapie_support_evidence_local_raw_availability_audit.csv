@@ -1,0 +1,29 @@
+curation_candidate_id,pdb_id,ligand_identifier,expected_local_raw_path,local_raw_file_exists,local_raw_file_tracked_by_git,local_raw_file_staged_by_git,raw_read_allowed_current_step,raw_read_attempted_current_step,raw_availability_audit_passed,qa_comment
+CUR_EVT_000001,1A3B,COVPDB1333,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A3B.cif,True,False,False,True,True,True,Existing local raw read-only evidence checked.
+CUR_EVT_000002,1A3E,COVPDB1330,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A3E.cif,True,False,False,True,True,True,Existing local raw read-only evidence checked.
+CUR_EVT_000003,1A46,COVPDB1,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A46.cif,True,False,False,True,True,True,Existing local raw read-only evidence checked.
+CUR_EVT_000004,1A54,COVPDB1089,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A54.cif,True,False,False,True,True,True,Existing local raw read-only evidence checked.
+CUR_EVT_000005,1A5G,COVPDB2,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A5G.cif,True,False,False,True,True,True,Existing local raw read-only evidence checked.
+CUR_EVT_000006,1A61,COVPDB3,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1A61.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000007,1AD8,COVPDB1090,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AD8.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000008,1AEC,COVPDB739,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AEC.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000009,1AHT,COVPDB501,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AHT.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000010,1AI8,COVPDB1341,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AI8.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000011,1AIM,COVPDB1512,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AIM.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000012,1ARC,COVPDB644,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1ARC.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000013,1AT3,COVPDB690,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AT3.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000014,1ATK,COVPDB739,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1ATK.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000015,1AU3,COVPDB1218,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AU3.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000016,1AU4,COVPDB956,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AU4.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000017,1AU8,COVPDB19,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AU8.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000018,1AUJ,COVPDB1235,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AUJ.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000019,1AWF,COVPDB875,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AWF.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000020,1AXB,COVPDB807,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AXB.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000021,1AY6,COVPDB102,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AY6.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000022,1AYU,COVPDB953,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AYU.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000023,1AYV,COVPDB952,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AYV.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000024,1AYW,COVPDB951,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1AYW.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+CUR_EVT_000025,1B02,COVPDB1415,data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0/1B02.mmcif,False,False,False,False,False,True,No local raw file available; candidate remains pending.
+summary_template_candidate_count,,,,,False,False,,,True,25
+summary_local_raw_available_count,,,,,False,False,,,True,5
+summary_local_raw_read_count,,,,,False,False,,,True,5
