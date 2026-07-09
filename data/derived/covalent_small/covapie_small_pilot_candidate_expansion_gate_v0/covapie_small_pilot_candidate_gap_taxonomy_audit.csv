@@ -1,0 +1,13 @@
+gap_type,gap_category,detection_policy,observed_count,blocks_manifest_rerun,gap_taxonomy_passed,qa_comment
+missing_chain_id,event_identity,chain_id is required for event-level identity,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_residue_name,event_identity,residue_name is required for event-level identity,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_residue_index,event_identity,residue_index is required for event-level identity,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_residue_atom_name,event_identity,residue_atom_name is required for event-level identity,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_ligand_atom_name,event_identity,ligand_atom_name is required unless covalent bond pair encodes it,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_covalent_bond_atom_pair,event_identity,covalent_bond_atom_pair must identify residue/ligand atoms,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_ligand_identifier,metadata_identity,ligand identifier is required for non-PDB-only matching,0,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_covalent_event_id,event_identity,covalent_event_id must be derived from event identity,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+duplicate_event_identity,deduplication,duplicate event identities block duplicate manifest rows,0,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+pdb_only_join_blocked,join_policy,PDB-only join attempts are always blocked,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+non_cys_or_non_sg_event_out_of_v1_scope,scope,non-CYS/SG evidence remains out of v1 scope,0,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.
+missing_authoritative_evidence_source,provenance,authoritative derived evidence is required before expansion,25,True,True,Observed counts are derived from metadata rows and allowed derived evidence only.

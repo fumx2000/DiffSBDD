@@ -1,0 +1,36 @@
+expansion_item_or_candidate_id,source_profile,source_database,pdb_id,ligand_identifier,chain_id,residue_name,residue_index,residue_atom_name,ligand_atom_name,covalent_bond_atom_pair,covalent_event_id,evidence_source_name,event_identity_complete,pdb_only_join_used,expansion_status,expansion_reason,candidate_expansion_passed
+metadata_candidate_universe_row_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,metadata_candidate_universe_row_count: 25,True
+step14c_selected_small_pilot_row_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,step14c_selected_small_pilot_row_count: 0,True
+step14c_gap_reason_missing_event_identity,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,step14c_gap_reason_missing_event_identity: 1,True
+evidence_sources_scanned_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,evidence_sources_scanned_count: 12,True
+authoritative_event_evidence_sources_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,authoritative_event_evidence_sources_count: 1,True
+expanded_event_candidate_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,expanded_event_candidate_count: 0,True
+selected_for_manifest_rerun_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,selected_for_manifest_rerun_count: 0,True
+incomplete_event_identity_candidate_count,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,incomplete_event_identity_candidate_count: 25,True
+pdb_only_join_attempts_blocked,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,pdb_only_join_attempts_blocked: 25,True
+candidate_expansion_passed,covpdb_manual_metadata_v0,CovPDB,,,,,,,,,,summary,True,False,summary,candidate_expansion_passed: 1,True
+COVPDB_META_000001,covpdb_manual_metadata_v0,CovPDB,1A3B,COVPDB1333,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000002,covpdb_manual_metadata_v0,CovPDB,1A3E,COVPDB1330,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000003,covpdb_manual_metadata_v0,CovPDB,1A46,COVPDB1,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000004,covpdb_manual_metadata_v0,CovPDB,1A54,COVPDB1089,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000005,covpdb_manual_metadata_v0,CovPDB,1A5G,COVPDB2,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000006,covpdb_manual_metadata_v0,CovPDB,1A61,COVPDB3,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000007,covpdb_manual_metadata_v0,CovPDB,1AD8,COVPDB1090,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000008,covpdb_manual_metadata_v0,CovPDB,1AEC,COVPDB739,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000009,covpdb_manual_metadata_v0,CovPDB,1AHT,COVPDB501,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000010,covpdb_manual_metadata_v0,CovPDB,1AI8,COVPDB1341,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000011,covpdb_manual_metadata_v0,CovPDB,1AIM,COVPDB1512,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000012,covpdb_manual_metadata_v0,CovPDB,1ARC,COVPDB644,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000013,covpdb_manual_metadata_v0,CovPDB,1AT3,COVPDB690,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000014,covpdb_manual_metadata_v0,CovPDB,1ATK,COVPDB739,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000015,covpdb_manual_metadata_v0,CovPDB,1AU3,COVPDB1218,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000016,covpdb_manual_metadata_v0,CovPDB,1AU4,COVPDB956,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000017,covpdb_manual_metadata_v0,CovPDB,1AU8,COVPDB19,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000018,covpdb_manual_metadata_v0,CovPDB,1AUJ,COVPDB1235,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000019,covpdb_manual_metadata_v0,CovPDB,1AWF,COVPDB875,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000020,covpdb_manual_metadata_v0,CovPDB,1AXB,COVPDB807,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000021,covpdb_manual_metadata_v0,CovPDB,1AY6,COVPDB102,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000022,covpdb_manual_metadata_v0,CovPDB,1AYU,COVPDB953,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000023,covpdb_manual_metadata_v0,CovPDB,1AYV,COVPDB952,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000024,covpdb_manual_metadata_v0,CovPDB,1AYW,COVPDB951,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True
+COVPDB_META_000025,covpdb_manual_metadata_v0,CovPDB,1B02,COVPDB1415,,,,,,,,,False,False,not_expanded_current_step,missing authoritative event-level identity; pdb_only_join blocked,True

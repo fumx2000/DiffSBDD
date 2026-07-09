@@ -1,0 +1,15 @@
+event_identity_field,required_for_expanded_candidate,allowed_source_evidence,pdb_only_join_allowed,current_step_policy,mapping_contract_passed,qa_comment
+source_profile,True,Step14C source profile contract,False,must equal current source profile,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+source_database,True,Step14C source profile contract,False,must equal current source database,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+pdb_id,True,metadata CSV plus authoritative event evidence,True,required but not sufficient by itself,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+ligand_identifier,True,metadata CSV plus authoritative event evidence,False,required with PDB for candidate matching,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+chain_id,True,authoritative event identity evidence,False,must not be fabricated,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+residue_name,True,authoritative event identity evidence,False,must not be fabricated,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+residue_index,True,authoritative event identity evidence,False,must not be fabricated,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+residue_atom_name,True,authoritative event identity evidence,False,must not be fabricated,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+ligand_atom_name,False,authoritative evidence or covalent_bond_atom_pair,False,nullable only when covalent_bond_atom_pair contains ligand atom identity,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+covalent_bond_atom_pair,True,authoritative event identity evidence,False,must contain residue/ligand atom relationship,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+covalent_event_id,True,derived from event-level identity,False,never derived from PDB ID alone,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+candidate_metadata_id,True,metadata CSV lineage,False,stable candidate lineage id,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+evidence_source,True,derived evidence source inventory,False,must record provenance,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
+evidence_provenance_status,True,derived evidence source inventory,False,must distinguish authoritative/supporting/missing,True,PDB-only joins are blocked except that pdb_id itself may be present as one component.
