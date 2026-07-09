@@ -1,0 +1,12 @@
+rerun_diff_item,observed_value,expected_value,rerun_diff_passed,blocking_reasons
+step14x_ready_candidate_count,3,3,True,
+small_pilot_manifest_row_count,3,3,True,
+blocked_exclusion_count,2,2,True,
+accepted_pairs_match_expected,"[""6BV6/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]","[""6BV6/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]",True,
+blocked_pairs_match_expected,"[""1A54/MDC"", ""6BV9/JUG""]","[""1A54/MDC"", ""6BV9/JUG""]",True,
+sample_index_written,False,False,True,
+final_dataset_written,False,False,True,
+split_assignments_written,False,False,True,
+leakage_matrix_written,False,False,True,
+training_artifacts_written,False,False,True,
+step14x_artifacts_unchanged,True,True,True,
