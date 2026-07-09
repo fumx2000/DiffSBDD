@@ -1,0 +1,9 @@
+policy_item,policy_status,allowed_current_step,forbidden_current_step,policy_contract_passed,qa_comment
+pdb_id_for_event_identity_still_forbidden,PDB ID-only event identity remains forbidden.,False,True,True,Discovery manifest policy boundary recorded.
+pdb_id_for_raw_evidence_discovery_allowed,PDB ID may be used only to fetch raw evidence in a future smoke.,True,False,True,Discovery manifest policy boundary recorded.
+discovery_download_not_sample_download,This manifest is not a sample download manifest.,True,True,True,Discovery manifest policy boundary recorded.
+struct_conn_required_for_event_identity,Future candidate identity requires struct_conn or authoritative evidence.,True,True,True,Discovery manifest policy boundary recorded.
+cys_sg_required_for_v1_candidate,V1 candidates must be CYS/SG.,True,True,True,Discovery manifest policy boundary recorded.
+manual_review_required_after_discovery,Discovery findings remain pending manual review.,True,True,True,Discovery manifest policy boundary recorded.
+no_ready_candidate_current_step,This step creates no ready candidates.,False,True,True,Discovery manifest policy boundary recorded.
+no_training_or_dataloader_current_step,No dataloader or training is allowed.,False,True,True,Discovery manifest policy boundary recorded.

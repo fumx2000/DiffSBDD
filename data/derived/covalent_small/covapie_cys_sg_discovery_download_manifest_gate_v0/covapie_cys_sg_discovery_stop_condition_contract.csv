@@ -1,0 +1,9 @@
+stop_condition_item,policy,current_step_status,stop_condition_passed,qa_comment
+after_discovery_parse_count_cys_sg_candidates,Count CYS/SG candidates after future discovery parse.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+if_cys_sg_candidates_ge_20_then_support_review,Proceed to support review only if enough candidates are found.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+if_cys_sg_candidates_lt_20_then_cys_sg_source_expansion,Switch to source expansion if discovery remains below target.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+do_not_continue_manual_review_with_zero_proposals,Do not review an empty proposal set.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+do_not_train_from_discovery_manifest,Discovery manifest is not a training dataset.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+do_not_mix_ser_events_into_cys_v1,SER or other residue events stay out of CYS V1.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+current_top25_candidate_route_is_diagnostic_only,Current route diagnoses source limitations.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.
+medium_pilot_requires_source_registry,Medium pilot requires a source registry before scale-up.,declared_not_executed,True,Stop condition contract recorded for future discovery parse.

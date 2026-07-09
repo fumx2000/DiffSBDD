@@ -1,0 +1,23 @@
+schema_field,field_present,policy_validated,schema_audit_passed,qa_comment
+discovery_manifest_row_id,True,True,True,Required discovery manifest schema field present and policy-bound.
+purpose,True,True,True,Required discovery manifest schema field present and policy-bound.
+source_profile,True,True,True,Required discovery manifest schema field present and policy-bound.
+source_database,True,True,True,Required discovery manifest schema field present and policy-bound.
+curation_candidate_id,True,True,True,Required discovery manifest schema field present and policy-bound.
+candidate_metadata_id,True,True,True,Required discovery manifest schema field present and policy-bound.
+pdb_id,True,True,True,Required discovery manifest schema field present and policy-bound.
+ligand_identifier,True,True,True,Required discovery manifest schema field present and policy-bound.
+intended_structure_format,True,True,True,Required discovery manifest schema field present and policy-bound.
+intended_download_url_or_resolver,True,True,True,Required discovery manifest schema field present and policy-bound.
+raw_output_path,True,True,True,Required discovery manifest schema field present and policy-bound.
+existing_local_raw_available,True,True,True,Required discovery manifest schema field present and policy-bound.
+discovery_download_status,True,True,True,Required discovery manifest schema field present and policy-bound.
+retry_count,True,True,True,Required discovery manifest schema field present and policy-bound.
+failure_reason,True,True,True,Required discovery manifest schema field present and policy-bound.
+source_metadata_hash,True,True,True,Required discovery manifest schema field present and policy-bound.
+pdb_only_join_role,True,True,True,Required discovery manifest schema field present and policy-bound.
+event_identity_status,True,True,True,Required discovery manifest schema field present and policy-bound.
+downstream_struct_conn_discovery_status,True,True,True,Required discovery manifest schema field present and policy-bound.
+git_tracking_guard,True,True,True,Required discovery manifest schema field present and policy-bound.
+ready_candidate_current_step,True,True,True,Required discovery manifest schema field present and policy-bound.
+ready_for_training_current_step,True,True,True,Required discovery manifest schema field present and policy-bound.

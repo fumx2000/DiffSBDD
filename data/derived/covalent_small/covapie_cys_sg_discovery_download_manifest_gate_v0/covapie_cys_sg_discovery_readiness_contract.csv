@@ -1,0 +1,9 @@
+readiness_item,observed_status,readiness_passed,next_required_gate,qa_comment
+discovery_manifest_written,true,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+discovery_manifest_rows_pending_download,25,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+no_raw_download_current_step,true,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+ready_for_cys_sg_discovery_download_smoke,true,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+ready_for_small_pilot_download_smoke_false,false,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+ready_for_actual_dataloader_false,false,True,covapie_cys_sg_discovery_download_smoke,Readiness is limited to CYS/SG discovery download smoke.
+training_still_blocked,false,True,feature_semantics_audit_and_leakage_split_design,Readiness is limited to CYS/SG discovery download smoke.
+feature_semantics_still_not_training_final,false,True,feature_semantics_audit_gate_before_training,Readiness is limited to CYS/SG discovery download smoke.
