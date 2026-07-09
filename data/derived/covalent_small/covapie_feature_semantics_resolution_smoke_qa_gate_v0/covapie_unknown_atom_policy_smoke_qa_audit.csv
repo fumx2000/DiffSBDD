@@ -1,0 +1,9 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,policy_finalized_for_training_current_step,ready_for_actual_tensor_smoke,blocks_training,qa_passed,qa_comment
+unknown_ligand_element_policy_candidate,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+uncommon_ligand_atom_policy_candidate,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+unknown_protein_residue_policy_candidate,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+unknown_protein_atom_name_policy_candidate,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+covalent_adduct_atom_mapping_policy_candidate,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+unknown_policy_audit_table_required,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+unknown_policy_resolution_smoke_required,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training
+unknown_policy_not_training_final_current_step,True,True,True,False,False,True,True,unknown atom policy smoke passed but policy remains non-final for training

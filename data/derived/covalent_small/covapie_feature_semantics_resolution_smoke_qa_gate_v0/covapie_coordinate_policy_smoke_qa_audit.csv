@@ -1,0 +1,9 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,derived_table_evidence_found,coordinate_like_columns_detected,current_step_tensorized,ready_for_actual_tensor_smoke,qa_passed,qa_comment
+protein_xyz_source_contract,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+ligand_xyz_source_contract,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+coordinate_unit_policy_candidate,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+coordinate_frame_policy_candidate,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+protein_ligand_joint_coordinate_policy,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+coordinate_dtype_policy_candidate,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+coordinate_shape_policy_candidate,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed
+coordinate_resolution_requires_smoke_validation,True,True,True,True,x;y;z,False,False,True,coordinate policy smoke passed with derived-table evidence only; no tensorization allowed

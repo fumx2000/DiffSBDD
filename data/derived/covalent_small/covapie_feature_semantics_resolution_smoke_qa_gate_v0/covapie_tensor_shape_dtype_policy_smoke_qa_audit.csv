@@ -1,0 +1,11 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,checkpoint_compatibility_risk,current_step_tensorized,ready_for_actual_tensor_smoke,qa_passed,qa_comment
+coordinate_dtype_candidate,True,True,True,medium,False,False,True,tensor shape/dtype smoke passed without creating tensors
+coordinate_shape_candidate,True,True,True,medium,False,False,True,tensor shape/dtype smoke passed without creating tensors
+atom_feature_dtype_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+atom_feature_shape_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+mask_selector_dtype_candidate,True,True,True,medium,False,False,True,tensor shape/dtype smoke passed without creating tensors
+mask_boolean_dtype_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+auxiliary_label_dtype_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+variable_size_collate_policy_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+batch_index_policy_candidate,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors
+tensor_shape_dtype_resolution_smoke_required,True,True,True,high,False,False,True,tensor shape/dtype smoke passed without creating tensors

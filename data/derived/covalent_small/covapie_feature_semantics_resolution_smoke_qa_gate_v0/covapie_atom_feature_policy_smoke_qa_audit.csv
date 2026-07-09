@@ -1,0 +1,13 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,derived_table_header_evidence_found,proposed_policy_status,ready_for_actual_tensor_smoke,blocks_training,qa_passed,qa_comment
+ligand_element_symbol_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+ligand_atom_type_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+ligand_aromatic_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+ligand_formal_charge_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+ligand_unknown_atom_feature_policy_link,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+protein_element_symbol_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+protein_residue_name_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+protein_atom_name_feature_policy,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+protein_unknown_residue_feature_policy_link,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+feature_dimension_policy_candidate,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+feature_dtype_policy_candidate,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training
+atom_feature_schema_resolution_smoke_required,True,True,True,True,candidate_policy_only_not_training_final,False,True,True,atom feature smoke remains candidate-only and blocks training

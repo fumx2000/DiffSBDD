@@ -1,0 +1,13 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,training_final_status,actual_tensor_smoke_allowed,qa_passed,qa_comment
+original_dataset_py_feature_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_prepare_crossdocked_feature_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_lightning_batch_key_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_equivariant_diffusion_feature_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_atom_encoder_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_atom_decoder_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_residue_encoder_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_feature_dimension_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_one_hot_feature_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_unknown_atom_candidate_symbols,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_feature_schema_mapping_not_training_final,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final
+original_checkpoint_compatibility_requires_static_mapping,True,True,True,not_training_final,False,True,feature schema mapping smoke row passed and remains non-training-final

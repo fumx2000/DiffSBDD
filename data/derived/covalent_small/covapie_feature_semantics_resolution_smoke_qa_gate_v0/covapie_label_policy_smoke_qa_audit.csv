@@ -1,0 +1,15 @@
+qa_item,source_smoke_row_found,expected_passed_status,observed_passed_status,mask_task_name_source_of_truth,mask_task_alias_display_only,ready_for_actual_tensor_smoke,blocks_training,qa_passed,qa_comment
+mask_task_name_string_selector_policy,True,True,True,True,True,False,False,True,label smoke passed; mask names remain source of truth and aliases display-only
+mask_task_alias_display_only_policy,True,True,True,True,True,False,False,True,label smoke passed; mask names remain source of truth and aliases display-only
+scaffold_linker_warhead_group_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+mask_boolean_tensor_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+warhead_type_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+covalent_atom_pair_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+covalent_bond_distance_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+pre_covalent_geometry_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+post_covalent_geometry_label_policy_candidate,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+auxiliary_loss_label_policy_blocked,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+group_label_materialization_smoke_required,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+auxiliary_label_resolution_smoke_required,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+label_tensorization_actual_smoke_blocked,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
+label_semantics_not_training_final_current_step,True,True,True,True,True,False,True,True,label smoke passed; mask names remain source of truth and aliases display-only
