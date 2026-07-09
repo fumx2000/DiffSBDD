@@ -1,0 +1,13 @@
+policy_item,policy_description,policy_contract_passed
+result_review_gate_only,This step only prepares result review artifacts.,True
+matched_struct_conn_evidence_is_not_ready_candidate,Matched evidence is not a ready candidate in this step.,True
+result_review_decision_required_before_ready_materialization,A human/user decision is required before ready materialization.,True
+ligand_atom_name_from_raw_struct_conn_only,Ligand atom names are carried from Step 14T raw struct_conn evidence.,True
+unmatched_inputs_not_used_as_ready_candidates,Unmatched inputs remain blocked and are not ready candidates.,True
+no_training_current_step,Training is not allowed in this step.,True
+no_sample_or_final_dataset_current_step,Sample and final dataset artifacts are not written.,True
+no_split_or_leakage_current_step,Split/leakage artifacts are not written.,True
+feature_semantics_audit_required_before_training,Feature semantics audit remains required before training.,True
+leakage_split_gate_required_before_training,Leakage/split gate remains required before training.,True
+canonical_five_masks_preserved,The canonical five masks remain unchanged.,True
+do_not_train_from_result_review_template,The review template cannot be used as training input.,True
