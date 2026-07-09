@@ -1,0 +1,13 @@
+gap_item,gap_value,gap_audit_passed,qa_comment
+seed_candidate_count,9,True,
+ligand_card_fetch_success_count,8,True,
+complex_card_resolved_count,9,True,
+complex_card_event_annotation_acquired_count,9,True,
+rcsb_ccd_fetch_success_count,8,True,
+acquired_event_annotation_candidate_count,9,True,
+partial_annotation_count,0,True,
+failed_annotation_count,0,True,
+ready_candidate_count_current_step,0,True,
+below_20_threshold_status,below_threshold_needs_additional_cys_sg_candidates,True,
+targeted_expansion_still_required,True,True,
+training_still_blocked,True,True,
