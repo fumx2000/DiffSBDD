@@ -1,0 +1,11 @@
+blocking_reason,blocking_description,blocking_contract_passed
+missing_raw_mmcif,missing raw mmcif,True
+missing_struct_conn_category,missing struct conn category,True
+no_cys_sg_ligand_match,no cys sg ligand match,True
+only_disulfide_or_sg_sg_found,only disulfide or sg sg found,True
+ligand_comp_id_mismatch,ligand comp id mismatch,True
+chain_or_residue_index_conflict,chain or residue index conflict,True
+multiple_ambiguous_struct_conn_matches,multiple ambiguous struct conn matches,True
+ligand_atom_name_missing,ligand atom name missing,True
+raw_parse_error,raw parse error,True
+metadata_raw_event_identity_conflict,metadata raw event identity conflict,True

@@ -1,0 +1,13 @@
+acceptance_item,acceptance_description,required_before_dataset_ready,required_before_training,current_step_status,acceptance_contract_passed
+require_raw_mmcif_available_before_crosscheck,A raw mmCIF file must be available before evidence cross-check.,True,True,contract_only_not_evaluated,True
+require_struct_conn_category_present,The raw mmCIF must contain struct_conn records.,True,True,contract_only_not_evaluated,True
+require_cys_sg_partner,One struct_conn partner must be CYS SG.,True,True,contract_only_not_evaluated,True
+require_ligand_comp_partner_matches_expected_het,The ligand partner component ID must match the expected HET code.,True,True,contract_only_not_evaluated,True
+require_chain_and_residue_index_match_or_reviewable_mapping,Chain and residue index must match or require explicit reviewable mapping.,True,True,contract_only_not_evaluated,True
+require_non_disulfide_non_sg_sg,Disulfide or SG-SG-only evidence cannot satisfy ligand covalent evidence.,True,True,contract_only_not_evaluated,True
+require_ligand_atom_name_extracted_from_struct_conn,The ligand atom name must come from struct_conn evidence.,True,True,contract_only_not_evaluated,True
+require_event_identity_not_pdb_id_alone,PDB ID alone is not event identity.,True,True,contract_only_not_evaluated,True
+require_event_identity_not_ligand_id_alone,Ligand ID alone is not event identity.,True,True,contract_only_not_evaluated,True
+require_manual_review_after_crosscheck_before_ready,Cross-check evidence still requires review before ready status.,True,True,contract_only_not_evaluated,True
+require_feature_semantics_audit_before_training,Feature semantics audit remains required before training.,True,True,contract_only_not_evaluated,True
+do_not_train_from_crosscheck_plan,This plan cannot be used as training input.,True,True,contract_only_not_evaluated,True
