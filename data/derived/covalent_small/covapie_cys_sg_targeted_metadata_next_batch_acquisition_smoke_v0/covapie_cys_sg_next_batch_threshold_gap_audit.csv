@@ -1,0 +1,13 @@
+threshold_gap_item,threshold_gap_value,threshold_gap_audit_passed,qa_comment
+existing_candidate_count,9,True,
+new_candidate_count,16,True,
+combined_candidate_count,25,True,
+total_candidate_target,20,True,
+additional_candidate_needed_before_step,11,True,
+additional_candidate_needed_after_step,0,True,
+new_candidate_target_met,True,True,
+below_20_threshold_status,target_reached_pending_manual_review,True,
+ready_candidate_count_current_step,0,True,
+ready_for_manual_review_gate_if_combined_ge_20,True,True,
+targeted_expansion_still_required_if_combined_lt_20,False,True,
+training_still_blocked,True,True,
