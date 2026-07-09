@@ -1,0 +1,4 @@
+ready_candidate_id,pdb_id,expected_het_id,upstream_step14w_input_present,upstream_step14v_user_decision_present,upstream_step14u_result_review_present,upstream_step14t_struct_conn_evidence_present,ligand_atom_from_raw_struct_conn,residue_atom_from_raw_struct_conn,covalent_bond_atom_pair,traceability_status,traceability_audit_passed,qa_comment
+CYS_SG_READY_CANDIDATE_000001,6BV6,JUG,True,True,True,True,True,True,SG--CAG,complete_evidence_chain_to_ready_candidate,True,traceability follows committed CSV/JSON artifacts; no raw files read in this step
+CYS_SG_READY_CANDIDATE_000002,6BV8,JUG,True,True,True,True,True,True,SG--CAG,complete_evidence_chain_to_ready_candidate,True,traceability follows committed CSV/JSON artifacts; no raw files read in this step
+CYS_SG_READY_CANDIDATE_000003,6BV5,JUG,True,True,True,True,True,True,SG--CAG,complete_evidence_chain_to_ready_candidate,True,traceability follows committed CSV/JSON artifacts; no raw files read in this step

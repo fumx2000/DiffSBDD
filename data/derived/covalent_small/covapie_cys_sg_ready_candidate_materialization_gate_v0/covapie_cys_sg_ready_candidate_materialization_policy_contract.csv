@@ -1,0 +1,13 @@
+policy_item,policy_description,policy_contract_passed
+ready_candidate_materialization_gate_only,This step materializes ready candidate records only.,True
+ready_candidate_is_not_final_dataset_sample,Ready candidates are not final dataset samples.,True
+ready_candidate_is_not_training_sample,Ready candidates are not training samples.,True
+ready_candidate_requires_future_sample_preparation,Future sample preparation remains required.,True
+final_dataset_not_written_current_step,No final dataset artifact is written.,True
+sample_index_not_written_current_step,No sample index artifact is written.,True
+split_and_leakage_not_written_current_step,No split or leakage artifact is written.,True
+feature_semantics_audit_required_before_training,Feature semantics audit remains required before training.,True
+leakage_split_gate_required_before_training,Leakage/split gate remains required before training.,True
+canonical_five_masks_preserved,The canonical five masks remain unchanged.,True
+blocked_inputs_not_materialized,Blocked inputs are not materialized as ready candidates.,True
+do_not_train_from_ready_candidate_inventory,Ready candidate inventory is not a training input.,True
