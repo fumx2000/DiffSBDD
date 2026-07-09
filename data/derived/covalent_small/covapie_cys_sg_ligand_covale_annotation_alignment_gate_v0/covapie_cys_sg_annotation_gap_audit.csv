@@ -1,0 +1,11 @@
+gap_item,observed_status,gap_audit_passed,qa_comment
+input_ligand_covale_candidate_count,9,True,input candidates reviewed
+metadata_pdb_match_count,9,True,"PDB context only, not event identity"
+metadata_ligand_or_het_alignment_count,9,True,ligand/het context alignment
+metadata_event_annotation_gap_count,9,True,event-level metadata gaps recorded
+metadata_conflict_count,0,True,conflicts retained for review
+annotation_aligned_pending_review_count,9,True,all rows remain pending review
+ready_candidate_count_current_step,0,True,no ready candidates
+small_pilot_threshold_20_status,below_threshold_needs_targeted_expansion_after_alignment,True,below_threshold_needs_targeted_expansion_after_alignment
+targeted_expansion_needed_after_alignment,True,True,below threshold route recorded
+training_still_blocked,true,True,training blocked

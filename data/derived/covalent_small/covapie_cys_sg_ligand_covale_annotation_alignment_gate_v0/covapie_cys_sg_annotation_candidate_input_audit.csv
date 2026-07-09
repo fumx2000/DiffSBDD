@@ -1,0 +1,11 @@
+candidate_input_item,observed_status,candidate_input_passed,qa_comment
+candidate_csv_exists,data/derived/covalent_small/covapie_cys_sg_discovery_support_review_gate_v0/covapie_cys_sg_ligand_covale_candidates.csv,True,
+candidate_json_exists,data/derived/covalent_small/covapie_cys_sg_discovery_support_review_gate_v0/covapie_cys_sg_ligand_covale_candidates.json,True,
+candidate_csv_json_consistent,candidate ids and row counts match,True,
+ligand_covale_candidate_count,9,True,
+all_candidates_struct_conn_type_covale,covale,True,
+all_candidates_residue_cys_sg,CYS/SG,True,
+all_candidates_ligand_comp_not_cys,ligand comp != CYS,True,
+all_candidates_bond_pair_not_sg_sg,not SG--SG,True,
+all_candidates_pending_manual_review,pending_manual_review,True,
+no_ready_candidates_in_input,ready false,True,
