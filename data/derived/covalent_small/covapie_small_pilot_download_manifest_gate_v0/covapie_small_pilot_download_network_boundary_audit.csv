@@ -1,0 +1,11 @@
+network_boundary_item,current_step_status,network_boundary_passed,qa_comment
+no_network_access_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_download_attempt_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_curl_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_wget_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_requests_or_urllib_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_raw_write_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+no_raw_file_content_read_current_step,not_executed_or_not_allowed,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+future_download_requires_explicit_smoke_gate,future_gate_required,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+future_download_must_not_stage_raw,future_gate_required,True,Step 14C writes manifest metadata only; no network or raw operations are performed.
+future_download_must_have_retry_checksum_policy,future_gate_required,True,Step 14C writes manifest metadata only; no network or raw operations are performed.

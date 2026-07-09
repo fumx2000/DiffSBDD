@@ -1,0 +1,25 @@
+manifest_field,required,observed_in_all_manifest_rows,value_policy_satisfied,schema_validation_passed,qa_comment
+download_manifest_row_id,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+source_profile,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+source_database,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+candidate_metadata_id,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+covalent_event_id,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+pdb_id,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+ligand_identifier,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+chain_id,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+residue_name,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+residue_index,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+residue_atom_name,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+covalent_bond_atom_pair,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+intended_structure_format,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+intended_download_url_or_resolver,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+raw_output_path,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+expected_checksum_field,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+download_status,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+retry_count,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+failure_reason,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+source_metadata_hash,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+downstream_extraction_status,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+git_tracking_guard,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+selected_for_small_pilot,True,True,True,True,Required field preserved for source-profile-aware future download manifests.
+pilot_selection_rank,True,True,True,True,Required field preserved for source-profile-aware future download manifests.

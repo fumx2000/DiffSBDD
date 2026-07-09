@@ -1,0 +1,35 @@
+selection_item_or_candidate_id,source_database,source_profile,pdb_id,ligand_identifier,covalent_event_id,candidate_metadata_id,selection_status,selection_reason,candidate_selection_passed
+candidate_universe_row_count,CovPDB,covpdb_manual_metadata_v0,,,,,summary,metadata rows scanned for manifest eligibility: 25,True
+candidate_rows_with_pdb_id,CovPDB,covpdb_manual_metadata_v0,,,,,summary,rows with pdb_id: 25,True
+candidate_rows_with_ligand_identifier,CovPDB,covpdb_manual_metadata_v0,,,,,summary,rows with ligand identifier: 25,True
+candidate_rows_with_event_identity,CovPDB,covpdb_manual_metadata_v0,,,,,summary,rows with event-level identity: 0,True
+duplicate_candidates_detected,CovPDB,covpdb_manual_metadata_v0,,,,,summary,duplicate event keys detected: 0,True
+excluded_candidates_detected,CovPDB,covpdb_manual_metadata_v0,,,,,summary,rows excluded from selected manifest due to incomplete event identity: 25,True
+selected_small_pilot_row_count,CovPDB,covpdb_manual_metadata_v0,,,,,summary,selected rows after eligibility and pilot cap: 0,True
+insufficient_candidate_count_for_20_to_50_pilot,CovPDB,covpdb_manual_metadata_v0,,,,,summary,download smoke remains blocked if true: True,True
+candidate_selection_passed,CovPDB,covpdb_manual_metadata_v0,,,,,summary,selection audit completed without fabricating identities: True,True
+COVPDB_META_000001,CovPDB,covpdb_manual_metadata_v0,1A3B,COVPDB1333,,COVPDB_META_000001,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000002,CovPDB,covpdb_manual_metadata_v0,1A3E,COVPDB1330,,COVPDB_META_000002,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000003,CovPDB,covpdb_manual_metadata_v0,1A46,COVPDB1,,COVPDB_META_000003,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000004,CovPDB,covpdb_manual_metadata_v0,1A54,COVPDB1089,,COVPDB_META_000004,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000005,CovPDB,covpdb_manual_metadata_v0,1A5G,COVPDB2,,COVPDB_META_000005,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000006,CovPDB,covpdb_manual_metadata_v0,1A61,COVPDB3,,COVPDB_META_000006,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000007,CovPDB,covpdb_manual_metadata_v0,1AD8,COVPDB1090,,COVPDB_META_000007,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000008,CovPDB,covpdb_manual_metadata_v0,1AEC,COVPDB739,,COVPDB_META_000008,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000009,CovPDB,covpdb_manual_metadata_v0,1AHT,COVPDB501,,COVPDB_META_000009,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000010,CovPDB,covpdb_manual_metadata_v0,1AI8,COVPDB1341,,COVPDB_META_000010,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000011,CovPDB,covpdb_manual_metadata_v0,1AIM,COVPDB1512,,COVPDB_META_000011,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000012,CovPDB,covpdb_manual_metadata_v0,1ARC,COVPDB644,,COVPDB_META_000012,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000013,CovPDB,covpdb_manual_metadata_v0,1AT3,COVPDB690,,COVPDB_META_000013,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000014,CovPDB,covpdb_manual_metadata_v0,1ATK,COVPDB739,,COVPDB_META_000014,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000015,CovPDB,covpdb_manual_metadata_v0,1AU3,COVPDB1218,,COVPDB_META_000015,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000016,CovPDB,covpdb_manual_metadata_v0,1AU4,COVPDB956,,COVPDB_META_000016,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000017,CovPDB,covpdb_manual_metadata_v0,1AU8,COVPDB19,,COVPDB_META_000017,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000018,CovPDB,covpdb_manual_metadata_v0,1AUJ,COVPDB1235,,COVPDB_META_000018,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000019,CovPDB,covpdb_manual_metadata_v0,1AWF,COVPDB875,,COVPDB_META_000019,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000020,CovPDB,covpdb_manual_metadata_v0,1AXB,COVPDB807,,COVPDB_META_000020,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000021,CovPDB,covpdb_manual_metadata_v0,1AY6,COVPDB102,,COVPDB_META_000021,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000022,CovPDB,covpdb_manual_metadata_v0,1AYU,COVPDB953,,COVPDB_META_000022,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000023,CovPDB,covpdb_manual_metadata_v0,1AYV,COVPDB952,,COVPDB_META_000023,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000024,CovPDB,covpdb_manual_metadata_v0,1AYW,COVPDB951,,COVPDB_META_000024,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
+COVPDB_META_000025,CovPDB,covpdb_manual_metadata_v0,1B02,COVPDB1415,,COVPDB_META_000025,excluded_current_step,missing event-level identity; no pdb_id_only join allowed,True
