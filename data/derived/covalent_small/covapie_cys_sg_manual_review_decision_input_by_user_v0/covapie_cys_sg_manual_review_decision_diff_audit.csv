@@ -1,0 +1,13 @@
+decision_diff_item,decision_diff_value,decision_diff_audit_passed,qa_comment
+input_template_row_count,25,True,
+decision_input_row_count,25,True,
+accepted_for_future_struct_conn_crosscheck_count,5,True,
+pending_manual_review_count,20,True,
+reject_count,0,True,
+needs_more_evidence_count,0,True,
+ready_candidate_count_current_step,0,True,
+training_candidate_count_current_step,0,True,
+accepted_rows_all_from_step14n,True,True,
+accepted_rows_all_need_future_struct_conn_crosscheck,True,True,
+accepted_rows_match_user_selected_ids,True,True,
+step14o_template_unchanged,True,True,
