@@ -1,0 +1,6 @@
+crosscheck_input_id,pdb_id,expected_het_id,expected_residue_name,expected_residue_atom_name,expected_residue_chain_id,expected_residue_index,struct_conn_records_scanned,matched_struct_conn_record_count,matched_conn_ids,matched_conn_type_ids,matched_residue_partner_sides,matched_ligand_partner_sides,matched_residue_atom_names,matched_ligand_atom_names,crosscheck_status,blocking_reason,ready_candidate_current_step,ready_for_training_current_step,query_execution_passed,qa_comment
+CYS_SG_STRUCT_CONN_CROSSCHECK_INPUT_000001,1A54,MDC,CYS,SG,A,197,0,0,,,,,,,no_struct_conn_loop_found,no_struct_conn_loop_found,False,False,True,
+CYS_SG_STRUCT_CONN_CROSSCHECK_INPUT_000002,6BV6,JUG,CYS,SG,A,346,6,1,covale1,covale,ptnr1,ptnr2,SG,CAG,matched_cys_sg_ligand_struct_conn,,False,False,True,auth_fields_matched
+CYS_SG_STRUCT_CONN_CROSSCHECK_INPUT_000003,6BV9,JUG,CYS,SG,A,222,4,0,,,,,,,ligand_comp_id_mismatch,ligand_comp_id_mismatch,False,False,True,CYS SG struct_conn records found without expected ligand HET
+CYS_SG_STRUCT_CONN_CROSSCHECK_INPUT_000004,6BV8,JUG,CYS,SG,A,353,11,1,covale1,covale,ptnr1,ptnr2,SG,CAG,matched_cys_sg_ligand_struct_conn,,False,False,True,auth_fields_matched
+CYS_SG_STRUCT_CONN_CROSSCHECK_INPUT_000005,6BV5,JUG,CYS,SG,A,353,11,1,covale1,covale,ptnr1,ptnr2,SG,CAG,matched_cys_sg_ligand_struct_conn,,False,False,True,auth_fields_matched
