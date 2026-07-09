@@ -1,0 +1,11 @@
+decision_application_diff_item,decision_application_diff_value,decision_application_diff_passed,qa_comment
+applied_decision_row_count,25,True,
+applied_accept_for_future_struct_conn_crosscheck_count,5,True,
+applied_pending_manual_review_count,20,True,
+future_struct_conn_crosscheck_input_count,5,True,
+accepted_pdb_het_pairs_match,"[""1A54/MDC"", ""6BV6/JUG"", ""6BV9/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]",True,
+future_pdb_het_pairs_match,"[""1A54/MDC"", ""6BV6/JUG"", ""6BV9/JUG"", ""6BV8/JUG"", ""6BV5/JUG""]",True,
+ready_candidate_count_current_step,0,True,
+training_candidate_count_current_step,0,True,
+future_rows_next_gate_validated,True,True,
+future_rows_not_ready,True,True,

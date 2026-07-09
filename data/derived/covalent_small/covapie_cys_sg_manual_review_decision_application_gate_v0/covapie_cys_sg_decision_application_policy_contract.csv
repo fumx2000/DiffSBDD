@@ -1,0 +1,11 @@
+policy_item,policy_description,policy_status,policy_contract_passed,qa_comment
+application_gate_only,This step applies Step 14P decisions into a future cross-check input manifest only.,passed,True,
+accepted_for_crosscheck_not_ready_candidate,Accepted for future struct_conn cross-check is not a ready candidate label.,passed,True,
+five_crosscheck_inputs_only,Exactly five user-selected inputs are passed forward.,passed,True,
+remaining_twenty_stay_pending,The remaining twenty candidates are retained as pending manual review.,passed,True,
+no_raw_mmcif_crosscheck_current_step,Raw/mmCIF struct_conn cross-check is not performed here.,passed,True,
+no_sample_or_dataset_artifacts,No sample/final/split/leakage/training artifacts are written.,passed,True,
+feature_semantics_audit_still_required,Feature semantics audit remains required before training.,passed,True,
+leakage_split_gate_still_required,Leakage/split design gate remains required before training.,passed,True,
+canonical_mask_scope_preserved,The five canonical mask tasks including scaffold_only/B3 remain unchanged.,passed,True,
+step14p_artifacts_read_only,Step 14P artifacts are read-only inputs.,passed,True,
