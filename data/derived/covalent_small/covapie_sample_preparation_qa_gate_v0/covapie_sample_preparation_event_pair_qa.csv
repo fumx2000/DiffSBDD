@@ -1,0 +1,4 @@
+event_pair_qa_id,sample_execution_id,pdb_id,expected_het_id,conn_type_id,residue_comp_id,residue_atom_name,ligand_comp_id,ligand_atom_name,covalent_bond_atom_pair,event_source,event_status,bond_distance_angstrom,bond_distance_status,ligand_covalent_atom_count,pocket_radius_status,event_pair_qa_status,blocking_reasons
+CYS_SG_EVENT_PAIR_QA_000001,CYS_SG_SAMPLE_PREP_EXECUTION_000001,6BV6,JUG,covale,CYS,SG,JUG,CAG,SG--CAG,raw_struct_conn,validated,1.670,positive_numeric_distance,1,all_pocket_rows_within_8_angstrom,passed,
+CYS_SG_EVENT_PAIR_QA_000002,CYS_SG_SAMPLE_PREP_EXECUTION_000002,6BV8,JUG,covale,CYS,SG,JUG,CAG,SG--CAG,raw_struct_conn,validated,1.800,positive_numeric_distance,1,all_pocket_rows_within_8_angstrom,passed,
+CYS_SG_EVENT_PAIR_QA_000003,CYS_SG_SAMPLE_PREP_EXECUTION_000003,6BV5,JUG,covale,CYS,SG,JUG,CAG,SG--CAG,raw_struct_conn,validated,1.718,positive_numeric_distance,1,all_pocket_rows_within_8_angstrom,passed,

@@ -1,0 +1,2 @@
+issue_id,issue_scope,pdb_id,expected_het_id,issue_severity,issue_type,issue_description,issue_status
+NO_QA_ISSUES,all_samples,,,none,no_issues,No sample preparation QA issues detected.,passed
