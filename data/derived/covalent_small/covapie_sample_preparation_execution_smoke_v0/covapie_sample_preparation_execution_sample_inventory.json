@@ -1,0 +1,53 @@
+[
+  {
+    "covalent_event_count": 1,
+    "expected_het_id": "JUG",
+    "ligand_atom_count": 13,
+    "ligand_residue_atom_pair_count": 1,
+    "pdb_id": "6BV6",
+    "pocket_atom_count": 121,
+    "protein_atom_count": 7468,
+    "raw_file_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif",
+    "ready_for_final_dataset_current_step": false,
+    "ready_for_sample_index_current_step": false,
+    "ready_for_training_current_step": false,
+    "sample_artifact_root": "data/derived/covalent_small/covapie_sample_preparation_execution_smoke_v0/samples/6BV6_JUG",
+    "sample_execution_id": "CYS_SG_SAMPLE_PREP_EXECUTION_000001",
+    "sample_preparation_input_id": "CYS_SG_SAMPLE_PREP_INPUT_000001",
+    "sample_preparation_status": "sample_preparation_smoke_passed"
+  },
+  {
+    "covalent_event_count": 1,
+    "expected_het_id": "JUG",
+    "ligand_atom_count": 18,
+    "ligand_residue_atom_pair_count": 1,
+    "pdb_id": "6BV8",
+    "pocket_atom_count": 196,
+    "protein_atom_count": 7508,
+    "raw_file_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv8.cif",
+    "ready_for_final_dataset_current_step": false,
+    "ready_for_sample_index_current_step": false,
+    "ready_for_training_current_step": false,
+    "sample_artifact_root": "data/derived/covalent_small/covapie_sample_preparation_execution_smoke_v0/samples/6BV8_JUG",
+    "sample_execution_id": "CYS_SG_SAMPLE_PREP_EXECUTION_000002",
+    "sample_preparation_input_id": "CYS_SG_SAMPLE_PREP_INPUT_000002",
+    "sample_preparation_status": "sample_preparation_smoke_passed"
+  },
+  {
+    "covalent_event_count": 1,
+    "expected_het_id": "JUG",
+    "ligand_atom_count": 13,
+    "ligand_residue_atom_pair_count": 1,
+    "pdb_id": "6BV5",
+    "pocket_atom_count": 178,
+    "protein_atom_count": 7503,
+    "raw_file_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv5.cif",
+    "ready_for_final_dataset_current_step": false,
+    "ready_for_sample_index_current_step": false,
+    "ready_for_training_current_step": false,
+    "sample_artifact_root": "data/derived/covalent_small/covapie_sample_preparation_execution_smoke_v0/samples/6BV5_JUG",
+    "sample_execution_id": "CYS_SG_SAMPLE_PREP_EXECUTION_000003",
+    "sample_preparation_input_id": "CYS_SG_SAMPLE_PREP_INPUT_000003",
+    "sample_preparation_status": "sample_preparation_smoke_passed"
+  }
+]

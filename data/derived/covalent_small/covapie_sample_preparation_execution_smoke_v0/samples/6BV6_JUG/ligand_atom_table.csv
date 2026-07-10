@@ -1,0 +1,14 @@
+sample_preparation_input_id,pdb_id,expected_het_id,atom_site_id,type_symbol,atom_name,ligand_comp_id,auth_asym_id,auth_seq_id,label_asym_id,label_seq_id,x,y,z,occupancy,altloc,model_num,is_covalent_ligand_atom,source_raw_file
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7513,O,OAA,JUG,A,601,B,,0.178,-13.082,-21.792,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7514,C,CAJ,JUG,A,601,B,,0.379,-11.741,-21.881,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7515,C,CAF,JUG,A,601,B,,1.673,-11.217,-21.941,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7516,C,CAG,JUG,A,601,B,,1.857,-9.832,-22.024,1.00,,1,True,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7517,C,CAK,JUG,A,601,B,,0.715,-9.009,-22.060,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7518,O,OAB,JUG,A,601,B,,0.879,-7.665,-22.156,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7519,C,CAM,JUG,A,601,B,,-0.596,-9.524,-22.003,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7520,C,CAL,JUG,A,601,B,,-0.758,-10.919,-21.914,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7521,C,CAH,JUG,A,601,B,,-2.049,-11.470,-21.855,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7522,C,CAD,JUG,A,601,B,,-3.184,-10.653,-21.885,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7523,C,CAE,JUG,A,601,B,,-3.035,-9.266,-21.975,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7524,C,CAI,JUG,A,601,B,,-1.750,-8.715,-22.034,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif
+CYS_SG_SAMPLE_PREP_INPUT_000001,6BV6,JUG,7525,O,OAC,JUG,A,601,B,,-1.581,-7.368,-22.124,1.00,,1,False,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/6bv6.cif

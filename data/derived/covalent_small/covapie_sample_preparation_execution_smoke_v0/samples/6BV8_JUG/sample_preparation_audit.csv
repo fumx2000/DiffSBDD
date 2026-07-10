@@ -1,0 +1,11 @@
+audit_item,expected_status,observed_status,audit_passed,blocking_reasons
+raw_file_resolved,true,True,True,
+atom_site_loop_parsed,true,True,True,
+struct_conn_loop_parsed,true,True,True,
+matching_cys_sg_jug_cag_event_found,true,True,True,
+protein_atom_table_written,true,True,True,
+ligand_atom_table_written,true,True,True,
+pocket_atom_table_written,true,True,True,
+covalent_event_table_written,true,True,True,
+ligand_residue_atom_pair_table_written,true,True,True,
+sample_preparation_passed,true,True,True,

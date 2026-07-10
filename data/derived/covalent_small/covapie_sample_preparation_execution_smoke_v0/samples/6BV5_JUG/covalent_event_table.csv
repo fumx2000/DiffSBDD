@@ -1,0 +1,2 @@
+sample_preparation_input_id,pdb_id,expected_het_id,conn_id,conn_type_id,residue_comp_id,residue_atom_name,residue_auth_asym_id,residue_auth_seq_id,residue_label_asym_id,residue_label_seq_id,ligand_comp_id,ligand_atom_name,ligand_auth_asym_id,ligand_auth_seq_id,ligand_label_asym_id,ligand_label_seq_id,covalent_bond_atom_pair,event_source,event_status
+CYS_SG_SAMPLE_PREP_INPUT_000003,6BV5,JUG,covale1,covale,CYS,SG,A,353,A,282,JUG,CAG,A,601,B,,SG--CAG,raw_struct_conn,validated
