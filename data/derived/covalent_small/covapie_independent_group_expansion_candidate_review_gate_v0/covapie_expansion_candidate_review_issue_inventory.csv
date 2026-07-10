@@ -1,0 +1,2 @@
+issue_id,issue_scope,expansion_shortlist_id,pdb_id,expected_het_id,issue_severity,issue_type,issue_description,issue_status
+NO_EXPANSION_CANDIDATE_REVIEW_ISSUES,expansion_batch_000001,,,,none,no_issues,No candidate review implementation issues detected.,passed
