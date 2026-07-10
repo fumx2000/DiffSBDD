@@ -1,0 +1,11 @@
+leakage_rule_id,leakage_rule_name,rule_description,evidence_required,current_pilot_application,rule_status
+CYS_SG_RULE_000001,exact_curated_ligand_component_grouping,same JUG component conservatively groups samples together; future graph hash should strengthen evidence,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000002,identical_covalent_event_supporting_evidence,same CYS SG--ligand CAG event supports grouping; event identity alone is not general similarity,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000003,no_pdb_number_proximity_heuristic,PDB numeric similarity must not be used as biological evidence,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000004,protein_sequence_evidence_not_available,no sequence identity claim; future protein accession/sequence cluster required,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000005,ligand_graph_evidence_not_available,no graph fingerprint claim; future canonical graph hash/scaffold clustering required,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000006,group_level_split_only,members of one leakage group cannot cross data splits,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000007,no_random_row_level_split,random row split is forbidden for leakage-related samples,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000008,split_requires_multiple_independent_groups,current one-group pilot cannot support three-way split,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000009,no_split_assignment_in_design_gate,design gate cannot assign train/validation/test,documented conservative evidence,applied,accepted_for_v0_design
+CYS_SG_RULE_000010,sample_expansion_required,more independent groups required before split materialization,documented conservative evidence,applied,accepted_for_v0_design

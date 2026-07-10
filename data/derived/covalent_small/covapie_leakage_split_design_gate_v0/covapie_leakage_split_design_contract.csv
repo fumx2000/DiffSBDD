@@ -1,0 +1,22 @@
+contract_type,contract_item,expected_status,observed_status,contract_passed,comment
+policy,leakage_split_design_gate_only,True,True,True,leakage split design gate only
+policy,pairwise_evidence_is_not_leakage_matrix,True,True,True,pairwise evidence is not leakage matrix
+policy,proposed_group_is_not_final_group_assignment,True,True,True,proposed group is not final group assignment
+policy,no_train_validation_test_assignment_current_step,True,True,True,no train validation test assignment current step
+policy,no_random_row_level_split,True,True,True,no random row level split
+policy,all_current_samples_remain_together,True,True,True,all current samples remain together
+policy,no_pdb_number_proximity_inference,True,True,True,no pdb number proximity inference
+policy,no_protein_sequence_identity_claim,True,True,True,no protein sequence identity claim
+policy,no_ligand_graph_similarity_claim,True,True,True,no ligand graph similarity claim
+policy,final_dataset_not_written_current_step,True,True,True,final dataset not written current step
+policy,sample_index_not_modified,True,True,True,sample index not modified
+policy,feature_semantics_audit_required_before_training,True,True,True,feature semantics audit required before training
+policy,canonical_five_masks_preserved,True,True,True,canonical five masks preserved
+policy,no_training_current_step,True,True,True,no training current step
+readiness,ready_for_covapie_leakage_split_review_gate,True,True,True,review required before materialization
+readiness,ready_for_covapie_split_materialization_smoke,False,False,True,review required before materialization
+readiness,ready_for_covapie_final_dataset_materialization_smoke,False,False,True,review required before materialization
+readiness,ready_for_covapie_actual_dataloader_adapter_smoke,False,False,True,review required before materialization
+readiness,ready_for_training,False,False,True,review required before materialization
+readiness,ready_to_train_now,False,False,True,review required before materialization
+readiness,additional_independent_samples_required_before_split,True,True,True,review required before materialization
