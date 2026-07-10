@@ -1,0 +1,2 @@
+failure_id,batch_id,pdb_id,expected_het_id,failure_stage,failure_type,failure_description,retry_recommended,failure_status
+NO_ACQUISITION_FAILURES,CYS_SG_INDEPENDENT_EXPANSION_BATCH_000001,,,none,no_failures,No controlled acquisition failures detected.,False,passed
