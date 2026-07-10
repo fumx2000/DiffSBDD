@@ -1,0 +1,98 @@
+[
+  {
+    "covalent_bond_atom_pair": "SG--C2",
+    "expected_het_id": "E64",
+    "pdb_id": "1AEC",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1aec.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AEC_E64",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000001",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000001",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C2",
+    "shortlist_rank": 1
+  },
+  {
+    "covalent_bond_atom_pair": "SG--CM",
+    "expected_het_id": "ZYA",
+    "pdb_id": "1AIM",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1aim.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AIM_ZYA",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000002",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000002",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "CM",
+    "shortlist_rank": 2
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C22",
+    "expected_het_id": "PCM",
+    "pdb_id": "1AU3",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1au3.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AU3_PCM",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000003",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000003",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C22",
+    "shortlist_rank": 3
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C17",
+    "expected_het_id": "INP",
+    "pdb_id": "1AU4",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1au4.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AU4_INP",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000004",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000004",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C17",
+    "shortlist_rank": 4
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C21",
+    "expected_het_id": "INA",
+    "pdb_id": "1AYU",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayu.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AYU_INA",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000005",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000005",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C21",
+    "shortlist_rank": 5
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C21",
+    "expected_het_id": "IN6",
+    "pdb_id": "1AYV",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayv.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AYV_IN6",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000006",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000006",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C21",
+    "shortlist_rank": 6
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C21",
+    "expected_het_id": "IN3",
+    "pdb_id": "1AYW",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayw.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1AYW_IN3",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000007",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000007",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C21",
+    "shortlist_rank": 7
+  },
+  {
+    "covalent_bond_atom_pair": "SG--C6",
+    "expected_het_id": "UFP",
+    "pdb_id": "1B02",
+    "raw_file_path": "data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1b02.cif",
+    "sample_artifact_root": "data/derived/covalent_small/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0/samples/1B02_UFP",
+    "sample_execution_id": "CYS_SG_EXPANSION_EXEC_000008",
+    "sample_preparation_input_id": "CYS_SG_EXPANSION_PREP_000008",
+    "sample_preparation_status": "passed",
+    "selected_ligand_atom_name": "C6",
+    "shortlist_rank": 8
+  }
+]

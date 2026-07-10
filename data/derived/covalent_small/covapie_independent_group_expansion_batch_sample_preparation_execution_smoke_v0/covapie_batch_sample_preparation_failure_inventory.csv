@@ -1,0 +1,2 @@
+failure_id,pdb_id,expected_het_id,failure_stage,failure_type,failure_description,retry_or_resolution_recommended,failure_status
+NO_BATCH_SAMPLE_PREPARATION_FAILURES,,,none,no_failures,No batch sample preparation failures detected.,False,passed

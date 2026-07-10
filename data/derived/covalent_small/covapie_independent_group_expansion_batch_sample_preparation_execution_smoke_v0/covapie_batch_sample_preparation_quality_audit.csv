@@ -1,0 +1,9 @@
+sample_preparation_input_id,sample_execution_id,pdb_id,expected_het_id,protein_atom_count,ligand_atom_count,pocket_atom_count,covalent_event_count,ligand_residue_atom_pair_count,ligand_covalent_atom_count,event_pair_atom_names_consistent,atom_site_distance_angstrom,struct_conn_distance_angstrom,distance_delta_angstrom,distance_consistency_passed,quality_audit_passed,blocking_reasons
+CYS_SG_EXPANSION_PREP_000001,CYS_SG_EXPANSION_EXEC_000001,1AEC,E64,2003,33,265,1,1,1,True,1.802,1.802,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000002,CYS_SG_EXPANSION_EXEC_000002,1AIM,ZYA,1923,31,231,1,1,1,True,1.809,1.809,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000003,CYS_SG_EXPANSION_EXEC_000003,1AU3,PCM,1649,43,278,1,1,1,True,1.762,1.762,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000004,CYS_SG_EXPANSION_EXEC_000004,1AU4,INP,1649,42,267,1,1,1,True,1.807,1.807,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000005,CYS_SG_EXPANSION_EXEC_000005,1AYU,INA,1649,42,257,1,1,1,True,1.799,1.799,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000006,CYS_SG_EXPANSION_EXEC_000006,1AYV,IN6,1649,43,249,1,1,1,True,1.806,1.806,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000007,CYS_SG_EXPANSION_EXEC_000007,1AYW,IN3,1649,40,261,1,1,1,True,1.794,1.794,0.000,True,True,
+CYS_SG_EXPANSION_PREP_000008,CYS_SG_EXPANSION_EXEC_000008,1B02,UFP,2315,21,228,1,1,1,True,1.717,1.717,0.000,True,True,

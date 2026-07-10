@@ -1,0 +1,9 @@
+sample_preparation_input_id,sample_execution_id,pdb_id,expected_het_id,raw_file_path,raw_sha256_verified,selected_struct_conn_id,struct_conn_event_revalidated,residue_atom_from_struct_conn,ligand_atom_from_struct_conn,atom_site_residue_atom_found,atom_site_ligand_atom_found,dynamic_ligand_atom_preserved,traceability_audit_passed,blocking_reasons
+CYS_SG_EXPANSION_PREP_000001,CYS_SG_EXPANSION_EXEC_000001,1AEC,E64,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1aec.cif,True,covale1,True,CYS/SG,C2,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000002,CYS_SG_EXPANSION_EXEC_000002,1AIM,ZYA,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1aim.cif,True,covale1,True,CYS/SG,CM,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000003,CYS_SG_EXPANSION_EXEC_000003,1AU3,PCM,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1au3.cif,True,covale1,True,CYS/SG,C22,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000004,CYS_SG_EXPANSION_EXEC_000004,1AU4,INP,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1au4.cif,True,covale1,True,CYS/SG,C17,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000005,CYS_SG_EXPANSION_EXEC_000005,1AYU,INA,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayu.cif,True,covale1,True,CYS/SG,C21,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000006,CYS_SG_EXPANSION_EXEC_000006,1AYV,IN6,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayv.cif,True,covale1,True,CYS/SG,C21,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000007,CYS_SG_EXPANSION_EXEC_000007,1AYW,IN3,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1ayw.cif,True,covale1,True,CYS/SG,C21,True,True,True,True,
+CYS_SG_EXPANSION_PREP_000008,CYS_SG_EXPANSION_EXEC_000008,1B02,UFP,data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/1b02.cif,True,covale1,True,CYS/SG,C6,True,True,True,True,

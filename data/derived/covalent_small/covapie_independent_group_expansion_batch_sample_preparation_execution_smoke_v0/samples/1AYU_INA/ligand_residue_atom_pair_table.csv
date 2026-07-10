@@ -1,0 +1,2 @@
+sample_preparation_input_id,pdb_id,expected_het_id,residue_atom_name,ligand_atom_name,covalent_bond_atom_pair,residue_atom_site_id,ligand_atom_site_id,residue_x,residue_y,residue_z,ligand_x,ligand_y,ligand_z,bond_distance_angstrom,validation_status
+CYS_SG_EXPANSION_PREP_000005,1AYU,INA,SG,C21,SG--C21,187,1670,-23.118,-20.004,59.058,-22.089,-18.852,58.136,1.799,validated_from_step14al_struct_conn_and_raw_atom_site

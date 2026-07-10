@@ -1,0 +1,2 @@
+sample_preparation_input_id,pdb_id,expected_het_id,conn_id,conn_type_id,residue_comp_id,residue_atom_name,residue_auth_asym_id,residue_auth_seq_id,residue_label_asym_id,residue_label_seq_id,ligand_comp_id,ligand_atom_name,ligand_auth_asym_id,ligand_auth_seq_id,ligand_label_asym_id,ligand_label_seq_id,covalent_bond_atom_pair,event_source,event_status
+CYS_SG_EXPANSION_PREP_000006,1AYV,IN6,covale1,covale,CYS,SG,A,25,A,25,IN6,C21,A,300,B,,SG--C21,raw_struct_conn_step14al_crosschecked,validated
