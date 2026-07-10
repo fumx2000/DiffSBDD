@@ -1,0 +1,2 @@
+issue_id,issue_scope,sample_index_row_id,pdb_id,expected_het_id,issue_severity,issue_type,issue_description,issue_status
+NO_EXPANSION_BATCH_SAMPLE_INDEX_MATERIALIZATION_ISSUES,expansion_batch_000001,,,,none,no_issues,No expansion batch sample-index materialization issues detected.,passed

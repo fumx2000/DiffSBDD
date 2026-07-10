@@ -1,0 +1,9 @@
+collision_audit_id,sample_index_row_id,pdb_id,expected_het_id,row_id_collision_with_existing_index,pdb_het_collision_with_existing_index,duplicate_row_id_within_expansion_batch,duplicate_pdb_het_within_expansion_batch,namespace_continuity_passed,collision_audit_passed,blocking_reasons
+COLLISION_000001,CYS_SG_SAMPLE_INDEX_000004,1AEC,E64,False,False,False,False,True,True,
+COLLISION_000002,CYS_SG_SAMPLE_INDEX_000005,1AIM,ZYA,False,False,False,False,True,True,
+COLLISION_000003,CYS_SG_SAMPLE_INDEX_000006,1AU3,PCM,False,False,False,False,True,True,
+COLLISION_000004,CYS_SG_SAMPLE_INDEX_000007,1AU4,INP,False,False,False,False,True,True,
+COLLISION_000005,CYS_SG_SAMPLE_INDEX_000008,1AYU,INA,False,False,False,False,True,True,
+COLLISION_000006,CYS_SG_SAMPLE_INDEX_000009,1AYV,IN6,False,False,False,False,True,True,
+COLLISION_000007,CYS_SG_SAMPLE_INDEX_000010,1AYW,IN3,False,False,False,False,True,True,
+COLLISION_000008,CYS_SG_SAMPLE_INDEX_000011,1B02,UFP,False,False,False,False,True,True,
