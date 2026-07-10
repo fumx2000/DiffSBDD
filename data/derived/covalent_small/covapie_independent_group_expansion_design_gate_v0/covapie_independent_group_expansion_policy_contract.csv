@@ -1,0 +1,17 @@
+policy_item,policy_description,policy_contract_passed
+independent_group_expansion_design_only,independent group expansion design only,True
+design_uses_existing_candidate_pool_only,design uses existing candidate pool only,True
+no_network_or_download_current_step,no network or download current step,True
+current_jug_group_not_counted_as_new_group,current jug group not counted as new group,True
+blocked_pairs_not_reintroduced,blocked pairs not reintroduced,True
+distinct_het_id_is_not_final_independence_proof,distinct het id is not final independence proof,True
+no_protein_sequence_identity_claim,no protein sequence identity claim,True
+no_ligand_graph_similarity_claim,no ligand graph similarity claim,True
+no_pdb_id_independence_inference,no pdb id independence inference,True
+manual_candidate_review_required,manual candidate review required,True
+controlled_acquisition_required_after_review,controlled acquisition required after review,True
+no_split_assignment_current_step,no split assignment current step,True
+no_final_dataset_current_step,no final dataset current step,True
+no_training_current_step,no training current step,True
+feature_semantics_audit_required_before_training,feature semantics audit required before training,True
+canonical_five_masks_preserved,canonical five masks preserved,True

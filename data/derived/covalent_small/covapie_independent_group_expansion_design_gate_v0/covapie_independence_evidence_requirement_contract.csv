@@ -1,0 +1,13 @@
+evidence_requirement_id,evidence_requirement_name,evidence_description,required_before_acquisition,required_before_final_group_assignment,currently_available,current_status,requirement_contract_passed
+CYS_SG_EVIDENCE_000001,distinct_het_id_is_provisional_diversity_only,Distinct HET ID is provisional diversity only.,False,True,False,pending_not_final_independence,True
+CYS_SG_EVIDENCE_000002,ligand_graph_hash_required_for_final_grouping,Canonical ligand graph hash is required for final grouping.,False,True,False,pending,True
+CYS_SG_EVIDENCE_000003,scaffold_cluster_required_for_final_grouping,Scaffold cluster review is required for final grouping.,False,True,False,pending,True
+CYS_SG_EVIDENCE_000004,protein_accession_required_for_target_grouping,Protein accession is required for target grouping.,False,True,False,pending,True
+CYS_SG_EVIDENCE_000005,protein_sequence_cluster_required_for_final_grouping,Protein sequence cluster is required for final grouping.,False,True,False,pending,True
+CYS_SG_EVIDENCE_000006,covalent_event_identity_is_supporting_not_sufficient,Covalent event identity supports but does not prove independence.,False,True,True,supporting_only,True
+CYS_SG_EVIDENCE_000007,pdb_id_difference_is_not_independence_evidence,Different PDB IDs are not independence evidence.,False,True,True,policy_enforced,True
+CYS_SG_EVIDENCE_000008,pdb_number_proximity_is_not_similarity_evidence,PDB number proximity is not similarity evidence.,False,True,True,policy_enforced,True
+CYS_SG_EVIDENCE_000009,raw_struct_conn_crosscheck_required,Controlled raw mmCIF struct_conn crosscheck is required.,True,True,False,planned_after_manual_review,True
+CYS_SG_EVIDENCE_000010,manual_review_required_before_acquisition,Manual candidate review is required before acquisition.,True,True,False,required_next_gate,True
+CYS_SG_EVIDENCE_000011,acquisition_does_not_equal_group_independence,Acquisition does not establish group independence.,False,True,True,policy_enforced,True
+CYS_SG_EVIDENCE_000012,final_leakage_review_required_before_split,Final leakage review is required before any split.,False,True,False,blocked_until_evidence_complete,True
