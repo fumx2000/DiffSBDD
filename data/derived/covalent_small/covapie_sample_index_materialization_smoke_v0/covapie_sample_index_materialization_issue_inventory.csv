@@ -1,0 +1,2 @@
+issue_id,issue_scope,sample_index_row_id,pdb_id,expected_het_id,issue_severity,issue_type,issue_description,issue_status
+NO_SAMPLE_INDEX_MATERIALIZATION_ISSUES,all_rows,,,,none,no_issues,No sample index materialization issues detected.,passed

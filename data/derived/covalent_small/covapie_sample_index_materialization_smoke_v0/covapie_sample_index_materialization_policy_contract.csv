@@ -1,0 +1,17 @@
+policy_item,policy_description,policy_contract_passed
+sample_index_materialization_smoke_only,sample index materialization smoke only,True
+materialization_writes_sample_index_csv_json,materialization writes sample index csv json,True
+sample_index_is_not_final_dataset,sample index is not final dataset,True
+sample_index_is_not_training_dataset,sample index is not training dataset,True
+materialization_reads_qa_passed_derived_outputs_only,materialization reads qa passed derived outputs only,True
+materialization_does_not_read_raw_mmcif,materialization does not read raw mmcif,True
+materialization_does_not_modify_atom_event_tables,materialization does not modify atom event tables,True
+sample_index_qa_gate_required_next,sample index qa gate required next,True
+no_final_dataset_current_step,no final dataset current step,True
+no_split_or_leakage_current_step,no split or leakage current step,True
+no_dataloader_smoke_current_step,no dataloader smoke current step,True
+no_training_current_step,no training current step,True
+feature_semantics_audit_required_before_training,feature semantics audit required before training,True
+leakage_split_gate_required_before_training,leakage split gate required before training,True
+canonical_five_masks_preserved,canonical five masks preserved,True
+do_not_train_from_unreviewed_sample_index_smoke,do not train from unreviewed sample index smoke,True
