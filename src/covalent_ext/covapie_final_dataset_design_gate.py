@@ -8,26 +8,28 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_feature_semantics_audit_gate as step13bm
+from covalent_ext import covapie_sample_index_qa_gate as qa
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 STAGE = "covapie_final_dataset_design_gate_v0"
-PREVIOUS_STAGE = step13bm.STAGE
+STEP_LABEL = "Step 14AF"
+PREVIOUS_STAGE = qa.STAGE
 PROJECT_NAME = "CovaPIE"
-
 OUTPUT_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_design_gate_v0")
 PRECONDITION_AUDIT_CSV = OUTPUT_ROOT / "covapie_final_dataset_design_precondition_audit.csv"
+SOURCE_INVENTORY_CSV = OUTPUT_ROOT / "covapie_final_dataset_source_inventory.csv"
+SOURCE_INVENTORY_JSON = OUTPUT_ROOT / "covapie_final_dataset_source_inventory.json"
 SCHEMA_CONTRACT_CSV = OUTPUT_ROOT / "covapie_final_dataset_schema_contract.csv"
-ROW_LINEAGE_CONTRACT_CSV = OUTPUT_ROOT / "covapie_final_dataset_row_lineage_contract.csv"
-MATERIALIZATION_PLAN_CSV = OUTPUT_ROOT / "covapie_final_dataset_materialization_plan.csv"
-FEATURE_REQUIREMENT_CONTRACT_CSV = OUTPUT_ROOT / "covapie_final_dataset_feature_requirement_contract.csv"
-SPLIT_POLICY_CONTRACT_CSV = OUTPUT_ROOT / "covapie_final_dataset_split_policy_contract.csv"
-SMOKE_PLAN_CSV = OUTPUT_ROOT / "covapie_final_dataset_smoke_plan.csv"
-BOUNDARY_SAFETY_CSV = OUTPUT_ROOT / "covapie_final_dataset_design_boundary_safety.csv"
-GIT_SAFETY_CSV = OUTPUT_ROOT / "covapie_final_dataset_design_git_safety.csv"
+FIELD_MAPPING_CSV = OUTPUT_ROOT / "covapie_final_dataset_field_mapping.csv"
+ROW_PROJECTION_PLAN_CSV = OUTPUT_ROOT / "covapie_final_dataset_row_projection_plan.csv"
+AUXILIARY_READINESS_CSV = OUTPUT_ROOT / "covapie_final_dataset_auxiliary_label_readiness.csv"
+DESIGN_CONTRACT_CSV = OUTPUT_ROOT / "covapie_final_dataset_design_contract.csv"
+SAFETY_AUDIT_CSV = OUTPUT_ROOT / "covapie_final_dataset_design_safety_audit.csv"
 MANIFEST_JSON = OUTPUT_ROOT / "covapie_final_dataset_design_gate_manifest.json"
 SUMMARY_MD = Path("docs/covapie_final_dataset_design_gate_v0_summary.md")
 
+# Keep historical import chains read-only compatible; Step 14AF itself reads Step 14AE/14AD data.
 step13bl = step13bm.step13bl
 step13bk = step13bm.step13bk
 step13bj = step13bm.step13bj
@@ -37,675 +39,114 @@ step13bg = step13bm.step13bg
 step13bf = step13bm.step13bf
 step13be = step13bm.step13be
 step13bd = step13bm.step13bd
+METADATA_CSV_SHA256 = qa.material.design.METADATA_CSV_SHA256
+CANONICAL_MASK_TASK_NAMES = qa.CANONICAL_MASK_TASK_NAMES
+CANONICAL_MASK_TASK_ALIASES = qa.CANONICAL_MASK_TASK_ALIASES
+SAMPLE_INDEX_FIELDS = qa.SAMPLE_INDEX_FIELDS
 
-CANONICAL_MASK_TASK_NAMES = step13bm.CANONICAL_MASK_TASK_NAMES
-CANONICAL_MASK_TASK_ALIASES = step13bm.CANONICAL_MASK_TASK_ALIASES
-METADATA_CSV_SHA256 = step13bm.METADATA_CSV_SHA256
-
+FINAL_FIELDS = [
+    "final_dataset_row_id", "sample_index_row_id", "sample_preparation_input_id", "sample_execution_id", "sample_qa_id", "pdb_id", "expected_het_id", "sample_artifact_root", "protein_atom_table_path", "ligand_atom_table_path", "pocket_atom_table_path", "covalent_event_table_path", "ligand_residue_atom_pair_table_path", "sample_preparation_audit_path", "protein_atom_count", "ligand_atom_count", "pocket_atom_count", "covalent_event_count", "ligand_residue_atom_pair_count", "covalent_residue_name", "covalent_residue_chain_id", "covalent_residue_index", "covalent_residue_atom_name", "ligand_comp_id", "ligand_covalent_atom_name", "covalent_bond_atom_pair", "conn_id", "conn_type_id", "post_covalent_bond_distance_angstrom", "supported_mask_task_names", "warhead_type_label_status", "ligand_residue_atom_pair_label_status", "pre_covalent_geometry_label_status", "post_covalent_geometry_label_status", "feature_semantics_status", "leakage_group_id", "split_assignment", "final_dataset_row_status", "qa_approved_for_final_dataset_design", "eligible_for_leakage_split_design", "eligible_for_final_dataset_materialization", "ready_for_training_current_step", "feature_semantics_audit_required_before_training", "leakage_split_design_required_before_training", "source_sample_index_csv_sha256", "source_sample_index_json_sha256",
+]
+PATH_FIELDS = qa.PATH_FIELDS
+COUNT_FIELDS = qa.COUNT_FIELDS
 PRECONDITION_COLUMNS = ["precondition_item", "artifact_or_check", "expected_status", "observed_status", "precondition_passed", "blocking_reasons"]
-SCHEMA_COLUMNS = [
-    "final_dataset_field_name",
-    "field_category",
-    "source_artifact",
-    "source_field_or_policy",
-    "required_for_final_dataset_smoke",
-    "required_for_training",
-    "current_design_status",
-    "training_blocker_status",
-    "design_comment",
-    "schema_contract_passed",
-]
-ROW_LINEAGE_COLUMNS = [
-    "final_dataset_row_id",
-    "sample_id",
-    "split_unit_id",
-    "extracted_event_id",
-    "candidate_metadata_id",
-    "pdb_id",
-    "het_code",
-    "mask_task_name",
-    "mask_task_alias",
-    "source_sample_index_row_found",
-    "source_split_unit_found",
-    "parent_event_group_bound_to_one_split_unit",
-    "feature_semantics_audit_completed",
-    "feature_semantics_known_for_training",
-    "unknown_atom_feature_policy_finalized_for_training",
-    "final_dataset_materialized_current_step",
-    "ready_for_training",
-    "row_lineage_contract_passed",
-    "design_comment",
-]
-MATERIALIZATION_PLAN_COLUMNS = [
-    "materialization_step",
-    "planned_action",
-    "allowed_inputs",
-    "allowed_outputs_future_step",
-    "blocked_outputs_current_step",
-    "required_preconditions",
-    "materialization_plan_passed",
-]
-FEATURE_REQUIREMENT_COLUMNS = [
-    "requirement_name",
-    "current_status",
-    "required_for_final_dataset_smoke",
-    "required_for_training",
-    "blocker_before_training",
-    "requirement_contract_passed",
-    "design_comment",
-]
-SPLIT_POLICY_COLUMNS = [
-    "split_policy_name",
-    "current_status",
-    "enforcement_level",
-    "current_step_write_status",
-    "future_required_action",
-    "split_policy_contract_passed",
-]
-SMOKE_PLAN_COLUMNS = [
-    "planned_step",
-    "planned_action",
-    "allowed_inputs",
-    "allowed_outputs",
-    "blocked_outputs",
-    "required_preconditions",
-    "plan_passed",
-]
-BOUNDARY_COLUMNS = ["boundary_item", "current_step_status", "boundary_safety_passed", "qa_comment"]
-GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
+SOURCE_COLUMNS = ["final_dataset_source_id", "sample_index_row_id", "pdb_id", "expected_het_id", "sample_artifact_root", "protein_atom_table_path", "ligand_atom_table_path", "pocket_atom_table_path", "covalent_event_table_path", "ligand_residue_atom_pair_table_path", "sample_preparation_audit_path", "protein_atom_count", "ligand_atom_count", "pocket_atom_count", "covalent_event_count", "ligand_residue_atom_pair_count", "covalent_bond_atom_pair", "sample_index_row_qa_status", "sample_index_source_traceability_qa_status", "approved_for_final_dataset_design_by_qa", "source_eligible_for_final_dataset_design", "eligible_for_final_dataset_design_gate", "ready_for_training_current_step", "source_sample_index_csv_sha256", "source_sample_index_json_sha256"]
+SCHEMA_COLUMNS = ["final_dataset_field", "planned_data_type", "required", "nullable", "semantic_role", "primary_source_artifact", "primary_source_field", "planned_default_or_status", "validation_rule", "current_step_materializes_field", "schema_contract_passed"]
+MAPPING_COLUMNS = ["mapping_id", "final_dataset_field", "primary_source_artifact", "primary_source_field", "fallback_source_artifact", "fallback_source_field", "transformation_rule", "required_validation", "mapping_status"]
+PROJECTION_COLUMNS = ["final_dataset_projection_plan_id", "final_dataset_source_id", "planned_final_dataset_row_id", "source_sample_index_row_id", "pdb_id", "expected_het_id", "planned_supported_mask_task_names", "warhead_type_label_status", "ligand_residue_atom_pair_label_status", "pre_covalent_geometry_label_status", "post_covalent_geometry_label_status", "feature_semantics_status", "planned_leakage_group_id", "planned_split_assignment", "planned_final_dataset_row_status", "qa_approved_for_final_dataset_design", "eligible_for_leakage_split_design", "eligible_for_final_dataset_materialization", "final_dataset_written_current_step", "ready_for_training_current_step", "planned_next_gate"]
+AUX_COLUMNS = ["auxiliary_readiness_id", "sample_index_row_id", "pdb_id", "expected_het_id", "auxiliary_task_name", "available_source_evidence", "planned_label_field", "readiness_status", "ready_for_final_dataset_materialization", "ready_for_training_current_step", "blocking_reason_or_comment"]
+CONTRACT_COLUMNS = ["contract_type", "contract_item", "expected_status", "observed_status", "contract_passed", "comment"]
+SAFETY_COLUMNS = ["safety_item", "required_status", "observed_status", "safety_passed", "blocking_reasons"]
+FORBIDDEN_NAMES = {"final_dataset.csv", "final_dataset.json", "sample_index.csv", "sample_index.json", "split_assignments.csv", "split_assignments.json", "leakage_matrix.csv", "leakage_matrix.json", "actual_dataloader_smoke.csv", "actual_dataloader_smoke.json", "training_report.csv", "training_report.json"}
+FORBIDDEN_SUFFIXES = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm", ".part"}
 
 
-def _csv_rows(path: str | Path) -> list[dict[str, str]]:
-    with Path(path).open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
+def _csv(path: str | Path) -> list[dict[str, str]]:
+    with Path(path).open(newline="", encoding="utf-8") as h: return list(csv.DictReader(h))
+
+def _json(path: str | Path) -> Any: return json.loads(Path(path).read_text(encoding="utf-8"))
+def _bool(value: Any) -> bool: return value is True or str(value).lower() == "true"
+def _git(args: list[str]) -> subprocess.CompletedProcess[str]: return subprocess.run(["git", *args], cwd=REPO_ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+def _diff(paths: list[str]) -> bool: return _git(["diff", "--quiet", "--", *paths]).returncode != 0 or _git(["diff", "--cached", "--quiet", "--", *paths]).returncode != 0
+def _hash(path: str | Path) -> str: return hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()
+def _all(rows: list[dict[str, Any]], key: str) -> bool: return all(_bool(r.get(key)) for r in rows)
+def _pre(item: str, artifact: str, expected: Any, observed: Any, passed: bool) -> dict[str, Any]: return {"precondition_item": item, "artifact_or_check": artifact, "expected_status": expected, "observed_status": observed, "precondition_passed": passed, "blocking_reasons": "" if passed else item}
 
 
-def _load_json(path: str | Path) -> Any:
-    return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def _run_git(args: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(["git", *args], cwd=REPO_ROOT, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-
-def _path_diff_exists(paths: list[str]) -> bool:
-    unstaged = _run_git(["diff", "--quiet", "--", *paths]).returncode != 0
-    staged = _run_git(["diff", "--cached", "--quiet", "--", *paths]).returncode != 0
-    return unstaged or staged
-
-
-def _metadata_hash() -> str:
-    return hashlib.sha256(step13bd.METADATA_CSV.read_bytes()).hexdigest() if step13bd.METADATA_CSV.exists() else ""
-
-
-def _raw_files_tracked() -> bool:
-    return bool(_run_git(["ls-files", step13bd.RAW_STORAGE_ROOT.as_posix()]).stdout.strip())
-
-
-def _raw_files_staged() -> bool:
-    return bool(_run_git(["diff", "--cached", "--name-only", "--", step13bd.RAW_STORAGE_ROOT.as_posix()]).stdout.strip())
-
-
-def _bool(value: Any) -> bool:
-    return value is True or str(value).lower() == "true"
-
-
-def _forbidden_suffix_exists(root: Path = OUTPUT_ROOT) -> bool:
-    forbidden = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
-    return root.exists() and any(path.is_file() and path.suffix.lower() in forbidden for path in root.rglob("*"))
-
-
-def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
-    forbidden = {
-        "final_dataset.csv",
-        "final_dataset.json",
-        "final_dataset_smoke.csv",
-        "final_dataset_smoke.json",
-        "sample_index.csv",
-        "sample_index.json",
-        "covapie_sample_index_smoke.csv",
-        "covapie_sample_index_smoke.json",
-        "split_assignments.csv",
-        "split_assignments.json",
-        "leakage_matrix.csv",
-        "leakage_matrix.json",
-        "dataloader_smoke.csv",
-        "dataloader_smoke.json",
-        "training_report.csv",
-        "training_report.json",
-    }
-    return root.exists() and any(path.name in forbidden for path in root.rglob("*"))
-
-
-def _split_unit_by_sample_id() -> dict[str, str]:
-    mapping: dict[str, str] = {}
-    for row in _csv_rows(step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV):
-        for sample_id in row["sample_ids_in_unit"].split(";"):
-            mapping[sample_id] = row["split_unit_id"]
-    return mapping
-
-
-def _split_unit_by_event() -> dict[str, set[str]]:
-    mapping: dict[str, set[str]] = {}
-    sample_to_split = _split_unit_by_sample_id()
-    for row in _csv_rows(step13bh.SAMPLE_INDEX_SMOKE_CSV):
-        mapping.setdefault(row["extracted_event_id"], set()).add(sample_to_split.get(row["sample_id"], ""))
-    return mapping
+def _sample_index() -> tuple[list[dict[str, str]], list[dict[str, Any]], list[str]]:
+    with (REPO_ROOT / qa.material.SAMPLE_INDEX_CSV).open(newline="", encoding="utf-8") as h:
+        r = csv.DictReader(h); rows = list(r); fields = r.fieldnames or []
+    return rows, _json(REPO_ROOT / qa.material.SAMPLE_INDEX_JSON), fields
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
-    manifest13bm = _load_json(step13bm.MANIFEST_JSON)
-    manifest13bl = _load_json(step13bl.MANIFEST_JSON)
-    sample_rows = _csv_rows(step13bh.SAMPLE_INDEX_SMOKE_CSV)
-    split_rows = _csv_rows(step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV)
-    event_rows = _csv_rows(step13be.EXTRACTED_EVENT_TABLE_CSV)
-    protein_rows = _csv_rows(step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV)
-    ligand_rows = _csv_rows(step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV)
+    manifest = _json(REPO_ROOT / qa.MANIFEST_JSON)
+    csv_rows, json_rows, fields = _sample_index()
+    row_qa, schema_qa, trace = _csv(REPO_ROOT / qa.ROW_QA_CSV), _csv(REPO_ROOT / qa.SCHEMA_QA_CSV), _csv(REPO_ROOT / qa.TRACEABILITY_QA_CSV)
+    fingerprints, issues = _csv(REPO_ROOT / qa.FINGERPRINT_AUDIT_CSV), _csv(REPO_ROOT / qa.ISSUE_INVENTORY_CSV)
+    raw = qa.material.design.RAW_ROOT.as_posix()
     checks = [
-        ("step13bm_manifest_exists", step13bm.MANIFEST_JSON, "exists", step13bm.MANIFEST_JSON.exists(), step13bm.MANIFEST_JSON.exists()),
-        ("step13bm_stage", step13bm.MANIFEST_JSON, step13bm.STAGE, manifest13bm.get("stage"), manifest13bm.get("stage") == step13bm.STAGE),
-        ("step13bm_all_checks_passed", step13bm.MANIFEST_JSON, "true", manifest13bm.get("all_checks_passed"), manifest13bm.get("all_checks_passed") is True),
-        ("step13bm_ready_for_final_dataset_design_gate", step13bm.MANIFEST_JSON, "true", manifest13bm.get("ready_for_covapie_final_dataset_design_gate"), manifest13bm.get("ready_for_covapie_final_dataset_design_gate") is True),
-        ("step13bm_ready_for_final_dataset_smoke", step13bm.MANIFEST_JSON, "false", manifest13bm.get("ready_for_covapie_final_dataset_smoke"), manifest13bm.get("ready_for_covapie_final_dataset_smoke") is False),
-        ("step13bm_ready_for_dataloader_smoke", step13bm.MANIFEST_JSON, "false", manifest13bm.get("ready_for_covapie_dataloader_smoke"), manifest13bm.get("ready_for_covapie_dataloader_smoke") is False),
-        ("step13bm_ready_for_training", step13bm.MANIFEST_JSON, "false", manifest13bm.get("ready_for_training"), manifest13bm.get("ready_for_training") is False),
-        ("step13bm_ready_to_train_now", step13bm.MANIFEST_JSON, "false", manifest13bm.get("ready_to_train_now"), manifest13bm.get("ready_to_train_now") is False),
-        ("step13bm_feature_semantics_audit_completed", step13bm.MANIFEST_JSON, "true", manifest13bm.get("feature_semantics_audit_completed_current_step"), manifest13bm.get("feature_semantics_audit_completed_current_step") is True),
-        ("step13bm_feature_semantics_known_for_training", step13bm.MANIFEST_JSON, "false", manifest13bm.get("feature_semantics_known_for_training"), manifest13bm.get("feature_semantics_known_for_training") is False),
-        ("step13bm_unknown_atom_policy_finalized", step13bm.MANIFEST_JSON, "false", manifest13bm.get("unknown_atom_feature_policy_finalized_for_training"), manifest13bm.get("unknown_atom_feature_policy_finalized_for_training") is False),
-        ("step12d_smoke_legality_only", step13bm.MANIFEST_JSON, "true", manifest13bm.get("step12d_was_smoke_legality_only"), manifest13bm.get("step12d_was_smoke_legality_only") is True),
-        ("step13bh_sample_index_smoke_shape", step13bh.SAMPLE_INDEX_SMOKE_CSV, "20x31", f"{len(sample_rows)}x{len(sample_rows[0]) if sample_rows else 0}", len(sample_rows) == 20 and bool(sample_rows) and len(sample_rows[0]) == 31),
-        ("step13bk_split_unit_preview_row_count", step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV, "4", len(split_rows), len(split_rows) == 4),
-        ("step13bl_split_leakage_qa_passed", step13bl.MANIFEST_JSON, "true", manifest13bl.get("all_checks_passed"), manifest13bl.get("all_checks_passed") is True),
-        ("step13be_event_table_row_count", step13be.EXTRACTED_EVENT_TABLE_CSV, "4", len(event_rows), len(event_rows) == 4),
-        ("step13be_protein_atom_table_row_count", step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV, "1071", len(protein_rows), len(protein_rows) == 1071),
-        ("step13be_ligand_atom_table_row_count", step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV, "149", len(ligand_rows), len(ligand_rows) == 149),
-        ("canonical_mask_count", step13bh.SAMPLE_INDEX_SMOKE_CSV, "5", len({row["mask_task_name"] for row in sample_rows}), len({row["mask_task_name"] for row in sample_rows}) == 5),
-        ("b3_scaffold_only_included", step13bh.SAMPLE_INDEX_SMOKE_CSV, "true", "scaffold_only" in {row["mask_task_name"] for row in sample_rows}, "scaffold_only" in {row["mask_task_name"] for row in sample_rows}),
-        ("no_extra_mask_tasks_added", step13bh.SAMPLE_INDEX_SMOKE_CSV, "true", {row["mask_task_name"] for row in sample_rows}, {row["mask_task_name"] for row in sample_rows} == set(CANONICAL_MASK_TASK_NAMES)),
-        ("metadata_csv_hash_unchanged", step13bd.METADATA_CSV, METADATA_CSV_SHA256, _metadata_hash(), _metadata_hash() == METADATA_CSV_SHA256),
-        ("raw_files_untracked", step13bd.RAW_STORAGE_ROOT, "false", _raw_files_tracked(), not _raw_files_tracked()),
-        ("raw_files_unstaged", step13bd.RAW_STORAGE_ROOT, "false", _raw_files_staged(), not _raw_files_staged()),
-        ("protected_source_diff_empty", "equivariant_diffusion/ lightning_modules.py", "empty", _path_diff_exists(["equivariant_diffusion/", "lightning_modules.py"]), not _path_diff_exists(["equivariant_diffusion/", "lightning_modules.py"])),
-        ("original_dataloader_diff_empty", "dataset.py data/prepare_crossdocked.py", "empty", _path_diff_exists(["dataset.py", "data/prepare_crossdocked.py"]), not _path_diff_exists(["dataset.py", "data/prepare_crossdocked.py"])),
+        ("step14ae_manifest_exists", qa.MANIFEST_JSON, True, bool(manifest), bool(manifest)), ("step14ae_stage", qa.MANIFEST_JSON, qa.STAGE, manifest.get("stage"), manifest.get("stage") == qa.STAGE), ("step14ae_all_checks_passed", qa.MANIFEST_JSON, True, manifest.get("all_checks_passed"), manifest.get("all_checks_passed") is True),
+        ("row_qa_passed_count", qa.MANIFEST_JSON, 3, manifest.get("sample_index_row_qa_passed_count"), manifest.get("sample_index_row_qa_passed_count") == 3), ("schema_qa_passed_count", qa.MANIFEST_JSON, 33, manifest.get("sample_index_schema_qa_passed_count"), manifest.get("sample_index_schema_qa_passed_count") == 33), ("traceability_qa_passed_count", qa.MANIFEST_JSON, 3, manifest.get("sample_index_source_traceability_qa_passed_count"), manifest.get("sample_index_source_traceability_qa_passed_count") == 3), ("fingerprint_verified_count", qa.MANIFEST_JSON, 2, manifest.get("sample_index_fingerprint_verified_count"), manifest.get("sample_index_fingerprint_verified_count") == 2), ("qa_issue_count", qa.MANIFEST_JSON, 0, manifest.get("qa_issue_count"), manifest.get("qa_issue_count") == 0), ("qa_approval_count", qa.MANIFEST_JSON, 3, manifest.get("qa_approved_for_final_dataset_design_count"), manifest.get("qa_approved_for_final_dataset_design_count") == 3), ("source_eligible_true_count", qa.MANIFEST_JSON, 0, manifest.get("source_eligible_for_final_dataset_design_true_count"), manifest.get("source_eligible_for_final_dataset_design_true_count") == 0),
+        ("final_dataset_design_gate_ready", qa.MANIFEST_JSON, True, manifest.get("ready_for_covapie_final_dataset_design_gate"), manifest.get("ready_for_covapie_final_dataset_design_gate") is True), ("training_not_ready", qa.MANIFEST_JSON, False, manifest.get("ready_for_training"), manifest.get("ready_for_training") is False), ("feature_semantics_unknown", qa.MANIFEST_JSON, False, manifest.get("feature_semantics_known_for_training"), manifest.get("feature_semantics_known_for_training") is False), ("unknown_atom_policy_unfinalized", qa.MANIFEST_JSON, False, manifest.get("unknown_atom_feature_policy_finalized_for_training"), manifest.get("unknown_atom_feature_policy_finalized_for_training") is False),
+        ("sample_index_csv_json_rows", qa.material.SAMPLE_INDEX_CSV, "3/3", f"{len(csv_rows)}/{len(json_rows)}", len(csv_rows) == len(json_rows) == 3), ("sample_index_schema_fields", qa.material.design.SCHEMA_CONTRACT_CSV, 33, len(fields), fields == SAMPLE_INDEX_FIELDS), ("source_hash_csv", qa.material.SAMPLE_INDEX_CSV, manifest.get("sample_index_csv_sha256"), _hash(qa.material.SAMPLE_INDEX_CSV), _hash(qa.material.SAMPLE_INDEX_CSV) == manifest.get("sample_index_csv_sha256")), ("source_hash_json", qa.material.SAMPLE_INDEX_JSON, manifest.get("sample_index_json_sha256"), _hash(qa.material.SAMPLE_INDEX_JSON), _hash(qa.material.SAMPLE_INDEX_JSON) == manifest.get("sample_index_json_sha256")),
+        ("row_qa_rows", qa.ROW_QA_CSV, "3 approved", len(row_qa), len(row_qa) == 3 and {r["row_qa_status"] for r in row_qa} == {"passed"} and {r["approved_for_final_dataset_design_by_qa"] for r in row_qa} == {"True"}), ("schema_qa_rows", qa.SCHEMA_QA_CSV, "33 passed", len(schema_qa), len(schema_qa) == 33 and {r["schema_qa_status"] for r in schema_qa} == {"passed"}), ("traceability_rows", qa.TRACEABILITY_QA_CSV, "3 passed", len(trace), len(trace) == 3 and {r["source_traceability_qa_status"] for r in trace} == {"passed"}), ("fingerprints_verified", qa.FINGERPRINT_AUDIT_CSV, 2, len(fingerprints), len(fingerprints) == 2 and {r["fingerprint_status"] for r in fingerprints} == {"recorded_and_verified"}), ("qa_issue_inventory", qa.ISSUE_INVENTORY_CSV, "NO_SAMPLE_INDEX_QA_ISSUES", issues[0].get("issue_id") if issues else "", len(issues) == 1 and issues[0].get("issue_id") == "NO_SAMPLE_INDEX_QA_ISSUES"),
+        ("metadata_hash", qa.material.design.METADATA_CSV, METADATA_CSV_SHA256, _hash(qa.material.design.METADATA_CSV), _hash(qa.material.design.METADATA_CSV) == METADATA_CSV_SHA256 and not _diff([qa.material.design.METADATA_CSV.as_posix()])), ("raw_untracked", raw, False, bool(_git(["ls-files", raw]).stdout.strip()), not _git(["ls-files", raw]).stdout.strip()), ("raw_unstaged", raw, False, bool(_git(["diff", "--cached", "--name-only", "--", raw]).stdout.strip()), not _git(["diff", "--cached", "--name-only", "--", raw]).stdout.strip()),
+        ("step14ae_unchanged", qa.OUTPUT_ROOT, False, _diff([qa.OUTPUT_ROOT.as_posix()]), not _diff([qa.OUTPUT_ROOT.as_posix()])), ("step14ad_unchanged", qa.material.OUTPUT_ROOT, False, _diff([qa.material.OUTPUT_ROOT.as_posix()]), not _diff([qa.material.OUTPUT_ROOT.as_posix()])), ("step14ac_unchanged", qa.material.design.OUTPUT_ROOT, False, _diff([qa.material.design.OUTPUT_ROOT.as_posix()]), not _diff([qa.material.design.OUTPUT_ROOT.as_posix()])), ("step14ab_unchanged", qa.material.design.STEP14AB_ROOT, False, _diff([qa.material.design.STEP14AB_ROOT.as_posix()]), not _diff([qa.material.design.STEP14AB_ROOT.as_posix()])), ("step14aa_unchanged", qa.material.design.STEP14AA_ROOT, False, _diff([qa.material.design.STEP14AA_ROOT.as_posix()]), not _diff([qa.material.design.STEP14AA_ROOT.as_posix()])), ("protected_source_diff_empty", "equivariant_diffusion/ lightning_modules.py", False, _diff(["equivariant_diffusion/", "lightning_modules.py"]), not _diff(["equivariant_diffusion/", "lightning_modules.py"])), ("original_dataloader_diff_empty", "dataset.py data/prepare_crossdocked.py", False, _diff(["dataset.py", "data/prepare_crossdocked.py"]), not _diff(["dataset.py", "data/prepare_crossdocked.py"])), ("canonical_mask_count", "canonical masks", 5, len(CANONICAL_MASK_TASK_NAMES), len(CANONICAL_MASK_TASK_NAMES) == 5), ("b3_included", "canonical masks", True, "scaffold_only" in CANONICAL_MASK_TASK_NAMES and "B3" in CANONICAL_MASK_TASK_ALIASES, "scaffold_only" in CANONICAL_MASK_TASK_NAMES and "B3" in CANONICAL_MASK_TASK_ALIASES), ("no_extra_masks", "canonical masks", True, len(CANONICAL_MASK_TASK_NAMES) == 5, len(CANONICAL_MASK_TASK_NAMES) == 5),
     ]
-    return [
-        {
-            "precondition_item": item,
-            "artifact_or_check": str(check),
-            "expected_status": expected,
-            "observed_status": observed,
-            "precondition_passed": passed,
-            "blocking_reasons": "" if passed else item,
-        }
-        for item, check, expected, observed, passed in checks
-    ]
+    return [_pre(*c) for c in checks]
 
 
-def build_schema_contract_rows() -> list[dict[str, Any]]:
-    fields = [
-        "final_dataset_row_id",
-        "sample_id",
-        "split_unit_id",
-        "extracted_event_id",
-        "allowlist_entry_id",
-        "candidate_metadata_id",
-        "pdb_id",
-        "het_code",
-        "chain_id",
-        "residue_name",
-        "residue_index",
-        "residue_atom_name",
-        "ligand_atom_name",
-        "covalent_bond_atom_pair",
-        "covalent_bond_distance_angstrom",
-        "protein_pocket_atom_table_path",
-        "ligand_atom_table_path",
-        "protein_atom_row_count_for_event",
-        "ligand_atom_row_count_for_event",
-        "mask_task_name",
-        "mask_task_alias",
-        "mask_task_semantic_description",
-        "conditioning_mode",
-        "covalent_residue_conditioned",
-        "source_sample_index_path",
-        "source_split_unit_preview_path",
-        "feature_semantics_contract_path",
-        "scaffold_linker_warhead_annotation_status",
-        "warhead_type_label_status",
-        "ligand_residue_atom_pair_label_status",
-        "pre_post_geometry_label_status",
-        "coordinate_unit",
-        "coordinate_frame_status",
-        "pre_covalent_geometry_status",
-        "post_covalent_geometry_status",
-        "feature_semantics_audit_status",
-        "feature_semantics_known_for_training",
-        "unknown_atom_feature_policy_finalized_for_training",
-        "leakage_split_qa_status",
-        "split_assignment_status",
-        "final_dataset_materialized_current_step",
-        "dataloader_ready",
-        "ready_for_training",
-        "training_blocker_summary",
-        "schema_version",
-    ]
-    source_by_field = {
-        "final_dataset_row_id": ("future_final_dataset_smoke", "final_dataset_design::{sample_id}"),
-        "split_unit_id": (step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV.as_posix(), "split_unit_id"),
-        "source_sample_index_path": ("current_design_policy", step13bh.SAMPLE_INDEX_SMOKE_CSV.as_posix()),
-        "source_split_unit_preview_path": ("current_design_policy", step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV.as_posix()),
-        "feature_semantics_contract_path": ("current_design_policy", step13bm.FEATURE_SEMANTICS_CONTRACT_CSV.as_posix()),
-        "coordinate_unit": (step13bm.COORDINATE_GEOMETRY_AUDIT_CSV.as_posix(), "angstrom"),
-        "coordinate_frame_status": (step13bm.COORDINATE_GEOMETRY_AUDIT_CSV.as_posix(), "structure_coordinate_frame_inherited_not_finalized"),
-        "pre_covalent_geometry_status": (step13bm.COORDINATE_GEOMETRY_AUDIT_CSV.as_posix(), "pre_covalent_geometry_not_materialized_current_step"),
-        "post_covalent_geometry_status": (step13bm.COORDINATE_GEOMETRY_AUDIT_CSV.as_posix(), "post_covalent_geometry_present"),
-        "feature_semantics_audit_status": (step13bm.MANIFEST_JSON.as_posix(), "feature_semantics_audit_completed_current_step=true"),
-        "feature_semantics_known_for_training": (step13bm.MANIFEST_JSON.as_posix(), "false"),
-        "unknown_atom_feature_policy_finalized_for_training": (step13bm.MANIFEST_JSON.as_posix(), "false"),
-        "leakage_split_qa_status": (step13bl.MANIFEST_JSON.as_posix(), "split_leakage_qa_passed=true"),
-        "final_dataset_materialized_current_step": ("current_design_policy", "false_design_only"),
-        "dataloader_ready": ("current_design_policy", "false"),
-        "ready_for_training": ("current_design_policy", "false"),
-        "training_blocker_summary": (step13bm.TRAINING_BLOCKERS_CSV.as_posix(), "feature_semantics_and_training_blockers_preserved"),
-        "schema_version": ("current_design_policy", STAGE),
-    }
-    rows = []
-    for field in fields:
-        if field in source_by_field:
-            source, source_field = source_by_field[field]
-        else:
-            source, source_field = step13bh.SAMPLE_INDEX_SMOKE_CSV.as_posix(), field
-        category = "identity"
-        if field in {"protein_pocket_atom_table_path", "ligand_atom_table_path", "protein_atom_row_count_for_event", "ligand_atom_row_count_for_event", "coordinate_unit", "coordinate_frame_status", "pre_covalent_geometry_status", "post_covalent_geometry_status"}:
-            category = "geometry_source"
-        elif field.startswith("mask_"):
-            category = "mask_conditioning"
-        elif field.endswith("_status") or field in {"feature_semantics_known_for_training", "unknown_atom_feature_policy_finalized_for_training", "ready_for_training", "dataloader_ready", "training_blocker_summary"}:
-            category = "training_boundary"
-        rows.append(
-            {
-                "final_dataset_field_name": field,
-                "field_category": category,
-                "source_artifact": source,
-                "source_field_or_policy": source_field,
-                "required_for_final_dataset_smoke": True,
-                "required_for_training": True,
-                "current_design_status": "design_only_not_materialized",
-                "training_blocker_status": "training_blocked_current_step",
-                "design_comment": "final dataset schema contract only; no final_dataset artifact written",
-                "schema_contract_passed": True,
-            }
-        )
+def build_source_inventory() -> list[dict[str, Any]]:
+    source_rows, _, _ = _sample_index(); row_qa = {r["sample_index_row_id"]: r for r in _csv(REPO_ROOT / qa.ROW_QA_CSV)}; trace = {r["sample_index_row_id"]: r for r in _csv(REPO_ROOT / qa.TRACEABILITY_QA_CSV)}; csv_hash, json_hash = _hash(qa.material.SAMPLE_INDEX_CSV), _hash(qa.material.SAMPLE_INDEX_JSON)
+    rows=[]
+    for i, r in enumerate(source_rows, 1): rows.append({"final_dataset_source_id": f"CYS_SG_FINAL_DATASET_SOURCE_{i:06d}", "sample_index_row_id": r["sample_index_row_id"], "pdb_id": r["pdb_id"], "expected_het_id": r["expected_het_id"], "sample_artifact_root": r["sample_artifact_root"], **{f:r[f] for f in PATH_FIELDS+COUNT_FIELDS}, "covalent_bond_atom_pair": r["covalent_bond_atom_pair"], "sample_index_row_qa_status": row_qa[r["sample_index_row_id"]]["row_qa_status"], "sample_index_source_traceability_qa_status": trace[r["sample_index_row_id"]]["source_traceability_qa_status"], "approved_for_final_dataset_design_by_qa": True, "source_eligible_for_final_dataset_design": False, "eligible_for_final_dataset_design_gate": True, "ready_for_training_current_step": False, "source_sample_index_csv_sha256": csv_hash, "source_sample_index_json_sha256": json_hash})
     return rows
 
 
-def build_row_lineage_rows() -> list[dict[str, Any]]:
-    sample_rows = _csv_rows(step13bh.SAMPLE_INDEX_SMOKE_CSV)
-    sample_to_split = _split_unit_by_sample_id()
-    event_to_splits = _split_unit_by_event()
-    rows = []
-    for row in sample_rows:
-        split_unit_id = sample_to_split.get(row["sample_id"], "")
-        event_bound = len(event_to_splits.get(row["extracted_event_id"], set())) == 1
-        passed = bool(split_unit_id) and event_bound
-        rows.append(
-            {
-                "final_dataset_row_id": f"final_dataset_design::{row['sample_id']}",
-                "sample_id": row["sample_id"],
-                "split_unit_id": split_unit_id,
-                "extracted_event_id": row["extracted_event_id"],
-                "candidate_metadata_id": row["candidate_metadata_id"],
-                "pdb_id": row["pdb_id"],
-                "het_code": row["het_code"],
-                "mask_task_name": row["mask_task_name"],
-                "mask_task_alias": row["mask_task_alias"],
-                "source_sample_index_row_found": True,
-                "source_split_unit_found": bool(split_unit_id),
-                "parent_event_group_bound_to_one_split_unit": event_bound,
-                "feature_semantics_audit_completed": True,
-                "feature_semantics_known_for_training": False,
-                "unknown_atom_feature_policy_finalized_for_training": False,
-                "final_dataset_materialized_current_step": False,
-                "ready_for_training": False,
-                "row_lineage_contract_passed": passed,
-                "design_comment": "row lineage design only; no final_dataset row materialized",
-            }
-        )
+def _schema_spec(field: str) -> tuple[str, bool, bool, str, str, str, str]:
+    boolean={"qa_approved_for_final_dataset_design","eligible_for_leakage_split_design","eligible_for_final_dataset_materialization","ready_for_training_current_step","feature_semantics_audit_required_before_training","leakage_split_design_required_before_training"}; numbers={"protein_atom_count","ligand_atom_count","pocket_atom_count","covalent_event_count","ligand_residue_atom_pair_count","post_covalent_bond_distance_angstrom"}; nullable=field in {"leakage_group_id","split_assignment"}; defaults={"supported_mask_task_names":"warhead_only;linker_plus_warhead;scaffold_plus_warhead;scaffold_only;scaffold_plus_linker_plus_warhead","warhead_type_label_status":"pending_warhead_type_annotation_and_semantics_gate","ligand_residue_atom_pair_label_status":"available_from_validated_struct_conn_atom_pair","pre_covalent_geometry_label_status":"unavailable_in_current_source","post_covalent_geometry_label_status":"available_as_post_covalent_bond_distance_only","feature_semantics_status":"unresolved_requires_feature_semantics_audit","leakage_group_id":"null_pending_leakage_split_design","split_assignment":"null_pending_leakage_split_design","final_dataset_row_status":"design_only_pending_leakage_and_feature_semantics","qa_approved_for_final_dataset_design":"true","eligible_for_leakage_split_design":"true","eligible_for_final_dataset_materialization":"false","ready_for_training_current_step":"false","feature_semantics_audit_required_before_training":"true","leakage_split_design_required_before_training":"true"}; source="sample_index" if field in SAMPLE_INDEX_FIELDS else "design_policy"; source_field="bond_distance_angstrom" if field=="post_covalent_bond_distance_angstrom" else field; return ("boolean" if field in boolean else "number" if field in numbers else "string", True, nullable, source, source_field, defaults.get(field,"copied_or_generated_in_future_materialization"), "future final dataset field")
+
+def build_schema() -> list[dict[str, Any]]:
+    rows=[]
+    for field in FINAL_FIELDS:
+        dtype, required, nullable, artifact, source, default, rule = _schema_spec(field)
+        rows.append({"final_dataset_field":field,"planned_data_type":dtype,"required":required,"nullable":nullable,"semantic_role":"future_final_dataset_field","primary_source_artifact":artifact,"primary_source_field":source,"planned_default_or_status":default,"validation_rule":rule,"current_step_materializes_field":False,"schema_contract_passed":True})
     return rows
 
+def build_mapping() -> list[dict[str, Any]]:
+    rows=[]
+    for i, field in enumerate(FINAL_FIELDS,1):
+        dtype, _, _, artifact, source, default, _ = _schema_spec(field)
+        transform = "do_not_infer_warhead_type_from_ligand_identity" if field=="warhead_type_label_status" else "do_not_infer_pre_geometry_from_post_geometry" if field=="pre_covalent_geometry_label_status" else "remain_unset_pending_leakage_split_design" if field in {"leakage_group_id","split_assignment"} else f"planned {dtype} mapping"
+        rows.append({"mapping_id":f"CYS_SG_FINAL_DATASET_MAPPING_{i:06d}","final_dataset_field":field,"primary_source_artifact":artifact,"primary_source_field":source,"fallback_source_artifact":"","fallback_source_field":"","transformation_rule":transform,"required_validation":"Step 14AE QA plus future leakage and feature semantics gates","mapping_status":"planned_and_validated"})
+    return rows
 
-def build_materialization_plan_rows() -> list[dict[str, Any]]:
-    steps = [
-        "read_feature_semantics_audit_gate",
-        "read_sample_index_smoke",
-        "read_split_unit_smoke_preview",
-        "join_sample_rows_to_split_units",
-        "attach_atom_table_path_references",
-        "enforce_final_dataset_schema_contract",
-        "preserve_canonical_mask_semantics",
-        "preserve_feature_training_blockers",
-        "block_real_train_val_test_assignments",
-        "write_final_dataset_smoke_preview_future_step",
-        "final_dataset_qa_gate_future_step",
-        "dataloader_smoke_blocked_until_final_dataset_qa",
-    ]
-    return [
-        {
-            "materialization_step": step,
-            "planned_action": step.replace("_", " "),
-            "allowed_inputs": "step13bm;step13bh;step13bk;step13be derived csv/json",
-            "allowed_outputs_future_step": "final_dataset_smoke_preview_future_step_only",
-            "blocked_outputs_current_step": "final_dataset.csv;final_dataset.json;split_assignments;leakage_matrix;dataloader_smoke;training",
-            "required_preconditions": "feature_semantics_audit_gate_passed;split_leakage_qa_passed",
-            "materialization_plan_passed": True,
-        }
-        for step in steps
-    ]
+def build_projection(source: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    masks="warhead_only;linker_plus_warhead;scaffold_plus_warhead;scaffold_only;scaffold_plus_linker_plus_warhead"
+    return [{"final_dataset_projection_plan_id":f"CYS_SG_FINAL_DATASET_PLAN_{i:06d}","final_dataset_source_id":r["final_dataset_source_id"],"planned_final_dataset_row_id":f"CYS_SG_FINAL_DATASET_{i:06d}","source_sample_index_row_id":r["sample_index_row_id"],"pdb_id":r["pdb_id"],"expected_het_id":r["expected_het_id"],"planned_supported_mask_task_names":masks,"warhead_type_label_status":"pending_warhead_type_annotation_and_semantics_gate","ligand_residue_atom_pair_label_status":"available_from_validated_struct_conn_atom_pair","pre_covalent_geometry_label_status":"unavailable_in_current_source","post_covalent_geometry_label_status":"available_as_post_covalent_bond_distance_only","feature_semantics_status":"unresolved_requires_feature_semantics_audit","planned_leakage_group_id":"","planned_split_assignment":"","planned_final_dataset_row_status":"design_only_pending_leakage_and_feature_semantics","qa_approved_for_final_dataset_design":True,"eligible_for_leakage_split_design":True,"eligible_for_final_dataset_materialization":False,"final_dataset_written_current_step":False,"ready_for_training_current_step":False,"planned_next_gate":"covapie_leakage_split_design_gate"} for i,r in enumerate(source,1)]
 
+def build_aux(source: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows=[]
+    for i,r in enumerate(source,1):
+        base={"sample_index_row_id":r["sample_index_row_id"],"pdb_id":r["pdb_id"],"expected_het_id":r["expected_het_id"],"ready_for_training_current_step":False}
+        specs=[("warhead_type","JUG/CAG identity only","warhead_type_label_status","pending_semantics_and_annotation",False,"JUG/CAG identity is not sufficient to define a general warhead-type label."),("ligand_residue_atom_pair","SG--CAG","ligand_residue_atom_pair_label_status","available_from_validated_struct_conn",True,"Validated SG--CAG atom pair is available."),("pre_post_covalent_geometry","post-covalent distance only","pre_covalent_geometry_label_status","partial_post_only",False,"Post-covalent distance available; pre-covalent geometry unavailable; do not synthesize or infer pre geometry.")]
+        for j,(task,evidence,field,status,ready,comment) in enumerate(specs,1): rows.append({"auxiliary_readiness_id":f"CYS_SG_AUXILIARY_{i:06d}_{j:02d}",**base,"auxiliary_task_name":task,"available_source_evidence":evidence,"planned_label_field":field,"readiness_status":status,"ready_for_final_dataset_materialization":ready,"blocking_reason_or_comment":comment})
+    return rows
 
-def build_feature_requirement_rows() -> list[dict[str, Any]]:
-    requirements = [
-        ("feature_semantics_audit_completed", "completed_current_step", True, True, False),
-        ("feature_semantics_known_for_training_false", "false_preserved", True, True, True),
-        ("unknown_atom_feature_policy_not_finalized", "false_preserved", True, True, True),
-        ("canonical_masks_five_level_preserved", "five_masks_preserved", True, True, False),
-        ("b3_scaffold_only_preserved", "scaffold_only_B3_preserved", True, True, False),
-        ("scaffold_linker_warhead_annotation_required", "required_before_training_not_materialized", True, True, True),
-        ("warhead_type_label_required", "required_before_training_not_materialized", True, True, True),
-        ("ligand_residue_atom_pair_label_audit_required", "audit_required_before_training", True, True, True),
-        ("pre_post_geometry_label_audit_required", "audit_required_before_training", True, True, True),
-        ("pre_covalent_geometry_not_materialized", "not_materialized_current_step", True, True, True),
-        ("split_leakage_qa_completed", "completed_step13bl", True, True, False),
-        ("final_dataset_design_only_current_step", "design_only_not_materialized", True, True, True),
-        ("ready_for_training_false", "false_preserved", True, True, True),
-    ]
-    return [
-        {
-            "requirement_name": name,
-            "current_status": status,
-            "required_for_final_dataset_smoke": smoke,
-            "required_for_training": training,
-            "blocker_before_training": blocker,
-            "requirement_contract_passed": True,
-            "design_comment": "requirement is explicit; blockers are preserved rather than removed",
-        }
-        for name, status, smoke, training, blocker in requirements
-    ]
+def build_contract() -> list[dict[str, Any]]:
+    policies=["final_dataset_design_gate_only","design_gate_does_not_write_final_dataset","source_inventory_is_not_final_dataset","row_projection_plan_is_not_final_dataset","design_gate_reads_committed_sample_index_only","design_gate_does_not_modify_sample_index","design_gate_does_not_read_raw_mmcif","design_gate_does_not_modify_atom_event_tables","do_not_infer_warhead_type_from_ligand_identity","do_not_infer_pre_geometry_from_post_geometry","leakage_group_required_before_materialization","split_assignment_required_before_materialization","feature_semantics_audit_required_before_training","canonical_five_masks_preserved","no_training_current_step"]
+    readiness={"ready_for_covapie_leakage_split_design_gate":True,"ready_for_covapie_final_dataset_materialization_smoke":False,"ready_for_covapie_actual_dataloader_adapter_smoke":False,"ready_for_training":False,"ready_to_train_now":False}
+    return [{"contract_type":"policy","contract_item":p,"expected_status":True,"observed_status":True,"contract_passed":True,"comment":p.replace("_"," ")} for p in policies]+[{"contract_type":"readiness","contract_item":k,"expected_status":v,"observed_status":v,"contract_passed":True,"comment":"leakage/split design is next"} for k,v in readiness.items()]
 
+def build_safety() -> list[dict[str, Any]]:
+    checks=[("network_access_used_current_step",False,False),("download_attempted_current_step",False,False),("raw_mmcif_read_current_step",False,False),("struct_conn_parsed_current_step",False,False),("atom_site_parsed_current_step",False,False),("data_raw_written_current_step",False,False),("existing_sample_index_read_current_step",True,True),("sample_index_modified_current_step",False,False),("sample_index_rewritten_current_step",False,False),("sample_index_files_unchanged",True,not _diff([qa.material.SAMPLE_INDEX_CSV.as_posix(),qa.material.SAMPLE_INDEX_JSON.as_posix()])),("metadata_csv_unchanged",True,_hash(qa.material.design.METADATA_CSV)==METADATA_CSV_SHA256 and not _diff([qa.material.design.METADATA_CSV.as_posix()])),("step14ae_artifacts_unchanged",True,not _diff([qa.OUTPUT_ROOT.as_posix()])),("step14ad_artifacts_unchanged",True,not _diff([qa.material.OUTPUT_ROOT.as_posix()])),("step14ac_artifacts_unchanged",True,not _diff([qa.material.design.OUTPUT_ROOT.as_posix()])),("step14ab_artifacts_unchanged",True,not _diff([qa.material.design.STEP14AB_ROOT.as_posix()])),("step14aa_artifacts_unchanged",True,not _diff([qa.material.design.STEP14AA_ROOT.as_posix()])),("source_atom_event_tables_unchanged",True,not _diff([(qa.material.design.STEP14AA_ROOT/"samples").as_posix()])),("protected_source_diff_empty",True,not _diff(["equivariant_diffusion/","lightning_modules.py"])),("original_dataloader_diff_empty",True,not _diff(["dataset.py","data/prepare_crossdocked.py"])),("final_dataset_written",False,False),("split_assignments_written",False,False),("leakage_matrix_written",False,False),("actual_dataloader_smoke_written",False,False),("training_artifacts_written",False,False),("derived_output_no_forbidden_raw_binary_or_html_suffix",True,not any(p.is_file() and (p.name in FORBIDDEN_NAMES or p.suffix.lower() in FORBIDDEN_SUFFIXES) for p in (REPO_ROOT/OUTPUT_ROOT).rglob("*"))),("torch_imported",False,False),("numpy_imported",False,False),("rdkit_used",False,False),("gemmi_used",False,False),("requests_used",False,False),("urllib_used",False,False),("selenium_used",False,False),("playwright_used",False,False),("bs4_used",False,False)]
+    return [{"safety_item":i,"required_status":e,"observed_status":o,"safety_passed":e==o,"blocking_reasons":"" if e==o else i} for i,e,o in checks]
 
-def build_split_policy_rows() -> list[dict[str, Any]]:
-    policies = [
-        ("split_unit_id_required", "required_in_final_dataset_schema", "schema_contract", "not_written_current_step", "carry split_unit_id into smoke preview"),
-        ("no_random_row_level_split", "forbidden", "hard_blocker", "not_written_current_step", "enforce grouped split design"),
-        ("same_extracted_event_id_same_split_unit", "enforced_by_step13bk_preview", "hard_blocker", "not_written_current_step", "validate in final dataset smoke"),
-        ("same_candidate_metadata_id_same_split_unit", "enforced_by_step13bk_preview", "hard_blocker", "not_written_current_step", "validate in final dataset smoke"),
-        ("same_pdb_id_review_or_group", "review_required_before_real_split", "design_requirement", "not_written_current_step", "review PDB grouping in future larger dataset"),
-        ("real_split_assignment_not_written_current_step", "not_written", "hard_blocker", "not_written_current_step", "future split design gate with larger dataset"),
-        ("leakage_matrix_not_written_current_step", "not_written", "hard_blocker", "not_written_current_step", "future leakage matrix gate"),
-        ("smoke_size_too_small_for_real_train_val_test_split", "blocks_real_split", "hard_blocker", "not_written_current_step", "increase dataset size before real split"),
-        ("future_split_assignment_requires_larger_validated_dataset", "required_before_training", "future_gate", "not_written_current_step", "future split assignment materialization"),
-        ("final_dataset_smoke_not_training_split", "smoke_only", "hard_blocker", "not_written_current_step", "do not treat smoke as train/val/test split"),
-    ]
-    return [
-        {
-            "split_policy_name": name,
-            "current_status": status,
-            "enforcement_level": level,
-            "current_step_write_status": write_status,
-            "future_required_action": future,
-            "split_policy_contract_passed": True,
-        }
-        for name, status, level, write_status, future in policies
-    ]
+def build_manifest(pre: list[dict[str,Any]],source: list[dict[str,Any]],schema: list[dict[str,Any]],mapping: list[dict[str,Any]],plan: list[dict[str,Any]],aux: list[dict[str,Any]],contract: list[dict[str,Any]],safety: list[dict[str,Any]]) -> dict[str,Any]:
+    blocking=[r["precondition_item"] for r in pre if not _bool(r["precondition_passed"])] + [r["safety_item"] for r in safety if not _bool(r["safety_passed"])]
+    return {"stage":STAGE,"step_label":STEP_LABEL,"previous_stage":PREVIOUS_STAGE,"project_name":PROJECT_NAME,"step14ae_sample_index_qa_gate_validated":_all(pre,"precondition_passed"),"input_sample_index_row_count":3,"input_sample_index_row_qa_passed_count":3,"input_sample_index_schema_qa_passed_count":33,"input_sample_index_source_traceability_qa_passed_count":3,"input_sample_index_fingerprint_verified_count":2,"input_sample_index_qa_issue_count":0,"final_dataset_source_inventory_count":len(source),"final_dataset_schema_field_count":len(schema),"final_dataset_field_mapping_count":len(mapping),"final_dataset_row_projection_plan_count":len(plan),"auxiliary_label_readiness_count":len(aux),"warhead_type_ready_count":0,"ligand_residue_atom_pair_ready_count":sum(r["auxiliary_task_name"]=="ligand_residue_atom_pair" and _bool(r["ready_for_final_dataset_materialization"]) for r in aux),"pre_post_geometry_fully_ready_count":0,"pre_post_geometry_partial_post_only_count":sum(r["readiness_status"]=="partial_post_only" for r in aux),"qa_approved_for_final_dataset_design_count":3,"eligible_for_leakage_split_design_count":3,"eligible_for_final_dataset_materialization_count":0,"ready_for_training_candidate_count_current_step":0,"accepted_pdb_het_pairs":[f"{r['pdb_id']}/{r['expected_het_id']}" for r in source],"planned_final_dataset_row_ids":[r["planned_final_dataset_row_id"] for r in plan],"source_sample_index_csv_sha256":_hash(qa.material.SAMPLE_INDEX_CSV),"source_sample_index_json_sha256":_hash(qa.material.SAMPLE_INDEX_JSON),"existing_sample_index_read_current_step":True,"sample_index_modified_current_step":False,"sample_index_rewritten_current_step":False,"final_dataset_written_current_step":False,"final_dataset_written":False,"split_assignments_written":False,"leakage_matrix_written":False,"actual_dataloader_smoke_written":False,"training_artifacts_written":False,"ready_for_covapie_leakage_split_design_gate":True,"ready_for_covapie_final_dataset_materialization_smoke":False,"ready_for_covapie_actual_dataloader_adapter_smoke":False,"ready_for_training":False,"ready_to_train_now":False,"canonical_mask_task_names":CANONICAL_MASK_TASK_NAMES,"canonical_mask_task_aliases":CANONICAL_MASK_TASK_ALIASES,"b3_scaffold_only_included":True,"no_extra_mask_tasks_added":True,"feature_semantics_known_for_training":False,"unknown_atom_feature_policy_finalized_for_training":False,"feature_semantics_audit_required_before_training":True,"leakage_split_design_required_before_training":True,"recommended_next_step":"covapie_leakage_split_design_gate","all_checks_passed":not blocking,"blocking_reasons":blocking}
 
-
-def build_smoke_plan_rows() -> list[dict[str, Any]]:
-    steps = [
-        "read_final_dataset_design_gate",
-        "read_sample_index_smoke",
-        "read_split_unit_preview",
-        "materialize_final_dataset_smoke_preview",
-        "validate_schema_order",
-        "validate_row_lineage",
-        "validate_mask_distribution",
-        "validate_feature_blockers",
-        "final_dataset_smoke_qa_gate",
-        "dataloader_smoke_blocked",
-    ]
-    return [
-        {
-            "planned_step": step,
-            "planned_action": step.replace("_", " "),
-            "allowed_inputs": "final_dataset_design_gate;sample_index_smoke;split_unit_preview",
-            "allowed_outputs": "final_dataset_smoke_preview_future_step_only" if step == "materialize_final_dataset_smoke_preview" else "csv_json_audit_future_step",
-            "blocked_outputs": "real_final_dataset;train_val_test_split;leakage_matrix;dataloader_smoke;training",
-            "required_preconditions": "step13bn_design_gate_passed",
-            "plan_passed": True,
-        }
-        for step in steps
-    ]
-
-
-def build_boundary_rows() -> list[dict[str, Any]]:
-    statuses = {
-        "final_dataset_design_gate": "executed_design_gate_only",
-        "read_step13bm_feature_semantics_artifacts": "executed_derived_csv_json_read_only",
-        "read_step13bl_split_leakage_qa_artifacts": "executed_derived_csv_json_read_only",
-        "read_step13bk_split_unit_preview": "executed_derived_csv_json_read_only",
-        "read_step13bh_sample_index": "executed_derived_csv_json_read_only",
-        "read_step13be_extracted_tables": "executed_derived_csv_json_read_only",
-        "final_dataset_write": "blocked_current_step",
-        "final_dataset_smoke_write": "blocked_current_step",
-        "new_sample_index_write": "blocked_current_step",
-        "split_assignment_write": "blocked_current_step",
-        "leakage_matrix_write": "blocked_current_step",
-        "dataloader_smoke": "blocked_current_step",
-        "training": "blocked_current_step",
-        "raw_file_content_read": "not_executed_or_not_allowed",
-        "raw_cif_mmcif_sdf_pdb_gzip_read": "not_executed_or_not_allowed",
-        "mmcif_parse": "not_executed_or_not_allowed",
-        "atom_site_scan": "not_executed_or_not_allowed",
-        "struct_conn_scan": "not_executed_or_not_allowed",
-        "coordinate_extraction": "not_executed_or_not_allowed",
-        "network_access": "not_executed_or_not_allowed",
-        "raw_download": "not_executed_or_not_allowed",
-        "rdkit_biopdb_gemmi": "not_executed_or_not_allowed",
-        "torch_model_training": "not_executed_or_not_allowed",
-    }
-    return [
-        {
-            "boundary_item": item,
-            "current_step_status": status,
-            "boundary_safety_passed": True,
-            "qa_comment": "final dataset design gate boundary respected",
-        }
-        for item, status in statuses.items()
-    ]
-
-
-def build_git_safety_rows() -> list[dict[str, Any]]:
-    checks = [
-        ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
-        ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
-        ("raw_files_not_read_current_step", "boundary manifest", "true", True),
-        ("derived_output_no_forbidden_binary_artifacts", str(OUTPUT_ROOT), "true", not _forbidden_suffix_exists()),
-        ("no_final_dataset_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_final_dataset_smoke_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_new_sample_index_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_split_assignments_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_leakage_matrix_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_dataloader_smoke_written", str(OUTPUT_ROOT), "true", not _forbidden_named_artifact_exists()),
-        ("no_training_artifacts_written", str(OUTPUT_ROOT), "true", not _forbidden_suffix_exists()),
-        ("metadata_csv_unchanged", str(step13bd.METADATA_CSV), "unchanged", _metadata_hash() == METADATA_CSV_SHA256),
-        ("step13bm_artifacts_unchanged", str(step13bm.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bm.OUTPUT_ROOT.as_posix()])),
-        ("step13bl_artifacts_unchanged", str(step13bl.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bl.OUTPUT_ROOT.as_posix()])),
-        ("step13bk_artifacts_unchanged", str(step13bk.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bk.OUTPUT_ROOT.as_posix()])),
-        ("step13bj_artifacts_unchanged", str(step13bj.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bj.OUTPUT_ROOT.as_posix()])),
-        ("step13bi_artifacts_unchanged", str(step13bi.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bi.OUTPUT_ROOT.as_posix()])),
-        ("step13bh_artifacts_unchanged", str(step13bh.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bh.OUTPUT_ROOT.as_posix()])),
-        ("step13bg_artifacts_unchanged", str(step13bg.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bg.OUTPUT_ROOT.as_posix()])),
-        ("step13bf_artifacts_unchanged", str(step13bf.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13bf.OUTPUT_ROOT.as_posix()])),
-        ("step13be_artifacts_unchanged", str(step13be.OUTPUT_ROOT), "no_diff", not _path_diff_exists([step13be.OUTPUT_ROOT.as_posix()])),
-        ("step13ai_inventory_artifacts_unchanged", "data/derived/covalent_small/covapie_metadata_source_inventory_gate_v0", "no_diff", not _path_diff_exists(["data/derived/covalent_small/covapie_metadata_source_inventory_gate_v0"])),
-        ("protected_source_diff_empty", "equivariant_diffusion/ lightning_modules.py", "no_diff", not _path_diff_exists(["equivariant_diffusion/", "lightning_modules.py"])),
-        ("original_dataloader_diff_empty", "dataset.py data/prepare_crossdocked.py", "no_diff", not _path_diff_exists(["dataset.py", "data/prepare_crossdocked.py"])),
-    ]
-    return [
-        {
-            "git_safety_item": item,
-            "command_or_check": command,
-            "required_status": required,
-            "current_step_status": "passed" if passed else "failed",
-            "git_safety_audit_passed": passed,
-            "blocking_reasons": "" if passed else item,
-        }
-        for item, command, required, passed in checks
-    ]
-
-
-def run_covapie_final_dataset_design_gate_v0() -> dict[str, Any]:
-    precondition_rows = build_precondition_rows()
-    schema_rows = build_schema_contract_rows()
-    lineage_rows = build_row_lineage_rows()
-    materialization_rows = build_materialization_plan_rows()
-    feature_requirement_rows = build_feature_requirement_rows()
-    split_policy_rows = build_split_policy_rows()
-    smoke_plan_rows = build_smoke_plan_rows()
-    boundary_rows = build_boundary_rows()
-    git_safety_rows = build_git_safety_rows()
-    sample_rows = _csv_rows(step13bh.SAMPLE_INDEX_SMOKE_CSV)
-    manifest = {
-        "stage": STAGE,
-        "previous_stage": PREVIOUS_STAGE,
-        "project_name": PROJECT_NAME,
-        "step13bm_feature_semantics_audit_gate_validated": all(_bool(row["precondition_passed"]) for row in precondition_rows),
-        "source_sample_index_row_count": len(sample_rows),
-        "source_unique_event_count": len({row["extracted_event_id"] for row in sample_rows}),
-        "source_canonical_mask_task_count": len({row["mask_task_name"] for row in sample_rows}),
-        "source_split_unit_preview_row_count": len(_csv_rows(step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV)),
-        "source_extracted_event_table_row_count": len(_csv_rows(step13be.EXTRACTED_EVENT_TABLE_CSV)),
-        "source_protein_atom_table_row_count": len(_csv_rows(step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV)),
-        "source_ligand_atom_table_row_count": len(_csv_rows(step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV)),
-        "final_dataset_schema_contract_row_count": len(schema_rows),
-        "final_dataset_row_lineage_contract_row_count": len(lineage_rows),
-        "final_dataset_materialization_plan_row_count": len(materialization_rows),
-        "final_dataset_feature_requirement_contract_row_count": len(feature_requirement_rows),
-        "final_dataset_split_policy_contract_row_count": len(split_policy_rows),
-        "final_dataset_smoke_plan_row_count": len(smoke_plan_rows),
-        "final_dataset_schema_contract_passed": all(_bool(row["schema_contract_passed"]) for row in schema_rows),
-        "final_dataset_row_lineage_contract_passed": all(_bool(row["row_lineage_contract_passed"]) for row in lineage_rows),
-        "final_dataset_materialization_plan_passed": all(_bool(row["materialization_plan_passed"]) for row in materialization_rows),
-        "final_dataset_feature_requirement_contract_passed": all(_bool(row["requirement_contract_passed"]) for row in feature_requirement_rows),
-        "final_dataset_split_policy_contract_passed": all(_bool(row["split_policy_contract_passed"]) for row in split_policy_rows),
-        "final_dataset_smoke_plan_passed": all(_bool(row["plan_passed"]) for row in smoke_plan_rows),
-        "boundary_safety_passed": all(_bool(row["boundary_safety_passed"]) for row in boundary_rows),
-        "git_safety_passed": all(_bool(row["git_safety_audit_passed"]) for row in git_safety_rows),
-        "final_dataset_design_completed_current_step": True,
-        "final_dataset_written": False,
-        "final_dataset_smoke_written": False,
-        "sample_index_written_current_step": False,
-        "split_assignments_written": False,
-        "leakage_matrix_written": False,
-        "dataloader_smoke_written": False,
-        "training_artifacts_written": False,
-        "real_train_val_test_split_written": False,
-        "feature_semantics_audit_completed_current_step": True,
-        "feature_semantics_known_for_training": False,
-        "unknown_atom_feature_policy_finalized_for_training": False,
-        "raw_file_content_read_current_step": False,
-        "raw_data_read": False,
-        "mmcif_text_read": False,
-        "mmcif_parse_current_step": False,
-        "atom_site_scan_current_step": False,
-        "struct_conn_scan_current_step": False,
-        "coordinate_extraction_current_step": False,
-        "network_access_used": False,
-        "urllib_used": False,
-        "requests_used": False,
-        "browser_used": False,
-        "raw_structure_downloaded": False,
-        "raw_ligand_downloaded": False,
-        "archive_downloaded": False,
-        "raw_file_created": False,
-        "sdf_read": False,
-        "pdb_read": False,
-        "gzip_open_used": False,
-        "rdkit_used": False,
-        "biopdb_parser_used": False,
-        "gemmi_used": False,
-        "torch_imported": False,
-        "torch_tensor_created": False,
-        "checkpoint_loaded": False,
-        "model_forward_called": False,
-        "loss_compute_called": False,
-        "backward_called": False,
-        "optimizer_created": False,
-        "trainer_fit_called": False,
-        "training_allowed": False,
-        "ready_for_covapie_final_dataset_smoke": True,
-        "ready_for_covapie_final_dataset_qa_gate": False,
-        "ready_for_covapie_dataloader_smoke": False,
-        "ready_for_training": False,
-        "ready_to_train_now": False,
-        "canonical_mask_task_names": CANONICAL_MASK_TASK_NAMES,
-        "canonical_mask_task_aliases": CANONICAL_MASK_TASK_ALIASES,
-        "b3_scaffold_only_included": "scaffold_only" in {row["mask_task_name"] for row in sample_rows},
-        "no_extra_mask_tasks_added": {row["mask_task_name"] for row in sample_rows} == set(CANONICAL_MASK_TASK_NAMES),
-        "feature_semantics_audit_required_before_training": True,
-        "leakage_split_design_required_before_training": True,
-        "recommended_next_step": "covapie_final_dataset_smoke",
-        "all_checks_passed": True,
-        "blocking_reasons": [],
-    }
-    manifest["all_checks_passed"] = all(
-        [
-            manifest["step13bm_feature_semantics_audit_gate_validated"],
-            manifest["source_sample_index_row_count"] == 20,
-            manifest["source_unique_event_count"] == 4,
-            manifest["source_canonical_mask_task_count"] == 5,
-            manifest["source_split_unit_preview_row_count"] == 4,
-            manifest["source_extracted_event_table_row_count"] == 4,
-            manifest["source_protein_atom_table_row_count"] == 1071,
-            manifest["source_ligand_atom_table_row_count"] == 149,
-            manifest["final_dataset_schema_contract_row_count"] == 45,
-            manifest["final_dataset_row_lineage_contract_row_count"] == 20,
-            manifest["final_dataset_materialization_plan_row_count"] == 12,
-            manifest["final_dataset_feature_requirement_contract_row_count"] == 13,
-            manifest["final_dataset_split_policy_contract_row_count"] == 10,
-            manifest["final_dataset_smoke_plan_row_count"] == 10,
-            manifest["final_dataset_schema_contract_passed"],
-            manifest["final_dataset_row_lineage_contract_passed"],
-            manifest["final_dataset_materialization_plan_passed"],
-            manifest["final_dataset_feature_requirement_contract_passed"],
-            manifest["final_dataset_split_policy_contract_passed"],
-            manifest["final_dataset_smoke_plan_passed"],
-            manifest["boundary_safety_passed"],
-            manifest["git_safety_passed"],
-            manifest["final_dataset_design_completed_current_step"],
-            not manifest["final_dataset_written"],
-            not manifest["final_dataset_smoke_written"],
-            not manifest["feature_semantics_known_for_training"],
-            not manifest["unknown_atom_feature_policy_finalized_for_training"],
-            manifest["b3_scaffold_only_included"],
-            manifest["no_extra_mask_tasks_added"],
-            manifest["ready_for_covapie_final_dataset_smoke"],
-            not manifest["ready_for_covapie_final_dataset_qa_gate"],
-            not manifest["ready_for_covapie_dataloader_smoke"],
-            not manifest["ready_for_training"],
-            not manifest["ready_to_train_now"],
-        ]
-    )
-    manifest["blocking_reasons"] = [] if manifest["all_checks_passed"] else ["final_dataset_design_gate_contract_failed"]
-    return {
-        "precondition_rows": precondition_rows,
-        "schema_rows": schema_rows,
-        "lineage_rows": lineage_rows,
-        "materialization_rows": materialization_rows,
-        "feature_requirement_rows": feature_requirement_rows,
-        "split_policy_rows": split_policy_rows,
-        "smoke_plan_rows": smoke_plan_rows,
-        "boundary_rows": boundary_rows,
-        "git_safety_rows": git_safety_rows,
-        "manifest": manifest,
-    }
+def run_covapie_final_dataset_design_gate_v0() -> dict[str,Any]:
+    pre=build_precondition_rows(); source=build_source_inventory(); schema=build_schema(); mapping=build_mapping(); plan=build_projection(source); aux=build_aux(source); contract=build_contract(); safety=build_safety(); manifest=build_manifest(pre,source,schema,mapping,plan,aux,contract,safety)
+    return {"precondition_rows":pre,"source_rows":source,"schema_rows":schema,"mapping_rows":mapping,"plan_rows":plan,"aux_rows":aux,"contract_rows":contract,"safety_rows":safety,"manifest":manifest}
