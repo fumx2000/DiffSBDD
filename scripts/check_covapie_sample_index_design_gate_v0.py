@@ -41,24 +41,24 @@ def write_json(data: Any, path: str | Path) -> None:
 def write_summary(manifest: dict[str, Any], path: str | Path) -> None:
     text = f"""# CovaPIE Sample Index Design Gate v0 Summary
 
-Step 13BG is a design gate for a future sample index smoke step.
-It reads only Step 13BF/13BE derived CSV and JSON artifacts and designs source artifact references, a 31-field sample index schema, and a 4 events x 5 mask task expansion contract.
-It does not write `sample_index.csv`, `sample_index.json`, final_dataset, split assignments, leakage matrix, tensors, or training inputs.
-It does not read raw CIF files, parse mmCIF, extract coordinates, use network, RDKit, Bio.PDB, gemmi, gzip, torch, model forward, loss, backward, optimizer, trainer.fit, or training.
-The five canonical masks remain unchanged, including `scaffold_only / B3`; no sixth mask is introduced.
-Feature semantics audit, scaffold/linker/warhead annotation, auxiliary labels, and leakage/split design remain required before formal training, fine-tuning, or real parameter updates.
-This gate allows sample index smoke next, not sample index QA, not split/leakage design, and not training.
+Step 14AC is a design gate for a future sample index materialization smoke.
+It reads only Step 14AB QA-passed derived outputs and Step 14AA derived sample-preparation outputs.
+It defines the source inventory, 33-field sample-index schema contract, field mapping, per-sample materialization plan, policy, safety, and downstream readiness contracts.
 
-future_sample_index_schema_field_count: `{manifest["future_sample_index_schema_field_count"]}`
-future_mask_task_expansion_row_count: `{manifest["future_mask_task_expansion_row_count"]}`
-future_unique_event_count: `{manifest["future_unique_event_count"]}`
-future_mask_task_count: `{manifest["future_mask_task_count"]}`
-future_planned_sample_count: `{manifest["future_planned_sample_count"]}`
-sample_index_materialized_current_step: `{manifest["sample_index_materialized_current_step"]}`
-sample_index_written: `{manifest["sample_index_written"]}`
-ready_for_covapie_sample_index_smoke: `{manifest["ready_for_covapie_sample_index_smoke"]}`
-ready_for_covapie_sample_index_qa_gate: `{manifest["ready_for_covapie_sample_index_qa_gate"]}`
-ready_for_covapie_split_leakage_design_gate: `{manifest["ready_for_covapie_split_leakage_design_gate"]}`
+This step does not write `sample_index.csv` or `sample_index.json`.
+It does not create a final dataset, split assignments, leakage matrix, dataloader smoke, tensors, checkpoints, or training artifacts.
+It does not read raw mmCIF, parse raw `struct_conn` or `atom_site`, modify atom/event tables, use network, RDKit, Bio.PDB, gemmi, torch, model forward, loss, backward, optimizer, trainer.fit, or training.
+
+The five canonical masks remain unchanged, including `scaffold_only / B3`.
+Feature semantics remain unknown for formal training, `UNKNOWN_ATOM_FEATURE_POLICY` remains not finalized for training, and feature-semantics audit plus leakage/split design remain required before formal training, fine-tuning, or real parameter updates.
+
+sample_index_source_inventory_count: `{manifest["sample_index_source_inventory_count"]}`
+sample_index_schema_field_count: `{manifest["sample_index_schema_field_count"]}`
+sample_index_field_mapping_count: `{manifest["sample_index_field_mapping_count"]}`
+sample_index_materialization_plan_count: `{manifest["sample_index_materialization_plan_count"]}`
+eligible_for_sample_index_materialization_count: `{manifest["eligible_for_sample_index_materialization_count"]}`
+sample_index_written_current_step: `{manifest["sample_index_written_current_step"]}`
+ready_for_covapie_sample_index_materialization_smoke: `{manifest["ready_for_covapie_sample_index_materialization_smoke"]}`
 ready_for_training: `{manifest["ready_for_training"]}`
 ready_to_train_now: `{manifest["ready_to_train_now"]}`
 recommended_next_step: `{manifest["recommended_next_step"]}`
@@ -72,34 +72,32 @@ blocking_reasons: `{manifest["blocking_reasons"]}`
 def run() -> int:
     result = design_gate.run_covapie_sample_index_design_gate_v0()
     write_csv(result["precondition_rows"], design_gate.PRECONDITION_AUDIT_CSV, design_gate.PRECONDITION_COLUMNS)
-    write_csv(result["source_rows"], design_gate.SOURCE_ARTIFACT_CONTRACT_CSV, design_gate.SOURCE_ARTIFACT_COLUMNS)
+    write_csv(result["source_rows"], design_gate.SOURCE_INVENTORY_CSV, design_gate.SOURCE_INVENTORY_COLUMNS)
+    write_json(result["source_rows"], design_gate.SOURCE_INVENTORY_JSON)
     write_csv(result["schema_rows"], design_gate.SCHEMA_CONTRACT_CSV, design_gate.SCHEMA_COLUMNS)
-    write_csv(result["mask_rows"], design_gate.MASK_TASK_EXPANSION_CONTRACT_CSV, design_gate.MASK_EXPANSION_COLUMNS)
-    write_csv(result["plan_rows"], design_gate.SMOKE_PLAN_CSV, design_gate.PLAN_COLUMNS)
-    write_csv(result["boundary_rows"], design_gate.BOUNDARY_SAFETY_CSV, design_gate.BOUNDARY_COLUMNS)
-    write_csv(result["git_safety_rows"], design_gate.GIT_SAFETY_CSV, design_gate.GIT_SAFETY_COLUMNS)
-    write_csv(result["training_blocker_rows"], design_gate.TRAINING_BLOCKERS_CSV, design_gate.TRAINING_BLOCKER_COLUMNS)
+    write_csv(result["mapping_rows"], design_gate.FIELD_MAPPING_CSV, design_gate.FIELD_MAPPING_COLUMNS)
+    write_csv(result["plan_rows"], design_gate.MATERIALIZATION_PLAN_CSV, design_gate.MATERIALIZATION_PLAN_COLUMNS)
+    write_csv(result["policy_rows"], design_gate.POLICY_CONTRACT_CSV, design_gate.POLICY_COLUMNS)
+    write_csv(result["downstream_rows"], design_gate.DOWNSTREAM_READINESS_CSV, design_gate.DOWNSTREAM_COLUMNS)
+    write_csv(result["safety_rows"], design_gate.SAFETY_AUDIT_CSV, design_gate.SAFETY_COLUMNS)
     write_json(result["manifest"], design_gate.MANIFEST_JSON)
     write_summary(result["manifest"], design_gate.SUMMARY_MD)
 
     manifest = result["manifest"]
-    if manifest["all_checks_passed"]:
-        print("covapie_sample_index_design_gate_v0_passed")
-    else:
-        print("covapie_sample_index_design_gate_v0_blocked")
+    print("covapie_sample_index_design_gate_v0_passed" if manifest["all_checks_passed"] else "covapie_sample_index_design_gate_v0_blocked")
     for key in [
-        "future_sample_index_schema_field_count",
-        "future_mask_task_expansion_row_count",
-        "future_planned_sample_count",
-        "source_artifact_contract_passed",
-        "sample_index_schema_contract_passed",
-        "mask_task_expansion_contract_passed",
-        "sample_index_smoke_plan_passed",
-        "ready_for_covapie_sample_index_smoke",
-        "ready_for_covapie_sample_index_qa_gate",
-        "ready_for_covapie_split_leakage_design_gate",
+        "sample_index_source_inventory_count",
+        "sample_index_schema_field_count",
+        "sample_index_field_mapping_count",
+        "sample_index_materialization_plan_count",
+        "eligible_for_sample_index_materialization_count",
+        "sample_index_written_current_step",
+        "ready_for_covapie_sample_index_materialization_smoke",
         "ready_for_training",
         "ready_to_train_now",
+        "feature_semantics_known_for_training",
+        "unknown_atom_feature_policy_finalized_for_training",
+        "feature_semantics_audit_required_before_training",
         "recommended_next_step",
         "blocking_reasons",
     ]:

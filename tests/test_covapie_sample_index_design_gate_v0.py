@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import csv
+import hashlib
 import json
 import subprocess
 import sys
@@ -16,6 +17,8 @@ from covalent_ext import covapie_sample_index_design_gate as design_gate
 
 
 ROOT = Path("data/derived/covalent_small/covapie_sample_index_design_gate_v0")
+EXPECTED_PAIRS = ["6BV6/JUG", "6BV8/JUG", "6BV5/JUG"]
+EXPECTED_IDS = ["CYS_SG_SAMPLE_INDEX_000001", "CYS_SG_SAMPLE_INDEX_000002", "CYS_SG_SAMPLE_INDEX_000003"]
 
 
 def _csv_rows(path: Path) -> list[dict[str, str]]:
@@ -26,7 +29,7 @@ def _csv_rows(path: Path) -> list[dict[str, str]]:
 
 def _manifest() -> dict:
     path = ROOT / "covapie_sample_index_design_gate_manifest.json"
-    assert path.is_file(), "Run the Step 13BG check script before artifact tests"
+    assert path.is_file(), "Run the Step 14AC check script before artifact tests"
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -41,145 +44,189 @@ def _imports_name(path: Path, name: str) -> bool:
     return False
 
 
-def test_step13bf_precondition_and_readiness() -> None:
-    manifest13bf = json.loads(design_gate.step13bf.MANIFEST_JSON.read_text(encoding="utf-8"))
+def test_step14ab_precondition_and_manifest_counts() -> None:
+    manifest14ab = json.loads(design_gate.STEP14AB_MANIFEST_JSON.read_text(encoding="utf-8"))
     precondition = _csv_rows(ROOT / "covapie_sample_index_design_precondition_audit.csv")
     manifest = _manifest()
-    assert manifest13bf["stage"] == design_gate.PREVIOUS_STAGE
-    assert manifest13bf["all_checks_passed"] is True
-    assert manifest13bf["ready_for_covapie_sample_index_design_gate"] is True
-    assert manifest13bf["ready_for_covapie_sample_index_smoke"] is False
-    assert manifest13bf["ready_for_training"] is False
+
+    assert manifest14ab["stage"] == design_gate.PREVIOUS_STAGE
+    assert manifest14ab["all_checks_passed"] is True
+    assert manifest14ab["sample_qa_count"] == 3
+    assert manifest14ab["sample_qa_passed_count"] == 3
+    assert manifest14ab["table_integrity_qa_count"] == 18
+    assert manifest14ab["table_integrity_passed_count"] == 18
+    assert manifest14ab["event_pair_qa_count"] == 3
+    assert manifest14ab["event_pair_qa_passed_count"] == 3
+    assert manifest14ab["qa_issue_count"] == 0
+    assert manifest14ab["ready_for_covapie_sample_index_design_gate"] is True
+    assert manifest14ab["ready_for_training"] is False
     assert {row["precondition_passed"] for row in precondition} == {"True"}
+
     assert manifest["stage"] == design_gate.STAGE
+    assert manifest["step_label"] == "Step 14AC"
     assert manifest["previous_stage"] == design_gate.PREVIOUS_STAGE
-    assert manifest["step13bf_extraction_qa_gate_validated"] is True
+    assert manifest["step14ab_sample_preparation_qa_gate_validated"] is True
     assert manifest["all_checks_passed"] is True
     assert manifest["blocking_reasons"] == []
 
 
-def test_source_artifact_contract_reads_required_derived_artifacts() -> None:
-    rows = _csv_rows(ROOT / "covapie_sample_index_source_artifact_contract.csv")
+def test_source_inventory_has_three_rows_and_json_consistency() -> None:
+    rows = _csv_rows(ROOT / "covapie_sample_index_source_inventory.csv")
+    json_rows = json.loads((ROOT / "covapie_sample_index_source_inventory.json").read_text(encoding="utf-8"))
     manifest = _manifest()
-    assert [row["source_artifact_name"] for row in rows] == [
-        "extracted_event_table",
-        "extracted_protein_pocket_atom_table",
-        "extracted_ligand_atom_table",
-        "extraction_qa_gate_manifest",
-        "event_table_qa_audit",
-        "atom_table_qa_audit",
-        "geometry_qa_audit",
-        "traceability_qa_audit",
+
+    assert len(rows) == 3
+    assert len(json_rows) == 3
+    assert [row["sample_index_source_id"] for row in rows] == [
+        "CYS_SG_SAMPLE_INDEX_SOURCE_000001",
+        "CYS_SG_SAMPLE_INDEX_SOURCE_000002",
+        "CYS_SG_SAMPLE_INDEX_SOURCE_000003",
     ]
-    assert {row["required_for_future_sample_index_smoke"] for row in rows} == {"True"}
-    assert {row["exists_current_step"] for row in rows} == {"True"}
-    assert {row["content_read_current_step"] for row in rows} == {"True"}
-    assert {row["source_artifact_contract_passed"] for row in rows} == {"True"}
-    assert manifest["source_artifact_contract_passed"] is True
+    assert [f"{row['pdb_id']}/{row['expected_het_id']}" for row in rows] == EXPECTED_PAIRS
+    assert [row["sample_index_source_id"] for row in rows] == [row["sample_index_source_id"] for row in json_rows]
+    assert {row["sample_level_qa_status"] for row in rows} == {"passed"}
+    assert {row["table_integrity_status"] for row in rows} == {"passed"}
+    assert {row["event_pair_qa_status"] for row in rows} == {"passed"}
+    assert {row["eligible_for_sample_index_materialization"] for row in rows} == {"True"}
+    assert {row["ready_for_training_current_step"] for row in rows} == {"False"}
+    assert {row["covalent_bond_atom_pair"] for row in rows} == {"SG--CAG"}
+    assert manifest["sample_index_source_inventory_count"] == 3
+    assert manifest["sample_index_source_inventory_csv_json_consistent"] is True
+    assert manifest["eligible_for_sample_index_materialization_count"] == 3
 
 
-def test_sample_index_schema_contract_has_exactly_31_design_only_fields() -> None:
+def test_all_six_source_artifact_paths_exist_for_each_sample() -> None:
+    rows = _csv_rows(ROOT / "covapie_sample_index_source_inventory.csv")
+    path_fields = [
+        "protein_atom_table_path",
+        "ligand_atom_table_path",
+        "pocket_atom_table_path",
+        "covalent_event_table_path",
+        "ligand_residue_atom_pair_table_path",
+        "sample_preparation_audit_path",
+    ]
+    for row in rows:
+        assert Path(row["sample_artifact_root"]).is_dir()
+        for field in path_fields:
+            assert Path(row[field]).is_file(), (field, row[field])
+        assert int(row["protein_atom_count"]) > 0
+        assert int(row["ligand_atom_count"]) > 0
+        assert int(row["pocket_atom_count"]) > 0
+        assert int(row["covalent_event_count"]) == 1
+        assert int(row["ligand_residue_atom_pair_count"]) == 1
+
+
+def test_schema_contract_contains_required_33_fields_design_only() -> None:
     rows = _csv_rows(ROOT / "covapie_sample_index_schema_contract.csv")
     manifest = _manifest()
-    assert len(rows) == 31
+    assert len(rows) == 33
     assert [row["sample_index_field"] for row in rows] == design_gate.SAMPLE_INDEX_FIELDS
-    assert [int(row["field_order"]) for row in rows] == list(range(1, 32))
-    assert {row["materialized_current_step"] for row in rows} == {"False"}
-    assert {row["required_in_future_sample_index_smoke"] for row in rows} == {"True"}
+    assert {row["current_step_materializes_field"] for row in rows} == {"False"}
     assert {row["schema_contract_passed"] for row in rows} == {"True"}
-    assert manifest["future_sample_index_schema_field_count"] == 31
-    assert manifest["sample_index_schema_contract_passed"] is True
+    assert rows[0]["sample_index_field"] == "sample_index_row_id"
+    assert rows[18]["sample_index_field"] == "covalent_residue_name"
+    assert rows[21]["sample_index_field"] == "covalent_residue_atom_name"
+    assert rows[22]["sample_index_field"] == "ligand_comp_id"
+    assert rows[23]["sample_index_field"] == "ligand_covalent_atom_name"
+    assert rows[24]["sample_index_field"] == "covalent_bond_atom_pair"
+    assert rows[-3]["sample_index_field"] == "ready_for_training_current_step"
+    assert rows[-2]["sample_index_field"] == "feature_semantics_audit_required_before_training"
+    assert rows[-1]["sample_index_field"] == "leakage_split_design_required_before_training"
+    assert manifest["sample_index_schema_field_count"] == 33
+    assert manifest["schema_contract_passed"] is True
 
 
-def test_mask_task_expansion_contract_is_four_events_by_five_canonical_masks() -> None:
-    rows = _csv_rows(ROOT / "covapie_sample_index_mask_task_expansion_contract.csv")
+def test_field_mapping_count_and_status() -> None:
+    rows = _csv_rows(ROOT / "covapie_sample_index_field_mapping.csv")
     manifest = _manifest()
-    assert len(rows) == 20
-    event_ids = sorted({row["extracted_event_id"] for row in rows})
-    mask_names = [row["mask_task_name"] for row in rows]
-    aliases = [row["mask_task_alias"] for row in rows]
-    assert len(event_ids) == 4
-    for event_id in event_ids:
-        event_rows = [row for row in rows if row["extracted_event_id"] == event_id]
-        assert [row["mask_task_name"] for row in event_rows] == design_gate.CANONICAL_MASK_TASK_NAMES
-        assert [row["mask_task_alias"] for row in event_rows] == design_gate.CANONICAL_MASK_TASK_ALIASES
-    assert {name: mask_names.count(name) for name in design_gate.CANONICAL_MASK_TASK_NAMES} == {name: 4 for name in design_gate.CANONICAL_MASK_TASK_NAMES}
-    assert {alias: aliases.count(alias) for alias in design_gate.CANONICAL_MASK_TASK_ALIASES} == {alias: 4 for alias in design_gate.CANONICAL_MASK_TASK_ALIASES}
-    assert ("scaffold_only" in mask_names) and ("B3" in aliases)
+    assert len(rows) == 33
+    assert [row["sample_index_field"] for row in rows] == design_gate.SAMPLE_INDEX_FIELDS
+    assert {row["mapping_status"] for row in rows} == {"planned_and_validated"}
+    by_field = {row["sample_index_field"]: row for row in rows}
+    assert by_field["pdb_id"]["primary_source_artifact"] == "sample-level QA"
+    assert by_field["covalent_residue_name"]["primary_source_artifact"] == "Step 14AA covalent_event_table"
+    assert by_field["conn_type_id"]["primary_source_field"] == "conn_type_id"
+    assert by_field["bond_distance_angstrom"]["primary_source_artifact"] == "Step 14AA ligand_residue_atom_pair_table"
+    assert by_field["ready_for_training_current_step"]["primary_source_field"] == "false"
+    assert by_field["feature_semantics_audit_required_before_training"]["primary_source_field"] == "true"
+    assert manifest["sample_index_field_mapping_count"] == 33
+    assert manifest["field_mapping_passed"] is True
+
+
+def test_materialization_plan_has_three_pending_rows() -> None:
+    rows = _csv_rows(ROOT / "covapie_sample_index_materialization_plan.csv")
+    manifest = _manifest()
+    assert len(rows) == 3
+    assert [row["planned_sample_index_row_id"] for row in rows] == EXPECTED_IDS
+    assert [f"{row['pdb_id']}/{row['expected_het_id']}" for row in rows] == EXPECTED_PAIRS
+    assert {row["planned_materialization_status"] for row in rows} == {"pending_sample_index_materialization_smoke"}
+    assert {row["required_source_table_count"] for row in rows} == {"6"}
+    assert {row["required_source_tables_present"] for row in rows} == {"True"}
+    assert {row["sample_qa_passed"] for row in rows} == {"True"}
+    assert {row["event_pair_qa_passed"] for row in rows} == {"True"}
+    assert {row["planned_next_gate"] for row in rows} == {"covapie_sample_index_materialization_smoke"}
+    assert {row["sample_index_written_current_step"] for row in rows} == {"False"}
+    assert {row["final_dataset_written_current_step"] for row in rows} == {"False"}
+    assert {row["ready_for_training_current_step"] for row in rows} == {"False"}
+    assert manifest["sample_index_materialization_plan_count"] == 3
+    assert manifest["materialization_plan_passed"] is True
+
+
+def test_policies_downstream_readiness_masks_and_training_boundaries() -> None:
+    policies = _csv_rows(ROOT / "covapie_sample_index_design_policy_contract.csv")
+    readiness = _csv_rows(ROOT / "covapie_sample_index_design_downstream_readiness_contract.csv")
+    manifest = _manifest()
+    assert [row["policy_item"] for row in policies] == [
+        "sample_index_design_gate_only",
+        "design_gate_does_not_write_sample_index",
+        "source_inventory_is_not_sample_index",
+        "materialization_plan_is_not_sample_index",
+        "design_gate_reads_qa_passed_derived_outputs_only",
+        "design_gate_does_not_read_raw_mmcif",
+        "design_gate_does_not_modify_atom_event_tables",
+        "no_final_dataset_current_step",
+        "no_split_or_leakage_current_step",
+        "no_dataloader_smoke_current_step",
+        "no_training_current_step",
+        "feature_semantics_audit_required_before_training",
+        "leakage_split_gate_required_before_training",
+        "canonical_five_masks_preserved",
+        "do_not_train_from_sample_index_design_artifacts",
+    ]
+    assert {row["policy_contract_passed"] for row in policies} == {"True"}
+    by_ready = {row["readiness_item"]: row for row in readiness}
+    assert by_ready["ready_for_covapie_sample_index_materialization_smoke"]["observed_status"] == "True"
     for key in [
-        "event_qa_passed",
-        "atom_qa_passed",
-        "geometry_qa_passed",
-        "scaffold_linker_warhead_annotation_required",
-        "auxiliary_labels_required",
-        "ready_for_future_sample_index_smoke",
-        "mask_task_expansion_contract_passed",
+        "ready_for_covapie_final_dataset_design_gate",
+        "ready_for_covapie_actual_dataloader_adapter_smoke",
+        "ready_for_training",
+        "ready_to_train_now",
     ]:
-        assert {row[key] for row in rows} == {"True"}
-    assert {row["materialized_current_step"] for row in rows} == {"False"}
-    assert {row["ready_for_training"] for row in rows} == {"False"}
-    assert manifest["future_mask_task_expansion_row_count"] == 20
-    assert manifest["future_unique_event_count"] == 4
-    assert manifest["future_mask_task_count"] == 5
-    assert manifest["future_planned_sample_count"] == 20
-    assert manifest["mask_task_expansion_contract_passed"] is True
+        assert by_ready[key]["observed_status"] == "False"
+    assert manifest["canonical_mask_task_names"] == [
+        "warhead_only",
+        "linker_plus_warhead",
+        "scaffold_plus_warhead",
+        "scaffold_only",
+        "scaffold_plus_linker_plus_warhead",
+    ]
+    assert manifest["canonical_mask_task_aliases"] == ["A", "B", "B2", "B3", "C"]
     assert manifest["b3_scaffold_only_included"] is True
     assert manifest["no_extra_mask_tasks_added"] is True
+    assert manifest["ready_for_covapie_sample_index_materialization_smoke"] is True
+    assert manifest["ready_for_covapie_final_dataset_design_gate"] is False
+    assert manifest["ready_for_covapie_actual_dataloader_adapter_smoke"] is False
+    assert manifest["ready_for_training"] is False
+    assert manifest["ready_to_train_now"] is False
+    assert manifest["feature_semantics_known_for_training"] is False
+    assert manifest["unknown_atom_feature_policy_finalized_for_training"] is False
+    assert manifest["feature_semantics_audit_required_before_training"] is True
+    assert manifest["leakage_split_design_required_before_training"] is True
+    assert manifest["recommended_next_step"] == "covapie_sample_index_materialization_smoke"
 
 
-def test_sample_index_smoke_plan_boundary_and_training_blockers() -> None:
-    plan = _csv_rows(ROOT / "covapie_sample_index_smoke_plan.csv")
-    boundary = _csv_rows(ROOT / "covapie_sample_index_design_boundary_safety.csv")
-    blockers = _csv_rows(ROOT / "covapie_sample_index_design_training_blockers.csv")
-    manifest = _manifest()
-    assert [row["planned_step"] for row in plan] == [
-        "read_extraction_qa_gate",
-        "read_extracted_event_table",
-        "read_extracted_atom_tables",
-        "expand_4_events_to_20_mask_task_rows",
-        "assign_deterministic_sample_ids",
-        "write_sample_index_smoke_csv",
-        "write_sample_index_smoke_json",
-        "sample_index_qa_gate",
-        "split_leakage_design_gate",
-        "feature_semantics_audit_gate",
-        "final_dataset_design_gate",
-        "dataloader_smoke",
-        "training",
-    ]
-    assert {row["plan_passed"] for row in plan} == {"True"}
-    assert plan[-1]["planned_action"] == "blocked"
-    by_boundary = {row["boundary_item"]: row for row in boundary}
-    assert by_boundary["sample_index_design_gate"]["current_step_status"] == "executed_design_gate_only"
-    assert by_boundary["read_step13bf_derived_artifacts"]["current_step_status"] == "executed_derived_csv_json_read_only"
-    assert by_boundary["sample_index_write"]["current_step_status"] == "blocked_current_design_gate"
-    for item in ["final_dataset", "split_assignments", "leakage_matrix", "dataloader_smoke", "training"]:
-        assert by_boundary[item]["current_step_status"] == "blocked_current_step"
-    for item in ["raw_file_content_read", "mmcif_parse", "coordinate_extraction", "network_access", "raw_download", "rdkit_biopdb_gemmi", "torch_model_training"]:
-        assert by_boundary[item]["current_step_status"] == "not_executed_or_not_allowed"
-    assert {row["boundary_safety_passed"] for row in boundary} == {"True"}
-    assert [row["training_blocker_item"] for row in blockers[:5]] == [
-        "mask_warhead_only_A",
-        "mask_linker_plus_warhead_B",
-        "mask_scaffold_plus_warhead_B2",
-        "mask_scaffold_only_B3",
-        "mask_scaffold_plus_linker_plus_warhead_C",
-    ]
-    assert {row["training_blocker_passed"] for row in blockers} == {"True"}
-    assert manifest["sample_index_smoke_plan_passed"] is True
-    assert manifest["boundary_safety_passed"] is True
-    assert manifest["training_blockers_passed"] is True
-
-
-def test_no_sample_index_downstream_raw_model_or_training_actions() -> None:
-    module_path = Path("src/covalent_ext/covapie_sample_index_design_gate.py")
-    script_path = Path("scripts/check_covapie_sample_index_design_gate_v0.py")
-    for name in ["urllib", "requests", "torch", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright", "shlex"]:
-        assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
-    forbidden_suffixes = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
-    assert [path for path in ROOT.rglob("*") if path.is_file() and path.suffix.lower() in forbidden_suffixes] == []
-    forbidden_names = {
+def test_no_actual_sample_index_or_forbidden_outputs() -> None:
+    forbidden_exact_names = {
         "sample_index.csv",
         "sample_index.json",
         "final_dataset.csv",
@@ -188,58 +235,75 @@ def test_no_sample_index_downstream_raw_model_or_training_actions() -> None:
         "split_assignments.json",
         "leakage_matrix.csv",
         "leakage_matrix.json",
+        "actual_dataloader_smoke.csv",
+        "actual_dataloader_smoke.json",
+        "training_report.csv",
+        "training_report.json",
     }
-    assert not any(path.name in forbidden_names for path in ROOT.rglob("*"))
-    tracked = subprocess.run(["git", "ls-files", str(design_gate.step13bf.step13be.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", str(design_gate.step13bf.step13be.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    assert tracked == []
-    assert staged == []
+    forbidden_suffixes = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm", ".part"}
+    bad_names = [p for p in ROOT.rglob("*") if p.is_file() and p.name in forbidden_exact_names]
+    bad_suffixes = [p for p in ROOT.rglob("*") if p.is_file() and p.suffix.lower() in forbidden_suffixes]
+    assert bad_names == []
+    assert bad_suffixes == []
     manifest = _manifest()
     for key in [
-        "sample_index_materialized_current_step",
+        "sample_index_written_current_step",
         "sample_index_written",
         "final_dataset_written",
         "split_assignments_written",
         "leakage_matrix_written",
-        "raw_file_content_read_current_step",
-        "raw_data_read",
-        "mmcif_text_read",
-        "mmcif_parse_current_step",
-        "atom_site_scan_current_step",
-        "struct_conn_scan_current_step",
-        "coordinate_extraction_current_step",
-        "network_access_used",
-        "urllib_used",
-        "requests_used",
-        "browser_used",
-        "raw_structure_downloaded",
-        "raw_ligand_downloaded",
-        "archive_downloaded",
-        "raw_file_created",
-        "sdf_read",
-        "pdb_read",
-        "gzip_open_used",
-        "rdkit_used",
-        "biopdb_parser_used",
-        "gemmi_used",
-        "torch_imported",
-        "torch_tensor_created",
-        "checkpoint_loaded",
-        "model_forward_called",
-        "loss_compute_called",
-        "backward_called",
-        "optimizer_created",
-        "trainer_fit_called",
-        "training_allowed",
+        "actual_dataloader_smoke_written",
+        "training_artifacts_written",
+        "raw_mmcif_read_current_step",
+        "struct_conn_parsed_current_step",
+        "atom_site_parsed_current_step",
     ]:
         assert manifest[key] is False, key
-    assert manifest["ready_for_covapie_sample_index_smoke"] is True
-    assert manifest["ready_for_covapie_sample_index_qa_gate"] is False
-    assert manifest["ready_for_covapie_split_leakage_design_gate"] is False
-    assert manifest["ready_for_training"] is False
-    assert manifest["ready_to_train_now"] is False
-    assert manifest["scaffold_linker_warhead_annotation_required_before_training"] is True
-    assert manifest["auxiliary_labels_required_before_training"] is True
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["recommended_next_step"] == "covapie_sample_index_smoke"
+
+
+def test_safety_metadata_raw_existing_artifacts_and_imports() -> None:
+    safety = _csv_rows(ROOT / "covapie_sample_index_design_safety_audit.csv")
+    manifest = _manifest()
+    assert {row["safety_passed"] for row in safety} == {"True"}
+    metadata_hash = hashlib.sha256(design_gate.METADATA_CSV.read_bytes()).hexdigest()
+    assert metadata_hash == design_gate.METADATA_CSV_SHA256
+
+    tracked = subprocess.run(["git", "ls-files", design_gate.RAW_ROOT.as_posix()], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
+    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", design_gate.RAW_ROOT.as_posix()], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
+    assert tracked == []
+    assert staged == []
+
+    for path in [
+        "data/derived/covalent_small/external_metadata_index/covpdb/covpdb_complexes_metadata_manual.csv",
+        "data/derived/covalent_small/covapie_sample_preparation_qa_gate_v0",
+        "data/derived/covalent_small/covapie_sample_preparation_execution_smoke_v0",
+        "data/derived/covalent_small/covapie_sample_preparation_design_gate_v0",
+        "equivariant_diffusion/",
+        "lightning_modules.py",
+        "dataset.py",
+        "data/prepare_crossdocked.py",
+    ]:
+        diff = subprocess.run(["git", "diff", "--", path], text=True, stdout=subprocess.PIPE, check=False).stdout.strip()
+        assert not diff, path
+
+    module_path = Path("src/covalent_ext/covapie_sample_index_design_gate.py")
+    script_path = Path("scripts/check_covapie_sample_index_design_gate_v0.py")
+    for name in ["urllib", "requests", "torch", "numpy", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright", "bs4"]:
+        assert not _imports_name(module_path, name)
+        assert not _imports_name(script_path, name)
+
+    for key in [
+        "network_access_used_current_step",
+        "download_attempted_current_step",
+        "data_raw_written_current_step",
+        "torch_imported",
+        "numpy_imported",
+        "rdkit_used",
+        "gemmi_used",
+        "requests_used",
+        "urllib_used",
+        "selenium_used",
+        "playwright_used",
+        "bs4_used",
+    ]:
+        assert manifest[key] is False, key

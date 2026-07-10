@@ -1,0 +1,6 @@
+readiness_item,observed_status,readiness_passed,next_required_gate,qa_comment
+ready_for_covapie_sample_index_materialization_smoke,True,True,covapie_sample_index_materialization_smoke,sample index materialization smoke is allowed next; training and downstream dataset gates remain blocked
+ready_for_covapie_final_dataset_design_gate,False,True,covapie_sample_index_materialization_smoke,sample index materialization smoke is allowed next; training and downstream dataset gates remain blocked
+ready_for_covapie_actual_dataloader_adapter_smoke,False,True,covapie_sample_index_materialization_smoke,sample index materialization smoke is allowed next; training and downstream dataset gates remain blocked
+ready_for_training,False,True,covapie_sample_index_materialization_smoke,sample index materialization smoke is allowed next; training and downstream dataset gates remain blocked
+ready_to_train_now,False,True,covapie_sample_index_materialization_smoke,sample index materialization smoke is allowed next; training and downstream dataset gates remain blocked
