@@ -1,0 +1,4 @@
+row_qa_id,sample_index_row_id,pdb_id,expected_het_id,csv_json_semantically_consistent,sample_index_row_id_unique,pdb_het_pair_unique,identity_fields_nonempty,all_six_artifact_paths_exist,count_fields_valid,covalent_event_identity_valid,bond_distance_angstrom,bond_distance_smoke_sanity_passed,sample_index_status_valid,boundary_flags_valid,source_traceability_passed,approved_for_final_dataset_design_by_qa,row_qa_status,blocking_reasons
+CYS_SG_SAMPLE_INDEX_ROW_QA_000001,CYS_SG_SAMPLE_INDEX_000001,6BV6,JUG,True,True,True,True,True,True,True,1.67,True,True,True,True,True,passed,
+CYS_SG_SAMPLE_INDEX_ROW_QA_000002,CYS_SG_SAMPLE_INDEX_000002,6BV8,JUG,True,True,True,True,True,True,True,1.8,True,True,True,True,True,passed,
+CYS_SG_SAMPLE_INDEX_ROW_QA_000003,CYS_SG_SAMPLE_INDEX_000003,6BV5,JUG,True,True,True,True,True,True,True,1.718,True,True,True,True,True,passed,

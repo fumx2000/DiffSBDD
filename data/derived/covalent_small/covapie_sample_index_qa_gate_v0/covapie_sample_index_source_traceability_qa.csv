@@ -1,0 +1,4 @@
+source_traceability_qa_id,sample_index_row_id,pdb_id,expected_het_id,protein_atom_actual_count,protein_atom_index_count,ligand_atom_actual_count,ligand_atom_index_count,pocket_atom_actual_count,pocket_atom_index_count,covalent_event_actual_count,covalent_event_index_count,atom_pair_actual_count,atom_pair_index_count,event_fields_match_source,bond_distance_matches_source,sample_preparation_audit_all_passed,source_traceability_qa_status,blocking_reasons
+CYS_SG_SAMPLE_INDEX_SOURCE_QA_000001,CYS_SG_SAMPLE_INDEX_000001,6BV6,JUG,7468,7468,13,13,121,121,1,1,1,1,True,True,True,passed,
+CYS_SG_SAMPLE_INDEX_SOURCE_QA_000002,CYS_SG_SAMPLE_INDEX_000002,6BV8,JUG,7508,7508,18,18,196,196,1,1,1,1,True,True,True,passed,
+CYS_SG_SAMPLE_INDEX_SOURCE_QA_000003,CYS_SG_SAMPLE_INDEX_000003,6BV5,JUG,7503,7503,13,13,178,178,1,1,1,1,True,True,True,passed,

@@ -1,0 +1,18 @@
+policy_item,policy_description,policy_contract_passed
+sample_index_qa_gate_only,sample index qa gate only,True
+qa_gate_reads_committed_sample_index_outputs,qa gate reads committed sample index outputs,True
+qa_gate_independently_recomputes_csv_json_consistency,qa gate independently recomputes csv json consistency,True
+qa_gate_independently_recounts_source_tables,qa gate independently recounts source tables,True
+qa_gate_records_sample_index_fingerprints,qa gate records sample index fingerprints,True
+qa_gate_does_not_modify_sample_index,qa gate does not modify sample index,True
+qa_approval_does_not_rewrite_eligible_field,qa approval does not rewrite eligible field,True
+sample_index_qa_approval_is_not_training_readiness,sample index qa approval is not training readiness,True
+final_dataset_design_gate_required_next,final dataset design gate required next,True
+no_final_dataset_current_step,no final dataset current step,True
+no_split_or_leakage_current_step,no split or leakage current step,True
+no_dataloader_smoke_current_step,no dataloader smoke current step,True
+no_training_current_step,no training current step,True
+feature_semantics_audit_required_before_training,feature semantics audit required before training,True
+leakage_split_gate_required_before_training,leakage split gate required before training,True
+canonical_five_masks_preserved,canonical five masks preserved,True
+do_not_train_from_sample_index_qa_artifacts,do not train from sample index qa artifacts,True
