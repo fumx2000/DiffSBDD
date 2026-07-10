@@ -1,0 +1,9 @@
+precondition_item,expected_status,observed_status,precondition_passed,blocking_reasons
+step14an_manifest_valid,True,True,True,
+step14an_ready_for_current_step,True,True,True,
+pilot_index_hashes_unchanged,True,True,True,
+expansion_index_hashes_unchanged,True,True,True,
+metadata_hash_unchanged,True,True,True,
+future_unified_sample_count,11,11,True,
+all_source_inventory_rows_passed,True,True,True,
+canonical_five_masks_preserved,True,True,True,
