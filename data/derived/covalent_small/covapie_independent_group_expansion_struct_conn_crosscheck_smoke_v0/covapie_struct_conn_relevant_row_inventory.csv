@@ -1,0 +1,10 @@
+struct_conn_inventory_id,shortlist_rank,pdb_id,expected_het_id,struct_conn_row_index,struct_conn_id,conn_type_id,ptnr1_label_asym_id,ptnr1_label_comp_id,ptnr1_label_seq_id,ptnr1_label_atom_id,ptnr1_auth_asym_id,ptnr1_auth_comp_id,ptnr1_auth_seq_id,ptnr1_auth_atom_id,ptnr2_label_asym_id,ptnr2_label_comp_id,ptnr2_label_seq_id,ptnr2_label_atom_id,ptnr2_auth_asym_id,ptnr2_auth_comp_id,ptnr2_auth_seq_id,ptnr2_auth_atom_id,pdbx_dist_value,normalized_partner1_comp_id,normalized_partner1_atom_id,normalized_partner2_comp_id,normalized_partner2_atom_id,partner1_identity_source,partner2_identity_source,expected_het_present_in_row,cys_sg_present_in_row,exact_cys_sg_expected_het_match,ligand_covalent_atom_name_if_exact,ligand_partner_side_if_exact
+INV_000001_0004,1,1AEC,E64,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,E64,,C2,A,E64,219,,1.802,CYS,SG,E64,C2,label,label,True,True,True,C2,ptnr2
+INV_000002_0004,2,1AIM,ZYA,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,ZYA,,CM,A,ZYA,280,,1.809,CYS,SG,ZYA,CM,label,label,True,True,True,CM,ptnr2
+INV_000003_0004,3,1AU3,PCM,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,PCM,,C22,A,PCM,300,,1.762,CYS,SG,PCM,C22,label,label,True,True,True,C22,ptnr2
+INV_000004_0004,4,1AU4,INP,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,INP,,C17,A,INP,300,,1.807,CYS,SG,INP,C17,label,label,True,True,True,C17,ptnr2
+INV_000005_0004,5,1AYU,INA,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,INA,,C21,A,INA,300,,1.799,CYS,SG,INA,C21,label,label,True,True,True,C21,ptnr2
+INV_000006_0004,6,1AYV,IN6,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,IN6,,C21,A,IN6,300,,1.806,CYS,SG,IN6,C21,label,label,True,True,True,C21,ptnr2
+INV_000007_0004,7,1AYW,IN3,4,covale1,covale,A,CYS,25,SG,A,CYS,25,,B,IN3,,C21,A,IN3,300,,1.794,CYS,SG,IN3,C21,label,label,True,True,True,C21,ptnr2
+INV_000008_0001,8,1B02,UFP,1,covale1,covale,A,CYS,161,SG,A,CYS,161,,B,UFP,,C6,A,UFP,280,,1.717,CYS,SG,UFP,C6,label,label,True,True,True,C6,ptnr2
+INV_000008_0002,8,1B02,UFP,2,covale2,covale,B,UFP,,C5,A,UFP,280,,C,C2F,,C11,A,C2F,281,,1.646,UFP,C5,C2F,C11,label,label,True,False,False,,

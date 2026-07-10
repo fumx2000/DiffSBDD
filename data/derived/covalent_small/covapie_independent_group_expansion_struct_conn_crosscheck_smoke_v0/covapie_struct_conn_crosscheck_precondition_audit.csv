@@ -1,0 +1,13 @@
+preflight_item,artifact_or_check,expected_status,observed_status,preflight_passed,blocking_reasons
+step14ak_manifest_valid,embedded_check,True,True,True,
+acquisition_counts,embedded_check,True,True,True,
+raw_sha_map,embedded_check,True,True,True,
+step14aj_registry_pairs,embedded_check,True,True,True,
+raw_files,embedded_check,True,True,True,
+raw_ignored,embedded_check,True,True,True,
+raw_untracked_unstaged,embedded_check,True,True,True,
+hashes,embedded_check,True,True,True,
+history_clean,embedded_check,True,True,True,
+protected_clean,embedded_check,True,True,True,
+staged_empty,embedded_check,True,True,True,
+masks,embedded_check,True,True,True,
