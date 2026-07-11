@@ -1,0 +1,2 @@
+issue_id,issue_scope,sample_index_row_id,final_leakage_group_id,issue_severity,issue_type,issue_description,issue_status
+NO_UNIFIED_ASSIGNMENT_OR_SAMPLE_INDEX_MERGE_ISSUES,unified_11_sample_assignment_merge_v0,,,none,no_issues,No unified independence-group assignment or sample-index merge issues detected.,passed

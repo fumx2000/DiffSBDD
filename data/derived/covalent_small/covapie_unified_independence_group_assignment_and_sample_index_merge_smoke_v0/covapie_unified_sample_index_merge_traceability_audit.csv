@@ -1,0 +1,12 @@
+merge_traceability_id,sample_index_row_id,source_index_stage,source_csv_row_found,source_json_row_found,source_csv_json_consistent,all_33_fields_preserved,unified_csv_row_found,unified_json_row_found,unified_csv_json_consistent,final_group_assignment_row_found,row_order_preserved,artifact_paths_still_exist,merge_traceability_passed,blocking_reasons
+COVAPIE_MERGE_TRACE_000001,CYS_SG_SAMPLE_INDEX_000001,pilot,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000002,CYS_SG_SAMPLE_INDEX_000002,pilot,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000003,CYS_SG_SAMPLE_INDEX_000003,pilot,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000004,CYS_SG_SAMPLE_INDEX_000004,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000005,CYS_SG_SAMPLE_INDEX_000005,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000006,CYS_SG_SAMPLE_INDEX_000006,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000007,CYS_SG_SAMPLE_INDEX_000007,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000008,CYS_SG_SAMPLE_INDEX_000008,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000009,CYS_SG_SAMPLE_INDEX_000009,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000010,CYS_SG_SAMPLE_INDEX_000010,expansion,True,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_MERGE_TRACE_000011,CYS_SG_SAMPLE_INDEX_000011,expansion,True,True,True,True,True,True,True,True,True,True,True,
