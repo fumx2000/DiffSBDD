@@ -1,0 +1,5 @@
+split_balance_audit_id,split_name,target_sample_ratio,actual_sample_count,actual_sample_ratio,sample_ratio_absolute_deviation,target_group_ratio,actual_group_count,actual_group_ratio,group_ratio_absolute_deviation,minimum_one_group_passed,group_integrity_passed,statistically_representative,balance_status,balance_audit_passed,blocking_reasons
+COVAPIE_BALANCE_000001,train,7/10,8,8/11,3/110,7/10,2,2/5,3/10,True,True,False,provisional_small_n_smoke_only_not_statistically_representative,True,
+COVAPIE_BALANCE_000002,validation,3/20,2,2/11,7/220,3/20,2,2/5,1/4,True,True,False,provisional_small_n_smoke_only_not_statistically_representative,True,
+COVAPIE_BALANCE_000003,test,3/20,1,1/11,13/220,3/20,1,1/5,1/20,True,True,False,provisional_small_n_smoke_only_not_statistically_representative,True,
+COVAPIE_BALANCE_000004,total,1,11,1,0,1,5,1,0,True,True,False,provisional_small_n_smoke_only_not_statistically_representative,True,
