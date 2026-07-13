@@ -1,241 +1,414 @@
 from __future__ import annotations
 
 import ast
-import csv
 import hashlib
-import json
+import importlib
+import inspect
+import re
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 
-SRC_ROOT = Path(__file__).resolve().parents[1] / "src"
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from covalent_ext import covapie_actual_dataloader_design_gate as design
+from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement
 
 
-ROOT = Path("data/derived/covalent_small/covapie_actual_dataloader_design_gate_v0")
+S3_ROOT = Path(
+    "data/derived/covalent_small/covapie_metadata_dataloader_smoke_qa_gate_v0"
+)
+S4_ROOT = Path(
+    "data/derived/covalent_small/covapie_actual_dataloader_design_gate_v0"
+)
+S5_ROOT = Path(
+    "data/derived/covalent_small/covapie_feature_semantics_tensorization_audit_gate_v0"
+)
+STEP14AR_ROOT = Path(
+    "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"
+)
+MODULE_PATH = Path("src/covalent_ext/covapie_actual_dataloader_design_gate.py")
+CHECK_PATH = Path("scripts/check_covapie_actual_dataloader_design_gate_v0.py")
+S5_MODULE = "covalent_ext.covapie_feature_semantics_tensorization_audit_gate"
+EXPECTED_GUARDS = (
+    "build_precondition_rows",
+    "build_static_reference_rows",
+    "build_safety_rows",
+    "run_covapie_actual_dataloader_design_gate_v0",
+)
+EXPECTED_PURE_BUILDERS = (
+    "build_adapter_design_rows",
+    "build_tensorization_input_rows",
+    "build_batch_collate_rows",
+    "build_checkpoint_compatibility_rows",
+    "build_feature_semantics_blocker_rows",
+    "build_future_smoke_plan_rows",
+)
+EXPECTED_BLOCKERS = (
+    "legacy_stage_superseded",
+    "dataloader_interface_redesign_pending",
+)
 
 
-def _csv_rows(path: Path) -> list[dict[str, str]]:
-    assert path.is_file(), f"missing artifact: {path}"
-    with path.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
+def _tree_hash(relative: Path) -> str:
+    digest = hashlib.sha256()
+    root = REPO_ROOT / relative
+    for path in sorted(root.rglob("*")):
+        if path.is_file():
+            digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
+            digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
 
 
-def _manifest() -> dict:
-    path = ROOT / "covapie_actual_dataloader_design_gate_manifest.json"
-    assert path.is_file(), "Run the Step 13BW check script before artifact tests"
-    return json.loads(path.read_text(encoding="utf-8"))
+def _module_tree() -> ast.Module:
+    return ast.parse(MODULE_PATH.read_text(encoding="utf-8"))
 
 
-def _imports_name(path: Path, name: str) -> bool:
-    tree = ast.parse(path.read_text(encoding="utf-8"))
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            if any(alias.name.split(".")[0] == name for alias in node.names):
-                return True
-        if isinstance(node, ast.ImportFrom) and node.module and node.module.split(".")[0] == name:
-            return True
-    return False
+def _function_node(name: str) -> ast.FunctionDef:
+    for node in ast.walk(_module_tree()):
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return node
+    raise AssertionError(f"missing function: {name}")
 
 
-def _git_diff_paths(paths: list[str]) -> list[str]:
-    result = subprocess.run(["git", "diff", "--name-only", "--", *paths], text=True, stdout=subprocess.PIPE, check=False)
+def _assert_first_statement_is_guard(node: ast.FunctionDef) -> None:
+    first = node.body[0]
+    assert isinstance(first, ast.Expr)
+    assert isinstance(first.value, ast.Call)
+    assert isinstance(first.value.func, ast.Name)
+    assert first.value.func.id == "raise_legacy_stage_retired"
+    assert len(first.value.args) == 1
+    assert isinstance(first.value.args[0], ast.Name)
+    assert first.value.args[0].id == "LEGACY_STAGE"
+
+
+def _invoke_with_required_arguments(function: object) -> None:
+    signature = inspect.signature(function)
+    args: list[object] = []
+    kwargs: dict[str, object] = {}
+    for parameter in signature.parameters.values():
+        if parameter.default is not inspect.Parameter.empty:
+            continue
+        if parameter.kind is inspect.Parameter.KEYWORD_ONLY:
+            kwargs[parameter.name] = None
+        elif parameter.kind not in {
+            inspect.Parameter.VAR_POSITIONAL,
+            inspect.Parameter.VAR_KEYWORD,
+        }:
+            args.append(None)
+    function(*args, **kwargs)  # type: ignore[operator]
+
+
+def _git_lines(*args: str) -> list[str]:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        check=False,
+    )
     return result.stdout.strip().splitlines()
 
 
-def test_step13bv_precondition_and_readiness_boundary() -> None:
-    manifest13bv = json.loads(design.step13bv.MANIFEST_JSON.read_text(encoding="utf-8"))
-    manifest = _manifest()
-    precondition = _csv_rows(ROOT / "covapie_actual_dataloader_design_precondition_audit.csv")
-    assert manifest13bv["stage"] == design.PREVIOUS_STAGE
-    assert manifest13bv["all_checks_passed"] is True
-    assert manifest13bv["ready_for_covapie_actual_dataloader_design_gate"] is True
-    assert manifest13bv["ready_for_covapie_actual_dataloader_smoke"] is False
-    assert manifest13bv["ready_for_training"] is False
-    assert manifest13bv["ready_to_train_now"] is False
-    assert {row["precondition_passed"] for row in precondition} == {"True"}
-    assert manifest["stage"] == design.STAGE
-    assert manifest["previous_stage"] == design.PREVIOUS_STAGE
-    assert manifest["project_name"] == "CovaPIE"
-    assert manifest["step13bv_metadata_dataloader_smoke_qa_validated"] is True
-    assert manifest["source_metadata_smoke_preview_row_count"] == 20
-    assert manifest["source_metadata_smoke_preview_column_count"] == 30
-    assert manifest["source_interface_preview_row_count"] == 20
-    assert manifest["source_interface_preview_column_count"] == 35
-    assert manifest["source_final_dataset_preview_row_count"] == 20
-    assert manifest["source_final_dataset_preview_column_count"] == 45
+def test_stage_identity_is_exact() -> None:
+    assert design.LEGACY_STAGE == "covapie_actual_dataloader_design_gate_v0"
+    assert design.STAGE == design.LEGACY_STAGE
 
 
-def test_static_reference_audit_has_expected_rows_and_no_diffs() -> None:
-    rows = _csv_rows(ROOT / "covapie_original_dataloader_static_reference_audit.csv")
-    manifest = _manifest()
-    assert len(rows) == 10
-    assert {row["static_reference_audit_passed"] for row in rows} == {"True"}
-    by_item = {row["static_reference_item"]: row for row in rows}
-    assert by_item["dataset_py_exists"]["observed_status"] == "exists"
-    assert by_item["prepare_crossdocked_py_exists"]["observed_status"] == "exists"
-    assert by_item["lightning_modules_py_exists"]["observed_status"] == "exists"
-    assert by_item["equivariant_diffusion_dir_exists"]["observed_status"] == "exists"
-    assert by_item["dataset_py_static_read_only"]["observed_status"].startswith("static_read_only_bytes=")
-    assert by_item["equivariant_diffusion_static_read_only"]["observed_status"].startswith("static_read_only_py_files=")
-    assert by_item["original_dataloader_no_diff"]["observed_status"] == "no_diff"
-    assert by_item["protected_model_code_no_diff"]["observed_status"] == "no_diff"
-    assert manifest["original_dataloader_static_reference_audit_row_count"] == 10
-    assert manifest["original_dataloader_static_reference_audit_passed"] is True
+def test_policy_matches_registry() -> None:
+    assert design.build_retirement_policy() == (
+        retirement.build_legacy_stage_retirement_policy(design.LEGACY_STAGE)
+    )
 
 
-def test_adapter_design_tensorization_batch_and_checkpoint_contracts() -> None:
-    adapter = _csv_rows(ROOT / "covapie_actual_dataloader_adapter_design_contract.csv")
-    tensor = _csv_rows(ROOT / "covapie_actual_dataloader_tensorization_input_contract.csv")
-    batch = _csv_rows(ROOT / "covapie_actual_dataloader_batch_collate_contract.csv")
-    checkpoint = _csv_rows(ROOT / "covapie_actual_dataloader_checkpoint_compatibility_contract.csv")
-    manifest = _manifest()
-    assert len(adapter) == 12
-    assert {row["current_step_status"] for row in adapter} == {"design_only_not_implemented"}
-    assert {row["adapter_design_contract_passed"] for row in adapter} == {"True"}
-    assert len(tensor) == 14
-    assert {row["tensorization_input_contract_passed"] for row in tensor} == {"True"}
-    tensor_by_item = {row["tensorization_item"]: row for row in tensor}
-    assert tensor_by_item["protein_xyz_from_derived_atom_table"]["blocked_before_actual_tensor_smoke"] == "False"
-    assert tensor_by_item["ligand_xyz_from_derived_atom_table"]["blocked_before_actual_tensor_smoke"] == "False"
-    assert tensor_by_item["protein_atom_feature_semantics_blocked"]["blocked_before_actual_tensor_smoke"] == "True"
-    assert tensor_by_item["torch_tensor_creation_blocked_current_step"]["current_step_status"] == "blocked_current_step"
-    assert len(batch) == 10
-    assert {row["batch_collate_contract_passed"] for row in batch} == {"True"}
-    batch_by_item = {row["batch_contract_item"]: row for row in batch}
-    assert batch_by_item["future_batch_variable_size_collate_requires_torch_gate"]["blocked_before_actual_dataloader_smoke"] == "True"
-    assert batch_by_item["future_training_batch_blocked"]["blocked_before_actual_dataloader_smoke"] == "True"
-    assert len(checkpoint) == 10
-    assert {row["checkpoint_compatibility_contract_passed"] for row in checkpoint} == {"True"}
-    checkpoint_by_item = {row["checkpoint_compatibility_item"]: row for row in checkpoint}
-    assert checkpoint_by_item["checkpoint_not_loaded_current_step"]["observed_status"] == "not loaded"
-    assert checkpoint_by_item["no_model_forward_current_step"]["observed_status"] == "not called"
-    assert checkpoint_by_item["original_diffsbbd_dataloader_unchanged"]["observed_status"] == "no diff"
-    assert manifest["actual_dataloader_adapter_design_contract_row_count"] == 12
-    assert manifest["tensorization_input_contract_row_count"] == 14
-    assert manifest["batch_collate_contract_row_count"] == 10
-    assert manifest["checkpoint_compatibility_contract_row_count"] == 10
+def test_guarded_entrypoints_are_explicit_and_unique() -> None:
+    assert design.GUARDED_ENTRYPOINTS == EXPECTED_GUARDS
+    assert len(design.GUARDED_ENTRYPOINTS) == len(set(design.GUARDED_ENTRYPOINTS))
 
 
-def test_feature_semantics_blockers_force_next_gate_not_actual_smoke() -> None:
-    feature = _csv_rows(ROOT / "covapie_actual_dataloader_feature_semantics_blocker_contract.csv")
-    plan = _csv_rows(ROOT / "covapie_actual_dataloader_future_smoke_plan.csv")
-    manifest = _manifest()
-    assert len(feature) == 10
-    assert {row["blocker_contract_passed"] for row in feature} == {"True"}
-    assert {row["blocks_actual_tensor_dataloader_smoke"] for row in feature} == {"True"}
-    assert {row["blocks_training"] for row in feature} == {"True"}
-    feature_by_item = {row["blocker_item"]: row for row in feature}
-    assert feature_by_item["feature_semantics_known_for_training_false"]["current_status"] == "feature_semantics_known_for_training=false"
-    assert feature_by_item["unknown_atom_feature_policy_finalized_for_training_false"]["current_status"] == "unknown_atom_feature_policy_finalized_for_training=false"
-    assert len(plan) == 8
-    assert {row["future_smoke_plan_passed"] for row in plan} == {"True"}
-    plan_by_step = {row["planned_step"]: row for row in plan}
-    assert plan_by_step["feature_semantics_resolution_gate_next_if_blocked"]["planned_action"] == "resolve tensorization semantics blockers"
-    assert "actual tensor dataloader smoke" in plan_by_step["feature_semantics_resolution_gate_next_if_blocked"]["blocked_outputs_current_step"]
-    assert manifest["feature_semantics_known_for_training"] is False
-    assert manifest["unknown_atom_feature_policy_finalized_for_training"] is False
-    assert manifest["ready_for_covapie_feature_semantics_tensorization_audit_gate"] is True
-    assert manifest["ready_for_covapie_actual_dataloader_adapter_smoke"] is False
-    assert manifest["ready_for_covapie_actual_dataloader_smoke"] is False
-    assert manifest["ready_for_training"] is False
-    assert manifest["ready_to_train_now"] is False
-    assert manifest["recommended_next_step"] == "covapie_feature_semantics_tensorization_audit_gate"
+def test_pure_historical_contract_builders_are_explicit_and_unique() -> None:
+    assert design.PURE_HISTORICAL_CONTRACT_BUILDERS == EXPECTED_PURE_BUILDERS
+    assert len(EXPECTED_PURE_BUILDERS) == len(set(EXPECTED_PURE_BUILDERS))
+    assert set(EXPECTED_PURE_BUILDERS).isdisjoint(EXPECTED_GUARDS)
 
 
-def test_canonical_masks_and_manifest_safety_boundary() -> None:
-    manifest = _manifest()
-    assert manifest["canonical_mask_task_names"] == design.CANONICAL_MASK_TASK_NAMES
-    assert manifest["canonical_mask_task_aliases"] == design.CANONICAL_MASK_TASK_ALIASES
-    assert manifest["source_canonical_mask_task_count"] == 5
-    assert manifest["b3_scaffold_only_included"] is True
-    assert manifest["no_extra_mask_tasks_added"] is True
-    for key in [
-        "actual_dataloader_smoke_written",
-        "real_dataloader_written",
-        "original_dataloader_modified",
-        "final_dataset_written",
-        "sample_index_written_current_step",
-        "split_assignments_written",
-        "leakage_matrix_written",
-        "dataloader_smoke_written",
-        "training_artifacts_written",
-        "torch_imported",
-        "torch_tensor_created",
-        "numpy_imported",
-        "numpy_array_returned",
-        "checkpoint_loaded",
-        "model_forward_called",
-        "loss_compute_called",
-        "backward_called",
-        "optimizer_created",
-        "trainer_fit_called",
-        "training_allowed",
-        "raw_file_content_read_current_step",
-        "raw_data_read",
-        "mmcif_text_read",
-        "mmcif_parse_current_step",
-        "coordinate_extraction_current_step",
-        "network_access_used",
-        "rdkit_used",
-        "biopdb_parser_used",
-        "gemmi_used",
-        "gzip_open_used",
-    ]:
-        assert manifest[key] is False, key
-    assert manifest["actual_dataloader_design_completed_current_step"] is True
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["all_checks_passed"] is True
-    assert manifest["blocking_reasons"] == []
+def test_policy_is_retired_and_non_executable() -> None:
+    policy = design.build_retirement_policy()
+    assert policy.legacy_stage_retired is True
+    assert policy.legacy_stage_executable is False
 
 
-def test_safety_audit_no_forbidden_outputs_or_imports() -> None:
-    safety = _csv_rows(ROOT / "covapie_actual_dataloader_design_safety_audit.csv")
-    assert len(safety) == 24
-    assert {row["safety_passed"] for row in safety} == {"True"}
-    forbidden_names = {
-        "actual_dataloader_smoke.csv",
-        "actual_dataloader_smoke.json",
-        "dataloader_smoke.csv",
-        "dataloader_smoke.json",
-        "final_dataset.csv",
-        "final_dataset.json",
-        "sample_index.csv",
-        "sample_index.json",
-        "split_assignments.csv",
-        "split_assignments.json",
-        "leakage_matrix.csv",
-        "leakage_matrix.json",
-        "training_report.csv",
-        "training_report.json",
-    }
-    assert not any(path.name in forbidden_names for path in ROOT.rglob("*"))
-    forbidden_suffixes = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
-    assert [path for path in ROOT.rglob("*") if path.is_file() and path.suffix.lower() in forbidden_suffixes] == []
-    module_path = Path("src/covalent_ext/covapie_actual_dataloader_design_gate.py")
-    script_path = Path("scripts/check_covapie_actual_dataloader_design_gate_v0.py")
-    for name in ["urllib", "requests", "torch", "numpy", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright", "shlex"]:
-        assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
+def test_successor_is_absent_and_redesign_is_pending() -> None:
+    policy = design.build_retirement_policy()
+    assert policy.superseded_by_stage is None
+    assert policy.superseded_by_manifest_path is None
+    assert policy.successor_availability == "redesign_pending"
 
 
-def test_raw_files_untracked_metadata_hash_and_existing_artifacts_unchanged() -> None:
-    tracked = subprocess.run(["git", "ls-files", str(design.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", str(design.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    assert tracked == []
-    assert staged == []
-    assert hashlib.sha256(design.step13bd.METADATA_CSV.read_bytes()).hexdigest() == design.METADATA_CSV_SHA256
-    assert _git_diff_paths([design.step13bv.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths([design.step13bu.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths([design.step13bt.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths([design.step13br.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths([design.step13bo.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths([design.step13bm.OUTPUT_ROOT.as_posix()]) == []
-    assert _git_diff_paths(["data/derived/covalent_small/covapie_metadata_source_inventory_gate_v0"]) == []
-    assert _git_diff_paths(["dataset.py", "data/prepare_crossdocked.py"]) == []
-    assert _git_diff_paths(["equivariant_diffusion/", "lightning_modules.py"]) == []
+def test_blockers_and_next_step_are_exact() -> None:
+    policy = design.build_retirement_policy()
+    assert policy.blocking_reasons == EXPECTED_BLOCKERS
+    assert policy.recommended_next_step == "covapie_final_dataset_qa_gate_v1"
+
+
+def test_training_and_feature_audit_boundary_is_exact() -> None:
+    policy = design.build_retirement_policy()
+    assert policy.historical_artifacts_read_only is True
+    assert policy.legacy_artifact_regeneration_forbidden is True
+    assert policy.ready_for_training is False
+    assert policy.ready_to_train_now is False
+    assert policy.feature_semantics_audit_required_before_training is True
+
+
+def test_main_run_fails_closed() -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        design.run_covapie_actual_dataloader_design_gate_v0()
+
+
+@pytest.mark.parametrize("name", EXPECTED_GUARDS)
+def test_all_artifact_and_admission_entrypoints_fail_closed(name: str) -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError) as caught:
+        _invoke_with_required_arguments(getattr(design, name))
+    assert caught.value.stage == design.LEGACY_STAGE
+
+
+def test_exception_attributes_and_message_are_deterministic() -> None:
+    expected_message = (
+        "legacy_stage_retired:covapie_actual_dataloader_design_gate_v0:"
+        "superseded_by=None:"
+        "recommended_next_step=covapie_final_dataset_qa_gate_v1"
+    )
+    messages = []
+    for _ in range(2):
+        with pytest.raises(retirement.LegacyStageRetiredError) as caught:
+            design.run_covapie_actual_dataloader_design_gate_v0()
+        error = caught.value
+        assert error.stage == design.LEGACY_STAGE
+        assert error.superseded_by_stage is None
+        assert error.successor_availability == "redesign_pending"
+        assert error.blocking_reasons == EXPECTED_BLOCKERS
+        messages.append(str(error))
+    assert messages == [expected_message, expected_message]
+
+
+@pytest.mark.parametrize("name", EXPECTED_GUARDS)
+def test_each_guard_is_first_executable_statement(name: str) -> None:
+    _assert_first_statement_is_guard(_function_node(name))
+
+
+@pytest.mark.parametrize("name", EXPECTED_GUARDS)
+def test_guard_precedes_artifact_static_source_and_git_access(
+    name: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def forbidden(*args: object, **kwargs: object) -> object:
+        raise AssertionError("I/O occurred before retirement guard")
+
+    for helper in (
+        "_csv_rows",
+        "_load_json",
+        "_run_git",
+        "_path_diff_exists",
+        "_metadata_hash",
+        "_raw_files_tracked",
+        "_raw_files_staged",
+        "_static_read_status",
+    ):
+        monkeypatch.setattr(design, helper, forbidden)
+    monkeypatch.setattr(Path, "exists", forbidden)
+    monkeypatch.setattr(Path, "is_file", forbidden)
+    monkeypatch.setattr(Path, "read_text", forbidden)
+    monkeypatch.setattr(Path, "read_bytes", forbidden)
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        _invoke_with_required_arguments(getattr(design, name))
+
+
+@pytest.mark.parametrize("name", EXPECTED_PURE_BUILDERS)
+def test_pure_contract_builders_remain_import_compatible(name: str) -> None:
+    rows = getattr(design, name)()
+    assert isinstance(rows, list)
+    assert rows
+
+
+@pytest.mark.parametrize("name", EXPECTED_PURE_BUILDERS)
+def test_pure_contract_builders_perform_no_io_or_readiness_admission(
+    name: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def forbidden(*args: object, **kwargs: object) -> object:
+        raise AssertionError("pure historical builder performed I/O")
+
+    for helper in (
+        "_csv_rows",
+        "_load_json",
+        "_run_git",
+        "_path_diff_exists",
+        "_metadata_hash",
+        "_raw_files_tracked",
+        "_raw_files_staged",
+        "_static_read_status",
+    ):
+        monkeypatch.setattr(design, helper, forbidden)
+    monkeypatch.setattr(Path, "open", forbidden)
+    monkeypatch.setattr(Path, "read_text", forbidden)
+    monkeypatch.setattr(Path, "read_bytes", forbidden)
+    before = tuple(Path(".").glob("definitely-no-match-*"))
+    rows = getattr(design, name)()
+    after = tuple(Path(".").glob("definitely-no-match-*"))
+    assert rows
+    assert before == after == ()
+    assert design.build_retirement_policy().legacy_stage_executable is False
+
+
+def test_module_reload_performs_no_artifact_or_static_source_io(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def forbidden(*args: object, **kwargs: object) -> object:
+        raise AssertionError("I/O during module import")
+
+    monkeypatch.setattr(Path, "open", forbidden)
+    monkeypatch.setattr(Path, "read_text", forbidden)
+    monkeypatch.setattr(Path, "read_bytes", forbidden)
+    monkeypatch.setattr(Path, "exists", forbidden)
+    monkeypatch.setattr(Path, "is_file", forbidden)
+    importlib.reload(design)
+
+
+def test_s5_import_surface_remains_compatible() -> None:
+    s5 = importlib.import_module(S5_MODULE)
+    assert s5.step13bw is design
+    assert s5.PREVIOUS_STAGE == design.STAGE
+    assert s5.CANONICAL_MASK_TASK_NAMES == design.CANONICAL_MASK_TASK_NAMES
+
+
+def test_s5_import_does_not_execute_s4_producer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    s5 = importlib.import_module(S5_MODULE)
+
+    def forbidden(*args: object, **kwargs: object) -> None:
+        raise AssertionError("S4 producer executed during S5 import")
+
+    monkeypatch.setattr(design, "run_covapie_actual_dataloader_design_gate_v0", forbidden)
+    for name in EXPECTED_GUARDS[:-1]:
+        monkeypatch.setattr(design, name, forbidden)
+    importlib.reload(s5)
+
+
+def test_s5_ast_has_no_calls_into_s4() -> None:
+    tree = ast.parse(
+        Path(
+            "src/covalent_ext/covapie_feature_semantics_tensorization_audit_gate.py"
+        ).read_text(encoding="utf-8")
+    )
+    calls = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        owner = node.func.value
+        if isinstance(owner, ast.Name) and owner.id == "step13bw":
+            calls.append(node.func.attr)
+    assert calls == []
+
+
+def test_check_script_is_policy_only() -> None:
+    text = CHECK_PATH.read_text(encoding="utf-8")
+    for forbidden in (
+        "run_covapie_actual_dataloader_design_gate_v0(",
+        "build_precondition_rows(",
+        "build_static_reference_rows(",
+        "build_safety_rows(",
+        "write_text",
+        "write_bytes",
+        "open(",
+        "mkdir",
+        "subprocess",
+        "dataset.py",
+        "lightning_modules.py",
+    ):
+        assert forbidden not in text
+
+
+def test_check_script_does_not_hardcode_registry_count() -> None:
+    text = CHECK_PATH.read_text(encoding="utf-8")
+    assert re.search(r"len\(policies\)\s*==", text) is None
+    assert "validation.registry_count_passed is True" in text
+
+
+def test_check_script_reports_retirement_success_without_artifact_changes() -> None:
+    before = _tree_hash(S4_ROOT)
+    result = subprocess.run(
+        [sys.executable, str(CHECK_PATH)],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "covapie_actual_dataloader_design_gate_v0_retirement_policy_passed" in result.stdout
+    assert "successor_availability=redesign_pending" in result.stdout
+    assert before == _tree_hash(S4_ROOT)
+
+
+def test_historical_s4_root_and_manifest_hashes_are_frozen() -> None:
+    assert _tree_hash(S4_ROOT) == (
+        "37d10ef6b1d56b59e01a0433c8ecae33c9724cc81a87a4625f776160e9ab99ce"
+    )
+    manifest = S4_ROOT / "covapie_actual_dataloader_design_gate_manifest.json"
+    assert hashlib.sha256(manifest.read_bytes()).hexdigest() == (
+        "25935bea5f89637c9eebfa404fb0dcb865b4aca0958a90eebe2e2d4e2d8d03d8"
+    )
+
+
+def test_s3_and_s5_root_hashes_are_frozen() -> None:
+    assert _tree_hash(S3_ROOT) == (
+        "894e64576bfa983115a0418207a455499e331fad27dc00fa8c8be0b5cf807acf"
+    )
+    assert _tree_hash(S5_ROOT) == (
+        "d738a52df0d4aad3b29adb5654f50a4ff2fc9aeb129968e5e08d7bdd18870675"
+    )
+    manifest = S5_ROOT / "covapie_feature_semantics_tensorization_audit_gate_manifest.json"
+    assert hashlib.sha256(manifest.read_bytes()).hexdigest() == (
+        "c89ebb3981be29c4180d477838d7eb3c9fbf3bc93aa52f4d07b9360c77d9bd91"
+    )
+
+
+def test_step14ar_manifest_hash_is_frozen() -> None:
+    manifest = STEP14AR_ROOT / "covapie_final_dataset_materialization_smoke_manifest.json"
+    assert hashlib.sha256(manifest.read_bytes()).hexdigest() == (
+        "6f25c8976b295749f3af6407c3bb8ce17cfbda9f18cb967df5fe9b47b480c433"
+    )
+
+
+def test_canonical_qa_v1_is_not_materialized() -> None:
+    assert not Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py").exists()
+    assert not Path(
+        "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1"
+    ).exists()
+
+
+def test_raw_files_remain_untracked_and_unstaged() -> None:
+    raw = "data/raw/covalent_sources"
+    assert _git_lines("ls-files", raw) == []
+    assert _git_lines("diff", "--cached", "--name-only", "--", raw) == []
+
+
+def test_policy_is_deterministic() -> None:
+    assert design.build_retirement_policy() == design.build_retirement_policy()
+
+
+def test_step14z_independent_stages_remain_outside_registry() -> None:
+    stages = set(retirement.LEGACY_STAGE_ORDER)
+    assert "covapie_independent_group_expansion_batch_sample_preparation_execution_smoke_v0" not in stages
+    assert "covapie_independent_group_expansion_struct_conn_crosscheck_smoke_v0" not in stages
+
+
+def test_historical_roots_have_no_tracked_diff() -> None:
+    assert _git_lines("diff", "--name-only", "--", str(S3_ROOT), str(S4_ROOT), str(S5_ROOT)) == []

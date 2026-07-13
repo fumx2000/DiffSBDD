@@ -1,37 +1,15 @@
-# CovaPIE Split/Leakage Smoke v0 Summary
+# CovaPIE Split Leakage Smoke v0 Retirement Summary
 
-Step 13BK is a split/leakage smoke preview for the Step 13BH/13BI 20-row sample index and Step 13BJ design contract.
-It materializes split units, parent-event grouping integrity, candidate-metadata grouping integrity, mask grouping integrity, and leakage risk smoke audits.
-It does not write real train/val/test split assignments, a leakage matrix, final_dataset, a new sample_index, dataloader smoke, tensors, checkpoints, or training outputs.
-It does not read raw CIF files, parse mmCIF, re-extract coordinates, use network, RDKit, Bio.PDB, gemmi, gzip, torch, model forward, loss, backward, optimizer, trainer.fit, or training.
-All five canonical masks remain unchanged, including `scaffold_only / B3`; no sixth mask is introduced.
-The current 20-row smoke remains too small for a real train/val/test split.
-Feature semantics audit remains required before formal training, fine-tuning, or real parameter updates.
-Leakage/split QA remains required before final dataset design and training.
-This smoke allows split/leakage QA gate next, not feature audit, not final dataset, not dataloader smoke, and not training.
+`covapie_split_leakage_smoke_v0` is retired and superseded. Its historical derived root remains unchanged, read-only evidence. It is non-executable, non-canonical, and no longer supplies current pipeline admission evidence.
 
-source_sample_index_row_count: `20`
-source_unique_event_count: `4`
-source_canonical_mask_task_count: `5`
-split_unit_smoke_preview_row_count: `4`
-parent_event_group_integrity_row_count: `4`
-candidate_metadata_group_integrity_row_count: `4`
-mask_task_grouping_integrity_row_count: `5`
-split_leakage_risk_smoke_audit_row_count: `12`
-split_unit_smoke_preview_passed: `True`
-parent_event_group_integrity_passed: `True`
-candidate_metadata_group_integrity_passed: `True`
-mask_task_grouping_integrity_passed: `True`
-split_leakage_risk_smoke_audit_passed: `True`
-split_assignments_written: `False`
-leakage_matrix_written: `False`
-final_dataset_written: `False`
-sample_index_written_current_step: `False`
-ready_for_covapie_split_leakage_qa_gate: `True`
-ready_for_covapie_feature_semantics_audit_gate: `False`
-ready_for_covapie_final_dataset_design_gate: `False`
-ready_for_covapie_dataloader_smoke: `False`
-ready_for_training: `False`
-ready_to_train_now: `False`
-recommended_next_step: `covapie_split_leakage_qa_gate`
-blocking_reasons: `[]`
+The tracked canonical successor is `covapie_unified_leakage_split_materialization_smoke_v0`, with manifest `data/derived/covalent_small/covapie_unified_leakage_split_materialization_smoke_v0/covapie_unified_leakage_split_materialization_smoke_manifest.json`. This manifest is intentionally shared with the retired split-leakage QA stage; it is the registry's only permitted shared successor reference.
+
+All public legacy execution entrypoints fail closed with `LegacyStageRetiredError` before filesystem reads, artifact generation, manifest construction, readiness checks, or calls along the old split/leakage chain. The check script is read-only and validates only the shared retirement registry, exact successor contract, tracked successor paths, and training boundary. It never regenerates the old split/leakage artifacts.
+
+- `successor_availability=tracked`
+- `historical_artifacts_read_only=true`
+- `legacy_artifact_regeneration_forbidden=true`
+- `ready_for_training=false`
+- `ready_to_train_now=false`
+- `feature_semantics_audit_required_before_training=true`
+- `recommended_next_step=covapie_unified_leakage_split_materialization_smoke`

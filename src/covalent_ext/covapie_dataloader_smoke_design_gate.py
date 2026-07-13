@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_dataloader_interface_qa_gate as step13bs
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_dataloader_smoke_design_gate_v0"
+LEGACY_STAGE = "covapie_dataloader_smoke_design_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bs.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -90,6 +96,17 @@ METADATA_DATALOADER_SMOKE_PLAN_COLUMNS = [
 ]
 SAFETY_AUDIT_COLUMNS = ["safety_item", "required_status", "observed_status", "safety_passed", "blocking_reasons"]
 
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_getitem_output_mapping_rows",
+    "build_safety_rows",
+    "run_covapie_dataloader_smoke_design_gate_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
@@ -154,6 +171,7 @@ def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bs = _load_json(step13bs.MANIFEST_JSON)
     manifest13bm = _load_json(step13bm.MANIFEST_JSON)
     interface_rows = _csv_rows(step13br.INTERFACE_SMOKE_PREVIEW_CSV)
@@ -259,6 +277,7 @@ def build_metadata_dataset_api_rows() -> list[dict[str, Any]]:
 
 
 def build_getitem_output_mapping_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     preview_fields = set(_csv_rows(step13br.INTERFACE_SMOKE_PREVIEW_CSV)[0]) | set(_csv_rows(step13bo.SMOKE_PREVIEW_CSV)[0])
     rows = [
         ("identity_metadata", "dataloader_interface_smoke_row_id;final_dataset_row_id;sample_id;extracted_event_id", "metadata.identity", "dict[str,str]", "required", "actual adapter/tensor gate"),
@@ -394,6 +413,7 @@ def build_metadata_smoke_plan_rows() -> list[dict[str, Any]]:
 
 
 def build_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "empty", not _raw_files_staged()),
@@ -433,6 +453,7 @@ def build_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_dataloader_smoke_design_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     runtime_rows = build_runtime_boundary_rows()
     api_rows = build_metadata_dataset_api_rows()

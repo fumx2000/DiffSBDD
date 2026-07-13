@@ -1,275 +1,343 @@
 from __future__ import annotations
 
 import ast
-import csv
 import hashlib
-import json
+import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Callable
+
+import pytest
 
 
-SRC_ROOT = Path(__file__).resolve().parents[1] / "src"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from covalent_ext import covapie_final_dataset_smoke as smoke
+from covalent_ext import covapie_final_dataset_smoke as legacy
+from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement
 
 
-ROOT = Path("data/derived/covalent_small/covapie_final_dataset_smoke_v0")
+LEGACY_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_smoke_v0")
+SUCCESSOR_MANIFEST = Path("data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_materialization_smoke_manifest.json")
+CHECK_SCRIPT = Path("scripts/check_covapie_final_dataset_smoke_v0.py")
+MODULE_PATH = Path("src/covalent_ext/covapie_final_dataset_smoke.py")
+RAW_ROOT = Path("data/raw/covalent_sources")
+STEP14AR_FILES = (
+    Path("data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"),
+    Path("docs/covapie_final_dataset_materialization_smoke_v0_summary.md"),
+    Path("scripts/check_covapie_final_dataset_materialization_smoke_v0.py"),
+    Path("src/covalent_ext/covapie_final_dataset_materialization_smoke.py"),
+    Path("tests/test_covapie_final_dataset_materialization_smoke_v0.py"),
+)
+
+EXPECTED_STAGE = "covapie_final_dataset_smoke_v0"
+EXPECTED_SUCCESSOR_STAGE = "covapie_final_dataset_materialization_smoke_v0"
+EXPECTED_SUCCESSOR_MANIFEST = "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_materialization_smoke_manifest.json"
+EXPECTED_NEXT_STEP = "covapie_final_dataset_materialization_smoke"
+EXPECTED_AVAILABILITY = "pending_commit"
+EXPECTED_BLOCKERS = ("legacy_stage_superseded",)
+EXPECTED_SUCCESS_LINE = "covapie_final_dataset_smoke_v0_retirement_policy_passed"
+OLD_SUCCESS_LINE = "covapie_final_dataset_smoke_v0_passed"
+EXPECTED_ERROR_MESSAGE = (
+    f"legacy_stage_retired:{EXPECTED_STAGE}:"
+    f"superseded_by={EXPECTED_SUCCESSOR_STAGE}:"
+    f"recommended_next_step={EXPECTED_NEXT_STEP}"
+)
+ENTRYPOINT_ARGS: dict[str, tuple[object, ...]] = {
+    "build_schema_order_rows": ([], []),
+    "build_row_lineage_rows": ([],),
+    "build_mask_distribution_rows": ([],),
+    "build_feature_blocker_rows": ([],),
+}
 
 
-def _csv_rows(path: Path) -> list[dict[str, str]]:
-    assert path.is_file(), f"missing artifact: {path}"
-    with path.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
+def _tree_hash(paths: tuple[Path, ...]) -> str:
+    digest = hashlib.sha256()
+    for relative in paths:
+        absolute = REPO_ROOT / relative
+        if not absolute.exists():
+            continue
+        candidates = [absolute] if absolute.is_file() else sorted(absolute.rglob("*"))
+        for path in candidates:
+            if path.is_file():
+                digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
+                digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
 
 
-def _manifest() -> dict:
-    path = ROOT / "covapie_final_dataset_smoke_manifest.json"
-    assert path.is_file(), "Run the Step 13BO check script before artifact tests"
-    return json.loads(path.read_text(encoding="utf-8"))
+def _run_check() -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, CHECK_SCRIPT.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
 
 
-def _imports_name(path: Path, name: str) -> bool:
-    tree = ast.parse(path.read_text(encoding="utf-8"))
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            if any(alias.name.split(".")[0] == name for alias in node.names):
-                return True
-        if isinstance(node, ast.ImportFrom) and node.module and node.module.split(".")[0] == name:
-            return True
-    return False
+def _invoke(name: str) -> None:
+    function: Callable[..., object] = getattr(legacy, name)
+    function(*ENTRYPOINT_ARGS.get(name, ()))
 
 
-def test_step13bn_precondition_and_readiness() -> None:
-    manifest13bn = json.loads(smoke.step13bn.MANIFEST_JSON.read_text(encoding="utf-8"))
-    precondition = _csv_rows(ROOT / "covapie_final_dataset_smoke_precondition_audit.csv")
-    manifest = _manifest()
-    assert manifest13bn["stage"] == smoke.PREVIOUS_STAGE
-    assert manifest13bn["all_checks_passed"] is True
-    assert manifest13bn["ready_for_covapie_final_dataset_smoke"] is True
-    assert manifest13bn["ready_for_covapie_final_dataset_qa_gate"] is False
-    assert manifest13bn["ready_for_covapie_dataloader_smoke"] is False
-    assert manifest13bn["ready_for_training"] is False
-    assert manifest13bn["ready_to_train_now"] is False
-    assert {row["precondition_passed"] for row in precondition} == {"True"}
-    assert manifest["stage"] == smoke.STAGE
-    assert manifest["previous_stage"] == smoke.PREVIOUS_STAGE
-    assert manifest["step13bn_final_dataset_design_gate_validated"] is True
-    assert manifest["source_sample_index_row_count"] == 20
-    assert manifest["source_unique_event_count"] == 4
-    assert manifest["source_canonical_mask_task_count"] == 5
-    assert manifest["source_split_unit_preview_row_count"] == 4
+def _raw_git_state() -> tuple[str, str]:
+    tracked = subprocess.run(
+        ["git", "ls-files", RAW_ROOT.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        check=False,
+    ).stdout
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--", RAW_ROOT.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        check=False,
+    ).stdout
+    return tracked, staged
 
 
-def test_smoke_preview_csv_json_schema_order_and_consistency() -> None:
-    csv_rows = _csv_rows(ROOT / "covapie_final_dataset_smoke_preview.csv")
-    json_rows = json.loads((ROOT / "covapie_final_dataset_smoke_preview.json").read_text(encoding="utf-8"))
-    schema_fields = [row["final_dataset_field_name"] for row in _csv_rows(smoke.step13bn.SCHEMA_CONTRACT_CSV)]
-    schema_audit = _csv_rows(ROOT / "covapie_final_dataset_schema_order_smoke_audit.csv")
-    manifest = _manifest()
-    assert len(csv_rows) == 20
-    assert len(json_rows) == 20
-    assert len(csv_rows[0]) == 45
-    assert list(csv_rows[0].keys()) == schema_fields
-    assert json_rows == csv_rows
-    assert len(schema_audit) == 1
-    assert schema_audit[0]["schema_field_count"] == "45"
-    assert schema_audit[0]["schema_order_matches_contract"] == "True"
-    assert schema_audit[0]["csv_json_consistent"] == "True"
-    assert schema_audit[0]["schema_order_smoke_passed"] == "True"
-    assert manifest["final_dataset_smoke_preview_csv_written"] is True
-    assert manifest["final_dataset_smoke_preview_json_written"] is True
-    assert manifest["final_dataset_smoke_preview_row_count"] == 20
-    assert manifest["final_dataset_smoke_preview_column_count"] == 45
-    assert manifest["final_dataset_smoke_preview_json_row_count"] == 20
-    assert manifest["schema_order_smoke_audit_passed"] is True
+def test_legacy_stage_and_alias_are_exact() -> None:
+    assert legacy.LEGACY_STAGE == EXPECTED_STAGE
+    assert legacy.STAGE == EXPECTED_STAGE
 
 
-def test_row_lineage_smoke_maps_samples_to_one_split_unit() -> None:
-    preview = _csv_rows(ROOT / "covapie_final_dataset_smoke_preview.csv")
-    lineage = _csv_rows(ROOT / "covapie_final_dataset_row_lineage_smoke_audit.csv")
-    manifest = _manifest()
-    assert len(lineage) == 20
-    for row in preview:
-        assert row["final_dataset_row_id"] == f"final_dataset_smoke::{row['sample_id']}"
-        assert row["final_dataset_materialized_current_step"] == "True"
-        assert row["dataloader_ready"] == "False"
-        assert row["ready_for_training"] == "False"
-    for row in lineage:
-        assert row["final_dataset_row_id"] == f"final_dataset_smoke::{row['sample_id']}"
-        assert row["source_sample_index_row_found"] == "True"
-        assert row["source_split_unit_found"] == "True"
-        assert row["parent_event_group_bound_to_one_split_unit"] == "True"
-        assert row["final_dataset_smoke_row_materialized"] == "True"
-        assert row["final_dataset_real_row_materialized"] == "False"
-        assert row["dataloader_ready"] == "False"
-        assert row["ready_for_training"] == "False"
-        assert row["row_lineage_smoke_passed"] == "True"
-    by_event: dict[str, set[str]] = {}
-    by_split: dict[str, int] = {}
-    for row in preview:
-        by_event.setdefault(row["extracted_event_id"], set()).add(row["split_unit_id"])
-        by_split[row["split_unit_id"]] = by_split.get(row["split_unit_id"], 0) + 1
-    assert len(by_event) == 4
-    assert all(len(split_units) == 1 for split_units in by_event.values())
-    assert set(by_split.values()) == {5}
-    assert manifest["row_lineage_smoke_audit_row_count"] == 20
-    assert manifest["row_lineage_smoke_audit_passed"] is True
+def test_guarded_entrypoints_are_explicit_unique_and_complete() -> None:
+    assert legacy.GUARDED_ENTRYPOINTS
+    assert legacy.GUARDED_ENTRYPOINTS[-1] == "run_covapie_final_dataset_smoke_v0"
+    assert len(legacy.GUARDED_ENTRYPOINTS) == len(set(legacy.GUARDED_ENTRYPOINTS))
 
 
-def test_mask_distribution_preserves_five_canonical_masks_and_b3() -> None:
-    preview = _csv_rows(ROOT / "covapie_final_dataset_smoke_preview.csv")
-    mask_rows = _csv_rows(ROOT / "covapie_final_dataset_mask_distribution_smoke_audit.csv")
-    manifest = _manifest()
-    assert len(mask_rows) == 5
-    assert [row["mask_task_name"] for row in mask_rows] == smoke.CANONICAL_MASK_TASK_NAMES
-    assert [row["mask_task_alias"] for row in mask_rows] == smoke.CANONICAL_MASK_TASK_ALIASES
-    assert {row["observed_row_count"] for row in mask_rows} == {"4"}
-    assert {row["observed_unique_event_count"] for row in mask_rows} == {"4"}
-    assert {row["observed_unique_split_unit_count"] for row in mask_rows} == {"4"}
-    assert {row["mask_distribution_smoke_passed"] for row in mask_rows} == {"True"}
-    assert [row for row in mask_rows if row["mask_task_name"] == "scaffold_only"][0]["mask_task_alias"] == "B3"
-    assert sorted({row["mask_task_name"] for row in preview}) == sorted(smoke.CANONICAL_MASK_TASK_NAMES)
-    assert manifest["mask_distribution_smoke_audit_row_count"] == 5
-    assert manifest["mask_distribution_smoke_audit_passed"] is True
-    assert manifest["canonical_mask_task_names"] == smoke.CANONICAL_MASK_TASK_NAMES
-    assert manifest["canonical_mask_task_aliases"] == smoke.CANONICAL_MASK_TASK_ALIASES
-    assert manifest["b3_scaffold_only_included"] is True
-    assert manifest["no_extra_mask_tasks_added"] is True
+def test_policy_matches_registry() -> None:
+    assert legacy.build_retirement_policy() == (
+        retirement.build_legacy_stage_retirement_policy(EXPECTED_STAGE)
+    )
 
 
-def test_feature_blockers_are_preserved_in_all_preview_rows() -> None:
-    preview = _csv_rows(ROOT / "covapie_final_dataset_smoke_preview.csv")
-    blockers = _csv_rows(ROOT / "covapie_final_dataset_feature_blocker_smoke_audit.csv")
-    manifest = _manifest()
-    assert len(blockers) == 13
-    assert [row["blocker_item"] for row in blockers] == [
-        "feature_semantics_known_for_training_false",
-        "unknown_atom_feature_policy_not_finalized",
-        "scaffold_linker_warhead_annotation_required",
-        "warhead_type_label_required",
-        "ligand_residue_atom_pair_label_audit_required",
-        "pre_post_geometry_label_audit_required",
-        "pre_covalent_geometry_not_materialized",
-        "final_dataset_smoke_preview_only",
-        "no_real_final_dataset_written",
-        "no_dataloader_smoke",
-        "no_training_current_step",
-        "ready_for_training_false",
-        "step12d_smoke_not_final_feature_semantics_audit",
-    ]
-    assert {row["blocker_smoke_passed"] for row in blockers} == {"True"}
-    assert all(row["feature_semantics_known_for_training"] == "False" for row in preview)
-    assert all(row["unknown_atom_feature_policy_finalized_for_training"] == "False" for row in preview)
-    assert all(row["dataloader_ready"] == "False" for row in preview)
-    assert all(row["ready_for_training"] == "False" for row in preview)
-    assert all(row["split_assignment_status"] == "not_written_current_step" for row in preview)
-    assert all(row["coordinate_unit"] == "angstrom" for row in preview)
-    assert all(row["pre_covalent_geometry_status"] == "pre_covalent_geometry_not_materialized_current_step" for row in preview)
-    assert all(row["post_covalent_geometry_status"] == "post_covalent_geometry_present" for row in preview)
-    assert all(row["feature_semantics_audit_status"] == "feature_semantics_audit_completed_current_step" for row in preview)
-    assert all(row["leakage_split_qa_status"] == "split_leakage_qa_passed" for row in preview)
-    required_summary_terms = {
-        "feature_semantics_known_for_training_false",
-        "unknown_atom_feature_policy_not_finalized",
-        "scaffold_linker_warhead_annotation_required",
-        "warhead_type_label_required",
-        "pre_covalent_geometry_not_materialized",
-        "ready_for_training_false",
+def test_retirement_and_successor_contract_is_exact() -> None:
+    policy = legacy.build_retirement_policy()
+    assert policy.legacy_stage_retired is True
+    assert policy.legacy_stage_executable is False
+    assert policy.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
+    assert policy.successor_availability == EXPECTED_AVAILABILITY
+    assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+    assert policy.recommended_next_step == EXPECTED_NEXT_STEP
+
+
+def test_training_and_historical_boundaries_are_exact() -> None:
+    policy = legacy.build_retirement_policy()
+    assert policy.ready_for_training is False
+    assert policy.ready_to_train_now is False
+    assert policy.feature_semantics_audit_required_before_training is True
+    assert policy.historical_artifacts_read_only is True
+    assert policy.legacy_artifact_regeneration_forbidden is True
+    assert policy.blocking_reasons == EXPECTED_BLOCKERS
+
+
+def test_main_producer_fails_closed() -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        _invoke("run_covapie_final_dataset_smoke_v0")
+
+
+@pytest.mark.parametrize("entrypoint", legacy.GUARDED_ENTRYPOINTS)
+def test_all_guarded_entrypoints_fail_closed(entrypoint: str) -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        _invoke(entrypoint)
+
+
+def test_exception_attributes_and_deterministic_message() -> None:
+    messages = []
+    for _ in range(2):
+        with pytest.raises(retirement.LegacyStageRetiredError) as caught:
+            _invoke("run_covapie_final_dataset_smoke_v0")
+        error = caught.value
+        assert error.stage == EXPECTED_STAGE
+        assert error.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
+        assert error.successor_availability == EXPECTED_AVAILABILITY
+        assert error.recommended_next_step == EXPECTED_NEXT_STEP
+        assert error.blocking_reasons == EXPECTED_BLOCKERS
+        messages.append(str(error))
+    assert messages == [EXPECTED_ERROR_MESSAGE, EXPECTED_ERROR_MESSAGE]
+
+
+def test_guards_are_first_executable_statements() -> None:
+    tree = ast.parse(MODULE_PATH.read_text(encoding="utf-8"))
+    functions = {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
     }
-    for row in preview:
-        assert required_summary_terms <= set(row["training_blocker_summary"].split(";"))
-    assert manifest["feature_blocker_smoke_audit_row_count"] == 13
-    assert manifest["feature_blocker_smoke_audit_passed"] is True
-    assert manifest["feature_semantics_known_for_training"] is False
-    assert manifest["unknown_atom_feature_policy_finalized_for_training"] is False
+    for name in legacy.GUARDED_ENTRYPOINTS:
+        first = functions[name].body[0]
+        assert isinstance(first, ast.Expr), name
+        assert isinstance(first.value, ast.Call), name
+        assert isinstance(first.value.func, ast.Name), name
+        assert first.value.func.id == "raise_legacy_stage_retired", name
+        assert isinstance(first.value.args[0], ast.Name), name
+        assert first.value.args[0].id == "LEGACY_STAGE", name
 
 
-def test_boundary_git_safety_and_no_forbidden_outputs() -> None:
-    boundary = {row["boundary_item"]: row for row in _csv_rows(ROOT / "covapie_final_dataset_smoke_boundary_safety.csv")}
-    git_rows = _csv_rows(ROOT / "covapie_final_dataset_smoke_git_safety.csv")
-    manifest = _manifest()
-    assert boundary["final_dataset_smoke"]["current_step_status"] == "executed_smoke_preview_only"
-    assert boundary["final_dataset_smoke_preview_write"]["current_step_status"] == "executed_smoke_preview_only"
-    for item in ["read_step13bn_design_artifacts", "read_step13bm_feature_semantics_artifacts", "read_step13bk_split_unit_preview", "read_step13bh_sample_index", "read_step13be_extracted_tables"]:
-        assert boundary[item]["current_step_status"] == "executed_derived_csv_json_read_only"
-    for item in ["real_final_dataset_write", "new_sample_index_write", "split_assignment_write", "leakage_matrix_write", "dataloader_smoke", "training"]:
-        assert boundary[item]["current_step_status"] == "blocked_current_step"
-    for item in ["raw_file_content_read", "raw_cif_mmcif_sdf_pdb_gzip_read", "mmcif_parse", "atom_site_scan", "struct_conn_scan", "coordinate_extraction", "network_access", "raw_download", "rdkit_biopdb_gemmi", "torch_model_training"]:
-        assert boundary[item]["current_step_status"] == "not_executed_or_not_allowed"
-    assert {row["boundary_safety_passed"] for row in boundary.values()} == {"True"}
-    assert {row["git_safety_audit_passed"] for row in git_rows} == {"True"}
-    allowed = {"covapie_final_dataset_smoke_preview.csv", "covapie_final_dataset_smoke_preview.json"}
-    forbidden_names = {"final_dataset.csv", "final_dataset.json", "final_dataset_smoke.csv", "final_dataset_smoke.json", "sample_index.csv", "sample_index.json", "split_assignments.csv", "split_assignments.json", "leakage_matrix.csv", "leakage_matrix.json", "dataloader_smoke.csv", "dataloader_smoke.json", "training_report.csv", "training_report.json"}
-    assert not any(path.name in forbidden_names and path.name not in allowed for path in ROOT.rglob("*"))
-    forbidden_suffixes = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
-    assert [path for path in ROOT.rglob("*") if path.is_file() and path.suffix.lower() in forbidden_suffixes] == []
-    assert manifest["boundary_safety_passed"] is True
-    assert manifest["git_safety_passed"] is True
+def test_guards_precede_all_filesystem_reads(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def unexpected(*args: object, **kwargs: object) -> object:
+        raise AssertionError("legacy filesystem read reached")
+
+    for name in (
+        "_csv_rows",
+        "_load_json",
+        "_metadata_hash",
+        "_raw_files_tracked",
+        "_raw_files_staged",
+        "_path_diff_exists",
+    ):
+        monkeypatch.setattr(legacy, name, unexpected)
+    for entrypoint in legacy.GUARDED_ENTRYPOINTS:
+        with pytest.raises(retirement.LegacyStageRetiredError):
+            _invoke(entrypoint)
 
 
-def test_no_raw_network_torch_training_imports_and_next_readiness() -> None:
-    module_path = Path("src/covalent_ext/covapie_final_dataset_smoke.py")
-    script_path = Path("scripts/check_covapie_final_dataset_smoke_v0.py")
-    for name in ["urllib", "requests", "torch", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright", "shlex"]:
-        assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
-    tracked = subprocess.run(["git", "ls-files", str(smoke.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", str(smoke.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    assert tracked == []
-    assert staged == []
-    assert hashlib.sha256(smoke.step13bd.METADATA_CSV.read_bytes()).hexdigest() == smoke.METADATA_CSV_SHA256
-    manifest = _manifest()
-    for key in [
-        "real_final_dataset_written",
-        "generic_final_dataset_written",
-        "sample_index_written_current_step",
-        "split_assignments_written",
-        "leakage_matrix_written",
-        "dataloader_smoke_written",
-        "training_artifacts_written",
-        "real_train_val_test_split_written",
-        "feature_semantics_known_for_training",
-        "unknown_atom_feature_policy_finalized_for_training",
-        "raw_file_content_read_current_step",
-        "raw_data_read",
-        "mmcif_text_read",
-        "mmcif_parse_current_step",
-        "atom_site_scan_current_step",
-        "struct_conn_scan_current_step",
-        "coordinate_extraction_current_step",
-        "network_access_used",
-        "urllib_used",
-        "requests_used",
-        "browser_used",
-        "raw_structure_downloaded",
-        "raw_ligand_downloaded",
-        "archive_downloaded",
-        "raw_file_created",
-        "sdf_read",
-        "pdb_read",
-        "gzip_open_used",
-        "rdkit_used",
-        "biopdb_parser_used",
-        "gemmi_used",
-        "torch_imported",
-        "torch_tensor_created",
-        "checkpoint_loaded",
-        "model_forward_called",
-        "loss_compute_called",
-        "backward_called",
-        "optimizer_created",
-        "trainer_fit_called",
-        "training_allowed",
-        "ready_for_covapie_dataloader_smoke",
-        "ready_for_training",
-        "ready_to_train_now",
-    ]:
-        assert manifest[key] is False, key
-    assert manifest["final_dataset_smoke_preview_written_current_step"] is True
-    assert manifest["ready_for_covapie_final_dataset_qa_gate"] is True
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["recommended_next_step"] == "covapie_final_dataset_qa_gate"
+def test_check_and_guards_precede_filesystem_writes() -> None:
+    text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    for forbidden in (
+        "write_text",
+        "write_bytes",
+        "open(",
+        "mkdir",
+        "csv.DictWriter",
+        "json.dump",
+        "subprocess",
+    ):
+        assert forbidden not in text
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        _invoke("run_covapie_final_dataset_smoke_v0")
+
+
+def test_module_import_has_zero_artifact_io() -> None:
+    guarded = (LEGACY_ROOT, *STEP14AR_FILES)
+    before = _tree_hash(guarded)
+    environment = os.environ.copy()
+    environment["PYTHONDONTWRITEBYTECODE"] = "1"
+    environment["PYTHONPATH"] = os.pathsep.join(
+        [str(SRC_ROOT), environment.get("PYTHONPATH", "")]
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", "import covalent_ext.covapie_final_dataset_smoke"],
+        cwd=REPO_ROOT,
+        env=environment,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    after = _tree_hash(guarded)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
+
+
+def test_check_exits_zero_and_reports_retirement_contract() -> None:
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert EXPECTED_SUCCESS_LINE in result.stdout
+    assert f"legacy_stage={EXPECTED_STAGE}" in result.stdout
+    assert f"successor_stage={EXPECTED_SUCCESSOR_STAGE}" in result.stdout
+    assert f"successor_availability={EXPECTED_AVAILABILITY}" in result.stdout
+    assert "ready_for_training=false" in result.stdout
+    assert "feature_semantics_audit_required_before_training=true" in result.stdout
+
+
+def test_check_does_not_call_old_producer_or_report_old_success() -> None:
+    text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    assert "run_covapie_final_dataset_smoke_v0" not in text
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert OLD_SUCCESS_LINE not in result.stdout
+
+
+def test_historical_root_is_noncanonical_evidence_and_unchanged() -> None:
+    before = _tree_hash((LEGACY_ROOT,))
+    result = _run_check()
+    after = _tree_hash((LEGACY_ROOT,))
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert legacy.build_retirement_policy().legacy_stage_executable is False
+    assert before == after
+
+
+def test_step14ar_sixteen_files_are_unchanged() -> None:
+    before = _tree_hash(STEP14AR_FILES)
+    result = _run_check()
+    after = _tree_hash(STEP14AR_FILES)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
+
+
+def test_raw_state_is_unchanged() -> None:
+    before = _raw_git_state()
+    result = _run_check()
+    after = _raw_git_state()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after == ("", "")
+    assert "data/raw" not in CHECK_SCRIPT.read_text(encoding="utf-8")
+
+
+def test_two_check_runs_are_deterministic() -> None:
+    first = _run_check()
+    second = _run_check()
+    assert first.returncode == second.returncode == 0
+    assert first.stdout == second.stdout
+    assert first.stderr == second.stderr
+
+
+def _materialize_tracked_successor_placeholders(repo_root: Path) -> None:
+    for policy in retirement.build_all_legacy_stage_retirement_policies():
+        if policy.successor_availability != "tracked":
+            continue
+        path = repo_root / str(policy.superseded_by_manifest_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+
+
+def test_pending_commit_contract_is_exact() -> None:
+    policy = legacy.build_retirement_policy()
+    assert policy.successor_availability == "pending_commit"
+    assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+    assert policy.blocking_reasons == ("legacy_stage_superseded",)
+
+
+def test_check_does_not_probe_pending_successor_filesystem() -> None:
+    text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    for forbidden in (".exists(", ".is_file(", ".lstat("):
+        assert forbidden not in text
+    assert "successor_manifest_filesystem_check_deferred=true" in _run_check().stdout
+
+
+def test_pending_successor_may_be_absent_from_clean_repository(
+    tmp_path: Path,
+) -> None:
+    _materialize_tracked_successor_placeholders(tmp_path)
+    pending_path = tmp_path / EXPECTED_SUCCESSOR_MANIFEST
+    assert not pending_path.exists()
+    result = retirement.validate_tracked_successor_manifest_paths(
+        retirement.build_all_legacy_stage_retirement_policies(),
+        repo_root=tmp_path,
+    )
+    assert result["tracked_successor_paths_passed"] is True
+    assert all(EXPECTED_STAGE not in reason for reason in result["blocking_reasons"])
+
+
+def test_untracked_step14ar_is_not_retirement_reproducibility_input(
+    tmp_path: Path,
+) -> None:
+    _materialize_tracked_successor_placeholders(tmp_path)
+    assert not (tmp_path / EXPECTED_SUCCESSOR_MANIFEST).exists()
+    policy = legacy.build_retirement_policy()
+    registry = retirement.validate_legacy_pipeline_retirement_registry(
+        retirement.build_all_legacy_stage_retirement_policies()
+    )
+    assert policy.successor_availability == "pending_commit"
+    assert registry.passed is True

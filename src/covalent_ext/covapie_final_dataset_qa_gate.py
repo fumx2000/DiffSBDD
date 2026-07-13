@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_final_dataset_smoke as step13bo
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_final_dataset_qa_gate_v0"
+LEGACY_STAGE = "covapie_final_dataset_qa_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bo.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -135,6 +141,23 @@ GIT_SAFETY_COLUMNS = [
     "blocking_reasons",
 ]
 
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_schema_order_rows",
+    "build_csv_json_consistency_rows",
+    "build_row_lineage_rows",
+    "build_mask_distribution_rows",
+    "build_feature_blocker_rows",
+    "build_readiness_rows",
+    "build_boundary_rows",
+    "build_git_safety_rows",
+    "run_covapie_final_dataset_qa_gate_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
@@ -222,6 +245,7 @@ def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bo = _load_json(step13bo.MANIFEST_JSON)
     manifest13bm = _load_json(step13bm.MANIFEST_JSON)
     preview_rows = _csv_rows(step13bo.SMOKE_PREVIEW_CSV)
@@ -277,6 +301,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_schema_order_rows(preview_rows: list[dict[str, str]], json_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     schema_fields = _schema_fields()
     csv_fields = list(preview_rows[0].keys()) if preview_rows else []
     json_projected_fields = list(_project_rows(json_rows[:1], schema_fields)[0].keys()) if json_rows else []
@@ -306,6 +331,7 @@ def build_schema_order_rows(preview_rows: list[dict[str, str]], json_rows: list[
 
 
 def build_csv_json_consistency_rows(preview_rows: list[dict[str, str]], json_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     schema_fields = _schema_fields()
     projected_json = _project_rows(json_rows, schema_fields)
     identical = _project_rows(preview_rows, schema_fields) == projected_json
@@ -329,6 +355,7 @@ def build_csv_json_consistency_rows(preview_rows: list[dict[str, str]], json_row
 
 
 def build_row_lineage_rows(preview_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     sample_ids = {row["sample_id"] for row in _csv_rows(step13bh.SAMPLE_INDEX_SMOKE_CSV)}
     split_by_sample = _split_unit_by_sample_id()
     event_to_splits = _event_to_splits(preview_rows)
@@ -375,6 +402,7 @@ def build_row_lineage_rows(preview_rows: list[dict[str, str]]) -> list[dict[str,
 
 
 def build_mask_distribution_rows(preview_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     observed_masks = {row["mask_task_name"] for row in preview_rows}
     rows = []
     for name, alias in zip(CANONICAL_MASK_TASK_NAMES, CANONICAL_MASK_TASK_ALIASES):
@@ -404,6 +432,7 @@ def build_mask_distribution_rows(preview_rows: list[dict[str, str]]) -> list[dic
 
 
 def build_feature_blocker_rows(preview_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     blockers = [
         "feature_semantics_known_for_training_false",
         "unknown_atom_feature_policy_not_finalized",
@@ -449,6 +478,7 @@ def build_feature_blocker_rows(preview_rows: list[dict[str, str]]) -> list[dict[
 
 
 def build_readiness_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("final_dataset_smoke_preview_validated", "true", True),
         ("real_final_dataset_not_written", "true", True),
@@ -474,6 +504,7 @@ def build_readiness_rows() -> list[dict[str, Any]]:
 
 
 def build_boundary_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     statuses = {
         "final_dataset_qa_gate": "executed_qa_gate_only",
         "read_step13bo_smoke_preview": "executed_derived_csv_json_read_only",
@@ -514,6 +545,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -557,6 +589,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_final_dataset_qa_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     preview_rows = _csv_rows(step13bo.SMOKE_PREVIEW_CSV)
     json_rows = _load_json(step13bo.SMOKE_PREVIEW_JSON)

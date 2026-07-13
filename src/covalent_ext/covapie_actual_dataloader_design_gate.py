@@ -9,10 +9,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_metadata_dataloader_smoke_qa_gate as step13bv
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_actual_dataloader_design_gate_v0"
+LEGACY_STAGE = "covapie_actual_dataloader_design_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bv.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -93,6 +99,25 @@ FUTURE_SMOKE_PLAN_COLUMNS = [
     "future_smoke_plan_passed",
 ]
 SAFETY_COLUMNS = ["safety_item", "required_status", "observed_status", "safety_passed", "blocking_reasons"]
+
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_static_reference_rows",
+    "build_safety_rows",
+    "run_covapie_actual_dataloader_design_gate_v0",
+)
+PURE_HISTORICAL_CONTRACT_BUILDERS = (
+    "build_adapter_design_rows",
+    "build_tensorization_input_rows",
+    "build_batch_collate_rows",
+    "build_checkpoint_compatibility_rows",
+    "build_feature_semantics_blocker_rows",
+    "build_future_smoke_plan_rows",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
 
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
@@ -186,6 +211,7 @@ def _own_files_have_forbidden_imports() -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bv = _load_json(step13bv.MANIFEST_JSON)
     manifest13bm = _load_json(step13bm.MANIFEST_JSON)
     metadata_rows = _csv_rows(step13bu.SMOKE_PREVIEW_CSV)
@@ -232,6 +258,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_static_reference_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     source_checks = [
         ("dataset_py_exists", DATASET_PY, "exists", DATASET_PY.exists()),
         ("prepare_crossdocked_py_exists", PREPARE_CROSSDOCKED_PY, "exists", PREPARE_CROSSDOCKED_PY.exists()),
@@ -454,6 +481,7 @@ def build_future_smoke_plan_rows() -> list[dict[str, Any]]:
 
 
 def build_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "empty", not _raw_files_staged()),
@@ -493,6 +521,7 @@ def build_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_actual_dataloader_design_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     static_rows = build_static_reference_rows()
     adapter_rows = build_adapter_design_rows()

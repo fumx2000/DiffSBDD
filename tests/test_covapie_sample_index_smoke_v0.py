@@ -2,253 +2,400 @@ from __future__ import annotations
 
 import ast
 import csv
+import hashlib
 import json
+import os
 import subprocess
 import sys
-from collections import Counter
 from pathlib import Path
+from typing import Callable
+
+import pytest
 
 
-SRC_ROOT = Path(__file__).resolve().parents[1] / "src"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement
 from covalent_ext import covapie_sample_index_smoke as smoke
 
 
-ROOT = Path("data/derived/covalent_small/covapie_sample_index_smoke_v0")
+LEGACY_ROOT = Path("data/derived/covalent_small/covapie_sample_index_smoke_v0")
+SUCCESSOR_ROOT = Path(
+    "data/derived/covalent_small/covapie_sample_index_materialization_smoke_v0"
+)
+SUCCESSOR_MANIFEST = (
+    SUCCESSOR_ROOT / "covapie_sample_index_materialization_smoke_manifest.json"
+)
+STEP14AR_FILES = (
+    Path("data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"),
+    Path("docs/covapie_final_dataset_materialization_smoke_v0_summary.md"),
+    Path("scripts/check_covapie_final_dataset_materialization_smoke_v0.py"),
+    Path("src/covalent_ext/covapie_final_dataset_materialization_smoke.py"),
+    Path("tests/test_covapie_final_dataset_materialization_smoke_v0.py"),
+)
+RAW_ROOT = Path("data/raw/covalent_sources")
+CHECK_SCRIPT = Path("scripts/check_covapie_sample_index_smoke_v0.py")
+MODULE_PATH = Path("src/covalent_ext/covapie_sample_index_smoke.py")
+
+EXPECTED_STAGE = "covapie_sample_index_smoke_v0"
+EXPECTED_SUCCESSOR_STAGE = "covapie_sample_index_materialization_smoke_v0"
+EXPECTED_SUCCESSOR_MANIFEST = SUCCESSOR_MANIFEST.as_posix()
+EXPECTED_NEXT_STEP = "covapie_sample_index_materialization_smoke"
+EXPECTED_ERROR_MESSAGE = (
+    "legacy_stage_retired:covapie_sample_index_smoke_v0:"
+    "superseded_by=covapie_sample_index_materialization_smoke_v0:"
+    "recommended_next_step=covapie_sample_index_materialization_smoke"
+)
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_sample_index_rows",
+    "build_row_qa_rows",
+    "build_mask_distribution_rows",
+    "build_source_traceability_rows",
+    "build_boundary_rows",
+    "build_git_safety_rows",
+    "build_training_blocker_rows",
+    "run_covapie_sample_index_smoke_v0",
+)
 
 
-def _csv_rows(path: Path) -> list[dict[str, str]]:
-    assert path.is_file(), f"missing artifact: {path}"
-    with path.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
+def _tree_hash(paths: tuple[Path, ...]) -> str:
+    digest = hashlib.sha256()
+    for relative in paths:
+        absolute = REPO_ROOT / relative
+        candidates = [absolute] if absolute.is_file() else sorted(absolute.rglob("*"))
+        for path in candidates:
+            if path.is_file():
+                digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
+                digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
 
 
-def _manifest() -> dict:
-    path = ROOT / "covapie_sample_index_smoke_manifest.json"
-    assert path.is_file(), "Run the Step 13BH check script before artifact tests"
-    return json.loads(path.read_text(encoding="utf-8"))
+def _git_paths(path: Path, *, cached: bool = False) -> tuple[str, ...]:
+    command = ["git", "diff"]
+    if cached:
+        command.append("--cached")
+    command.extend(["--name-only", "--", path.as_posix()])
+    result = subprocess.run(
+        command,
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    return tuple(line for line in result.stdout.splitlines() if line)
 
 
-def _imports_name(path: Path, name: str) -> bool:
-    tree = ast.parse(path.read_text(encoding="utf-8"))
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            if any(alias.name.split(".")[0] == name for alias in node.names):
-                return True
-        if isinstance(node, ast.ImportFrom) and node.module and node.module.split(".")[0] == name:
-            return True
-    return False
+def _run_check() -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, CHECK_SCRIPT.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
 
 
-def test_step13bg_precondition_and_readiness_boundary() -> None:
-    manifest13bg = json.loads(smoke.step13bg.MANIFEST_JSON.read_text(encoding="utf-8"))
-    precondition = _csv_rows(ROOT / "covapie_sample_index_smoke_precondition_audit.csv")
-    manifest = _manifest()
-    assert manifest13bg["stage"] == smoke.PREVIOUS_STAGE
-    assert manifest13bg["all_checks_passed"] is True
-    assert manifest13bg["ready_for_covapie_sample_index_smoke"] is True
-    assert manifest13bg["ready_for_covapie_sample_index_qa_gate"] is False
-    assert manifest13bg["ready_for_training"] is False
-    assert {row["precondition_passed"] for row in precondition} == {"True"}
-    assert manifest["stage"] == smoke.STAGE
-    assert manifest["previous_stage"] == smoke.PREVIOUS_STAGE
-    assert manifest["step13bg_sample_index_design_gate_validated"] is True
-    assert manifest["all_checks_passed"] is True
-    assert manifest["blocking_reasons"] == []
+def _invoke(name: str) -> None:
+    function: Callable[..., object] = getattr(smoke, name)
+    if name in {
+        "build_row_qa_rows",
+        "build_mask_distribution_rows",
+        "build_source_traceability_rows",
+    }:
+        function([])
+    else:
+        function()
 
 
-def test_sample_index_csv_json_schema_and_identity_contract() -> None:
-    rows = _csv_rows(ROOT / "covapie_sample_index_smoke.csv")
-    json_rows = json.loads((ROOT / "covapie_sample_index_smoke.json").read_text(encoding="utf-8"))
-    manifest = _manifest()
+def test_legacy_stage_is_exact() -> None:
+    assert smoke.LEGACY_STAGE == EXPECTED_STAGE
+
+
+def test_historical_stage_alias_is_preserved() -> None:
+    assert smoke.STAGE == smoke.LEGACY_STAGE
+
+
+def test_build_retirement_policy_matches_registry() -> None:
+    built = smoke.build_retirement_policy()
+    registered = retirement.build_legacy_stage_retirement_policy(EXPECTED_STAGE)
+    assert built == registered
+
+
+def test_stage_is_retired() -> None:
+    assert smoke.build_retirement_policy().legacy_stage_retired is True
+
+
+def test_stage_is_not_executable() -> None:
+    assert smoke.build_retirement_policy().legacy_stage_executable is False
+
+
+def test_successor_stage_is_exact() -> None:
+    assert (
+        smoke.build_retirement_policy().superseded_by_stage
+        == EXPECTED_SUCCESSOR_STAGE
+    )
+
+
+def test_successor_availability_is_tracked() -> None:
+    assert smoke.build_retirement_policy().successor_availability == "tracked"
+
+
+def test_successor_manifest_path_is_exact() -> None:
+    assert (
+        smoke.build_retirement_policy().superseded_by_manifest_path
+        == EXPECTED_SUCCESSOR_MANIFEST
+    )
+
+
+def test_recommended_next_step_is_exact() -> None:
+    assert smoke.build_retirement_policy().recommended_next_step == EXPECTED_NEXT_STEP
+
+
+def test_training_readiness_is_false() -> None:
+    policy = smoke.build_retirement_policy()
+    assert policy.ready_for_training is False
+    assert policy.ready_to_train_now is False
+
+
+def test_feature_semantics_audit_remains_required() -> None:
+    assert (
+        smoke.build_retirement_policy().feature_semantics_audit_required_before_training
+        is True
+    )
+
+
+def test_historical_artifacts_are_read_only() -> None:
+    assert smoke.build_retirement_policy().historical_artifacts_read_only is True
+
+
+def test_legacy_artifact_regeneration_is_forbidden() -> None:
+    assert (
+        smoke.build_retirement_policy().legacy_artifact_regeneration_forbidden
+        is True
+    )
+
+
+def test_blocking_reason_is_exact() -> None:
+    assert smoke.build_retirement_policy().blocking_reasons == (
+        "legacy_stage_superseded",
+    )
+
+
+def test_main_legacy_producer_fails_closed() -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        smoke.run_covapie_sample_index_smoke_v0()
+
+
+@pytest.mark.parametrize("entrypoint", GUARDED_ENTRYPOINTS)
+def test_every_public_legacy_entrypoint_fails_closed(entrypoint: str) -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        _invoke(entrypoint)
+
+
+def test_guard_exception_attributes_are_exact() -> None:
+    with pytest.raises(retirement.LegacyStageRetiredError) as caught:
+        smoke.run_covapie_sample_index_smoke_v0()
+    error = caught.value
+    assert error.stage == EXPECTED_STAGE
+    assert error.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
+    assert error.successor_availability == "tracked"
+    assert error.recommended_next_step == EXPECTED_NEXT_STEP
+    assert error.blocking_reasons == ("legacy_stage_superseded",)
+
+
+def test_guard_exception_message_is_deterministic() -> None:
+    messages = []
+    for _ in range(2):
+        with pytest.raises(retirement.LegacyStageRetiredError) as caught:
+            smoke.run_covapie_sample_index_smoke_v0()
+        messages.append(str(caught.value))
+    assert messages == [EXPECTED_ERROR_MESSAGE, EXPECTED_ERROR_MESSAGE]
+
+
+def test_guards_are_first_executable_statements() -> None:
+    tree = ast.parse(MODULE_PATH.read_text(encoding="utf-8"))
+    functions = {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    assert set(GUARDED_ENTRYPOINTS).issubset(functions)
+    for name in GUARDED_ENTRYPOINTS:
+        first = functions[name].body[0]
+        assert isinstance(first, ast.Expr), name
+        assert isinstance(first.value, ast.Call), name
+        assert isinstance(first.value.func, ast.Name), name
+        assert first.value.func.id == "raise_legacy_stage_retired", name
+        assert len(first.value.args) == 1
+        assert isinstance(first.value.args[0], ast.Name)
+        assert first.value.args[0].id == "LEGACY_STAGE"
+
+
+def test_guard_precedes_all_legacy_filesystem_reads(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def unexpected(*args: object, **kwargs: object) -> object:
+        raise AssertionError("legacy filesystem read reached")
+
+    for name in (
+        "_csv_rows",
+        "_load_json",
+        "_metadata_hash",
+        "_raw_files_tracked",
+        "_raw_files_staged",
+        "_path_diff_exists",
+    ):
+        monkeypatch.setattr(smoke, name, unexpected)
+    for entrypoint in GUARDED_ENTRYPOINTS:
+        with pytest.raises(retirement.LegacyStageRetiredError):
+            _invoke(entrypoint)
+
+
+def test_guard_and_check_precede_all_legacy_filesystem_writes() -> None:
+    script_text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    for forbidden in (
+        "write_text",
+        "write_bytes",
+        "open(",
+        "mkdir",
+        "csv.DictWriter",
+        "json.dump",
+    ):
+        assert forbidden not in script_text
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        smoke.run_covapie_sample_index_smoke_v0()
+
+
+def test_module_import_does_not_modify_artifacts() -> None:
+    guarded = (LEGACY_ROOT, SUCCESSOR_ROOT, *STEP14AR_FILES)
+    before = _tree_hash(guarded)
+    environment = os.environ.copy()
+    environment["PYTHONDONTWRITEBYTECODE"] = "1"
+    environment["PYTHONPATH"] = os.pathsep.join(
+        [str(SRC_ROOT), environment.get("PYTHONPATH", "")]
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", "import covalent_ext.covapie_sample_index_smoke"],
+        cwd=REPO_ROOT,
+        env=environment,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    after = _tree_hash(guarded)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
+
+
+def test_retirement_check_exits_zero_and_reports_success() -> None:
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "covapie_sample_index_smoke_v0_retirement_policy_passed" in result.stdout
+
+
+def test_retirement_check_reports_exact_contract() -> None:
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    expected_lines = {
+        "legacy_stage=covapie_sample_index_smoke_v0",
+        "legacy_stage_retired=true",
+        "legacy_stage_executable=false",
+        "successor_stage=covapie_sample_index_materialization_smoke_v0",
+        "successor_availability=tracked",
+        "successor_manifest_path_validation_passed=true",
+        "historical_artifacts_read_only=true",
+        "legacy_artifact_regeneration_forbidden=true",
+        "ready_for_training=false",
+        "ready_to_train_now=false",
+        "feature_semantics_audit_required_before_training=true",
+        "recommended_next_step=covapie_sample_index_materialization_smoke",
+    }
+    assert expected_lines.issubset(set(result.stdout.splitlines()))
+
+
+def test_retirement_check_does_not_call_old_producer() -> None:
+    text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    assert "run_covapie_sample_index_smoke_v0" not in text
+
+
+def test_retirement_check_contains_no_write_mkdir_or_subprocess() -> None:
+    text = CHECK_SCRIPT.read_text(encoding="utf-8")
+    for forbidden in ("write_text", "write_bytes", "open(", "mkdir", "subprocess"):
+        assert forbidden not in text
+
+
+def test_retirement_check_does_not_report_old_success_line() -> None:
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "covapie_sample_index_smoke_v0_passed" not in result.stdout
+
+
+def test_historical_sample_index_evidence_is_preserved_but_not_canonical() -> None:
+    csv_path = LEGACY_ROOT / "covapie_sample_index_smoke.csv"
+    manifest_path = LEGACY_ROOT / "covapie_sample_index_smoke_manifest.json"
+    with (REPO_ROOT / csv_path).open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    manifest = json.loads((REPO_ROOT / manifest_path).read_text(encoding="utf-8"))
     assert len(rows) == 20
-    assert len(json_rows) == 20
-    assert list(rows[0].keys()) == smoke.SAMPLE_INDEX_FIELDS
-    assert list(json_rows[0].keys()) == smoke.SAMPLE_INDEX_FIELDS
     assert len(rows[0]) == 31
-    assert manifest["sample_index_row_count"] == 20
-    assert manifest["sample_index_column_count"] == 31
-    assert manifest["sample_index_json_row_count"] == 20
-    assert rows == [{key: str(value) for key, value in item.items()} for item in json_rows]
-    sample_ids = [row["sample_id"] for row in rows]
-    assert len(set(sample_ids)) == 20
-    assert manifest["sample_id_unique_count"] == 20
-    for row in rows:
-        assert row["sample_id"] == f"sample::{row['candidate_metadata_id']}::{row['mask_task_name']}"
-        assert row["sample_index_materialized_current_step"] == "True"
-        assert row["ready_for_training"] == "False"
+    assert manifest["stage"] == EXPECTED_STAGE
+    assert smoke.build_retirement_policy().legacy_stage_executable is False
+    assert smoke.build_retirement_policy().superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
 
 
-def test_four_events_by_five_canonical_masks_and_b3_included() -> None:
-    rows = _csv_rows(ROOT / "covapie_sample_index_smoke.csv")
-    manifest = _manifest()
-    event_counts = Counter(row["extracted_event_id"] for row in rows)
-    mask_counts = Counter(row["mask_task_name"] for row in rows)
-    alias_counts = Counter(row["mask_task_alias"] for row in rows)
-    assert len(event_counts) == 4
-    assert set(event_counts.values()) == {5}
-    assert mask_counts == {name: 4 for name in smoke.CANONICAL_MASK_TASK_NAMES}
-    assert alias_counts == {alias: 4 for alias in smoke.CANONICAL_MASK_TASK_ALIASES}
-    assert "scaffold_only" in mask_counts
-    assert "B3" in alias_counts
-    assert manifest["unique_event_count"] == 4
-    assert manifest["canonical_mask_task_count"] == 5
-    assert manifest["planned_sample_count"] == 20
-    assert manifest["observed_sample_count"] == 20
-    assert manifest["b3_scaffold_only_included"] is True
-    assert manifest["no_extra_mask_tasks_added"] is True
-    assert manifest["mask_scaffold_only_B3_count"] == 4
+def test_historical_root_hash_is_unchanged_by_check() -> None:
+    before = _tree_hash((LEGACY_ROOT,))
+    result = _run_check()
+    after = _tree_hash((LEGACY_ROOT,))
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
 
 
-def test_row_qa_mask_distribution_and_source_traceability_pass() -> None:
-    row_qa = _csv_rows(ROOT / "covapie_sample_index_row_qa_audit.csv")
-    mask = _csv_rows(ROOT / "covapie_sample_index_mask_distribution_audit.csv")
-    trace = _csv_rows(ROOT / "covapie_sample_index_source_traceability_audit.csv")
-    manifest = _manifest()
-    assert len(row_qa) == 20
-    assert len(mask) == 5
-    assert len(trace) == 4
-    for key in [
-        "sample_id_deterministic",
-        "sample_id_unique",
-        "schema_order_matches_contract",
-        "source_event_found",
-        "source_event_extraction_success",
-        "source_event_geometry_qa_passed",
-        "protein_atom_rows_count_matches_source",
-        "ligand_atom_rows_count_matches_source",
-        "canonical_mask_task_valid",
-        "b3_scaffold_only_included_when_applicable",
-        "annotation_blockers_preserved",
-        "auxiliary_label_blockers_preserved",
-        "ready_for_training_false",
-        "row_qa_passed",
-    ]:
-        assert {row[key] for row in row_qa} == {"True"}
-    assert {row["mask_distribution_passed"] for row in mask} == {"True"}
-    assert {row["observed_row_count"] for row in mask} == {"4"}
-    assert {row["observed_unique_event_count"] for row in mask} == {"4"}
-    assert {row["sample_index_rows_for_event"] for row in trace} == {"5"}
-    for key in [
-        "source_event_table_found",
-        "source_protein_atom_rows_found",
-        "source_ligand_atom_rows_found",
-        "step13bf_event_qa_found",
-        "step13bf_atom_qa_found",
-        "step13bf_geometry_qa_found",
-        "step13bg_mask_expansion_contract_found",
-        "traceability_qa_passed",
-    ]:
-        assert {row[key] for row in trace} == {"True"}
-    assert manifest["row_qa_passed"] is True
-    assert manifest["mask_distribution_qa_passed"] is True
-    assert manifest["source_traceability_qa_passed"] is True
+def test_successor_manifest_exists_as_regular_non_symlink() -> None:
+    path = REPO_ROOT / SUCCESSOR_MANIFEST
+    assert path.exists()
+    assert path.is_file()
+    assert not path.is_symlink()
 
 
-def test_source_atom_counts_match_extracted_tables() -> None:
-    sample_rows = _csv_rows(ROOT / "covapie_sample_index_smoke.csv")
-    protein_rows = _csv_rows(smoke.step13bg.step13bf.step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV)
-    ligand_rows = _csv_rows(smoke.step13bg.step13bf.step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV)
-    protein_counts = Counter(row["extracted_event_id"] for row in protein_rows)
-    ligand_counts = Counter(row["extracted_event_id"] for row in ligand_rows)
-    for row in sample_rows:
-        assert int(row["protein_atom_row_count_for_event"]) == protein_counts[row["extracted_event_id"]]
-        assert int(row["ligand_atom_row_count_for_event"]) == ligand_counts[row["extracted_event_id"]]
-    assert sum(protein_counts.values()) == 1071
-    assert sum(ligand_counts.values()) == 149
+def test_canonical_materialization_outputs_are_unchanged_by_check() -> None:
+    before = _tree_hash((SUCCESSOR_ROOT,))
+    result = _run_check()
+    after = _tree_hash((SUCCESSOR_ROOT,))
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
 
 
-def test_boundary_git_safety_training_blockers_and_no_forbidden_outputs() -> None:
-    boundary = {row["boundary_item"]: row for row in _csv_rows(ROOT / "covapie_sample_index_smoke_boundary_safety.csv")}
-    git_rows = _csv_rows(ROOT / "covapie_sample_index_smoke_git_safety.csv")
-    blockers = _csv_rows(ROOT / "covapie_sample_index_smoke_training_blockers.csv")
-    manifest = _manifest()
-    assert boundary["sample_index_smoke"]["current_step_status"] == "executed_smoke_only"
-    assert boundary["read_step13bg_design_contracts"]["current_step_status"] == "executed_derived_csv_json_read_only"
-    assert boundary["read_step13bf_qa_artifacts"]["current_step_status"] == "executed_derived_csv_json_read_only"
-    assert boundary["read_step13be_extracted_tables"]["current_step_status"] == "executed_derived_csv_json_read_only"
-    assert boundary["sample_index_csv_write"]["current_step_status"] == "executed_smoke_only"
-    assert boundary["sample_index_json_write"]["current_step_status"] == "executed_smoke_only"
-    assert boundary["sample_index_qa_gate"]["current_step_status"] == "blocked_until_next_gate"
-    for item in ["final_dataset", "split_assignments", "leakage_matrix", "dataloader_smoke", "training"]:
-        assert boundary[item]["current_step_status"] == "blocked_current_step"
-    for item in ["raw_file_content_read", "mmcif_parse", "coordinate_extraction", "network_access", "raw_download", "rdkit_biopdb_gemmi", "torch_model_training"]:
-        assert boundary[item]["current_step_status"] == "not_executed_or_not_allowed"
-    assert {row["boundary_safety_passed"] for row in boundary.values()} == {"True"}
-    assert {row["git_safety_audit_passed"] for row in git_rows} == {"True"}
-    assert [row["training_blocker_item"] for row in blockers[:5]] == [
-        "mask_warhead_only_A",
-        "mask_linker_plus_warhead_B",
-        "mask_scaffold_plus_warhead_B2",
-        "mask_scaffold_only_B3",
-        "mask_scaffold_plus_linker_plus_warhead_C",
-    ]
-    assert {row["training_blocker_passed"] for row in blockers} == {"True"}
-    assert manifest["boundary_safety_passed"] is True
-    assert manifest["git_safety_passed"] is True
-    assert manifest["training_blockers_passed"] is True
-    forbidden_names = {"final_dataset.csv", "final_dataset.json", "split_assignments.csv", "split_assignments.json", "leakage_matrix.csv", "leakage_matrix.json"}
-    assert not any(path.name in forbidden_names for path in ROOT.rglob("*"))
-    forbidden_suffixes = {".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip", ".tgz", ".npz", ".pdb", ".cif", ".mmcif", ".sdf", ".mol2", ".gz", ".html", ".htm"}
-    assert [path for path in ROOT.rglob("*") if path.is_file() and path.suffix.lower() in forbidden_suffixes] == []
+def test_step14ar_files_are_unchanged_by_check() -> None:
+    before = _tree_hash(STEP14AR_FILES)
+    result = _run_check()
+    after = _tree_hash(STEP14AR_FILES)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before == after
 
 
-def test_no_raw_network_runtime_model_or_training_imports_and_readiness() -> None:
-    module_path = Path("src/covalent_ext/covapie_sample_index_smoke.py")
-    script_path = Path("scripts/check_covapie_sample_index_smoke_v0.py")
-    for name in ["urllib", "requests", "torch", "rdkit", "gemmi", "Bio", "gzip", "selenium", "playwright", "shlex"]:
-        assert not _imports_name(module_path, name)
-        assert not _imports_name(script_path, name)
-    tracked = subprocess.run(["git", "ls-files", str(smoke.step13bg.step13bf.step13be.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "--", str(smoke.step13bg.step13bf.step13be.step13bd.RAW_STORAGE_ROOT)], text=True, stdout=subprocess.PIPE, check=False).stdout.strip().splitlines()
-    assert tracked == []
-    assert staged == []
-    manifest = _manifest()
-    assert manifest["sample_index_materialized_current_step"] is True
-    assert manifest["sample_index_written"] is True
-    for key in [
-        "final_dataset_written",
-        "split_assignments_written",
-        "leakage_matrix_written",
-        "raw_file_content_read_current_step",
-        "raw_data_read",
-        "mmcif_text_read",
-        "mmcif_parse_current_step",
-        "atom_site_scan_current_step",
-        "struct_conn_scan_current_step",
-        "coordinate_extraction_current_step",
-        "network_access_used",
-        "urllib_used",
-        "requests_used",
-        "browser_used",
-        "raw_structure_downloaded",
-        "raw_ligand_downloaded",
-        "archive_downloaded",
-        "raw_file_created",
-        "sdf_read",
-        "pdb_read",
-        "gzip_open_used",
-        "rdkit_used",
-        "biopdb_parser_used",
-        "gemmi_used",
-        "torch_imported",
-        "torch_tensor_created",
-        "checkpoint_loaded",
-        "model_forward_called",
-        "loss_compute_called",
-        "backward_called",
-        "optimizer_created",
-        "trainer_fit_called",
-        "training_allowed",
-        "ready_for_covapie_split_leakage_design_gate",
-        "ready_for_covapie_final_dataset_design_gate",
-        "ready_for_training",
-        "ready_to_train_now",
-    ]:
-        assert manifest[key] is False, key
-    assert manifest["ready_for_covapie_sample_index_qa_gate"] is True
-    assert manifest["feature_semantics_audit_required_before_training"] is True
-    assert manifest["leakage_split_design_required_before_training"] is True
-    assert manifest["recommended_next_step"] == "covapie_sample_index_qa_gate"
+def test_raw_paths_are_not_accessed_by_legacy_execution() -> None:
+    before_hash = _tree_hash((RAW_ROOT,))
+    before_diff = (_git_paths(RAW_ROOT), _git_paths(RAW_ROOT, cached=True))
+    with pytest.raises(retirement.LegacyStageRetiredError):
+        smoke.run_covapie_sample_index_smoke_v0()
+    after_hash = _tree_hash((RAW_ROOT,))
+    after_diff = (_git_paths(RAW_ROOT), _git_paths(RAW_ROOT, cached=True))
+    assert before_hash == after_hash
+    assert before_diff == after_diff
+
+
+def test_two_retirement_checks_are_deterministic() -> None:
+    first = _run_check()
+    second = _run_check()
+    assert first.returncode == second.returncode == 0
+    assert first.stdout == second.stdout
+    assert first.stderr == second.stderr

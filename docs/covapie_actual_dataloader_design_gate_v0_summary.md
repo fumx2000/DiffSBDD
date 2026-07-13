@@ -1,43 +1,39 @@
-# CovaPIE Actual Dataloader Design Gate v0 Summary
+# CovaPIE Actual Dataloader Design Gate v0 Retirement Summary
 
-Step 13BW designs the future CovaPIE actual dataloader / adapter path.
-It is a design gate only: it does not implement an actual dataloader, write actual dataloader smoke, write `dataloader_smoke.csv/json`, create tensors, import torch or numpy, load checkpoints, call model forward, compute loss, or train.
-It reads `dataset.py`, `data/prepare_crossdocked.py`, `lightning_modules.py`, and `equivariant_diffusion/` as static references only and does not modify original DiffSBDD dataloader/model/loss code.
-It keeps the five canonical masks unchanged, including `scaffold_only / B3`.
-Because `feature_semantics_known_for_training=false` and `unknown_atom_feature_policy_finalized_for_training=false`, the next step is a feature semantics tensorization audit gate, not actual dataloader smoke and not training.
+`covapie_actual_dataloader_design_gate_v0` is a retired legacy design stage.
+Its admission evidence depends on the retired S3 metadata-dataloader QA gate,
+the historical 20x30/20x35/20x45 preview lineage, and an older feature-semantics
+manifest. It is not an actual dataloader runtime and never provided a torch
+Dataset, DataLoader, checkpoint load, model forward, loss, optimizer, trainer,
+or training path.
 
-original_dataloader_static_reference_audit_row_count: `10`
-original_dataloader_static_reference_audit_passed: `True`
-actual_dataloader_adapter_design_contract_row_count: `12`
-actual_dataloader_adapter_design_contract_passed: `True`
-tensorization_input_contract_row_count: `14`
-tensorization_input_contract_passed: `True`
-batch_collate_contract_row_count: `10`
-batch_collate_contract_passed: `True`
-checkpoint_compatibility_contract_row_count: `10`
-checkpoint_compatibility_contract_passed: `True`
-feature_semantics_blocker_contract_row_count: `10`
-feature_semantics_blocker_contract_passed: `True`
-future_smoke_plan_row_count: `8`
-future_smoke_plan_passed: `True`
-safety_audit_passed: `True`
-actual_dataloader_design_completed_current_step: `True`
-actual_dataloader_smoke_written: `False`
-real_dataloader_written: `False`
-original_dataloader_modified: `False`
-torch_imported: `False`
-numpy_imported: `False`
-torch_tensor_created: `False`
-checkpoint_loaded: `False`
-model_forward_called: `False`
-loss_compute_called: `False`
-training_allowed: `False`
-feature_semantics_known_for_training: `False`
-unknown_atom_feature_policy_finalized_for_training: `False`
-ready_for_covapie_feature_semantics_tensorization_audit_gate: `True`
-ready_for_covapie_actual_dataloader_adapter_smoke: `False`
-ready_for_covapie_actual_dataloader_smoke: `False`
-ready_for_training: `False`
-ready_to_train_now: `False`
-recommended_next_step: `covapie_feature_semantics_tensorization_audit_gate`
-blocking_reasons: `[]`
+Artifact/precondition reading, static-source inspection, safety admission, and
+the main run now fail closed before any filesystem, CSV/JSON, static source,
+hash, git, or subprocess access. The static adapter, tensorization, collate,
+checkpoint, blocker, and future-plan contract builders remain importable as
+historical provenance only. They are noncanonical and cannot establish current
+readiness.
+
+Historical design artifacts and static source evidence remain read-only. This
+retirement does not create or implement a canonical dataloader, does not migrate
+the old preview schemas, and does not claim that feature semantics are resolved.
+S5 through S8 remain unretired; their feature-semantics evidence must be
+re-anchored against the canonical 33-field final-dataset QA contract before any
+new dataloader design can proceed.
+
+The exact retirement policy is:
+
+- `legacy_stage_retired=true`
+- `legacy_stage_executable=false`
+- `successor_availability=redesign_pending`
+- `superseded_by_stage=None`
+- `superseded_by_manifest_path=None`
+- `historical_artifacts_read_only=true`
+- `legacy_artifact_regeneration_forbidden=true`
+- `ready_for_training=false`
+- `ready_to_train_now=false`
+- `feature_semantics_audit_required_before_training=true`
+- `recommended_next_step=covapie_final_dataset_qa_gate_v1`
+- `blocking_reasons=(legacy_stage_superseded, dataloader_interface_redesign_pending)`
+
+Formal training, fine-tuning, and real parameter updates remain blocked.

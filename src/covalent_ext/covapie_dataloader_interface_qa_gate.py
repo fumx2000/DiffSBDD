@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_dataloader_interface_smoke as step13br
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_dataloader_interface_qa_gate_v0"
+LEGACY_STAGE = "covapie_dataloader_interface_qa_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13br.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -141,6 +147,23 @@ READINESS_QA_COLUMNS = ["readiness_item", "expected_status", "observed_status", 
 BOUNDARY_COLUMNS = ["boundary_item", "current_step_status", "boundary_safety_passed", "qa_comment"]
 GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
 
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_preview_integrity_rows",
+    "build_input_source_qa_rows",
+    "build_field_mapping_qa_rows",
+    "build_feature_batch_qa_rows",
+    "build_mask_qa_rows",
+    "build_checkpoint_compatibility_qa_rows",
+    "build_readiness_qa_rows",
+    "build_git_safety_rows",
+    "run_covapie_dataloader_interface_qa_gate_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
@@ -205,6 +228,7 @@ def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13br = _load_json(step13br.MANIFEST_JSON)
     manifest13bq = _load_json(step13bq.MANIFEST_JSON)
     manifest13bm = _load_json(step13bm.MANIFEST_JSON)
@@ -260,6 +284,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_preview_integrity_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     csv_rows = _csv_rows(step13br.INTERFACE_SMOKE_PREVIEW_CSV)
     json_rows = _load_json(step13br.INTERFACE_SMOKE_PREVIEW_JSON)
     json_by_id = {row["dataloader_interface_smoke_row_id"]: row for row in json_rows}
@@ -307,6 +332,7 @@ def build_preview_integrity_rows() -> list[dict[str, Any]]:
 
 
 def build_input_source_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for row in _csv_rows(step13br.INPUT_SOURCE_SMOKE_AUDIT_CSV):
         passed = _bool(row["source_exists_or_policy_valid"]) and _bool(row["input_source_smoke_passed"]) and not _bool(row["runtime_dependency_used_current_step"])
@@ -322,6 +348,7 @@ def build_input_source_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_field_mapping_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     preview_fields = set(_csv_rows(step13bo.SMOKE_PREVIEW_CSV)[0].keys())
     rows = []
     for row in _csv_rows(step13br.FIELD_MAPPING_SMOKE_AUDIT_CSV):
@@ -340,6 +367,7 @@ def build_field_mapping_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_feature_batch_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for row in _csv_rows(step13br.FEATURE_BATCH_SMOKE_AUDIT_CSV):
         passed = _bool(row["feature_batch_smoke_passed"]) and not _bool(row["current_step_materialized"]) and not _bool(row["torch_tensor_created"]) and not _bool(row["actual_collate_implemented"])
@@ -357,6 +385,7 @@ def build_feature_batch_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_mask_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for row in _csv_rows(step13br.MASK_INTERFACE_SMOKE_AUDIT_CSV):
         canonical_or_aux = row["mask_task_name"] in CANONICAL_MASK_TASK_NAMES or row["mask_interface_item"] in {
@@ -378,6 +407,7 @@ def build_mask_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_checkpoint_compatibility_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for row in _csv_rows(step13br.CHECKPOINT_COMPATIBILITY_SMOKE_AUDIT_CSV):
         passed = _bool(row["compatibility_smoke_passed"]) and not _bool(row["checkpoint_loaded"]) and not _bool(row["model_forward_called"]) and not _bool(row["original_dataloader_modified"])
@@ -395,6 +425,7 @@ def build_checkpoint_compatibility_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_readiness_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     observed = {
         "dataloader_interface_smoke_preview_validated": True,
         "actual_dataloader_smoke_not_written": True,
@@ -463,6 +494,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -510,6 +542,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_dataloader_interface_qa_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     preview_rows = build_preview_integrity_rows()
     input_rows = build_input_source_qa_rows()

@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 from __future__ import annotations
 
-import csv
-import json
 import sys
 from pathlib import Path
-from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -13,116 +10,78 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from covalent_ext import covapie_split_leakage_design_gate as gate  # noqa: E402
+from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement  # noqa: E402
+from covalent_ext import covapie_split_leakage_design_gate as legacy  # noqa: E402
 
 
-def _csv_value(value: Any) -> Any:
-    if isinstance(value, (list, dict, set)):
-        return json.dumps(sorted(value) if isinstance(value, set) else value, sort_keys=True)
-    return value
+EXPECTED_SUCCESSOR_STAGE = "covapie_leakage_split_design_gate_v0"
+EXPECTED_SUCCESSOR_MANIFEST = (
+    "data/derived/covalent_small/covapie_leakage_split_design_gate_v0/"
+    "covapie_leakage_split_design_gate_manifest.json"
+)
+EXPECTED_NEXT_STEP = "covapie_leakage_split_design_gate"
 
 
-def write_csv(rows: list[dict[str, Any]], path: str | Path, fieldnames: list[str]) -> None:
-    output = Path(path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow({key: _csv_value(row.get(key, "")) for key in fieldnames})
-
-
-def write_json(data: Any, path: str | Path) -> None:
-    output = Path(path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-
-def write_summary(manifest: dict[str, Any], path: str | Path) -> None:
-    text = f"""# CovaPIE Split/Leakage Design Gate v0 Summary
-
-Step 13BJ is a split/leakage design gate for the Step 13BH/13BI 20-row sample index smoke.
-It designs future split grouping keys, leakage rules, leakage risk classes, split unit preview, and the next split/leakage smoke plan.
-It does not write split assignments, a leakage matrix, final_dataset, a new sample_index, dataloader smoke, tensors, checkpoints, or training outputs.
-It does not read raw CIF files, parse mmCIF, re-extract coordinates, use network, RDKit, Bio.PDB, gemmi, gzip, torch, model forward, loss, backward, optimizer, trainer.fit, or training.
-All five canonical masks remain unchanged, including `scaffold_only / B3`; no sixth mask is introduced.
-The 20-row smoke is too small for a real train/val/test split, so this step only designs the policy.
-Feature semantics audit remains required before formal training, fine-tuning, or real parameter updates.
-Leakage/split gates remain required before final dataset design and training.
-This gate allows split/leakage smoke next, not split QA, not final dataset, not dataloader smoke, and not training.
-
-source_sample_index_row_count: `{manifest["source_sample_index_row_count"]}`
-source_unique_event_count: `{manifest["source_unique_event_count"]}`
-source_canonical_mask_task_count: `{manifest["source_canonical_mask_task_count"]}`
-split_grouping_key_contract_row_count: `{manifest["split_grouping_key_contract_row_count"]}`
-leakage_rule_contract_row_count: `{manifest["leakage_rule_contract_row_count"]}`
-leakage_risk_design_audit_row_count: `{manifest["leakage_risk_design_audit_row_count"]}`
-split_unit_design_preview_row_count: `{manifest["split_unit_design_preview_row_count"]}`
-split_leakage_smoke_plan_row_count: `{manifest["split_leakage_smoke_plan_row_count"]}`
-split_assignments_written: `{manifest["split_assignments_written"]}`
-leakage_matrix_written: `{manifest["leakage_matrix_written"]}`
-final_dataset_written: `{manifest["final_dataset_written"]}`
-sample_index_written_current_step: `{manifest["sample_index_written_current_step"]}`
-ready_for_covapie_split_leakage_smoke: `{manifest["ready_for_covapie_split_leakage_smoke"]}`
-ready_for_covapie_split_leakage_qa_gate: `{manifest["ready_for_covapie_split_leakage_qa_gate"]}`
-ready_for_covapie_final_dataset_design_gate: `{manifest["ready_for_covapie_final_dataset_design_gate"]}`
-ready_for_covapie_dataloader_smoke: `{manifest["ready_for_covapie_dataloader_smoke"]}`
-ready_for_training: `{manifest["ready_for_training"]}`
-ready_to_train_now: `{manifest["ready_to_train_now"]}`
-recommended_next_step: `{manifest["recommended_next_step"]}`
-blocking_reasons: `{manifest["blocking_reasons"]}`
-"""
-    output = Path(path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(text, encoding="utf-8")
+def _bool(value: bool) -> str:
+    return str(value).lower()
 
 
 def run() -> int:
-    result = gate.run_covapie_split_leakage_design_gate_v0()
-    write_csv(result["precondition_rows"], gate.PRECONDITION_AUDIT_CSV, gate.PRECONDITION_COLUMNS)
-    write_csv(result["grouping_rows"], gate.GROUPING_KEY_CONTRACT_CSV, gate.GROUPING_KEY_COLUMNS)
-    write_csv(result["leakage_rule_rows"], gate.LEAKAGE_RULE_CONTRACT_CSV, gate.LEAKAGE_RULE_COLUMNS)
-    write_csv(result["risk_rows"], gate.LEAKAGE_RISK_DESIGN_AUDIT_CSV, gate.RISK_AUDIT_COLUMNS)
-    write_csv(result["split_unit_rows"], gate.SPLIT_UNIT_DESIGN_PREVIEW_CSV, gate.SPLIT_UNIT_COLUMNS)
-    write_csv(result["smoke_plan_rows"], gate.SMOKE_PLAN_CSV, gate.SMOKE_PLAN_COLUMNS)
-    write_csv(result["boundary_rows"], gate.BOUNDARY_SAFETY_CSV, gate.BOUNDARY_COLUMNS)
-    write_csv(result["git_safety_rows"], gate.GIT_SAFETY_CSV, gate.GIT_SAFETY_COLUMNS)
-    write_json(result["manifest"], gate.MANIFEST_JSON)
-    write_summary(result["manifest"], gate.SUMMARY_MD)
-
-    manifest = result["manifest"]
-    print("covapie_split_leakage_design_gate_v0_passed" if manifest["all_checks_passed"] else "covapie_split_leakage_design_gate_v0_blocked")
-    for key in [
-        "source_sample_index_row_count",
-        "source_unique_event_count",
-        "source_canonical_mask_task_count",
-        "split_grouping_key_contract_row_count",
-        "leakage_rule_contract_row_count",
-        "leakage_risk_design_audit_row_count",
-        "split_unit_design_preview_row_count",
-        "split_leakage_smoke_plan_row_count",
-        "split_grouping_key_contract_passed",
-        "leakage_rule_contract_passed",
-        "leakage_risk_design_audit_passed",
-        "split_unit_design_preview_passed",
-        "split_leakage_smoke_plan_passed",
-        "boundary_safety_passed",
-        "git_safety_passed",
-        "split_assignments_written",
-        "leakage_matrix_written",
-        "final_dataset_written",
-        "sample_index_written_current_step",
-        "ready_for_covapie_split_leakage_smoke",
-        "ready_for_covapie_split_leakage_qa_gate",
-        "ready_for_covapie_final_dataset_design_gate",
-        "ready_for_covapie_dataloader_smoke",
-        "ready_for_training",
-        "ready_to_train_now",
-        "recommended_next_step",
-        "blocking_reasons",
-    ]:
-        print(f"{key}={manifest[key]}")
-    return 0 if manifest["all_checks_passed"] else 1
+    stage_policy = legacy.build_retirement_policy()
+    policies = retirement.build_all_legacy_stage_retirement_policies()
+    registry = retirement.validate_legacy_pipeline_retirement_registry(policies)
+    paths = retirement.validate_tracked_successor_manifest_paths(
+        policies,
+        repo_root=REPO_ROOT,
+    )
+    successor_path_passed = (
+        paths["tracked_successor_paths_passed"] is True
+        and stage_policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+    )
+    values = {
+        "legacy_stage": stage_policy.stage,
+        "legacy_stage_retired": stage_policy.legacy_stage_retired,
+        "legacy_stage_executable": stage_policy.legacy_stage_executable,
+        "successor_stage": stage_policy.superseded_by_stage,
+        "successor_availability": stage_policy.successor_availability,
+        "successor_manifest_path": stage_policy.superseded_by_manifest_path,
+        "successor_manifest_path_validation_passed": successor_path_passed,
+        "historical_artifacts_read_only": stage_policy.historical_artifacts_read_only,
+        "legacy_artifact_regeneration_forbidden": (
+            stage_policy.legacy_artifact_regeneration_forbidden
+        ),
+        "ready_for_training": stage_policy.ready_for_training,
+        "ready_to_train_now": stage_policy.ready_to_train_now,
+        "feature_semantics_audit_required_before_training": (
+            stage_policy.feature_semantics_audit_required_before_training
+        ),
+        "recommended_next_step": stage_policy.recommended_next_step,
+    }
+    for key, value in values.items():
+        print(f"{key}={_bool(value) if isinstance(value, bool) else value}")
+    passed = (
+        registry.passed is True
+        and successor_path_passed is True
+        and stage_policy.stage == legacy.LEGACY_STAGE
+        and stage_policy.legacy_stage_retired is True
+        and stage_policy.legacy_stage_executable is False
+        and stage_policy.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
+        and stage_policy.successor_availability == "tracked"
+        and stage_policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+        and stage_policy.historical_artifacts_read_only is True
+        and stage_policy.legacy_artifact_regeneration_forbidden is True
+        and stage_policy.ready_for_training is False
+        and stage_policy.ready_to_train_now is False
+        and stage_policy.feature_semantics_audit_required_before_training is True
+        and stage_policy.recommended_next_step == EXPECTED_NEXT_STEP
+        and stage_policy.blocking_reasons == ("legacy_stage_superseded",)
+    )
+    print(
+        "covapie_split_leakage_design_gate_v0_retirement_policy_passed"
+        if passed
+        else "covapie_split_leakage_design_gate_v0_retirement_policy_blocked"
+    )
+    return 0 if passed else 1
 
 
 if __name__ == "__main__":

@@ -1,38 +1,15 @@
-# CovaPIE Split/Leakage QA Gate v0 Summary
+# CovaPIE Split Leakage QA Gate v0 Retirement Summary
 
-Step 13BL is a QA gate for the Step 13BK split/leakage smoke preview.
-It reads but does not rewrite the Step 13BK split unit preview CSV/JSON.
-It validates split unit preview consistency, parent event grouping, candidate metadata grouping, canonical mask grouping, leakage risk status, boundary safety, git safety, and training blockers.
-It does not write real split assignments, a leakage matrix, final_dataset, a new sample_index, dataloader smoke, tensors, checkpoints, or training outputs.
-It does not read raw CIF files, parse mmCIF, re-extract coordinates, use network, RDKit, Bio.PDB, gemmi, gzip, torch, model forward, loss, backward, optimizer, trainer.fit, or training.
-All five canonical masks remain unchanged, including `scaffold_only / B3`; no sixth mask is introduced.
-Feature semantics audit remains required before formal training, fine-tuning, real parameter updates, or further training-prep progression.
-Step 12D was smoke legality only, not final feature semantics audit.
-This QA gate allows feature semantics audit gate next, not final dataset, not dataloader smoke, and not training.
+`covapie_split_leakage_qa_gate_v0` is retired and superseded. Its historical derived root remains unchanged, read-only evidence. It is non-executable, non-canonical, and no longer supplies current pipeline admission evidence.
 
-source_sample_index_row_count: `20`
-source_unique_event_count: `4`
-source_canonical_mask_task_count: `5`
-source_split_unit_preview_row_count: `4`
-source_split_unit_preview_json_row_count: `4`
-split_unit_preview_qa_row_count: `4`
-group_integrity_qa_row_count: `8`
-mask_integrity_qa_row_count: `5`
-leakage_risk_qa_row_count: `12`
-split_unit_preview_qa_passed: `True`
-group_integrity_qa_passed: `True`
-mask_integrity_qa_passed: `True`
-leakage_risk_qa_passed: `True`
-training_blockers_passed: `True`
-split_assignments_written: `False`
-leakage_matrix_written: `False`
-final_dataset_written: `False`
-sample_index_written_current_step: `False`
-split_unit_preview_written_current_step: `False`
-ready_for_covapie_feature_semantics_audit_gate: `True`
-ready_for_covapie_final_dataset_design_gate: `False`
-ready_for_covapie_dataloader_smoke: `False`
-ready_for_training: `False`
-ready_to_train_now: `False`
-recommended_next_step: `covapie_feature_semantics_audit_gate`
-blocking_reasons: `[]`
+The tracked canonical successor is `covapie_unified_leakage_split_materialization_smoke_v0`, with manifest `data/derived/covalent_small/covapie_unified_leakage_split_materialization_smoke_v0/covapie_unified_leakage_split_materialization_smoke_manifest.json`. This manifest is intentionally shared with the retired split-leakage smoke stage; it is the registry's only permitted shared successor reference.
+
+All public legacy execution entrypoints fail closed with `LegacyStageRetiredError` before filesystem reads, artifact generation, manifest construction, readiness checks, or calls along the old split/leakage chain. The check script is read-only and validates only the shared retirement registry, exact successor contract, tracked successor paths, and training boundary. It never regenerates the old split/leakage artifacts.
+
+- `successor_availability=tracked`
+- `historical_artifacts_read_only=true`
+- `legacy_artifact_regeneration_forbidden=true`
+- `ready_for_training=false`
+- `ready_to_train_now=false`
+- `feature_semantics_audit_required_before_training=true`
+- `recommended_next_step=covapie_unified_leakage_split_materialization_smoke`

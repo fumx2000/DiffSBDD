@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_metadata_dataloader_smoke as step13bu
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_metadata_dataloader_smoke_qa_gate_v0"
+LEGACY_STAGE = "covapie_metadata_dataloader_smoke_qa_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bu.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -79,6 +85,24 @@ BLOCKER_RUNTIME_QA_COLUMNS = ["blocker_item", "expected_status", "observed_statu
 READINESS_QA_COLUMNS = ["readiness_item", "expected_status", "observed_status", "readiness_qa_passed", "qa_comment"]
 SAFETY_COLUMNS = ["safety_item", "required_status", "observed_status", "safety_passed", "blocking_reasons"]
 GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
+
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "_dataset_items",
+    "build_shim_api_rows",
+    "build_preview_integrity_rows",
+    "build_getitem_contract_rows",
+    "build_mask_distribution_rows",
+    "build_blocker_runtime_rows",
+    "build_readiness_rows",
+    "build_safety_rows",
+    "build_git_safety_rows",
+    "run_covapie_metadata_dataloader_smoke_qa_gate_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
 
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
@@ -150,6 +174,7 @@ def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bu = _load_json(step13bu.MANIFEST_JSON)
     manifest13bt = _load_json(step13bt.MANIFEST_JSON)
     preview_rows = _csv_rows(step13bu.SMOKE_PREVIEW_CSV)
@@ -196,6 +221,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def _dataset_items() -> tuple[step13bu.CovapieMetadataDatasetSmoke, list[dict[str, Any]], bool]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     dataset = step13bu.CovapieMetadataDatasetSmoke(step13br.INTERFACE_SMOKE_PREVIEW_CSV, step13bo.SMOKE_PREVIEW_CSV)
     index_error_checked = False
     try:
@@ -206,6 +232,7 @@ def _dataset_items() -> tuple[step13bu.CovapieMetadataDatasetSmoke, list[dict[st
 
 
 def build_shim_api_rows(dataset: step13bu.CovapieMetadataDatasetSmoke, items: list[dict[str, Any]], index_error_checked: bool) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("shim_class_exists", "class exists", hasattr(step13bu, "CovapieMetadataDatasetSmoke"), "class importable"),
         ("shim_no_torch_dataset_inheritance", "no torch Dataset inheritance", all(base.__module__.split(".")[0] != "torch" for base in type(dataset).__mro__), "pure Python class"),
@@ -229,6 +256,7 @@ def build_shim_api_rows(dataset: step13bu.CovapieMetadataDatasetSmoke, items: li
 
 
 def build_preview_integrity_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     csv_rows = _csv_rows(step13bu.SMOKE_PREVIEW_CSV)
     json_rows = _load_json(step13bu.SMOKE_PREVIEW_JSON)
     json_by_id = {row["metadata_dataset_row_id"]: row for row in json_rows}
@@ -267,6 +295,7 @@ def build_preview_integrity_rows() -> list[dict[str, Any]]:
 
 
 def build_getitem_contract_rows(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     source_rows = step13bu.build_key_coverage_rows(items)
     return [
         {
@@ -283,6 +312,7 @@ def build_getitem_contract_rows(items: list[dict[str, Any]]) -> list[dict[str, A
 
 
 def build_mask_distribution_rows(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     source_rows = step13bu.build_mask_distribution_rows(items)
     return [
         {
@@ -302,6 +332,7 @@ def build_mask_distribution_rows(items: list[dict[str, Any]]) -> list[dict[str, 
 
 
 def build_blocker_runtime_rows(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     source_rows = step13bu.build_blocker_runtime_rows(items)
     return [
         {
@@ -317,6 +348,7 @@ def build_blocker_runtime_rows(items: list[dict[str, Any]]) -> list[dict[str, An
 
 
 def build_readiness_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("metadata_dataloader_smoke_validated", True, "metadata smoke QA passed"),
         ("metadata_dataloader_smoke_preview_not_rewritten_current_step", True, "preview remains previous-step artifact"),
@@ -340,6 +372,7 @@ def build_readiness_rows() -> list[dict[str, Any]]:
 
 
 def build_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "empty", not _raw_files_staged()),
@@ -380,6 +413,7 @@ def build_safety_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -404,6 +438,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_metadata_dataloader_smoke_qa_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     dataset, items, index_error_checked = _dataset_items()
     shim_rows = build_shim_api_rows(dataset, items, index_error_checked)

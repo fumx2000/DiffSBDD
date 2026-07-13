@@ -1,37 +1,36 @@
-# CovaPIE Metadata Dataloader Smoke v0 Summary
+# CovaPIE Metadata Dataloader Smoke v0 Retirement Summary
 
-Step 13BU implements a minimal metadata-only Dataset-like shim under `src/covalent_ext`.
-The shim reads the Step 13BR dataloader interface smoke preview and supports `__len__` plus `__getitem__`.
-It returns Python dict metadata records only.
-It does not inherit from torch Dataset, use torch DataLoader, import torch, create tensors, return numpy arrays, load checkpoints, call model forward, compute loss, train, or modify original DiffSBDD dataloader/model/loss code.
-It does not read raw structures, parse mmCIF, download data, use RDKit/Bio.PDB/gemmi/gzip, write actual dataloader smoke, write real final dataset artifacts, write a new sample index, write split assignments, or write a leakage matrix.
-It preserves the five canonical masks, including `scaffold_only / B3`.
-The next step is metadata dataloader smoke QA gate, not actual dataloader smoke and not training.
+`covapie_metadata_dataloader_smoke_v0` is a retired legacy stage. It and
+`covapie_metadata_dataloader_smoke_qa_gate_v0` form one atomic retirement
+unit because the QA gate directly instantiates this stage's artifact-backed
+dataset shim and calls its historical audit builders.
 
-metadata_dataset_len: `20`
-metadata_dataloader_smoke_preview_row_count: `20`
-metadata_dataloader_smoke_preview_column_count: `30`
-len_getitem_audit_row_count: `20`
-len_getitem_audit_passed: `True`
-out_of_range_index_error_checked: `True`
-key_coverage_audit_row_count: `12`
-key_coverage_audit_passed: `True`
-mask_distribution_audit_row_count: `5`
-mask_distribution_audit_passed: `True`
-blocker_runtime_audit_row_count: `12`
-blocker_runtime_audit_passed: `True`
-metadata_dataloader_smoke_written: `True`
-actual_dataloader_smoke_written: `False`
-real_dataloader_written: `False`
-original_dataloader_modified: `False`
-torch_imported: `False`
-torch_tensor_created: `False`
-checkpoint_loaded: `False`
-model_forward_called: `False`
-training_allowed: `False`
-ready_for_covapie_metadata_dataloader_smoke_qa_gate: `True`
-ready_for_covapie_actual_dataloader_smoke: `False`
-ready_for_training: `False`
-ready_to_train_now: `False`
-recommended_next_step: `covapie_metadata_dataloader_smoke_qa_gate`
-blocking_reasons: `[]`
+`CovapieMetadataDatasetSmoke` is a plain Python compatibility class, not a
+`torch` Dataset. Its historical constructor reads the legacy 20x35 interface
+preview and 20x45 final-dataset preview, so construction now fails closed
+before any path or CSV access. The class symbol, `__len__`, `__getitem__`,
+constants, aliases, and historical helper symbols remain available only for
+import and provenance compatibility.
+
+The historical 20x30 preview and audit artifacts are retained read-only and
+must not be regenerated, migrated, copied, or rewritten. This retirement does
+not create a canonical dataloader or a replacement QA v1 stage. S4 through S8
+remain unretired; their feature evidence still requires re-anchoring after the
+canonical 33-field final-dataset QA contract is available.
+
+The exact retirement policy is:
+
+- `legacy_stage_retired=true`
+- `legacy_stage_executable=false`
+- `successor_availability=redesign_pending`
+- `superseded_by_stage=None`
+- `superseded_by_manifest_path=None`
+- `historical_artifacts_read_only=true`
+- `legacy_artifact_regeneration_forbidden=true`
+- `ready_for_training=false`
+- `ready_to_train_now=false`
+- `feature_semantics_audit_required_before_training=true`
+- `recommended_next_step=covapie_final_dataset_qa_gate_v1`
+- `blocking_reasons=(legacy_stage_superseded, dataloader_interface_redesign_pending)`
+
+Formal training, fine-tuning, and real parameter updates remain blocked.

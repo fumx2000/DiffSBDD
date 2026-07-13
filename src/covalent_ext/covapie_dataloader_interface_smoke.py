@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_dataloader_interface_design_gate as step13bq
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_dataloader_interface_smoke_v0"
+LEGACY_STAGE = "covapie_dataloader_interface_smoke_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bq.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -145,6 +151,22 @@ CHECKPOINT_COMPATIBILITY_SMOKE_COLUMNS = [
 BOUNDARY_COLUMNS = ["boundary_item", "current_step_status", "boundary_safety_passed", "qa_comment"]
 GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
 
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_interface_preview_rows",
+    "build_input_source_smoke_rows",
+    "build_field_mapping_smoke_rows",
+    "build_feature_batch_smoke_rows",
+    "build_mask_interface_smoke_rows",
+    "build_checkpoint_compatibility_smoke_rows",
+    "build_git_safety_rows",
+    "run_covapie_dataloader_interface_smoke_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
@@ -212,6 +234,7 @@ def _forbidden_named_artifact_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bq = _load_json(step13bq.MANIFEST_JSON)
     manifest13bp = _load_json(step13bp.MANIFEST_JSON)
     manifest13bm = _load_json(step13bm.MANIFEST_JSON)
@@ -261,6 +284,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_interface_preview_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for row in _final_preview_rows():
         rows.append(
@@ -306,6 +330,7 @@ def build_interface_preview_rows() -> list[dict[str, Any]]:
 
 
 def build_input_source_smoke_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for contract in _csv_rows(step13bq.INPUT_SOURCE_CONTRACT_CSV):
         path_or_policy = contract["source_path_or_policy"]
@@ -329,6 +354,7 @@ def build_input_source_smoke_rows() -> list[dict[str, Any]]:
 
 
 def build_field_mapping_smoke_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     preview_fields = set(_final_preview_rows()[0].keys())
     rows = []
     for contract in _csv_rows(step13bq.FIELD_MAPPING_CONTRACT_CSV):
@@ -351,6 +377,7 @@ def build_field_mapping_smoke_rows() -> list[dict[str, Any]]:
 
 
 def build_feature_batch_smoke_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for contract in _csv_rows(step13bq.FEATURE_INTERFACE_CONTRACT_CSV):
         rows.append(
@@ -388,6 +415,7 @@ def build_feature_batch_smoke_rows() -> list[dict[str, Any]]:
 
 
 def build_mask_interface_smoke_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for contract in _csv_rows(step13bq.MASK_INTERFACE_CONTRACT_CSV):
         rows.append(
@@ -407,6 +435,7 @@ def build_mask_interface_smoke_rows() -> list[dict[str, Any]]:
 
 
 def build_checkpoint_compatibility_smoke_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     return [
         {
             "compatibility_item": contract["compatibility_item"],
@@ -467,6 +496,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -516,6 +546,7 @@ def _stringify_rows(rows: list[dict[str, Any]]) -> list[dict[str, str]]:
 
 
 def run_covapie_dataloader_interface_smoke_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     preview_rows = build_interface_preview_rows()
     json_rows = _stringify_rows(preview_rows)

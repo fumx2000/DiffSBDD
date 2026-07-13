@@ -9,10 +9,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_sample_index_design_gate as step13bg
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_sample_index_smoke_v0"
+LEGACY_STAGE = "covapie_sample_index_smoke_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bg.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -92,6 +98,10 @@ GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", 
 TRAINING_BLOCKER_COLUMNS = ["training_blocker_item", "required_status", "current_step_status", "training_blocker_passed", "qa_comment"]
 
 
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
+
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
@@ -154,6 +164,7 @@ def _forbidden_downstream_exists(root: Path = OUTPUT_ROOT) -> bool:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bg = _load_json(step13bg.MANIFEST_JSON)
     manifest13bf = _load_json(step13bg.step13bf.MANIFEST_JSON)
     event_rows = _csv_rows(step13bg.step13bf.step13be.EXTRACTED_EVENT_TABLE_CSV)
@@ -200,6 +211,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_sample_index_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     event_rows = _csv_rows(step13bg.step13bf.step13be.EXTRACTED_EVENT_TABLE_CSV)
     protein_counts = _count_by_event(_csv_rows(step13bg.step13bf.step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV))
     ligand_counts = _count_by_event(_csv_rows(step13bg.step13bf.step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV))
@@ -244,6 +256,7 @@ def build_sample_index_rows() -> list[dict[str, Any]]:
 
 
 def build_row_qa_rows(sample_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     event_by_id = {row["extracted_event_id"]: row for row in _csv_rows(step13bg.step13bf.step13be.EXTRACTED_EVENT_TABLE_CSV)}
     event_qa = {row["extracted_event_id"]: row for row in _csv_rows(step13bg.step13bf.EVENT_TABLE_QA_CSV)}
     atom_qa = {row["extracted_event_id"]: row for row in _csv_rows(step13bg.step13bf.ATOM_TABLE_QA_CSV)}
@@ -313,6 +326,7 @@ def build_row_qa_rows(sample_rows: list[dict[str, Any]]) -> list[dict[str, Any]]
 
 
 def build_mask_distribution_rows(sample_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     rows = []
     for name, alias in zip(CANONICAL_MASK_TASK_NAMES, CANONICAL_MASK_TASK_ALIASES):
         selected = [row for row in sample_rows if row["mask_task_name"] == name and row["mask_task_alias"] == alias]
@@ -334,6 +348,7 @@ def build_mask_distribution_rows(sample_rows: list[dict[str, Any]]) -> list[dict
 
 
 def build_source_traceability_rows(sample_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     events = _csv_rows(step13bg.step13bf.step13be.EXTRACTED_EVENT_TABLE_CSV)
     protein_counts = _count_by_event(_csv_rows(step13bg.step13bf.step13be.EXTRACTED_PROTEIN_ATOM_TABLE_CSV))
     ligand_counts = _count_by_event(_csv_rows(step13bg.step13bf.step13be.EXTRACTED_LIGAND_ATOM_TABLE_CSV))
@@ -371,6 +386,7 @@ def build_source_traceability_rows(sample_rows: list[dict[str, Any]]) -> list[di
 
 
 def build_boundary_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     statuses = {
         "sample_index_smoke": "executed_smoke_only",
         "read_step13bg_design_contracts": "executed_derived_csv_json_read_only",
@@ -404,6 +420,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files raw storage root", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached raw storage root", "empty", not _raw_files_staged()),
@@ -434,6 +451,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def build_training_blocker_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     items = [
         ("mask_warhead_only_A", "present"),
         ("mask_linker_plus_warhead_B", "present"),
@@ -465,6 +483,7 @@ def build_training_blocker_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_sample_index_smoke_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     sample_rows = build_sample_index_rows()
     row_qa_rows = build_row_qa_rows(sample_rows)

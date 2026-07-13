@@ -1,37 +1,37 @@
-# CovaPIE Metadata Dataloader Smoke QA Gate v0 Summary
+# CovaPIE Metadata Dataloader Smoke QA Gate v0 Retirement Summary
 
-Step 13BV validates the Step 13BU metadata-only Dataset-like shim and smoke artifacts.
-It reads but does not rewrite `covapie_metadata_dataloader_smoke_preview.csv` or `.json`.
-It instantiates the pure Python metadata shim only; it does not use torch Dataset, torch DataLoader, tensors, numpy arrays, checkpoints, model forward, loss, or training.
-It does not write actual dataloader smoke, real dataloader artifacts, final dataset artifacts, a new sample index, split assignments, or a leakage matrix.
-It does not modify `dataset.py`, `data/prepare_crossdocked.py`, `lightning_modules.py`, `equivariant_diffusion/`, or original DiffSBDD model/dataloader/loss code.
-The next step is actual dataloader design gate, not actual dataloader smoke and not training.
+`covapie_metadata_dataloader_smoke_qa_gate_v0` is retired atomically with
+`covapie_metadata_dataloader_smoke_v0`. The legacy QA implementation directly
+instantiates the S2 artifact-backed constructor and invokes S2 key-coverage,
+mask-distribution, and blocker-runtime builders. Leaving either side executable
+would preserve a partial admission path into the obsolete 20x35/20x45 data
+contract.
 
-metadata_dataset_len_rechecked: `20`
-shim_api_qa_row_count: `8`
-shim_api_qa_passed: `True`
-preview_integrity_qa_row_count: `20`
-preview_integrity_qa_passed: `True`
-getitem_contract_qa_row_count: `12`
-getitem_contract_qa_passed: `True`
-mask_distribution_qa_row_count: `5`
-mask_distribution_qa_passed: `True`
-blocker_runtime_qa_row_count: `12`
-blocker_runtime_qa_passed: `True`
-readiness_qa_row_count: `8`
-readiness_qa_passed: `True`
-metadata_dataloader_smoke_preview_written_current_step: `False`
-actual_dataloader_smoke_written: `False`
-real_dataloader_written: `False`
-torch_imported: `False`
-numpy_imported: `False`
-torch_tensor_created: `False`
-checkpoint_loaded: `False`
-model_forward_called: `False`
-training_allowed: `False`
-ready_for_covapie_actual_dataloader_design_gate: `True`
-ready_for_covapie_actual_dataloader_smoke: `False`
-ready_for_training: `False`
-ready_to_train_now: `False`
-recommended_next_step: `covapie_actual_dataloader_design_gate`
-blocking_reasons: `[]`
+All artifact, constructor-wrapper, historical builder, readiness, safety, and
+run entrypoints now fail closed before invoking S2 or reading CSV/JSON paths.
+Existing preview and audit artifacts remain unchanged and read-only; no data is
+migrated or copied.
+
+S4 retains import compatibility because it consumes only constants, paths,
+schema metadata, historical aliases, and readiness/artifact references from
+this module. S4 through S8 have not been retired in this batch. Their feature
+evidence remains pending re-anchoring after the canonical 33-field
+final-dataset QA stage is materialized.
+
+The exact retirement policy is:
+
+- `legacy_stage_retired=true`
+- `legacy_stage_executable=false`
+- `successor_availability=redesign_pending`
+- `superseded_by_stage=None`
+- `superseded_by_manifest_path=None`
+- `historical_artifacts_read_only=true`
+- `legacy_artifact_regeneration_forbidden=true`
+- `ready_for_training=false`
+- `ready_to_train_now=false`
+- `feature_semantics_audit_required_before_training=true`
+- `recommended_next_step=covapie_final_dataset_qa_gate_v1`
+- `blocking_reasons=(legacy_stage_superseded, dataloader_interface_redesign_pending)`
+
+No canonical dataloader, QA v1, tensor, checkpoint, or training artifact is
+created by this retirement.

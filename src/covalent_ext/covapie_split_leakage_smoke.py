@@ -9,10 +9,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_split_leakage_design_gate as step13bj
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_split_leakage_smoke_v0"
+LEGACY_STAGE = "covapie_split_leakage_smoke_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bj.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -101,6 +107,22 @@ RISK_SMOKE_COLUMNS = [
 ]
 BOUNDARY_COLUMNS = ["boundary_item", "current_step_status", "boundary_safety_passed", "qa_comment"]
 GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
+
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_split_unit_smoke_preview_rows",
+    "build_parent_event_group_integrity_rows",
+    "build_candidate_metadata_group_integrity_rows",
+    "build_mask_task_grouping_integrity_rows",
+    "build_risk_smoke_audit_rows",
+    "build_boundary_rows",
+    "build_git_safety_rows",
+    "run_covapie_split_leakage_smoke_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
 
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
@@ -195,6 +217,7 @@ def _split_unit_id(index: int) -> str:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bj = _load_json(step13bj.MANIFEST_JSON)
     grouping = _csv_rows(step13bj.GROUPING_KEY_CONTRACT_CSV)
     rules = _csv_rows(step13bj.LEAKAGE_RULE_CONTRACT_CSV)
@@ -242,6 +265,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_split_unit_smoke_preview_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     grouped = _group_by(_csv_rows(step13bj.step13bi.step13bh.SAMPLE_INDEX_SMOKE_CSV), "extracted_event_id")
     blocker = "smoke_size_too_small;feature_semantics_audit_required;scaffold_linker_warhead_annotation_required;split_leakage_smoke_only_current_step"
     rows = []
@@ -275,6 +299,7 @@ def build_split_unit_smoke_preview_rows() -> list[dict[str, Any]]:
 
 
 def build_parent_event_group_integrity_rows(split_units: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     split_by_event = {row["extracted_event_id"]: row["split_unit_id"] for row in split_units}
     grouped = _group_by(_csv_rows(step13bj.step13bi.step13bh.SAMPLE_INDEX_SMOKE_CSV), "extracted_event_id")
     rows = []
@@ -301,6 +326,7 @@ def build_parent_event_group_integrity_rows(split_units: list[dict[str, Any]]) -
 
 
 def build_candidate_metadata_group_integrity_rows(split_units: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     split_by_candidate = {row["candidate_metadata_id"]: row["split_unit_id"] for row in split_units}
     grouped = _group_by(_csv_rows(step13bj.step13bi.step13bh.SAMPLE_INDEX_SMOKE_CSV), "candidate_metadata_id")
     rows = []
@@ -327,6 +353,7 @@ def build_candidate_metadata_group_integrity_rows(split_units: list[dict[str, An
 
 
 def build_mask_task_grouping_integrity_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     sample_rows = _csv_rows(step13bj.step13bi.step13bh.SAMPLE_INDEX_SMOKE_CSV)
     rows = []
     observed_masks = {row["mask_task_name"] for row in sample_rows}
@@ -354,6 +381,7 @@ def build_mask_task_grouping_integrity_rows() -> list[dict[str, Any]]:
 
 
 def build_risk_smoke_audit_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     sample_rows = _csv_rows(step13bj.step13bi.step13bh.SAMPLE_INDEX_SMOKE_CSV)
     residue_sites = [_residue_site(row) for row in sample_rows]
     counts = {
@@ -439,6 +467,7 @@ def build_risk_smoke_audit_rows() -> list[dict[str, Any]]:
 
 
 def build_boundary_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     statuses = {
         "split_leakage_smoke": "executed_smoke_only",
         "read_step13bj_design_artifacts": "executed_derived_csv_json_read_only",
@@ -471,6 +500,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -505,6 +535,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_split_leakage_smoke_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     split_unit_rows = build_split_unit_smoke_preview_rows()
     parent_rows = build_parent_event_group_integrity_rows(split_unit_rows)

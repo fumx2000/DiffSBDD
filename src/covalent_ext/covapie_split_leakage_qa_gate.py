@@ -8,10 +8,16 @@ from pathlib import Path
 from typing import Any
 
 from covalent_ext import covapie_split_leakage_smoke as step13bk
+from covalent_ext.covapie_legacy_pipeline_retirement_policy import (
+    LegacyStageRetirementPolicy,
+    build_legacy_stage_retirement_policy,
+    raise_legacy_stage_retired,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-STAGE = "covapie_split_leakage_qa_gate_v0"
+LEGACY_STAGE = "covapie_split_leakage_qa_gate_v0"
+STAGE = LEGACY_STAGE
 PREVIOUS_STAGE = step13bk.STAGE
 PROJECT_NAME = "CovaPIE"
 
@@ -98,6 +104,22 @@ BOUNDARY_COLUMNS = ["boundary_item", "current_step_status", "boundary_safety_pas
 GIT_SAFETY_COLUMNS = ["git_safety_item", "command_or_check", "required_status", "current_step_status", "git_safety_audit_passed", "blocking_reasons"]
 TRAINING_BLOCKER_COLUMNS = ["training_blocker_item", "required_status", "current_step_status", "training_blocker_passed", "qa_comment"]
 
+GUARDED_ENTRYPOINTS = (
+    "build_precondition_rows",
+    "build_split_unit_preview_qa_rows",
+    "build_group_integrity_qa_rows",
+    "build_mask_integrity_qa_rows",
+    "build_leakage_risk_qa_rows",
+    "build_boundary_rows",
+    "build_git_safety_rows",
+    "build_training_blocker_rows",
+    "run_covapie_split_leakage_qa_gate_v0",
+)
+
+
+def build_retirement_policy() -> LegacyStageRetirementPolicy:
+    return build_legacy_stage_retirement_policy(LEGACY_STAGE)
+
 
 def _csv_rows(path: str | Path) -> list[dict[str, str]]:
     with Path(path).open(newline="", encoding="utf-8") as handle:
@@ -174,6 +196,7 @@ def _split_unit_by_candidate() -> dict[str, str]:
 
 
 def build_precondition_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     manifest13bk = _load_json(step13bk.MANIFEST_JSON)
     manifest13bj = _load_json(step13bk.step13bj.MANIFEST_JSON)
     manifest13bi = _load_json(step13bk.step13bj.step13bi.MANIFEST_JSON)
@@ -222,6 +245,7 @@ def build_precondition_rows() -> list[dict[str, Any]]:
 
 
 def build_split_unit_preview_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     json_rows = _json_by_split_unit()
     rows = []
     for row in _csv_rows(step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV):
@@ -270,6 +294,7 @@ def build_split_unit_preview_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_group_integrity_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     split_by_event = _split_unit_by_event()
     split_by_candidate = _split_unit_by_candidate()
     rows = []
@@ -327,6 +352,7 @@ def build_group_integrity_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_mask_integrity_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     split_rows = _csv_rows(step13bk.SPLIT_UNIT_SMOKE_PREVIEW_CSV)
     split_units_by_mask = {
         mask: {
@@ -378,6 +404,7 @@ def build_mask_integrity_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_leakage_risk_qa_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     expected_status = {
         "row_level_random_split_forbidden": "forbidden_by_design",
         "scaffold_identity_missing": "required_before_real_split",
@@ -414,6 +441,7 @@ def build_leakage_risk_qa_rows() -> list[dict[str, Any]]:
 
 
 def build_boundary_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     statuses = {
         "split_leakage_qa_gate": "executed_qa_gate_only",
         "read_step13bk_smoke_artifacts": "executed_derived_csv_json_read_only",
@@ -447,6 +475,7 @@ def build_boundary_rows() -> list[dict[str, Any]]:
 
 
 def build_git_safety_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     checks = [
         ("raw_files_untracked", "git ls-files data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_tracked()),
         ("raw_files_unstaged", "git diff --cached --name-only -- data/raw/covalent_sources/covpdb/raw_structure_event_annotation_smoke_v0", "empty", not _raw_files_staged()),
@@ -483,6 +512,7 @@ def build_git_safety_rows() -> list[dict[str, Any]]:
 
 
 def build_training_blocker_rows() -> list[dict[str, Any]]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     blockers = [
         "no_real_train_val_test_split",
         "no_split_assignments",
@@ -513,6 +543,7 @@ def build_training_blocker_rows() -> list[dict[str, Any]]:
 
 
 def run_covapie_split_leakage_qa_gate_v0() -> dict[str, Any]:
+    raise_legacy_stage_retired(LEGACY_STAGE)
     precondition_rows = build_precondition_rows()
     split_unit_rows = build_split_unit_preview_qa_rows()
     group_rows = build_group_integrity_qa_rows()
