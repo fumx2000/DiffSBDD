@@ -1,0 +1,5 @@
+split_summary_id,split_name,split_rank,sample_count,leakage_group_count,canonical_schema_field_count,source_rows_preserved,artifact_reference_count,group_integrity_preserved,statistical_representativeness_claimed,split_summary_passed,blocking_reasons
+COVAPIE_FINAL_SPLIT_SUMMARY_000001,train,0,8,2,33,True,48,True,False,True,
+COVAPIE_FINAL_SPLIT_SUMMARY_000002,validation,1,2,2,33,True,12,True,False,True,
+COVAPIE_FINAL_SPLIT_SUMMARY_000003,test,2,1,1,33,True,6,True,False,True,
+COVAPIE_FINAL_SPLIT_SUMMARY_000004,total,-1,11,5,33,True,66,True,False,True,

@@ -1,0 +1,12 @@
+source_preservation_id,sample_index_row_id,assigned_split,source_split_row_found,source_sample_assignment_row_found,final_dataset_csv_row_found,final_dataset_json_row_found,all_33_fields_preserved,split_membership_preserved,group_membership_preserved,six_artifact_references_preserved,artifact_paths_exist,source_preservation_passed,blocking_reasons
+COVAPIE_FINAL_SOURCE_PRESERVATION_000001,CYS_SG_SAMPLE_INDEX_000001,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000002,CYS_SG_SAMPLE_INDEX_000002,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000003,CYS_SG_SAMPLE_INDEX_000003,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000004,CYS_SG_SAMPLE_INDEX_000004,validation,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000005,CYS_SG_SAMPLE_INDEX_000005,validation,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000006,CYS_SG_SAMPLE_INDEX_000006,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000007,CYS_SG_SAMPLE_INDEX_000007,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000008,CYS_SG_SAMPLE_INDEX_000008,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000009,CYS_SG_SAMPLE_INDEX_000009,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000010,CYS_SG_SAMPLE_INDEX_000010,train,True,True,True,True,True,True,True,True,True,True,
+COVAPIE_FINAL_SOURCE_PRESERVATION_000011,CYS_SG_SAMPLE_INDEX_000011,test,True,True,True,True,True,True,True,True,True,True,

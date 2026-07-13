@@ -1,0 +1,183 @@
+{
+  "stage": "covapie_final_dataset_materialization_smoke_v0",
+  "step_label": "Step 14AR",
+  "project_name": "CovaPIE",
+  "manifest_schema_version": "v0",
+  "previous_stage": "covapie_unified_leakage_split_materialization_smoke_v0",
+  "source_step14aq_commit": "b6f09468447e611a586751bf329d5b07bb308317",
+  "source_input_count": 12,
+  "source_input_sha256": {
+    "step14aq_manifest": "697f4ad7d4d5afb7598862ad82b93db7f8e6c1aa05ea61a9162cae45a1d59bba",
+    "precondition_audit": "18972c4a9291ba4bd9c5684b2c75c3915d72f209665e94054f149894388457be",
+    "policy_audit": "541c62036574c17cc441f05bf23be5ab46dbb2b27ad210a4e1b457b63c07da18",
+    "group_split_assignment": "ed62fcf56ad87d8a49743517329c97aa98d3a781562fa403b4b43a9b9ea3ffc3",
+    "sample_split_assignment": "29ffff244e33e3ec93f2c2b3e5e42a09ce73d7f55019f833e97659301f6a388c",
+    "train_sample_index": "d8900f2642743da7340f178874a270b23d0a59dc3794b9ba2c455ebf0a7fb573",
+    "validation_sample_index": "b553df213deb1a4ec4c2b5f059f897ad29b80a58911090cbc6fabd9ec737aa60",
+    "test_sample_index": "bb2f7e56123aaaf434d85e08e7e3964c5930c2c8447e0c16013ccf8c0b5094fb",
+    "cross_split_leakage_audit": "8941aae3350156800ee0f6bbaa8088a3add6b130c9405664786cc0886c0577ce",
+    "split_balance_audit": "ac9b57dfd09ef5d602977777dd4b6db1c4b27f5880e4ab62ed0da43a18d97fe9",
+    "issue_inventory": "50afa39af63675e8fd12f77d20f9e19741fca41ee94f35f467d4ac20623d0da6",
+    "safety_audit": "a2d1322aea0ded4e5abb0db3d3225256f7155c399d0c9767f2977c0c9d3f0a6c"
+  },
+  "output_artifact_count": 12,
+  "non_manifest_output_count": 11,
+  "non_manifest_outputs": [
+    {
+      "logical_name": "precondition_audit",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_precondition_audit.csv",
+      "format": "csv",
+      "row_count": 23,
+      "sha256": "50fc4502fe8b68ac09410e89958e82cfa878731f7fe5592eb1c7047eda963985"
+    },
+    {
+      "logical_name": "final_dataset_index_csv",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/final_dataset_index.csv",
+      "format": "csv",
+      "row_count": 11,
+      "sha256": "c4c31888cb0f7c148b00656ccf22ab68fab842fcdafdee049b2f420eddc1302d"
+    },
+    {
+      "logical_name": "final_dataset_index_json",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/final_dataset_index.json",
+      "format": "json",
+      "row_count": 11,
+      "sha256": "a575096e2ffa8bb74cccfa00bbe0007fe370d1e97bcac16a6ef3ab7952cbbe61"
+    },
+    {
+      "logical_name": "membership",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_membership.csv",
+      "format": "csv",
+      "row_count": 11,
+      "sha256": "ddf1705176c8680d90e0e216a9af3d1501c6a821764c3e7138a28269e687a977"
+    },
+    {
+      "logical_name": "artifact_inventory",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_artifact_inventory.csv",
+      "format": "csv",
+      "row_count": 66,
+      "sha256": "77d13fd17a7de66731334e50f279310d36966d8f8b9ac038b9c2f3352bfeacd8"
+    },
+    {
+      "logical_name": "schema_validation_audit",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_schema_validation_audit.csv",
+      "format": "csv",
+      "row_count": 33,
+      "sha256": "c2989676ecc0ccfbf0f23c12146ee95a552ccdf0ef7e65348bf4eed3d99d5384"
+    },
+    {
+      "logical_name": "source_preservation_audit",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_source_preservation_audit.csv",
+      "format": "csv",
+      "row_count": 11,
+      "sha256": "df7d497a92ec81abc9dc1a800797b11053d519d84417c8e14d2f0447e9dc8dda"
+    },
+    {
+      "logical_name": "split_summary",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_split_summary.csv",
+      "format": "csv",
+      "row_count": 4,
+      "sha256": "2814910adf644285c83b78a0355f614ac9dd49883277c6ce809f06db727ee831"
+    },
+    {
+      "logical_name": "integrity_audit",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_integrity_audit.csv",
+      "format": "csv",
+      "row_count": 24,
+      "sha256": "40c66e2e7285c7f8baacd5b8fce189490a8b829398c3dd1c812861125ed68358"
+    },
+    {
+      "logical_name": "issue_inventory",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_issue_inventory.csv",
+      "format": "csv",
+      "row_count": 1,
+      "sha256": "0609fa6be087ee942e7c2d0d47141be7d4264b81a2f9a551a6927e578bebf4d4"
+    },
+    {
+      "logical_name": "safety_audit",
+      "relative_path": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_safety_audit.csv",
+      "format": "csv",
+      "row_count": 55,
+      "sha256": "f727141b45b8d5b893293cc8267349100ccf1c34dcc762e1152efc8611dd01d1"
+    }
+  ],
+  "final_dataset_index_row_count": 11,
+  "canonical_schema_field_count": 33,
+  "membership_row_count": 11,
+  "artifact_inventory_row_count": 66,
+  "schema_audit_row_count": 33,
+  "source_preservation_row_count": 11,
+  "split_summary_row_count": 4,
+  "integrity_audit_row_count": 24,
+  "safety_audit_row_count": 55,
+  "issue_inventory_row_count": 1,
+  "blocking_issue_count": 0,
+  "split_sample_counts": {
+    "train": 8,
+    "validation": 2,
+    "test": 1,
+    "total": 11
+  },
+  "split_group_counts": {
+    "train": 2,
+    "validation": 2,
+    "test": 1,
+    "total": 5
+  },
+  "split_artifact_counts": {
+    "train": 48,
+    "validation": 12,
+    "test": 6,
+    "total": 66
+  },
+  "canonical_mask_pairs": [
+    [
+      "warhead_only",
+      "A"
+    ],
+    [
+      "linker_plus_warhead",
+      "B"
+    ],
+    [
+      "scaffold_plus_warhead",
+      "B2"
+    ],
+    [
+      "scaffold_only",
+      "B3"
+    ],
+    [
+      "scaffold_plus_linker_plus_warhead",
+      "C"
+    ]
+  ],
+  "source_step14aq_preconditions_passed": true,
+  "final_dataset_index_schema_passed": true,
+  "final_dataset_index_write_validation_passed": true,
+  "membership_checks_passed": true,
+  "membership_write_validation_passed": true,
+  "artifact_inventory_checks_passed": true,
+  "artifact_inventory_write_validation_passed": true,
+  "source_preservation_checks_passed": true,
+  "split_summary_checks_passed": true,
+  "integrity_checks_passed": true,
+  "safety_checks_passed": true,
+  "issue_inventory_clear": true,
+  "metadata_output_boundary_passed": true,
+  "all_output_nodes_regular": true,
+  "all_checks_passed": true,
+  "ready_for_covapie_final_dataset_qa_gate": true,
+  "ready_for_training": false,
+  "ready_to_train_now": false,
+  "feature_semantics_known_for_training": false,
+  "unknown_atom_feature_policy_finalized_for_training": false,
+  "feature_semantics_audit_required_before_training": true,
+  "statistical_representativeness_claimed": false,
+  "production_split_policy_finalized": false,
+  "contains_raw_structure": false,
+  "contains_tensor_data": false,
+  "raw_read_attempted": false,
+  "recommended_next_step": "covapie_final_dataset_qa_gate_v0",
+  "blocking_reasons": []
+}

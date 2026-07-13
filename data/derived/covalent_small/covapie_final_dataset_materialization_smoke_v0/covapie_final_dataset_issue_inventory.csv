@@ -1,0 +1,2 @@
+issue_id,issue_scope,sample_index_row_id,assigned_split,issue_severity,issue_type,issue_description,issue_status
+NO_COVAPIE_FINAL_DATASET_MATERIALIZATION_ISSUES,current_11_sample_final_dataset_materialization_smoke_v0,,,none,no_issues,no_blocking_issues_detected,passed
