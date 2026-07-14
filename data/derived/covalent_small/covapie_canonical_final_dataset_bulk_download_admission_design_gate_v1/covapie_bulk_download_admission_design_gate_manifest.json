@@ -1,0 +1,103 @@
+{
+  "admission_rule_count": 15,
+  "admission_schema_field_count": 17,
+  "all_admission_rule_contract_checks_passed": true,
+  "all_admission_schema_contract_checks_passed": true,
+  "all_checks_passed": true,
+  "all_safety_checks_passed": true,
+  "all_source_boundary_checks_passed": true,
+  "artifact_inventory_reference_paths_not_recursively_opened": true,
+  "blocking_reasons": [],
+  "candidate_records_materialized": false,
+  "canonical_final_dataset_baseline_only": true,
+  "canonical_final_dataset_group_count": 5,
+  "canonical_final_dataset_sample_count": 11,
+  "canonical_mask_pairs": [
+    [
+      "warhead_only",
+      "A"
+    ],
+    [
+      "linker_plus_warhead",
+      "B"
+    ],
+    [
+      "scaffold_plus_warhead",
+      "B2"
+    ],
+    [
+      "scaffold_only",
+      "B3"
+    ],
+    [
+      "scaffold_plus_linker_plus_warhead",
+      "C"
+    ]
+  ],
+  "canonical_mask_task_count": 5,
+  "canonical_split_group_counts": {
+    "test": 1,
+    "total": 5,
+    "train": 2,
+    "validation": 2
+  },
+  "canonical_split_sample_counts": {
+    "test": 1,
+    "total": 11,
+    "train": 8,
+    "validation": 2
+  },
+  "download_queue_materialized": false,
+  "expected_admission_rule_count": 15,
+  "expected_admission_schema_field_count": 17,
+  "expected_safety_item_count": 17,
+  "feature_semantics_audit_required_before_training": true,
+  "leakage_split_design_required_before_training": true,
+  "manifest_schema_version": "covapie_bulk_download_admission_design_gate_v1_manifest_v1",
+  "network_access_used_current_step": false,
+  "non_manifest_output_count": 5,
+  "output_file_count": 6,
+  "output_files": [
+    "covapie_bulk_download_admission_schema_contract.csv",
+    "covapie_bulk_download_admission_rule_registry.csv",
+    "covapie_bulk_download_admission_source_boundary_audit.csv",
+    "covapie_bulk_download_admission_safety_audit.csv",
+    "covapie_bulk_download_admission_issue_inventory.csv",
+    "covapie_bulk_download_admission_design_gate_manifest.json"
+  ],
+  "output_sha256": {
+    "covapie_bulk_download_admission_issue_inventory.csv": "0f78005a11fbab8d4bbbada49ad4cc1b6803f596c566a27264a36246925d48d3",
+    "covapie_bulk_download_admission_rule_registry.csv": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc",
+    "covapie_bulk_download_admission_safety_audit.csv": "388869caf582bdf624d0016cae385dc2268f6cc05f54ecc9bf140608bbd3b208",
+    "covapie_bulk_download_admission_schema_contract.csv": "44ca53db60e210ffe1200d32f449c1fd94107f2775ed19b9c14f3a1e982e9710",
+    "covapie_bulk_download_admission_source_boundary_audit.csv": "2ee9e545469274b9d5464859e370e297e038b3264c3f4b3704b1fb8d6aca03d6"
+  },
+  "post_download_required_field_count": 4,
+  "pre_download_required_field_count": 12,
+  "pre_final_split_required_field_count": 1,
+  "previous_stage": "covapie_final_dataset_qa_gate_v1",
+  "project_name": "CovaPIE",
+  "raw_structure_read_current_step": false,
+  "ready_for_bulk_download_admission_implementation": true,
+  "ready_for_bulk_download_now": false,
+  "ready_for_training": false,
+  "ready_to_train_now": false,
+  "recommended_next_step": "covapie_canonical_final_dataset_bulk_download_admission_implementation_v1",
+  "safety_item_count": 17,
+  "source_input_count": 10,
+  "source_input_sha256": {
+    "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_materialization_smoke_manifest.json": "6f25c8976b295749f3af6407c3bb8ce17cfbda9f18cb967df5fe9b47b480c433",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_artifact_inventory_audit.csv": "0f01215310ae296355bb08348e9a9a0b9dbcef3a2e73a1e2c7ac63c25d4428e1",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_issue_inventory.csv": "b6698aefe44b7fcf494207bdad629651110b878621d7d3a986776f62d76b58d9",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_manifest.json": "4f7c884379f926af52101f40a7870b243f0309af3b1637dc65c8c0691acf9f35",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_mask_contract_audit.csv": "2208afeaa2f5c7e1138f0ffa1aeb3b4640b3e46a04a49ce5fc68e30f72187789",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_precondition_audit.csv": "12a612ff3c277fb0844939285ad303430907aebc464f33c27d0cd0e29596b51f",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_safety_training_boundary_audit.csv": "8ea6a53d04456443014ba250a0cfacf4983e39d2138d7035ad188dc1dcceebe5",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_schema_lineage_audit.csv": "2b60a3d32939508ca6c0fbebbee6a6fd5c1b9d01dc9bcaaea23b581e8dd43019",
+    "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1/covapie_final_dataset_qa_v1_split_leakage_audit.csv": "42aa0778a8ac257611a71ab85b0c1b3491cce655e2737270f4a2261aee209b0b",
+    "data/derived/covalent_small/covapie_unified_leakage_split_materialization_smoke_v0/covapie_unified_leakage_split_materialization_smoke_manifest.json": "697f4ad7d4d5afb7598862ad82b93db7f8e6c1aa05ea61a9162cae45a1d59bba"
+  },
+  "source_read_boundary": "only_step14as_8_outputs_step14ar_manifest_step14aq_manifest",
+  "stage": "covapie_canonical_final_dataset_bulk_download_admission_design_gate_v1",
+  "step_label": "Step14AT"
+}
