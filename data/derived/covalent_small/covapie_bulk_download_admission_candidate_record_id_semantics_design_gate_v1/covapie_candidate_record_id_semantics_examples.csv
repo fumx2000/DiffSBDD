@@ -1,0 +1,51 @@
+example_id,example_scope,input_type,input_display,batch_type,batch_display,expected_syntax_valid,expected_batch_valid,expected_passed,expected_canonical_candidate_record_id,expected_blocking_reason,observed_syntax_valid,observed_batch_valid,observed_passed,observed_canonical_candidate_record_id,observed_blocking_reason,example_passed
+single_valid_01,single,str,A,,,true,true,true,A,,true,true,true,A,,true
+single_valid_02,single,str,HR_0002,,,true,true,true,HR_0002,,true,true,true,HR_0002,,true
+single_valid_03,single,str,candidate-001,,,true,true,true,candidate-001,,true,true,true,candidate-001,,true
+single_valid_04,single,str,candidate.record:01,,,true,true,true,candidate.record:01,,true,true,true,candidate.record:01,,true
+single_valid_05,single,str,AxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxZ,,,true,true,true,AxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxZ,,true,true,true,AxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxZ,,true
+single_valid_06,single,str,ABC,,,true,true,true,ABC,,true,true,true,ABC,,true
+single_valid_07,single,str,abc,,,true,true,true,abc,,true,true,true,abc,,true
+single_invalid_empty,single,str,,,,false,true,false,,candidate_record_id_empty,false,true,false,,candidate_record_id_empty,true
+single_invalid_leading_space,single,str, A,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_trailing_space,single,str,A ,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_internal_space,single,str,A B,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_real_tab,single,str,A\tB,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_real_newline,single,str,A\nB,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_real_carriage_return,single,str,A\rB,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_slash,single,str,A/B,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_backslash,single,str,A\\B,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_unicode,single,str,candidaté,,,false,true,false,,candidate_record_id_non_ascii,false,true,false,,candidate_record_id_non_ascii,true
+single_invalid_leading_underscore,single,str,_A,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_trailing_underscore,single,str,A_,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_leading_dot,single,str,.A,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_trailing_dot,single,str,A.,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_leading_dash,single,str,-A,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_trailing_dash,single,str,A-,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_leading_colon,single,str,:A,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_trailing_colon,single,str,A:,,,false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
+single_invalid_too_long,single,str,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,,,false,true,false,,candidate_record_id_length_out_of_range,false,true,false,,candidate_record_id_length_out_of_range,true
+single_invalid_bytes,single,bytes,b'A',,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+single_invalid_int,single,int,1,,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+single_invalid_bool,single,bool,True,,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+single_invalid_none,single,NoneType,None,,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+single_invalid_path,single,PosixPath,A,,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+single_invalid_str_subclass,single,_StringSubclass,A,,,false,true,false,,candidate_record_id_not_exact_str,false,true,false,,candidate_record_id_not_exact_str,true
+batch_valid_one,batch,str,A,list,['A'],true,true,true,A,,true,true,true,A,,true
+batch_valid_many,batch,str,HR_0002,list,"['A', 'HR_0002', 'candidate-001']",true,true,true,HR_0002,,true,true,true,HR_0002,,true
+batch_valid_case_distinct,batch,str,ABC,list,"['ABC', 'abc']",true,true,true,ABC,,true,true,true,ABC,,true
+batch_valid_tuple,batch,str,A,tuple,"('A', 'B')",true,true,true,A,,true,true,true,A,,true
+batch_valid_reordered,batch,str,A,list,"['B', 'A', 'C']",true,true,true,A,,true,true,true,A,,true
+batch_invalid_scalar,batch,str,A,str,A,true,false,false,A,batch_candidate_record_ids_invalid_type,true,false,false,A,batch_candidate_record_ids_invalid_type,true
+batch_invalid_bytes,batch,str,A,bytes,b'A',true,false,false,A,batch_candidate_record_ids_invalid_type,true,false,false,A,batch_candidate_record_ids_invalid_type,true
+batch_invalid_set,batch,str,A,set,{'A'},true,false,false,A,batch_candidate_record_ids_invalid_type,true,false,false,A,batch_candidate_record_ids_invalid_type,true
+batch_invalid_dict,batch,str,A,dict,{'A': 1},true,false,false,A,batch_candidate_record_ids_invalid_type,true,false,false,A,batch_candidate_record_ids_invalid_type,true
+batch_invalid_generator,batch,str,A,generator,<generator>,true,false,false,A,batch_candidate_record_ids_invalid_type,true,false,false,A,batch_candidate_record_ids_invalid_type,true
+batch_invalid_empty,batch,str,A,list,[],true,false,false,A,batch_candidate_record_ids_empty,true,false,false,A,batch_candidate_record_ids_empty,true
+batch_invalid_missing,batch,str,A,list,['B'],true,true,false,A,candidate_record_id_missing_from_batch,true,true,false,A,candidate_record_id_missing_from_batch,true
+batch_invalid_repeated_candidate,batch,str,A,list,"['A', 'A']",true,true,false,A,candidate_record_id_repeated_in_batch,true,true,false,A,candidate_record_id_repeated_in_batch,true
+batch_invalid_other_repeated,batch,str,A,list,"['A', 'B', 'B']",true,true,false,A,batch_candidate_record_ids_not_globally_unique,true,true,false,A,batch_candidate_record_ids_not_globally_unique,true
+batch_invalid_member,batch,str,A,list,"['A', 'B B']",true,false,false,A,batch_candidate_record_id_member_invalid,true,false,false,A,batch_candidate_record_id_member_invalid,true
+batch_invalid_non_str_member,batch,str,A,list,"['A', 1]",true,false,false,A,batch_candidate_record_id_member_invalid,true,false,false,A,batch_candidate_record_id_member_invalid,true
+batch_invalid_candidate_syntax,batch,str,A A,list,['A A'],false,false,false,,candidate_record_id_pattern_invalid,false,false,false,,candidate_record_id_pattern_invalid,true
+batch_invalid_candidate_syntax_valid_batch,batch,str,A A,list,['B'],false,true,false,,candidate_record_id_pattern_invalid,false,true,false,,candidate_record_id_pattern_invalid,true
