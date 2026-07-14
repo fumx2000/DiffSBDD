@@ -1,0 +1,128 @@
+{
+  "admit_002_rule_logic_ready": true,
+  "all_checks_passed": true,
+  "all_integrated_context_checks_passed": true,
+  "all_integrated_field_checks_passed": true,
+  "all_integrated_rule_checks_passed": true,
+  "all_integration_lineage_checks_passed": true,
+  "all_issue_transition_checks_passed": true,
+  "all_safety_checks_passed": true,
+  "all_source_boundary_checks_passed": true,
+  "artifact_reference_paths_not_recursively_opened": true,
+  "blocking_reasons": [
+    "CANDIDATE_RECORD_ID_SEMANTICS_UNRESOLVED",
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "COVALENT_EVIDENCE_ENUM_UNRESOLVED",
+    "COVALENT_RESIDUE_ATOM_NAME_NORMALIZATION_UNRESOLVED",
+    "COVALENT_RESIDUE_IDENTITY_SEMANTICS_UNRESOLVED",
+    "DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED",
+    "DOWNLOAD_RESULT_STATUS_ENUM_UNRESOLVED",
+    "DUPLICATE_IDENTITY_KEY_SEMANTICS_UNRESOLVED",
+    "LEAKAGE_GROUP_ASSIGNMENT_PROVENANCE_UNRESOLVED",
+    "LIGAND_COMP_ID_SEMANTICS_UNRESOLVED",
+    "RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED",
+    "TOPOLOGY_DISPOSITION_ENUM_UNRESOLVED"
+  ],
+  "candidate_records_materialized_current_step": false,
+  "canonical_mask_pairs": [
+    [
+      "warhead_only",
+      "A"
+    ],
+    [
+      "linker_plus_warhead",
+      "B"
+    ],
+    [
+      "scaffold_plus_warhead",
+      "B2"
+    ],
+    [
+      "scaffold_only",
+      "B3"
+    ],
+    [
+      "scaffold_plus_linker_plus_warhead",
+      "C"
+    ]
+  ],
+  "canonical_mask_task_count": 5,
+  "changed_context_items": [
+    "pdb_id_format_contract"
+  ],
+  "changed_field_names": [
+    "pdb_id"
+  ],
+  "changed_rule_ids": [
+    "ADMIT_002"
+  ],
+  "deterministic_after_contract_freeze_context_count": 18,
+  "deterministic_now_context_count": 6,
+  "download_queue_materialized_current_step": false,
+  "evaluation_context_item_count": 18,
+  "feature_semantics_audit_required_before_training": true,
+  "integrated_context_count": 18,
+  "integrated_field_count": 17,
+  "integrated_rule_count": 15,
+  "manifest_schema_version": "covapie_pdb_identifier_semantics_integration_gate_v1_manifest_v1",
+  "network_access_used_current_step": false,
+  "non_manifest_output_count": 5,
+  "output_file_count": 6,
+  "output_files": [
+    "covapie_pdb_identifier_integrated_rule_matrix.csv",
+    "covapie_pdb_identifier_integrated_field_matrix.csv",
+    "covapie_pdb_identifier_integrated_context_matrix.csv",
+    "covapie_pdb_identifier_integration_safety_audit.csv",
+    "covapie_pdb_identifier_integration_issue_inventory.csv",
+    "covapie_pdb_identifier_semantics_integration_manifest.json"
+  ],
+  "output_sha256": {
+    "covapie_pdb_identifier_integrated_context_matrix.csv": "dc816f74777a5cdced360048ac1cfdc27f711132868f04204d122c9d8f54c5af",
+    "covapie_pdb_identifier_integrated_field_matrix.csv": "56388107014e0295c3124bac4660280ff41393e8a8cb6ffa1b50e4028be3c8da",
+    "covapie_pdb_identifier_integrated_rule_matrix.csv": "99e3a4c8c127af4ac900343a90dfd2eebde73a2f75e9c1a3b27782144858e317",
+    "covapie_pdb_identifier_integration_issue_inventory.csv": "8857f22fda3ce281dab13772ee322e9c1af838d7895e410d19084731f9637a21",
+    "covapie_pdb_identifier_integration_safety_audit.csv": "fe480434e672a0f455299712248fa807293f73a061ed9d97ad3940bd6ec8c8e8"
+  },
+  "pdb_identifier_semantics_integrated": true,
+  "previous_stages": [
+    "covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1",
+    "covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1"
+  ],
+  "project_name": "CovaPIE",
+  "raw_structure_read_current_step": false,
+  "ready_evaluation_context_count": 6,
+  "ready_for_admission_evaluator_interface_implementation": true,
+  "ready_for_admission_evaluator_rule_logic_implementation": false,
+  "ready_for_bulk_download_now": false,
+  "ready_for_real_candidate_evaluation": false,
+  "ready_for_training": false,
+  "ready_to_train_now": false,
+  "recommended_next_step": "resolve_next_covapie_bulk_download_admission_semantics_blocker",
+  "remaining_issue_count": 12,
+  "removed_issue_ids": [
+    "PDB_ID_FORMAT_SEMANTICS_UNRESOLVED"
+  ],
+  "rule_dependency_contract_passed_count": 15,
+  "semantics_complete_field_count": 1,
+  "semantics_complete_rule_count": 3,
+  "semantics_incomplete_field_count": 16,
+  "semantics_incomplete_rule_count": 12,
+  "source_input_count": 12,
+  "source_input_sha256": {
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_issue_inventory.csv": "761b1483e56f189d31575b6f2e0f26106cc15f38d4e700806bf349187e218d88",
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_normalization_examples.csv": "35ea09ae36ddf2311b1dcf5a313d18e62888c68e542eb068bd98c04900379ce9",
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_safety_audit.csv": "034240c5493d891ce44cef8dc6221b42c77eb8d5d2f7833bf83d6777e63050cf",
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_semantics_contract.csv": "cabbbf025f4336a6789ead032a01c8ee329efcca46f981e5b37f0843af301be4",
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_semantics_design_manifest.json": "4b8bf6a9754e8c416359c8ac9616628c83f0e09941240c78db1d21f3bdb37b70",
+    "data/derived/covalent_small/covapie_bulk_download_admission_pdb_identifier_semantics_design_gate_v1/covapie_pdb_identifier_source_boundary_audit.csv": "859a359ea2deab113c6d82fa7e63530496abcdfbd5dfe2aa52a50e3735cc4082",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_evaluation_context_contract.csv": "1146ba9f7dce648726b54401ece8e7f5e94e9feea8057ab29d4fea8a8bf6f8b0",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_field_semantics_matrix.csv": "a64a746cd13eb8f8421fcab1298f5657147e7882b8c786cf956f8096187966a1",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_implementation_issue_inventory.csv": "7c7707f5261461083bda7ab2177a423b608c725c070dafaff558bdf39256211e",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_implementation_precondition_manifest.json": "2304b5754d8052b4b186981a98c12f259608a3492947e069c2afab84084a0d52",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_implementation_safety_audit.csv": "a8942ae2b17d5dcaf367e2f7ab783fd2a0732449e72e04cc16e9fd9b3f7402c6",
+    "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_rule_executability_matrix.csv": "a7782e48cac282b047a392ee20b5b26a72fa1b2208a3889edf8b1c8af923921b"
+  },
+  "source_read_boundary": "only_step14au_a_and_step14au_b1_12_committed_metadata_outputs",
+  "stage": "covapie_bulk_download_admission_pdb_identifier_semantics_integration_gate_v1",
+  "step_label": "Step14AU-B2"
+}
