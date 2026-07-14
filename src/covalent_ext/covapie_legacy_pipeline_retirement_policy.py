@@ -94,6 +94,16 @@ EXPECTED_SHARED_SUCCESSOR_MANIFEST_REFERENCES = {
     )
 }
 
+EXPECTED_LEGACY_STAGE_COUNT = 13
+EXPECTED_SUCCESSOR_AVAILABILITY_COUNTS = (
+    ("tracked", 5),
+    ("pending_commit", 0),
+    ("not_materialized", 1),
+    ("redesign_pending", 7),
+)
+EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT = 5
+EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT = 4
+
 
 def _retired_policy(
     *,
@@ -154,7 +164,7 @@ LEGACY_STAGE_RETIREMENT_REGISTRY = (
         stage="covapie_final_dataset_smoke_v0",
         superseded_by_stage="covapie_final_dataset_materialization_smoke_v0",
         superseded_by_manifest_path=_FINAL_DATASET_MATERIALIZATION_MANIFEST,
-        successor_availability="pending_commit",
+        successor_availability="tracked",
         recommended_next_step="covapie_final_dataset_materialization_smoke",
     ),
     _retired_policy(
@@ -297,7 +307,7 @@ def validate_legacy_pipeline_retirement_registry(
     validated = tuple(policies)
     stages = tuple(policy.stage for policy in validated)
 
-    registry_count_passed = len(validated) == 13
+    registry_count_passed = len(validated) == EXPECTED_LEGACY_STAGE_COUNT
     stage_order_passed = stages == LEGACY_STAGE_ORDER
     stage_uniqueness_passed = len(stages) == len(set(stages))
     availability_contract_passed = all(
@@ -458,25 +468,49 @@ def validate_tracked_successor_manifest_paths(
                 blocking_reasons.append(reason)
             shared_contract_passed = False
 
-    if tracked_successor_reference_count != 4:
+    reference_count_passed = (
+        tracked_successor_reference_count
+        == EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT
+    )
+    validated_reference_count_passed = (
+        validated_reference_count == EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT
+    )
+    unique_manifest_path_count_passed = (
+        unique_manifest_path_count
+        == EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT
+    )
+    unique_regular_file_count_passed = (
+        unique_regular_file_count
+        == EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT
+    )
+    shared_manifest_reference_count_passed = (
+        shared_manifest_reference_count
+        == len(EXPECTED_SHARED_SUCCESSOR_MANIFEST_REFERENCES)
+    )
+
+    if not reference_count_passed:
         blocking_reasons.append("tracked_successor_reference_count_mismatch")
-    if validated_reference_count != 4:
+    if not validated_reference_count_passed:
         blocking_reasons.append(
             "tracked_successor_validated_reference_count_mismatch"
         )
-    if unique_manifest_path_count != 3:
+    if not unique_manifest_path_count_passed:
         blocking_reasons.append("tracked_successor_unique_path_count_mismatch")
-    if unique_regular_file_count != 3:
+    if not unique_regular_file_count_passed:
         blocking_reasons.append(
             "tracked_successor_unique_regular_file_count_mismatch"
         )
+    if not shared_manifest_reference_count_passed:
+        blocking_reasons.append(
+            "tracked_successor_shared_manifest_reference_count_mismatch"
+        )
 
     passed = (
-        tracked_successor_reference_count == 4
-        and validated_reference_count == 4
-        and unique_manifest_path_count == 3
-        and unique_regular_file_count == 3
-        and shared_manifest_reference_count == 1
+        reference_count_passed
+        and validated_reference_count_passed
+        and unique_manifest_path_count_passed
+        and unique_regular_file_count_passed
+        and shared_manifest_reference_count_passed
         and shared_contract_passed
         and not blocking_reasons
     )

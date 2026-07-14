@@ -30,9 +30,7 @@ def _bool(value: bool) -> str:
 def run() -> int:
     sample_policy = legacy.build_retirement_policy()
     policies = retirement.build_all_legacy_stage_retirement_policies()
-    registry_validation = retirement.validate_legacy_pipeline_retirement_registry(
-        policies
-    )
+    validation = retirement.validate_legacy_pipeline_retirement_registry(policies)
     path_validation = retirement.validate_tracked_successor_manifest_paths(
         policies,
         repo_root=REPO_ROOT,
@@ -70,7 +68,8 @@ def run() -> int:
         print(f"{key}={_bool(value) if isinstance(value, bool) else value}")
 
     passed = (
-        registry_validation.passed is True
+        validation.passed is True
+        and validation.registry_count_passed is True
         and successor_manifest_path_validation_passed is True
         and sample_policy.stage == legacy.LEGACY_STAGE
         and sample_policy.legacy_stage_retired is True

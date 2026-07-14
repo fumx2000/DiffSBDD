@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 import subprocess
 import sys
 from collections import Counter
@@ -44,6 +45,9 @@ STEP14AR_FILES = (
     Path("src/covalent_ext/covapie_final_dataset_materialization_smoke.py"),
     Path("tests/test_covapie_final_dataset_materialization_smoke_v0.py"),
 )
+STAGE_CHECK_SCRIPTS = tuple(
+    Path("scripts") / f"check_{stage}.py" for stage in LEGACY_ROOT_NAMES
+)
 
 
 def _policies() -> tuple[policy.LegacyStageRetirementPolicy, ...]:
@@ -75,6 +79,7 @@ def _tree_hash(paths: tuple[Path, ...]) -> str:
 
 def test_registry_has_exactly_thirteen_entries() -> None:
     assert len(policy.LEGACY_STAGE_RETIREMENT_REGISTRY) == 13
+    assert policy.EXPECTED_LEGACY_STAGE_COUNT == 13
 
 
 def test_stage_order_is_frozen() -> None:
@@ -95,12 +100,19 @@ def test_availability_values_are_exact() -> None:
 
 
 def test_availability_counts_are_exact() -> None:
-    assert Counter(item.successor_availability for item in _policies()) == {
-        "tracked": 4,
-        "pending_commit": 1,
+    counts = Counter(item.successor_availability for item in _policies())
+    assert {name: counts[name] for name in policy.SUCCESSOR_AVAILABILITY_VALUES} == {
+        "tracked": 5,
+        "pending_commit": 0,
         "not_materialized": 1,
         "redesign_pending": 7,
     }
+    assert policy.EXPECTED_SUCCESSOR_AVAILABILITY_COUNTS == (
+        ("tracked", 5),
+        ("pending_commit", 0),
+        ("not_materialized", 1),
+        ("redesign_pending", 7),
+    )
 
 
 def test_all_stages_are_retired() -> None:
@@ -164,11 +176,15 @@ def test_split_smoke_and_qa_share_unified_successor() -> None:
         )
 
 
-def test_final_dataset_smoke_is_pending_commit() -> None:
+def test_final_dataset_smoke_successor_is_tracked() -> None:
     item = _by_stage()["covapie_final_dataset_smoke_v0"]
     assert item.superseded_by_stage == "covapie_final_dataset_materialization_smoke_v0"
-    assert item.successor_availability == "pending_commit"
-    assert item.superseded_by_manifest_path is not None
+    assert item.successor_availability == "tracked"
+    assert item.superseded_by_manifest_path == (
+        "data/derived/covalent_small/"
+        "covapie_final_dataset_materialization_smoke_v0/"
+        "covapie_final_dataset_materialization_smoke_manifest.json"
+    )
 
 
 def test_canonical_final_dataset_qa_stage_is_v1() -> None:
@@ -504,7 +520,7 @@ def test_invalid_availability_blocks_validation() -> None:
     assert result.availability_contract_passed is False
 
 
-def test_pending_commit_missing_path_blocks_validation() -> None:
+def test_tracked_successor_missing_path_blocks_registry_validation() -> None:
     items = list(_policies())
     items[4] = replace(items[4], superseded_by_manifest_path=None)
     result = policy.validate_legacy_pipeline_retirement_registry(items)
@@ -563,34 +579,36 @@ def test_duplicate_blocker_blocks_validation() -> None:
     assert result.retirement_boundary_passed is False
 
 
-def test_tracked_successor_paths_validate_four_of_four() -> None:
+def test_tracked_successor_paths_validate_five_of_five() -> None:
     result = _tracked_path_result()
     assert result == {
         "tracked_successor_paths_passed": True,
-        "tracked_successor_reference_count": 4,
-        "validated_reference_count": 4,
-        "unique_manifest_path_count": 3,
-        "unique_regular_file_count": 3,
+        "tracked_successor_reference_count": 5,
+        "validated_reference_count": 5,
+        "unique_manifest_path_count": 4,
+        "unique_regular_file_count": 4,
         "shared_manifest_reference_count": 1,
         "shared_manifest_reference_contract_passed": True,
         "blocking_reasons": (),
     }
 
 
-def test_tracked_successor_reference_count_is_four() -> None:
-    assert _tracked_path_result()["tracked_successor_reference_count"] == 4
+def test_tracked_successor_reference_count_is_five() -> None:
+    assert policy.EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT == 5
+    assert _tracked_path_result()["tracked_successor_reference_count"] == 5
 
 
-def test_validated_successor_reference_count_is_four() -> None:
-    assert _tracked_path_result()["validated_reference_count"] == 4
+def test_validated_successor_reference_count_is_five() -> None:
+    assert _tracked_path_result()["validated_reference_count"] == 5
 
 
-def test_unique_successor_manifest_path_count_is_three() -> None:
-    assert _tracked_path_result()["unique_manifest_path_count"] == 3
+def test_unique_successor_manifest_path_count_is_four() -> None:
+    assert policy.EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT == 4
+    assert _tracked_path_result()["unique_manifest_path_count"] == 4
 
 
-def test_unique_regular_successor_manifest_count_is_three() -> None:
-    assert _tracked_path_result()["unique_regular_file_count"] == 3
+def test_unique_regular_successor_manifest_count_is_four() -> None:
+    assert _tracked_path_result()["unique_regular_file_count"] == 4
 
 
 def test_shared_manifest_reference_count_is_one() -> None:
@@ -667,16 +685,65 @@ def test_shared_stages_moved_to_different_path_are_blocked() -> None:
     )
 
 
-def test_pending_commit_path_is_not_checked(tmp_path: Path) -> None:
+def test_step14ar_manifest_missing_blocks_tracked_path_validation() -> None:
+    items = list(_policies())
+    items[4] = replace(
+        items[4],
+        superseded_by_manifest_path=(
+            "data/derived/covalent_small/"
+            "covapie_final_dataset_materialization_smoke_v0/missing.json"
+        ),
+    )
     result = policy.validate_tracked_successor_manifest_paths(
-        _policies(),
-        repo_root=tmp_path,
+        items,
+        repo_root=REPO_ROOT,
     )
-    assert result["tracked_successor_reference_count"] == 4
-    assert all(
-        "covapie_final_dataset_smoke_v0" not in reason
-        for reason in result["blocking_reasons"]
+    assert result["tracked_successor_paths_passed"] is False
+    assert (
+        "covapie_final_dataset_smoke_v0:manifest_path_missing"
+        in result["blocking_reasons"]
     )
+
+
+def test_step14ar_manifest_not_regular_file_blocks_validation() -> None:
+    items = list(_policies())
+    items[4] = replace(
+        items[4],
+        superseded_by_manifest_path=(
+            "data/derived/covalent_small/"
+            "covapie_final_dataset_materialization_smoke_v0"
+        ),
+    )
+    result = policy.validate_tracked_successor_manifest_paths(
+        items,
+        repo_root=REPO_ROOT,
+    )
+    assert result["tracked_successor_paths_passed"] is False
+    assert (
+        "covapie_final_dataset_smoke_v0:manifest_path_not_regular_file"
+        in result["blocking_reasons"]
+    )
+
+
+def test_stage_specific_checks_do_not_freeze_global_counts() -> None:
+    forbidden_patterns = (
+        *(rf'\["{field}"\]\s*==\s*\d+' for field in (
+            "tracked_successor_reference_count",
+            "validated_reference_count",
+            "unique_manifest_path_count",
+            "unique_regular_file_count",
+        )),
+        r"len\(policies\)\s*==\s*\d+",
+    )
+    for script in STAGE_CHECK_SCRIPTS:
+        text = script.read_text(encoding="utf-8")
+        assert all(re.search(pattern, text) is None for pattern in forbidden_patterns)
+
+
+def test_stage_specific_checks_require_registry_count_validation() -> None:
+    for script in STAGE_CHECK_SCRIPTS:
+        text = script.read_text(encoding="utf-8")
+        assert "validation.registry_count_passed is True" in text
 
 
 def test_tracked_parent_reference_is_rejected() -> None:
@@ -785,10 +852,15 @@ def test_check_script_reports_reference_and_unique_counts_truthfully() -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "tracked_successor_reference_count=4" in result.stdout
-    assert "validated_successor_reference_count=4" in result.stdout
-    assert "unique_successor_manifest_count=3" in result.stdout
-    assert "unique_regular_successor_manifest_count=3" in result.stdout
+    assert "legacy_retirement_stage_count=13" in result.stdout
+    assert "tracked_count=5" in result.stdout
+    assert "pending_commit_count=0" in result.stdout
+    assert "not_materialized_count=1" in result.stdout
+    assert "redesign_pending_count=7" in result.stdout
+    assert "tracked_successor_reference_count=5" in result.stdout
+    assert "validated_successor_reference_count=5" in result.stdout
+    assert "unique_successor_manifest_count=4" in result.stdout
+    assert "unique_regular_successor_manifest_count=4" in result.stdout
     assert "shared_manifest_reference_count=1" in result.stdout
     assert "shared_manifest_reference_contract_passed=true" in result.stdout
     assert "regular_file_count" not in result.stdout

@@ -15,12 +15,17 @@ read-only evidence. A successful policy validation means that the retirement
 contract is internally correct; it does not make a legacy stage executable.
 
 Successor availability is restricted to `tracked`, `pending_commit`,
-`not_materialized`, and `redesign_pending`. The registry contains four tracked
-successor references that resolve to three unique manifest files. Legacy split
+`not_materialized`, and `redesign_pending`. The registry contains five tracked
+successor references that resolve to four unique manifest files. Legacy split
 smoke and split QA intentionally share the Step14AQ unified leakage-split
 manifest. Reference count and physical file count are therefore distinct.
 Only tracked successor manifest paths receive an optional read-only filesystem
 check. Manifest contents are not opened or parsed.
+
+The canonical final-dataset materialization successor is tracked at commit
+`51e6d187a66e11b1ced5ba17d3835773f8c0f2a4`. Its Step14AR manifest is now part
+of tracked-successor validation, and the registry has no `pending_commit`
+entries.
 
 The tenth registry entry retires
 `covapie_dataloader_smoke_design_gate_v0`. The eleventh and twelfth entries
@@ -37,7 +42,8 @@ batch and their feature-semantics evidence still requires re-anchoring.
 The tracked legacy final-dataset QA stage remains
 `covapie_final_dataset_qa_gate_v0`. The future Step14AR-based canonical QA
 stage is frozen as `covapie_final_dataset_qa_gate_v1`. This foundation does not
-create QA v1 code or artifacts and does not modify the Step14AR manifest.
+create QA v1 code or artifacts and does not modify the Step14AR manifest. S5
+through S8 remain outside this retirement batch and are unchanged.
 
 The policy does not access raw data, import model or dataloader runtime code,
 create tensors, write training artifacts, or permit training. Feature semantics

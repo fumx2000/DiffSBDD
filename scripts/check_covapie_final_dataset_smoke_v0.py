@@ -30,7 +30,7 @@ def _bool(value: bool) -> str:
 def run() -> int:
     stage_policy = legacy.build_retirement_policy()
     policies = retirement.build_all_legacy_stage_retirement_policies()
-    registry = retirement.validate_legacy_pipeline_retirement_registry(policies)
+    validation = retirement.validate_legacy_pipeline_retirement_registry(policies)
     tracked_paths = retirement.validate_tracked_successor_manifest_paths(
         policies,
         repo_root=REPO_ROOT,
@@ -48,7 +48,7 @@ def run() -> int:
         "successor_manifest_path_contract_passed": (
             successor_manifest_path_contract_passed
         ),
-        "successor_manifest_filesystem_check_deferred": True,
+        "successor_manifest_filesystem_check_deferred": False,
         "historical_artifacts_read_only": stage_policy.historical_artifacts_read_only,
         "legacy_artifact_regeneration_forbidden": (
             stage_policy.legacy_artifact_regeneration_forbidden
@@ -63,13 +63,14 @@ def run() -> int:
     for key, value in values.items():
         print(f"{key}={_bool(value) if isinstance(value, bool) else value}")
     passed = (
-        registry.passed is True
+        validation.passed is True
+        and validation.registry_count_passed is True
         and tracked_paths["tracked_successor_paths_passed"] is True
         and stage_policy.stage == legacy.LEGACY_STAGE
         and stage_policy.legacy_stage_retired is True
         and stage_policy.legacy_stage_executable is False
         and stage_policy.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
-        and stage_policy.successor_availability == "pending_commit"
+        and stage_policy.successor_availability == "tracked"
         and successor_manifest_path_contract_passed is True
         and stage_policy.historical_artifacts_read_only is True
         and stage_policy.legacy_artifact_regeneration_forbidden is True

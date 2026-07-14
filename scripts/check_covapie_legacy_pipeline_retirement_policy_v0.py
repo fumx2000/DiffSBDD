@@ -26,6 +26,10 @@ def run() -> int:
         repo_root=REPO_ROOT,
     )
     availability = Counter(item.successor_availability for item in policies)
+    availability_counts = {
+        name: availability[name]
+        for name, _ in policy.EXPECTED_SUCCESSOR_AVAILABILITY_COUNTS
+    }
 
     summaries = {
         "legacy_retirement_stage_count": len(policies),
@@ -51,6 +55,7 @@ def run() -> int:
         "shared_manifest_reference_contract_passed": path_validation[
             "shared_manifest_reference_contract_passed"
         ],
+        "tracked_count": availability["tracked"],
         "pending_commit_count": availability["pending_commit"],
         "not_materialized_count": availability["not_materialized"],
         "redesign_pending_count": availability["redesign_pending"],
@@ -79,21 +84,11 @@ def run() -> int:
 
     passed = (
         validation.passed
+        and validation.registry_count_passed is True
         and path_validation["tracked_successor_paths_passed"] is True
-        and path_validation["tracked_successor_reference_count"] == 4
-        and path_validation["validated_reference_count"] == 4
-        and path_validation["unique_manifest_path_count"] == 3
-        and path_validation["unique_regular_file_count"] == 3
-        and path_validation["shared_manifest_reference_count"] == 1
-        and path_validation["shared_manifest_reference_contract_passed"] is True
-        and len(policies) == 13
-        and availability
-        == {
-            "tracked": 4,
-            "pending_commit": 1,
-            "not_materialized": 1,
-            "redesign_pending": 7,
-        }
+        and len(policies) == policy.EXPECTED_LEGACY_STAGE_COUNT
+        and availability_counts
+        == dict(policy.EXPECTED_SUCCESSOR_AVAILABILITY_COUNTS)
         and summaries["all_legacy_stages_retired"] is True
         and summaries["all_legacy_stages_executable"] is False
         and summaries["all_training_readiness_false"] is True

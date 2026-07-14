@@ -66,15 +66,6 @@ def run() -> int:
         and validation.passed is True
         and validation.registry_count_passed is True
         and path_validation["tracked_successor_paths_passed"] is True
-        and path_validation["tracked_successor_reference_count"] == 4
-        and path_validation["validated_reference_count"] == 4
-        and path_validation["unique_manifest_path_count"] == 3
-        and path_validation["unique_regular_file_count"] == 3
-        and path_validation["shared_manifest_reference_count"] == 1
-        and path_validation[
-            "shared_manifest_reference_contract_passed"
-        ]
-        is True
         and policy.legacy_stage_retired is True
         and policy.legacy_stage_executable is False
         and policy.superseded_by_stage is None

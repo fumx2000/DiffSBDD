@@ -37,10 +37,13 @@ EXPECTED_STAGE = "covapie_final_dataset_smoke_v0"
 EXPECTED_SUCCESSOR_STAGE = "covapie_final_dataset_materialization_smoke_v0"
 EXPECTED_SUCCESSOR_MANIFEST = "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_materialization_smoke_manifest.json"
 EXPECTED_NEXT_STEP = "covapie_final_dataset_materialization_smoke"
-EXPECTED_AVAILABILITY = "pending_commit"
+EXPECTED_AVAILABILITY = "tracked"
 EXPECTED_BLOCKERS = ("legacy_stage_superseded",)
 EXPECTED_SUCCESS_LINE = "covapie_final_dataset_smoke_v0_retirement_policy_passed"
 OLD_SUCCESS_LINE = "covapie_final_dataset_smoke_v0_passed"
+EXPECTED_STEP14AR_MANIFEST_SHA256 = (
+    "6f25c8976b295749f3af6407c3bb8ce17cfbda9f18cb967df5fe9b47b480c433"
+)
 EXPECTED_ERROR_MESSAGE = (
     f"legacy_stage_retired:{EXPECTED_STAGE}:"
     f"superseded_by={EXPECTED_SUCCESSOR_STAGE}:"
@@ -247,8 +250,15 @@ def test_check_exits_zero_and_reports_retirement_contract() -> None:
     assert f"legacy_stage={EXPECTED_STAGE}" in result.stdout
     assert f"successor_stage={EXPECTED_SUCCESSOR_STAGE}" in result.stdout
     assert f"successor_availability={EXPECTED_AVAILABILITY}" in result.stdout
+    assert f"successor_manifest_path={EXPECTED_SUCCESSOR_MANIFEST}" in result.stdout
+    assert "successor_manifest_path_contract_passed=true" in result.stdout
+    assert "successor_manifest_filesystem_check_deferred=false" in result.stdout
+    assert "historical_artifacts_read_only=true" in result.stdout
+    assert "legacy_artifact_regeneration_forbidden=true" in result.stdout
     assert "ready_for_training=false" in result.stdout
+    assert "ready_to_train_now=false" in result.stdout
     assert "feature_semantics_audit_required_before_training=true" in result.stdout
+    assert f"recommended_next_step={EXPECTED_NEXT_STEP}" in result.stdout
 
 
 def test_check_does_not_call_old_producer_or_report_old_success() -> None:
@@ -293,51 +303,70 @@ def test_two_check_runs_are_deterministic() -> None:
     assert first.stderr == second.stderr
 
 
-def _materialize_tracked_successor_placeholders(repo_root: Path) -> None:
-    for policy in retirement.build_all_legacy_stage_retirement_policies():
-        if policy.successor_availability != "tracked":
-            continue
-        path = repo_root / str(policy.superseded_by_manifest_path)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("{}\n", encoding="utf-8")
-
-
-def test_pending_commit_contract_is_exact() -> None:
+def test_tracked_successor_contract_is_exact() -> None:
     policy = legacy.build_retirement_policy()
-    assert policy.successor_availability == "pending_commit"
+    assert policy.successor_availability == "tracked"
     assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
     assert policy.blocking_reasons == ("legacy_stage_superseded",)
 
 
-def test_check_does_not_probe_pending_successor_filesystem() -> None:
-    text = CHECK_SCRIPT.read_text(encoding="utf-8")
-    for forbidden in (".exists(", ".is_file(", ".lstat("):
-        assert forbidden not in text
-    assert "successor_manifest_filesystem_check_deferred=true" in _run_check().stdout
+def test_check_validates_tracked_successor_filesystem() -> None:
+    result = _run_check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "successor_manifest_filesystem_check_deferred=false" in result.stdout
+    path_validation = retirement.validate_tracked_successor_manifest_paths(
+        retirement.build_all_legacy_stage_retirement_policies(),
+        repo_root=REPO_ROOT,
+    )
+    assert path_validation["tracked_successor_paths_passed"] is True
 
 
-def test_pending_successor_may_be_absent_from_clean_repository(
-    tmp_path: Path,
-) -> None:
-    _materialize_tracked_successor_placeholders(tmp_path)
-    pending_path = tmp_path / EXPECTED_SUCCESSOR_MANIFEST
-    assert not pending_path.exists()
+def test_tracked_successor_exists_and_is_git_tracked() -> None:
+    manifest = REPO_ROOT / SUCCESSOR_MANIFEST
+    assert manifest.exists()
+    assert manifest.is_file()
+    assert not manifest.is_symlink()
+    tracked = subprocess.run(
+        ["git", "ls-files", "--error-unmatch", SUCCESSOR_MANIFEST.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    assert tracked.returncode == 0, tracked.stdout + tracked.stderr
+    assert tracked.stdout.strip() == EXPECTED_SUCCESSOR_MANIFEST
+    policy = legacy.build_retirement_policy()
+    assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
     result = retirement.validate_tracked_successor_manifest_paths(
         retirement.build_all_legacy_stage_retirement_policies(),
-        repo_root=tmp_path,
+        repo_root=REPO_ROOT,
     )
     assert result["tracked_successor_paths_passed"] is True
-    assert all(EXPECTED_STAGE not in reason for reason in result["blocking_reasons"])
+    assert result["tracked_successor_reference_count"] == 5
+    assert result["validated_reference_count"] == 5
+    assert result["unique_manifest_path_count"] == 4
+    assert result["unique_regular_file_count"] == 4
+    assert result["shared_manifest_reference_count"] == 1
 
 
-def test_untracked_step14ar_is_not_retirement_reproducibility_input(
-    tmp_path: Path,
-) -> None:
-    _materialize_tracked_successor_placeholders(tmp_path)
-    assert not (tmp_path / EXPECTED_SUCCESSOR_MANIFEST).exists()
-    policy = legacy.build_retirement_policy()
-    registry = retirement.validate_legacy_pipeline_retirement_registry(
-        retirement.build_all_legacy_stage_retirement_policies()
-    )
-    assert policy.successor_availability == "pending_commit"
-    assert registry.passed is True
+def test_tracked_step14ar_is_retirement_reproducibility_input() -> None:
+    manifest = REPO_ROOT / SUCCESSOR_MANIFEST
+    before_manifest_hash = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    before_step14ar_root = _tree_hash((STEP14AR_FILES[0],))
+    before_legacy_root = _tree_hash((LEGACY_ROOT,))
+    before_raw_state = _raw_git_state()
+
+    result = _run_check()
+
+    after_manifest_hash = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    after_step14ar_root = _tree_hash((STEP14AR_FILES[0],))
+    after_legacy_root = _tree_hash((LEGACY_ROOT,))
+    after_raw_state = _raw_git_state()
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert before_manifest_hash == EXPECTED_STEP14AR_MANIFEST_SHA256
+    assert after_manifest_hash == EXPECTED_STEP14AR_MANIFEST_SHA256
+    assert before_manifest_hash == after_manifest_hash
+    assert before_step14ar_root == after_step14ar_root
+    assert before_legacy_root == after_legacy_root
+    assert before_raw_state == after_raw_state == ("", "")
