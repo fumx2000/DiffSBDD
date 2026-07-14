@@ -16,6 +16,11 @@ from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement
 
 EXPECTED_SUCCESSOR_STAGE = "covapie_final_dataset_qa_gate_v1"
 EXPECTED_NEXT_STEP = "covapie_final_dataset_qa_gate_v1"
+EXPECTED_SUCCESSOR_MANIFEST = (
+    "data/derived/covalent_small/"
+    "covapie_final_dataset_qa_gate_v1/"
+    "covapie_final_dataset_qa_v1_manifest.json"
+)
 
 
 def _bool(value: bool) -> str:
@@ -30,10 +35,10 @@ def run() -> int:
         policies,
         repo_root=REPO_ROOT,
     )
-    canonical_successor_not_materialized = (
-        stage_policy.successor_availability == "not_materialized"
-        and stage_policy.superseded_by_manifest_path is None
-        and "canonical_successor_not_materialized" in stage_policy.blocking_reasons
+    canonical_successor_tracked = (
+        stage_policy.successor_availability == "tracked"
+        and stage_policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+        and stage_policy.blocking_reasons == ("legacy_stage_superseded",)
     )
     values = {
         "legacy_stage": stage_policy.stage,
@@ -41,12 +46,8 @@ def run() -> int:
         "legacy_stage_executable": stage_policy.legacy_stage_executable,
         "successor_stage": stage_policy.superseded_by_stage,
         "successor_availability": stage_policy.successor_availability,
-        "successor_manifest_path_is_none": (
-            stage_policy.superseded_by_manifest_path is None
-        ),
-        "canonical_successor_not_materialized": (
-            canonical_successor_not_materialized
-        ),
+        "successor_manifest_path": stage_policy.superseded_by_manifest_path,
+        "canonical_successor_tracked": canonical_successor_tracked,
         "historical_artifacts_read_only": stage_policy.historical_artifacts_read_only,
         "legacy_artifact_regeneration_forbidden": (
             stage_policy.legacy_artifact_regeneration_forbidden
@@ -68,17 +69,16 @@ def run() -> int:
         and stage_policy.legacy_stage_retired is True
         and stage_policy.legacy_stage_executable is False
         and stage_policy.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
-        and stage_policy.successor_availability == "not_materialized"
-        and stage_policy.superseded_by_manifest_path is None
-        and canonical_successor_not_materialized is True
+        and stage_policy.successor_availability == "tracked"
+        and stage_policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+        and canonical_successor_tracked is True
         and stage_policy.historical_artifacts_read_only is True
         and stage_policy.legacy_artifact_regeneration_forbidden is True
         and stage_policy.ready_for_training is False
         and stage_policy.ready_to_train_now is False
         and stage_policy.feature_semantics_audit_required_before_training is True
         and stage_policy.recommended_next_step == EXPECTED_NEXT_STEP
-        and stage_policy.blocking_reasons
-        == ("legacy_stage_superseded", "canonical_successor_not_materialized")
+        and stage_policy.blocking_reasons == ("legacy_stage_superseded",)
     )
     print(
         "covapie_final_dataset_qa_gate_v0_retirement_policy_passed"

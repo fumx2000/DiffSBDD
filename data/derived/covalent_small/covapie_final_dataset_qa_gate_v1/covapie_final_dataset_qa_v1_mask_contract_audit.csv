@@ -1,0 +1,6 @@
+mask_order,mask_task_name,mask_task_alias,present_in_manifest,mask_semantics_source,final_index_mask_field_present,final_index_mask_field_required,final_index_sample_set_complete,long_name_source_of_truth,alias_display_only,no_extra_masks,mask_contract_qa_passed,blocking_reasons
+1,warhead_only,A,true,step14ar_manifest,false,false,true,true,true,true,true,
+2,linker_plus_warhead,B,true,step14ar_manifest,false,false,true,true,true,true,true,
+3,scaffold_plus_warhead,B2,true,step14ar_manifest,false,false,true,true,true,true,true,
+4,scaffold_only,B3,true,step14ar_manifest,false,false,true,true,true,true,true,
+5,scaffold_plus_linker_plus_warhead,C,true,step14ar_manifest,false,false,true,true,true,true,true,

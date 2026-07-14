@@ -24,6 +24,7 @@ LEGACY_ROOT = Path("data/derived/covalent_small/covapie_dataloader_interface_smo
 CHECK_SCRIPT = Path("scripts/check_covapie_dataloader_interface_smoke_v0.py")
 MODULE_PATH = Path("src/covalent_ext/covapie_dataloader_interface_smoke.py")
 RAW_ROOT = Path("data/raw/covalent_sources")
+QA_V1_MODULE = Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py")
 QA_V1_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_qa_gate_v1")
 STEP14AR_FILES = (
     Path("data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"),
@@ -71,6 +72,22 @@ def _tree_hash(paths: tuple[Path, ...]) -> str:
                 digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
                 digest.update(hashlib.sha256(path.read_bytes()).digest())
     return digest.hexdigest()
+
+
+def _snapshot_path(relative: Path) -> dict[str, object]:
+    path = REPO_ROOT / relative
+    if not path.exists():
+        return {"state": "missing"}
+    if path.is_file():
+        return {"state": "file", "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+    return {
+        "state": "directory",
+        "files": {
+            child.relative_to(path).as_posix(): hashlib.sha256(child.read_bytes()).hexdigest()
+            for child in sorted(path.rglob("*"))
+            if child.is_file()
+        },
+    }
 
 
 def _run_check() -> subprocess.CompletedProcess[str]:
@@ -272,15 +289,16 @@ def test_check_is_policy_only_and_does_not_report_old_success() -> None:
 def test_historical_root_step14ar_qa_v1_and_raw_are_unchanged() -> None:
     legacy_before = _tree_hash((LEGACY_ROOT,))
     step_before = _tree_hash(STEP14AR_FILES)
-    qa_before = (REPO_ROOT / QA_V1_ROOT).exists()
+    module_before = _snapshot_path(QA_V1_MODULE)
+    root_before = _snapshot_path(QA_V1_ROOT)
     raw_before = _raw_git_state()
     result = _run_check()
     assert result.returncode == 0, result.stdout + result.stderr
     assert legacy.build_retirement_policy().legacy_stage_executable is False
     assert legacy_before == _tree_hash((LEGACY_ROOT,))
     assert step_before == _tree_hash(STEP14AR_FILES)
-    assert qa_before is False
-    assert (REPO_ROOT / QA_V1_ROOT).exists() is False
+    assert _snapshot_path(QA_V1_MODULE) == module_before
+    assert _snapshot_path(QA_V1_ROOT) == root_before
     assert raw_before == _raw_git_state() == ("", "")
 
 

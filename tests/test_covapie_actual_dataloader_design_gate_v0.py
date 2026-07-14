@@ -33,6 +33,8 @@ S5_ROOT = Path(
 STEP14AR_ROOT = Path(
     "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"
 )
+QA_V1_MODULE = Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py")
+QA_V1_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_qa_gate_v1")
 MODULE_PATH = Path("src/covalent_ext/covapie_actual_dataloader_design_gate.py")
 CHECK_PATH = Path("scripts/check_covapie_actual_dataloader_design_gate_v0.py")
 S5_MODULE = "covalent_ext.covapie_feature_semantics_tensorization_audit_gate"
@@ -64,6 +66,22 @@ def _tree_hash(relative: Path) -> str:
             digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
             digest.update(hashlib.sha256(path.read_bytes()).digest())
     return digest.hexdigest()
+
+
+def _snapshot_path(relative: Path) -> dict[str, object]:
+    path = REPO_ROOT / relative
+    if not path.exists():
+        return {"state": "missing"}
+    if path.is_file():
+        return {"state": "file", "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+    return {
+        "state": "directory",
+        "files": {
+            child.relative_to(path).as_posix(): hashlib.sha256(child.read_bytes()).hexdigest()
+            for child in sorted(path.rglob("*"))
+            if child.is_file()
+        },
+    }
 
 
 def _module_tree() -> ast.Module:
@@ -387,11 +405,20 @@ def test_step14ar_manifest_hash_is_frozen() -> None:
     )
 
 
-def test_canonical_qa_v1_is_not_materialized() -> None:
-    assert not Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py").exists()
-    assert not Path(
-        "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1"
-    ).exists()
+def test_canonical_qa_v1_is_unchanged_by_legacy_check() -> None:
+    module_before = _snapshot_path(QA_V1_MODULE)
+    root_before = _snapshot_path(QA_V1_ROOT)
+    result = subprocess.run(
+        [sys.executable, CHECK_PATH.as_posix()],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert _snapshot_path(QA_V1_MODULE) == module_before
+    assert _snapshot_path(QA_V1_ROOT) == root_before
 
 
 def test_raw_files_remain_untracked_and_unstaged() -> None:

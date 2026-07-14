@@ -338,16 +338,58 @@ def test_tracked_successor_exists_and_is_git_tracked() -> None:
     assert tracked.stdout.strip() == EXPECTED_SUCCESSOR_MANIFEST
     policy = legacy.build_retirement_policy()
     assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+    tracked_policies = tuple(
+        policy
+        for policy in retirement.build_all_legacy_stage_retirement_policies()
+        if policy.successor_availability == "tracked"
+    )
+    assert len(tracked_policies) == retirement.EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT
+    for tracked_policy in tracked_policies:
+        assert tracked_policy.superseded_by_manifest_path is not None
+        tracked_successor = subprocess.run(
+            [
+                "git",
+                "ls-files",
+                "--error-unmatch",
+                tracked_policy.superseded_by_manifest_path,
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        assert tracked_successor.returncode == 0, (
+            tracked_successor.stdout + tracked_successor.stderr
+        )
+        assert (
+            tracked_successor.stdout.strip()
+            == tracked_policy.superseded_by_manifest_path
+        )
     result = retirement.validate_tracked_successor_manifest_paths(
-        retirement.build_all_legacy_stage_retirement_policies(),
+        tracked_policies,
         repo_root=REPO_ROOT,
     )
     assert result["tracked_successor_paths_passed"] is True
-    assert result["tracked_successor_reference_count"] == 5
-    assert result["validated_reference_count"] == 5
-    assert result["unique_manifest_path_count"] == 4
-    assert result["unique_regular_file_count"] == 4
-    assert result["shared_manifest_reference_count"] == 1
+    assert (
+        result["tracked_successor_reference_count"]
+        == retirement.EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT
+    )
+    assert (
+        result["validated_reference_count"]
+        == retirement.EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT
+    )
+    assert (
+        result["unique_manifest_path_count"]
+        == retirement.EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT
+    )
+    assert (
+        result["unique_regular_file_count"]
+        == retirement.EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT
+    )
+    assert result["shared_manifest_reference_count"] == len(
+        retirement.EXPECTED_SHARED_SUCCESSOR_MANIFEST_REFERENCES
+    )
 
 
 def test_tracked_step14ar_is_retirement_reproducibility_input() -> None:

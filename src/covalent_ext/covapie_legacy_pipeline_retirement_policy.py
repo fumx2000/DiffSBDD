@@ -86,6 +86,11 @@ _FINAL_DATASET_MATERIALIZATION_MANIFEST = (
     "covapie_final_dataset_materialization_smoke_v0/"
     "covapie_final_dataset_materialization_smoke_manifest.json"
 )
+_CANONICAL_FINAL_DATASET_QA_MANIFEST = (
+    "data/derived/covalent_small/"
+    "covapie_final_dataset_qa_gate_v1/"
+    "covapie_final_dataset_qa_v1_manifest.json"
+)
 
 EXPECTED_SHARED_SUCCESSOR_MANIFEST_REFERENCES = {
     _UNIFIED_LEAKAGE_SPLIT_MANIFEST: (
@@ -96,13 +101,13 @@ EXPECTED_SHARED_SUCCESSOR_MANIFEST_REFERENCES = {
 
 EXPECTED_LEGACY_STAGE_COUNT = 13
 EXPECTED_SUCCESSOR_AVAILABILITY_COUNTS = (
-    ("tracked", 5),
+    ("tracked", 6),
     ("pending_commit", 0),
-    ("not_materialized", 1),
+    ("not_materialized", 0),
     ("redesign_pending", 7),
 )
-EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT = 5
-EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT = 4
+EXPECTED_TRACKED_SUCCESSOR_REFERENCE_COUNT = 6
+EXPECTED_UNIQUE_TRACKED_SUCCESSOR_MANIFEST_COUNT = 5
 
 
 def _retired_policy(
@@ -170,13 +175,9 @@ LEGACY_STAGE_RETIREMENT_REGISTRY = (
     _retired_policy(
         stage="covapie_final_dataset_qa_gate_v0",
         superseded_by_stage=CANONICAL_FINAL_DATASET_QA_STAGE,
-        superseded_by_manifest_path=None,
-        successor_availability="not_materialized",
+        superseded_by_manifest_path=_CANONICAL_FINAL_DATASET_QA_MANIFEST,
+        successor_availability="tracked",
         recommended_next_step=CANONICAL_FINAL_DATASET_QA_STAGE,
-        blocking_reasons=(
-            "legacy_stage_superseded",
-            "canonical_successor_not_materialized",
-        ),
     ),
     *(
         _retired_policy(

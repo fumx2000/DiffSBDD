@@ -21,10 +21,11 @@ from covalent_ext import covapie_legacy_pipeline_retirement_policy as retirement
 
 
 LEGACY_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_qa_gate_v0")
-SUCCESSOR_MANIFEST = None
 CHECK_SCRIPT = Path("scripts/check_covapie_final_dataset_qa_gate_v0.py")
 MODULE_PATH = Path("src/covalent_ext/covapie_final_dataset_qa_gate.py")
 RAW_ROOT = Path("data/raw/covalent_sources")
+QA_V1_MODULE = Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py")
+QA_V1_ROOT = Path("data/derived/covalent_small/covapie_final_dataset_qa_gate_v1")
 STEP14AR_FILES = (
     Path("data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0"),
     Path("docs/covapie_final_dataset_materialization_smoke_v0_summary.md"),
@@ -35,10 +36,14 @@ STEP14AR_FILES = (
 
 EXPECTED_STAGE = "covapie_final_dataset_qa_gate_v0"
 EXPECTED_SUCCESSOR_STAGE = "covapie_final_dataset_qa_gate_v1"
-EXPECTED_SUCCESSOR_MANIFEST = None
+EXPECTED_SUCCESSOR_MANIFEST = (
+    "data/derived/covalent_small/"
+    "covapie_final_dataset_qa_gate_v1/"
+    "covapie_final_dataset_qa_v1_manifest.json"
+)
 EXPECTED_NEXT_STEP = "covapie_final_dataset_qa_gate_v1"
-EXPECTED_AVAILABILITY = "not_materialized"
-EXPECTED_BLOCKERS = ("legacy_stage_superseded", "canonical_successor_not_materialized")
+EXPECTED_AVAILABILITY = "tracked"
+EXPECTED_BLOCKERS = ("legacy_stage_superseded",)
 EXPECTED_SUCCESS_LINE = "covapie_final_dataset_qa_gate_v0_retirement_policy_passed"
 OLD_SUCCESS_LINE = "covapie_final_dataset_qa_gate_v0_passed"
 EXPECTED_ERROR_MESSAGE = (
@@ -67,6 +72,22 @@ def _tree_hash(paths: tuple[Path, ...]) -> str:
                 digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
                 digest.update(hashlib.sha256(path.read_bytes()).digest())
     return digest.hexdigest()
+
+
+def _snapshot_path(relative: Path) -> dict[str, object]:
+    path = REPO_ROOT / relative
+    if not path.exists():
+        return {"state": "missing"}
+    if path.is_file():
+        return {"state": "file", "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+    return {
+        "state": "directory",
+        "files": {
+            child.relative_to(path).as_posix(): hashlib.sha256(child.read_bytes()).hexdigest()
+            for child in sorted(path.rglob("*"))
+            if child.is_file()
+        },
+    }
 
 
 def _run_check() -> subprocess.CompletedProcess[str]:
@@ -248,6 +269,10 @@ def test_check_exits_zero_and_reports_retirement_contract() -> None:
     assert f"legacy_stage={EXPECTED_STAGE}" in result.stdout
     assert f"successor_stage={EXPECTED_SUCCESSOR_STAGE}" in result.stdout
     assert f"successor_availability={EXPECTED_AVAILABILITY}" in result.stdout
+    assert f"successor_manifest_path={EXPECTED_SUCCESSOR_MANIFEST}" in result.stdout
+    assert "canonical_successor_tracked=true" in result.stdout
+    assert "canonical_successor_pending_commit" not in result.stdout
+    assert "canonical_successor_not_materialized" not in result.stdout
     assert "ready_for_training=false" in result.stdout
     assert "feature_semantics_audit_required_before_training=true" in result.stdout
 
@@ -294,31 +319,33 @@ def test_two_check_runs_are_deterministic() -> None:
     assert first.stderr == second.stderr
 
 
-def test_qa_v1_successor_is_not_materialized() -> None:
+def test_qa_v1_successor_is_tracked() -> None:
     policy = legacy.build_retirement_policy()
-    assert policy.superseded_by_stage == "covapie_final_dataset_qa_gate_v1"
-    assert policy.successor_availability == "not_materialized"
-    assert policy.superseded_by_manifest_path is None
-    assert "canonical_successor_not_materialized" in policy.blocking_reasons
+    assert policy.superseded_by_stage == EXPECTED_SUCCESSOR_STAGE
+    assert policy.successor_availability == EXPECTED_AVAILABILITY
+    assert policy.superseded_by_manifest_path == EXPECTED_SUCCESSOR_MANIFEST
+    assert policy.blocking_reasons == EXPECTED_BLOCKERS
 
 
 def test_check_does_not_probe_qa_v1_filesystem() -> None:
     text = CHECK_SCRIPT.read_text(encoding="utf-8")
-    assert "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1" not in text
-    for forbidden in (".exists(", ".is_file(", ".lstat("):
+    for forbidden in (
+        ".exists(",
+        ".is_file(",
+        ".lstat(",
+        ".read_bytes(",
+        ".read_text(",
+    ):
         assert forbidden not in text
 
 
-def test_check_does_not_create_qa_v1_artifact() -> None:
-    qa_v1_root = Path("data/derived/covalent_small/covapie_final_dataset_qa_gate_v1")
-    before = _tree_hash((qa_v1_root,))
-    before_exists = (REPO_ROOT / qa_v1_root).exists()
+def test_check_preserves_qa_v1_artifact_state() -> None:
+    module_before = _snapshot_path(QA_V1_MODULE)
+    root_before = _snapshot_path(QA_V1_ROOT)
     result = _run_check()
-    after = _tree_hash((qa_v1_root,))
-    after_exists = (REPO_ROOT / qa_v1_root).exists()
     assert result.returncode == 0, result.stdout + result.stderr
-    assert before == after
-    assert before_exists == after_exists == False
+    assert _snapshot_path(QA_V1_MODULE) == module_before
+    assert _snapshot_path(QA_V1_ROOT) == root_before
 
 
 def test_check_makes_no_qa_v1_or_dataloader_readiness_claim() -> None:
@@ -328,4 +355,6 @@ def test_check_makes_no_qa_v1_or_dataloader_readiness_claim() -> None:
     assert "qa v1 passed" not in output
     assert "qa v1 ready" not in output
     assert "ready_for_dataloader" not in output
-    assert "canonical_successor_not_materialized=true" in output
+    assert "canonical_successor_tracked=true" in output
+    assert "canonical_successor_pending_commit" not in output
+    assert "canonical_successor_not_materialized" not in output

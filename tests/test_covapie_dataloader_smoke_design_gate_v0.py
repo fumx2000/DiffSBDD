@@ -34,6 +34,7 @@ MODULE_PATH = Path(
     "src/covalent_ext/covapie_dataloader_smoke_design_gate.py"
 )
 RAW_ROOT = Path("data/raw/covalent_sources")
+QA_V1_MODULE = Path("src/covalent_ext/covapie_final_dataset_qa_gate_v1.py")
 QA_V1_ROOT = Path(
     "data/derived/covalent_small/covapie_final_dataset_qa_gate_v1"
 )
@@ -95,6 +96,22 @@ def _tree_hash(paths: tuple[Path, ...]) -> str:
                 digest.update(path.relative_to(REPO_ROOT).as_posix().encode())
                 digest.update(hashlib.sha256(path.read_bytes()).digest())
     return digest.hexdigest()
+
+
+def _snapshot_path(relative: Path) -> dict[str, object]:
+    path = REPO_ROOT / relative
+    if not path.exists():
+        return {"state": "missing"}
+    if path.is_file():
+        return {"state": "file", "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+    return {
+        "state": "directory",
+        "files": {
+            child.relative_to(path).as_posix(): hashlib.sha256(child.read_bytes()).hexdigest()
+            for child in sorted(path.rglob("*"))
+            if child.is_file()
+        },
+    }
 
 
 def _run_check() -> subprocess.CompletedProcess[str]:
@@ -388,11 +405,13 @@ def test_check_preserves_s1_s2_and_step14ar() -> None:
     assert before == _tree_hash(guarded)
 
 
-def test_qa_v1_root_is_not_created() -> None:
-    assert (REPO_ROOT / QA_V1_ROOT).exists() is False
+def test_qa_v1_root_is_unchanged_by_legacy_check() -> None:
+    module_before = _snapshot_path(QA_V1_MODULE)
+    root_before = _snapshot_path(QA_V1_ROOT)
     result = _run_check()
     assert result.returncode == 0, result.stdout + result.stderr
-    assert (REPO_ROOT / QA_V1_ROOT).exists() is False
+    assert _snapshot_path(QA_V1_MODULE) == module_before
+    assert _snapshot_path(QA_V1_ROOT) == root_before
 
 
 def test_raw_git_state_remains_empty() -> None:
