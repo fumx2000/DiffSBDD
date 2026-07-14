@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! REPO_ROOT="$(git rev-parse --show-toplevel)"; then
+  echo "CovaPIE pre-commit safety check error: unable to locate repository root." >&2
+  exit 2
+fi
+
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON=python3
+elif command -v python >/dev/null 2>&1; then
+  PYTHON=python
+else
+  echo "CovaPIE pre-commit safety check error: Python interpreter unavailable." >&2
+  exit 2
+fi
+
+export PYTHONDONTWRITEBYTECODE=1
+exec "$PYTHON" "$REPO_ROOT/scripts/check_covapie_staged_commit_safety.py" --repo-root "$REPO_ROOT"
