@@ -1,0 +1,21 @@
+contract_item,contract_scope,required_value,normalization_behavior,validation_phase,external_lookup_required,contract_status,blocking_reason,contract_passed
+accepted_input_type,type,Python str only,no implicit str(value),pre_download,false,frozen,,true
+legacy_input_length,legacy_4_character,exactly 4 ASCII characters,canonicalize to extended,pre_download,false,frozen,,true
+legacy_input_character_contract,legacy_4_character,^[0-9][A-Za-z0-9]{3}$,lowercase letters,pre_download,false,frozen,,true
+extended_input_length,extended_12_character,exactly 12 ASCII characters,lowercase canonical output,pre_download,false,frozen,,true
+extended_input_prefix_contract,extended_12_character,pdb_ prefix case-insensitive,lowercase prefix,pre_download,false,frozen,,true
+extended_input_character_contract,extended_12_character,pdb_ plus 8 ASCII alphanumeric characters,lowercase letters,pre_download,false,frozen,,true
+input_case_policy,syntax,mixed ASCII case accepted for letters,canonical lowercase,pre_download,false,frozen,,true
+surrounding_whitespace_policy,syntax,surrounding whitespace forbidden,no trim,pre_download,false,frozen,,true
+ascii_only_policy,syntax,ASCII only,no Unicode normalization,pre_download,false,frozen,,true
+canonical_output_length,canonical_representation,exactly 12 characters,pdb_ plus 8 characters,pre_download,false,frozen,,true
+canonical_output_prefix,canonical_representation,pdb_,fixed lowercase prefix,pre_download,false,frozen,,true
+canonical_output_case,canonical_representation,lowercase ASCII,lowercase only,pre_download,false,frozen,,true
+legacy_to_extended_conversion,canonical_representation,pdb_0000 plus lowercase legacy ID,deterministic conversion,pre_download,false,frozen,,true
+syntax_existence_separation,boundary,syntax does not establish archive existence,no lookup,pre_download,false,frozen,,true
+filesystem_path_characters_forbidden,syntax,paths and separators rejected,no path resolution,pre_download,false,frozen,,true
+url_and_filename_forms_forbidden,syntax,URLs and filename suffixes rejected,no URL parsing,pre_download,false,frozen,,true
+non_string_coercion_forbidden,type,non-string objects rejected,no coercion,pre_download,false,frozen,,true
+pure_function_boundary,implementation,no network or filesystem access,pure in-memory result,pre_download,false,frozen,,true
+archive_existence_not_evaluated,boundary,no existence or withdrawal claim,defer to future stage,pre_download,false,frozen,,true
+download_readiness_not_granted,readiness,no download permission,remain blocked,current_step,false,frozen,,true

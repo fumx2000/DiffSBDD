@@ -1,0 +1,30 @@
+example_id,input_representation,input_type,expected_input_form,expected_syntax_valid,expected_canonical_pdb_id,expected_normalization_applied,expected_blocking_reason,example_passed
+EXAMPLE_001,1abc,str,legacy_4_character,true,pdb_00001abc,true,,true
+EXAMPLE_002,1ABC,str,legacy_4_character,true,pdb_00001abc,true,,true
+EXAMPLE_003,9xyz,str,legacy_4_character,true,pdb_00009xyz,true,,true
+EXAMPLE_004,0abc,str,legacy_4_character,true,pdb_00000abc,true,,true
+EXAMPLE_005,pdb_00001abc,str,extended_12_character,true,pdb_00001abc,false,,true
+EXAMPLE_006,PDB_00001ABC,str,extended_12_character,true,pdb_00001abc,true,,true
+EXAMPLE_007,pDb_1000AbCd,str,extended_12_character,true,pdb_1000abcd,true,,true
+EXAMPLE_008,,str,invalid,false,,false,pdb_id_empty,true
+EXAMPLE_009, 1abc,str,invalid,false,,false,pdb_id_surrounding_whitespace_forbidden,true
+EXAMPLE_010,1abc ,str,invalid,false,,false,pdb_id_surrounding_whitespace_forbidden,true
+EXAMPLE_011,\t1abc,str,invalid,false,,false,pdb_id_surrounding_whitespace_forbidden,true
+EXAMPLE_012,1abc\n,str,invalid,false,,false,pdb_id_surrounding_whitespace_forbidden,true
+EXAMPLE_013,abc,str,invalid,false,,false,pdb_id_length_invalid,true
+EXAMPLE_014,1abcd,str,invalid,false,,false,pdb_id_length_invalid,true
+EXAMPLE_015,pdb_0001abc,str,invalid,false,,false,pdb_id_length_invalid,true
+EXAMPLE_016,pdb_000001abc,str,invalid,false,,false,pdb_id_length_invalid,true
+EXAMPLE_017,foo_00001abc,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_018,pdb/1abc,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_019,pdb\\\\1abc,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_020,1abc.,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_021,1abc.cif,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_022,1abc.cif.gz,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_023,https://example/1abc,str,invalid,false,,false,pdb_id_format_invalid,true
+EXAMPLE_024,pdb_００００1abc,str,invalid,false,,false,pdb_id_non_ascii_forbidden,true
+EXAMPLE_025,None,NoneType,invalid,false,,false,pdb_id_missing,true
+EXAMPLE_026,1234,int,invalid,false,,false,pdb_id_not_string,true
+EXAMPLE_027,bytes:1abc,bytes,invalid,false,,false,pdb_id_not_string,true
+EXAMPLE_028,list:['1abc'],list,invalid,false,,false,pdb_id_not_string,true
+EXAMPLE_029,dict:{'pdb_id':'1abc'},dict,invalid,false,,false,pdb_id_not_string,true
