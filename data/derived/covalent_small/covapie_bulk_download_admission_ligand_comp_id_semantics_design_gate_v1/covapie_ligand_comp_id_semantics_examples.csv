@@ -1,0 +1,37 @@
+example_id,example_class,input_kind,input_literal,expected_passed,expected_canonical_ligand_comp_id,expected_blocking_reason,observed_passed,observed_canonical_ligand_comp_id,observed_blocking_reason,example_passed
+LIGEX_001,valid,str,JUG,true,JUG,,true,JUG,,true
+LIGEX_002,valid,str,jug,true,JUG,,true,JUG,,true
+LIGEX_003,valid,str,JuG,true,JUG,,true,JUG,,true
+LIGEX_004,valid,str,E64,true,E64,,true,E64,,true
+LIGEX_005,valid,str,IN3,true,IN3,,true,IN3,,true
+LIGEX_006,valid,str,UFP,true,UFP,,true,UFP,,true
+LIGEX_007,valid,str,0QE,true,0QE,,true,0QE,,true
+LIGEX_008,valid,str,A,true,A,,true,A,,true
+LIGEX_009,valid,str,1,true,1,,true,1,,true
+LIGEX_010,valid,str,ABC123,true,ABC123,,true,ABC123,,true
+LIGEX_011,valid,str,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,true,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,,true,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,,true
+LIGEX_012,valid,str,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,true,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,,true,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,,true
+LIGEX_013,invalid,NoneType,None,false,,LIGAND_COMP_ID_TYPE_INVALID,false,,LIGAND_COMP_ID_TYPE_INVALID,true
+LIGEX_014,invalid,bytes,b'JUG',false,,LIGAND_COMP_ID_TYPE_INVALID,false,,LIGAND_COMP_ID_TYPE_INVALID,true
+LIGEX_015,invalid,int,7,false,,LIGAND_COMP_ID_TYPE_INVALID,false,,LIGAND_COMP_ID_TYPE_INVALID,true
+LIGEX_016,invalid,bool,True,false,,LIGAND_COMP_ID_TYPE_INVALID,false,,LIGAND_COMP_ID_TYPE_INVALID,true
+LIGEX_017,invalid,float,1.5,false,,LIGAND_COMP_ID_TYPE_INVALID,false,,LIGAND_COMP_ID_TYPE_INVALID,true
+LIGEX_018,invalid,str,,false,,LIGAND_COMP_ID_EMPTY,false,,LIGAND_COMP_ID_EMPTY,true
+LIGEX_019,invalid,str, ,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_020,invalid,str, JUG,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_021,invalid,str,JUG ,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_022,invalid,str,JU G,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_023,invalid,str,\t,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_024,invalid,str,\n,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_025,invalid,str,J\xdcG,false,,LIGAND_COMP_ID_NON_ASCII,false,,LIGAND_COMP_ID_NON_ASCII,true
+LIGEX_026,invalid,str,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,false,,LIGAND_COMP_ID_LENGTH_INVALID,false,,LIGAND_COMP_ID_LENGTH_INVALID,true
+LIGEX_027,invalid,str,.,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_028,invalid,str,?,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_029,invalid,str,A-B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_030,invalid,str,A_B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_031,invalid,str,A/B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_032,invalid,str,"A,B",false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_033,invalid,str,A;B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_034,invalid,str,A|B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_035,invalid,str,A:B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
+LIGEX_036,invalid,str,A+B,false,,LIGAND_COMP_ID_SYNTAX_INVALID,false,,LIGAND_COMP_ID_SYNTAX_INVALID,true
