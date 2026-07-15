@@ -1,0 +1,13 @@
+resolution_case_id,struct_conn_tag_present,struct_conn_raw_value,struct_conn_token_class,atom_site_tag_present,atom_site_raw_value,atom_site_token_class,expected_resolved_state,expected_resolved_value,expected_passed,expected_blocks_admit_004,expected_blocking_reason,observed_resolved_state,observed_resolved_value,observed_passed,observed_blocks_admit_004,observed_blocking_reason,resolution_case_passed
+RESOLVE_001,true,A,explicit_token,true,A,explicit_token,present,A,true,false,,present,A,true,false,,true
+RESOLVE_002,true,1,explicit_token,true,1,explicit_token,present,1,true,false,,present,1,true,false,,true
+RESOLVE_003,true,A,explicit_token,true,B,explicit_token,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,true
+RESOLVE_004,true,A,explicit_token,true,.,dot_not_applicable,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,true
+RESOLVE_005,true,.,dot_not_applicable,true,A,explicit_token,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_SOURCE_CONFLICT,true
+RESOLVE_006,true,.,dot_not_applicable,true,.,dot_not_applicable,absent,,true,false,,absent,,true,false,,true
+RESOLVE_007,true,?,question_unknown,true,?,question_unknown,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,true
+RESOLVE_008,false,,tag_missing,false,,tag_missing,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,true
+RESOLVE_009,true,,parsed_empty,true,,parsed_empty,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,true
+RESOLVE_010,true,A,explicit_token,true,?,question_unknown,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,true
+RESOLVE_011,true,?,question_unknown,true,A,explicit_token,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,true
+RESOLVE_012,true, A,invalid_token,true,A,explicit_token,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_EVIDENCE_INVALID,unknown,,false,true,COVALENT_RESIDUE_INSERTION_CODE_EVIDENCE_INVALID,true
