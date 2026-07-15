@@ -1,0 +1,124 @@
+{
+  "additive_raw_preserving_parser_adapter_implemented": true,
+  "admit_004_rule_logic_ready": false,
+  "all_checks_passed": true,
+  "all_compatibility_checks_passed": true,
+  "all_contract_checks_passed": true,
+  "all_issue_inventory_checks_passed": true,
+  "all_p4_predecessor_checks_passed": true,
+  "all_raw_parser_checks_passed": true,
+  "all_safety_checks_passed": true,
+  "all_source_boundary_checks_passed": true,
+  "all_synthetic_case_checks_passed": true,
+  "canonical_mask_pairs": [
+    [
+      "warhead_only",
+      "A"
+    ],
+    [
+      "linker_plus_warhead",
+      "B"
+    ],
+    [
+      "scaffold_plus_warhead",
+      "B2"
+    ],
+    [
+      "scaffold_only",
+      "B3"
+    ],
+    [
+      "scaffold_plus_linker_plus_warhead",
+      "C"
+    ]
+  ],
+  "canonical_mask_task_count": 5,
+  "current_domain_blocking_reasons": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "COVALENT_EVIDENCE_ENUM_UNRESOLVED",
+    "COVALENT_RESIDUE_ATOM_NAME_NORMALIZATION_UNRESOLVED",
+    "COVALENT_RESIDUE_IDENTITY_SEMANTICS_UNRESOLVED",
+    "DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED",
+    "DOWNLOAD_RESULT_STATUS_ENUM_UNRESOLVED",
+    "DUPLICATE_IDENTITY_KEY_SEMANTICS_UNRESOLVED",
+    "LEAKAGE_GROUP_ASSIGNMENT_PROVENANCE_UNRESOLVED",
+    "RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED",
+    "TOPOLOGY_DISPOSITION_ENUM_UNRESOLVED"
+  ],
+  "existing_real_sample_count": 11,
+  "expansion_parser_modified_current_step": false,
+  "explicit_partner_side_preserved": true,
+  "exported_blocking_case_count": 5,
+  "exported_pass_case_count": 5,
+  "feature_semantics_audit_required_before_training": true,
+  "historical_compatibility_view_verified": true,
+  "historical_parser_modified_current_step": false,
+  "insertion_code_provenance_export_ready_for_real_samples": false,
+  "manifest_schema_version": "covapie_covalent_residue_locator_parser_provider_provenance_export_smoke_v1_manifest_v1",
+  "non_manifest_output_count": 5,
+  "output_file_count": 6,
+  "output_files": [
+    "covapie_covalent_residue_locator_parser_provider_smoke_contract.csv",
+    "covapie_covalent_residue_locator_synthetic_case_audit.csv",
+    "covapie_covalent_residue_locator_source_boundary_audit.csv",
+    "covapie_covalent_residue_locator_safety_audit.csv",
+    "covapie_covalent_residue_locator_parser_provider_smoke_issue_inventory.csv",
+    "covapie_covalent_residue_locator_parser_provider_provenance_export_smoke_manifest.json"
+  ],
+  "output_sha256": {
+    "covapie_covalent_residue_locator_parser_provider_smoke_contract.csv": "a354f457caa2aed03536fbe848cda6a95beafc93810a480b31ec18e4ed70780f",
+    "covapie_covalent_residue_locator_parser_provider_smoke_issue_inventory.csv": "32f16ab8e8567d964324963d8cc6208bf08a9cf1c925adb2f37354f0f70040a8",
+    "covapie_covalent_residue_locator_safety_audit.csv": "f6cc680501c0e9beb3285e14931bdb3f0a20a3c7b58ba487ae6998a9503c4acf",
+    "covapie_covalent_residue_locator_source_boundary_audit.csv": "d59eab7cc5584a687122cc350e67e39974956a1ebff7bd15f2a66c05b2ac104d",
+    "covapie_covalent_residue_locator_synthetic_case_audit.csv": "1c7436924296c102b9875e662f3968a24aa31e1b3e37c2a7c6f9fde39b1f26da"
+  },
+  "p4_design_frozen": true,
+  "p4_payload_key_count": 20,
+  "parser_provider_provenance_export_synthetic_smoke_passed": true,
+  "predecessor_domain_issue_count": 10,
+  "predecessor_field_count": 22,
+  "previous_stage": "covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1",
+  "project_name": "CovaPIE",
+  "ready_for_bulk_download_now": false,
+  "ready_for_e1_residue_identity_semantics_design": false,
+  "ready_for_real_candidate_evaluation": false,
+  "ready_for_real_parser_provider_pipeline_integration_design": true,
+  "ready_for_training": false,
+  "ready_to_train_now": false,
+  "real_candidate_records_materialized_current_step": false,
+  "real_fully_provable_pre_download_sample_count": 0,
+  "real_insertion_absence_proven_sample_count": 0,
+  "real_insertion_unknown_sample_count": 11,
+  "real_parser_pipeline_integration_implemented": false,
+  "real_provider_payloads_materialized_current_step": false,
+  "real_provider_pipeline_integration_implemented": false,
+  "real_samples_backfilled_current_step": 0,
+  "recommended_next_step": "design_covapie_covalent_residue_locator_real_parser_provider_pipeline_integration_v1",
+  "rejected_case_count": 6,
+  "smoke_followup_issue_ids": [
+    "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_NOT_YET_EXPORTABLE",
+    "COVALENT_RESIDUE_LOCATOR_REAL_PIPELINE_INTEGRATION_NOT_YET_IMPLEMENTED"
+  ],
+  "source_input_count": 9,
+  "source_input_sha256": {
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_parser_provider_export_contract.csv": "8893ca769577e955319ea8b9abe411149206db562193b70928d58ce4afd0ba8c",
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_parser_provider_issue_inventory.csv": "fe7383541cfc06f05814afb0d3fba04716b423bc0e85b8975fb27bedad02f43e",
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_parser_provider_provenance_export_design_manifest.json": "aa6435381c90416ce9ded7e50afca166f33b29b4a268b230755bba0145680876",
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_raw_token_resolution_matrix.csv": "b48febdbedcb6ea6d4adc19e636b26f6774292ef3e1d405cecf7a491d7feb2fa",
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_safety_audit.csv": "e19c9dbd6480b68ff2617681a2150e1c314c5ecac9a9acdfa4bd009a515b0f0c",
+    "data/derived/covalent_small/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate_v1/covapie_covalent_residue_locator_source_boundary_audit.csv": "1600f716ea290b7a381d83c9408d8fbc21ab0d45b5d775c3e3fb71a93a03bd13",
+    "src/covalent_ext/covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_design_gate.py": "b1a874e402180a361b6940541c95710797ed10cabfdb19f7426c0b04d0532537",
+    "src/covalent_ext/covapie_independent_group_expansion_batch_sample_preparation_execution_smoke.py": "1b04a32a580ef2dbb18048fe50f609bd188dd89c378d83474a1b32822f1e4932",
+    "src/covalent_ext/covapie_sample_preparation_execution_smoke.py": "0bb67a720595ce8b5211ba56f6913f1d6333828846abba326af8b2f9965eca8b"
+  },
+  "source_read_boundary": "only_p4_seven_committed_design_sources_and_two_frozen_historical_parser_modules",
+  "stage": "covapie_bulk_download_admission_covalent_residue_locator_parser_provider_provenance_export_smoke_v1",
+  "step_label": "Step14AU-E0-P5-B",
+  "synthetic_case_count": 16,
+  "synthetic_case_rows_materialized_current_step": true,
+  "synthetic_provider_export_mapping_implemented": true,
+  "synthetic_provider_export_rows_materialized_current_step": true,
+  "synthetic_sidecar_column_count": 33,
+  "unique_matched_atom_site_row_binding_verified": true,
+  "validation_failures": []
+}
