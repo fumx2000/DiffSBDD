@@ -1,0 +1,65 @@
+row_kind,case_id,input_descriptor,input_type,input_length,expected_outcome,observed_outcome,expected_reason,observed_reason,canonical_descriptor,exact_preserved,case_preserved,example_passed
+present_valid_example,PRESENT_VALID_001,'A',str,1,passed,passed,,,'A',true,true,true
+present_valid_example,PRESENT_VALID_002,'a',str,1,passed,passed,,,'a',true,true,true
+present_valid_example,PRESENT_VALID_003,'1',str,1,passed,passed,,,'1',true,true,true
+present_valid_example,PRESENT_VALID_004,'AA',str,2,passed,passed,,,'AA',true,true,true
+present_valid_example,PRESENT_VALID_005,'A1',str,2,passed,passed,,,'A1',true,true,true
+present_valid_example,PRESENT_VALID_006,'Z9',str,2,passed,passed,,,'Z9',true,true,true
+present_valid_example,PRESENT_VALID_007,A repeated 256,str,256,passed,passed,,,A repeated 256,true,true,true
+present_valid_example,PRESENT_VALID_008,'A[B',str,3,passed,passed,,,'A[B',true,true,true
+present_valid_example,PRESENT_VALID_009,'A]B',str,3,passed,passed,,,'A]B',true,true,true
+present_valid_example,PRESENT_VALID_010,'A_B',str,3,passed,passed,,,'A_B',true,true,true
+present_valid_example,PRESENT_VALID_011,"'A,B'",str,3,passed,passed,,,"'A,B'",true,true,true
+present_valid_example,PRESENT_VALID_012,'A.B',str,3,passed,passed,,,'A.B',true,true,true
+present_valid_example,PRESENT_VALID_013,'A;B',str,3,passed,passed,,,'A;B',true,true,true
+present_valid_example,PRESENT_VALID_014,'A:B',str,3,passed,passed,,,'A:B',true,true,true
+present_valid_example,PRESENT_VALID_015,"'A""B'",str,3,passed,passed,,,"'A""B'",true,true,true
+present_valid_example,PRESENT_VALID_016,'A&B',str,3,passed,passed,,,'A&B',true,true,true
+present_valid_example,PRESENT_VALID_017,'A<B',str,3,passed,passed,,,'A<B',true,true,true
+present_valid_example,PRESENT_VALID_018,'A>B',str,3,passed,passed,,,'A>B',true,true,true
+present_valid_example,PRESENT_VALID_019,'A(B',str,3,passed,passed,,,'A(B',true,true,true
+present_valid_example,PRESENT_VALID_020,'A)B',str,3,passed,passed,,,'A)B',true,true,true
+present_valid_example,PRESENT_VALID_021,'A/B',str,3,passed,passed,,,'A/B',true,true,true
+present_valid_example,PRESENT_VALID_022,'A{B',str,3,passed,passed,,,'A{B',true,true,true
+present_valid_example,PRESENT_VALID_023,'A}B',str,3,passed,passed,,,'A}B',true,true,true
+present_valid_example,PRESENT_VALID_024,"""A'B""",str,3,passed,passed,,,"""A'B""",true,true,true
+present_valid_example,PRESENT_VALID_025,'A`B',str,3,passed,passed,,,'A`B',true,true,true
+present_valid_example,PRESENT_VALID_026,'A~B',str,3,passed,passed,,,'A~B',true,true,true
+present_valid_example,PRESENT_VALID_027,'A!B',str,3,passed,passed,,,'A!B',true,true,true
+present_valid_example,PRESENT_VALID_028,'A@B',str,3,passed,passed,,,'A@B',true,true,true
+present_valid_example,PRESENT_VALID_029,'A#B',str,3,passed,passed,,,'A#B',true,true,true
+present_valid_example,PRESENT_VALID_030,'A$B',str,3,passed,passed,,,'A$B',true,true,true
+present_valid_example,PRESENT_VALID_031,'A%B',str,3,passed,passed,,,'A%B',true,true,true
+present_valid_example,PRESENT_VALID_032,'A*B',str,3,passed,passed,,,'A*B',true,true,true
+present_valid_example,PRESENT_VALID_033,'A|B',str,3,passed,passed,,,'A|B',true,true,true
+present_valid_example,PRESENT_VALID_034,'A+B',str,3,passed,passed,,,'A+B',true,true,true
+present_valid_example,PRESENT_VALID_035,'A-B',str,3,passed,passed,,,'A-B',true,true,true
+present_invalid_example,PRESENT_INVALID_001,'',str,0,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_REQUIRES_NONEMPTY,COVALENT_RESIDUE_INSERTION_PRESENT_REQUIRES_NONEMPTY,None,false,true,true
+present_invalid_example,PRESENT_INVALID_002,'.',str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_003,'?',str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_004,'A B',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_005,'A\tB',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_006,' A',str,2,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_007,'A ',str,2,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_008,'A\nB',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_009,'A\rB',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+present_invalid_example,PRESENT_INVALID_010,'Aé',str,2,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_NON_ASCII,COVALENT_RESIDUE_INSERTION_PRESENT_NON_ASCII,None,false,true,true
+present_invalid_example,PRESENT_INVALID_011,'A=B',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_CHARACTER_GRAMMAR_INVALID,COVALENT_RESIDUE_INSERTION_PRESENT_CHARACTER_GRAMMAR_INVALID,None,false,true,true
+present_invalid_example,PRESENT_INVALID_012,'A\\B',str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_CHARACTER_GRAMMAR_INVALID,COVALENT_RESIDUE_INSERTION_PRESENT_CHARACTER_GRAMMAR_INVALID,None,false,true,true
+present_invalid_example,PRESENT_INVALID_013,'A',StrSubclass,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+present_invalid_example,PRESENT_INVALID_014,1,int,n/a,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+present_invalid_example,PRESENT_INVALID_015,None,NoneType,n/a,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_001,state non-exact str,int/str,0,invalid,invalid,COVALENT_RESIDUE_INSERTION_STATE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_STATE_TYPE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_002,state outside enum,str/str,0,invalid,invalid,COVALENT_RESIDUE_INSERTION_STATE_VALUE_INVALID,COVALENT_RESIDUE_INSERTION_STATE_VALUE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_003,absent non-exact value,str/NoneType,n/a,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_004,absent empty,str/str,0,passed,passed,,,'',true,true,true
+state_value_truth,STATE_VALUE_005,absent nonempty,str/str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_ABSENT_REQUIRES_EMPTY,COVALENT_RESIDUE_INSERTION_ABSENT_REQUIRES_EMPTY,None,false,true,true
+state_value_truth,STATE_VALUE_006,unknown non-exact value,str/NoneType,n/a,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_007,unknown empty,str/str,0,blocked,blocked,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,'',true,true,true
+state_value_truth,STATE_VALUE_008,unknown nonempty,str/str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_UNKNOWN_REQUIRES_EMPTY,COVALENT_RESIDUE_INSERTION_UNKNOWN_REQUIRES_EMPTY,None,false,true,true
+state_value_truth,STATE_VALUE_009,present non-exact value,str/NoneType,n/a,invalid,invalid,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,COVALENT_RESIDUE_INSERTION_VALUE_TYPE_INVALID,None,false,true,true
+state_value_truth,STATE_VALUE_010,present empty,str/str,0,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_REQUIRES_NONEMPTY,COVALENT_RESIDUE_INSERTION_PRESENT_REQUIRES_NONEMPTY,None,false,true,true
+state_value_truth,STATE_VALUE_011,present marker,str/str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_MARKER_FORBIDDEN,None,false,true,true
+state_value_truth,STATE_VALUE_012,present whitespace,str/str,3,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_INSERTION_PRESENT_WHITESPACE_FORBIDDEN,None,false,true,true
+state_value_truth,STATE_VALUE_013,present non-ASCII,str/str,1,invalid,invalid,COVALENT_RESIDUE_INSERTION_PRESENT_NON_ASCII,COVALENT_RESIDUE_INSERTION_PRESENT_NON_ASCII,None,false,true,true
+state_value_truth,STATE_VALUE_014,present grammar-valid,str/str,3,passed,passed,,,'A.B',true,true,true

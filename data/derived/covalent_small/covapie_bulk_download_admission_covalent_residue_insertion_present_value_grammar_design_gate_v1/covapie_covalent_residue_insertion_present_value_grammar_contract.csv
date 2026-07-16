@@ -1,0 +1,32 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+INSERTION_GRAMMAR_001,normative,normative dictionary identity,PDBx/mmCIF V5,PDBx/mmCIF V5,true
+INSERTION_GRAMMAR_002,normative,normative atom_site insertion item,_atom_site.pdbx_PDB_ins_code,_atom_site.pdbx_PDB_ins_code,true
+INSERTION_GRAMMAR_003,normative,struct_conn reference role,_struct_conn.pdbx_ptnr1/2_PDB_ins_code references atom_site insertion code,_struct_conn.pdbx_ptnr1/2_PDB_ins_code references atom_site insertion code,true
+INSERTION_GRAMMAR_004,grammar,dictionary code pattern permits empty,"[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]*","[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]*",true
+INSERTION_GRAMMAR_005,grammar,CovaPIE present pattern is nonempty,"[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]+","[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]+",true
+INSERTION_GRAMMAR_006,grammar,type(value) is str; subclasses rejected,true,true,true
+INSERTION_GRAMMAR_007,grammar,ASCII only,true,true,true
+INSERTION_GRAMMAR_008,grammar,minimum semantic length,1,1,true
+INSERTION_GRAMMAR_009,grammar,semantic maximum length,none,none,true
+INSERTION_GRAMMAR_010,grammar,whitespace at any position forbidden,forbidden,forbidden,true
+INSERTION_GRAMMAR_011,grammar,complete dot and question-mark markers forbidden,forbidden,forbidden,true
+INSERTION_GRAMMAR_012,preservation,case preserved,exact,exact,true
+INSERTION_GRAMMAR_013,preservation,trim operation,none,none,true
+INSERTION_GRAMMAR_014,preservation,type coercion,none,none,true
+INSERTION_GRAMMAR_015,preservation,Unicode or canonical normalization,none,none,true
+INSERTION_GRAMMAR_016,preservation,successful canonical value equals input,exact,exact,true
+INSERTION_GRAMMAR_017,preservation,repeated validation,idempotent,idempotent,true
+INSERTION_GRAMMAR_018,state_value,state enum,absent|present|unknown,absent|present|unknown,true
+INSERTION_GRAMMAR_019,state_value,absent requires exact empty str,passed,passed,true
+INSERTION_GRAMMAR_020,state_value,unknown requires exact empty str and blocks ADMIT_004,blocked,blocked,true
+INSERTION_GRAMMAR_021,state_value,present requires grammar-valid nonempty exact str,passed,passed,true
+INSERTION_GRAMMAR_022,state_value,all invalid state/value outcomes block ADMIT_004 fail closed,true,true,true
+INSERTION_GRAMMAR_023,evidence,raw CIF quote delimiters are not candidate data,decoded_exact_value_only,decoded_exact_value_only,true
+INSERTION_GRAMMAR_024,agreement,both sources require explicit resolved evidence,true,true,true
+INSERTION_GRAMMAR_025,agreement,decoded values compare byte-for-byte,exact,exact,true
+INSERTION_GRAMMAR_026,agreement,resolved/candidate/provenance payload agree,exact,exact,true
+INSERTION_GRAMMAR_027,readiness,parser quote-class roundtrip verified,false,false,true
+INSERTION_GRAMMAR_028,readiness,real provider present-value roundtrip ready,false,false,true
+INSERTION_GRAMMAR_029,readiness,candidate grammar design blocked by quote gap,false,false,true
+INSERTION_GRAMMAR_030,readiness,ready for successor integration,true,true,true
+INSERTION_GRAMMAR_031,readiness,grammar integrated into effective schema,false,false,true
