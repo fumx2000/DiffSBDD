@@ -1,0 +1,16 @@
+safety_item,expected_executed,observed_executed,safety_passed
+exact_source_reads,true,true,true
+semantics_design,true,true,true
+truth_table_classification,true,true,true
+exact11_metadata_audit,true,true,true
+issue_transition_design,true,true,true
+raw_read,false,false,true
+parser_execution,false,false,true
+provider_execution,false,false,true
+candidate_record_materialization,false,false,true
+admission_modification,false,false,true
+sample_backfill,false,false,true
+network_or_download,false,false,true
+checkpoint_access,false,false,true
+torch_numpy_rdkit_import,false,false,true
+model_forward_loss_training,false,false,true
