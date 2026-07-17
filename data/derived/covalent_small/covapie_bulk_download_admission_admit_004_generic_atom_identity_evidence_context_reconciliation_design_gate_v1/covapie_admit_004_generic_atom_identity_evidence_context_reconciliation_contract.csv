@@ -1,0 +1,29 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+CONFLICT_001,conflict_evidence,historical E1-D ADMIT_004 rule_logic_ready claim retained,true,true,true
+CONFLICT_002,conflict_evidence,generic atom scope separation conflict detected,true,true,true
+ATOM_001,generic_atom,generic atom requires exact str; subclasses rejected,true,true,true
+ATOM_002,generic_atom,empty generic atom rejected,true,true,true
+ATOM_003,generic_atom,ASCII only,true,true,true
+ATOM_004,generic_atom,whitespace at any position forbidden,true,true,true
+ATOM_005,generic_atom,complete dot and question markers forbidden,true,true,true
+ATOM_006,generic_atom,semantic maximum length,none,none,true
+ATOM_007,generic_atom,successful value exact-preserved,true,true,true
+ATOM_008,generic_atom,trim/coercion/case-fold/Unicode normalization/canonical rewrite,none,none,true
+SCOPE_001,rule_separation,ADMIT_004 accepts valid generic residue atom identity,passed,passed,true
+SCOPE_002,rule_separation,ADMIT_005 alone enforces canonical CYS and exact SG,true,true,true
+BINDING_001,candidate_binding,ADMIT_004 candidate dependency count,9,9,true
+CONTEXT_001,evidence_context,top-level accepts Mapping and unrelated keys,true,true,true
+CONTEXT_002,evidence_context,nested context exact key count,6,6,true
+CONTEXT_003,evidence_context,nested context schema version,covapie_covalent_residue_identity_evidence_context_v1,covapie_covalent_residue_identity_evidence_context_v1,true
+CONTEXT_004,evidence_context,attested candidate exact field count and raw binding,9,9,true
+CONTEXT_005,evidence_context,provider outcome enum,passed|blocked|invalid,passed|blocked|invalid,true
+CONTEXT_006,evidence_context,provider reason combination exact contract,true,true,true
+CONTEXT_007,evidence_context,four-way and quote flags require exact bool,true,true,true
+BOUNDARY_001,execution_boundary,evaluator filesystem/raw/provenance dereference,none,none,true
+CONTEXT_008,evidence_context,missing context outcome,blocked,blocked,true
+CONTEXT_009,evidence_context,malformed context outcome,invalid,invalid,true
+PRECEDENCE_001,outcome_precedence,outcome precedence,invalid>blocked>passed,invalid>blocked>passed,true
+QUOTE_001,quote_class,present quote-class false blocks; absent unaffected,true,true,true
+INSERTION_REUSE_001,insertion_reuse,E1-C insertion present-value grammar reused exactly without character-set drift,"[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]+","[][_,.;:\""&<>()/\{}'`~!@#$%A-Za-z0-9*|+-]+",true
+READINESS_001,successor,ready for generic atom/evidence-context successor integration,true,true,true
+READINESS_002,successor,reconciled ADMIT_004 interface implementation ready,false,false,true

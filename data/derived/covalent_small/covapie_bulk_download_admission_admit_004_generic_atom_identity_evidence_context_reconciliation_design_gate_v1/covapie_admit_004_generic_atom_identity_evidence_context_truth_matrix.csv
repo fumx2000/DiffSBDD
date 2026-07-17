@@ -1,0 +1,37 @@
+row_kind,case_id,input_residue_name,input_atom_descriptor,insertion_state,context_case,expected_admit_004_outcome,observed_admit_004_outcome,expected_admit_005_outcome,observed_admit_005_outcome,expected_reason,observed_reason,canonical_value,truth_passed
+generic_atom_valid,GENERIC_ATOM_VALID_001,,SG,,,passed,passed,,,,,SG,true
+generic_atom_valid,GENERIC_ATOM_VALID_002,,CA,,,passed,passed,,,,,CA,true
+generic_atom_valid,GENERIC_ATOM_VALID_003,,ca,,,passed,passed,,,,,ca,true
+generic_atom_valid,GENERIC_ATOM_VALID_004,,N1,,,passed,passed,,,,,N1,true
+generic_atom_valid,GENERIC_ATOM_VALID_005,,OXT,,,passed,passed,,,,,OXT,true
+generic_atom_valid,GENERIC_ATOM_VALID_006,,C1',,,passed,passed,,,,,C1',true
+generic_atom_valid,GENERIC_ATOM_VALID_007,,A.B,,,passed,passed,,,,,A.B,true
+generic_atom_valid,GENERIC_ATOM_VALID_008,,+,,,passed,passed,,,,,+,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_001,,non-str,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_002,,str subclass,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_003,,empty,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_EMPTY,COVALENT_RESIDUE_ATOM_NAME_EMPTY,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_004,,non-ASCII,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_NON_ASCII,COVALENT_RESIDUE_ATOM_NAME_NON_ASCII,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_005,,embedded space,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_006,,embedded tab,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_007,,complete dot,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,,true
+generic_atom_invalid,GENERIC_ATOM_INVALID_008,,complete question mark,,,invalid,invalid,,,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,,true
+admit_004_admit_005_scope,ATOM_SCOPE_001,CYS,SG,,,passed,passed,passed,passed,,,CYS,true
+admit_004_admit_005_scope,ATOM_SCOPE_002,cys,SG,,,passed,passed,passed,passed,,,CYS,true
+admit_004_admit_005_scope,ATOM_SCOPE_003,CYS,CA,,,passed,passed,rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYS,true
+admit_004_admit_005_scope,ATOM_SCOPE_004,SER,SG,,,passed,passed,rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,SER,true
+admit_004_admit_005_scope,ATOM_SCOPE_005,SER,CA,,,passed,passed,rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,SER,true
+admit_004_admit_005_scope,ATOM_SCOPE_006,CYS,ca,,,passed,passed,rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYS,true
+admit_004_admit_005_scope,ATOM_SCOPE_007,C-Y,SG,,,invalid,invalid,invalid,invalid,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,,true
+admit_004_admit_005_scope,ATOM_SCOPE_008,CYS,?,,,invalid,invalid,invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,CYS,true
+evidence_context_binding,EVIDENCE_CONTEXT_001,CYS,SG,absent,valid_absent_exact_binding_provider_passed,passed,passed,,,,,,true
+evidence_context_binding,EVIDENCE_CONTEXT_002,CYS,SG,present,valid_present_all_attested,passed,passed,,,,,,true
+evidence_context_binding,EVIDENCE_CONTEXT_003,CYS,SG,unknown,unknown_empty_provider_blocked,blocked,blocked,,,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN,,true
+evidence_context_binding,EVIDENCE_CONTEXT_004,CYS,SG,absent,context_key_entirely_missing,blocked,blocked,,,ADMIT_004_IDENTITY_EVIDENCE_CONTEXT_MISSING,ADMIT_004_IDENTITY_EVIDENCE_CONTEXT_MISSING,,true
+evidence_context_binding,EVIDENCE_CONTEXT_005,CYS,SG,absent,top_level_context_non_mapping,invalid,invalid,,,ADMIT_004_EVALUATION_CONTEXT_MAPPING_INVALID,ADMIT_004_EVALUATION_CONTEXT_MAPPING_INVALID,,true
+evidence_context_binding,EVIDENCE_CONTEXT_006,CYS,SG,absent,nested_schema_or_keyset_invalid,invalid,invalid,,,ADMIT_004_IDENTITY_EVIDENCE_CONTEXT_SCHEMA_INVALID,ADMIT_004_IDENTITY_EVIDENCE_CONTEXT_SCHEMA_INVALID,,true
+evidence_context_binding,EVIDENCE_CONTEXT_007,CYS,SG,absent,attested_field_missing,invalid,invalid,,,ADMIT_004_ATTESTED_CANDIDATE_FIELDSET_INVALID,ADMIT_004_ATTESTED_CANDIDATE_FIELDSET_INVALID,,true
+evidence_context_binding,EVIDENCE_CONTEXT_008,CYS,SG,absent,candidate_binding_mismatch,invalid,invalid,,,ADMIT_004_ATTESTED_CANDIDATE_BINDING_MISMATCH:covalent_residue_name,ADMIT_004_ATTESTED_CANDIDATE_BINDING_MISMATCH:covalent_residue_name,,true
+evidence_context_binding,EVIDENCE_CONTEXT_009,CYS,SG,absent,provider_outcome_invalid,invalid,invalid,,,PROVIDER_INVALID,PROVIDER_INVALID,,true
+evidence_context_binding,EVIDENCE_CONTEXT_010,CYS,SG,absent,provider_outcome_blocked,blocked,blocked,,,PROVIDER_BLOCKED,PROVIDER_BLOCKED,,true
+evidence_context_binding,EVIDENCE_CONTEXT_011,CYS,SG,present,present_four_way_false,blocked,blocked,,,ADMIT_004_PRESENT_FOUR_WAY_EQUALITY_UNATTESTED,ADMIT_004_PRESENT_FOUR_WAY_EQUALITY_UNATTESTED,,true
+evidence_context_binding,EVIDENCE_CONTEXT_012,CYS,SG,present,present_quote_class_false,blocked,blocked,,,COVALENT_RESIDUE_INSERTION_PRESENT_QUOTE_CLASS_UNVERIFIED,COVALENT_RESIDUE_INSERTION_PRESENT_QUOTE_CLASS_UNVERIFIED,,true
