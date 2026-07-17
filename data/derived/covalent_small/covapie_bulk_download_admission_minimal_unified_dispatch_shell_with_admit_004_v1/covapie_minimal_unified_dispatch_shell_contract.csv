@@ -1,0 +1,32 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+RUNTIME_001,public_api,public callable,evaluate_admission_rule,evaluate_admission_rule,true
+RUNTIME_002,public_api,signature,"(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'","(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'",true
+RUNTIME_003,public_api,dispatch cardinality,single_rule_only,single_rule_only,true
+RESULT_001,result,frozen dataclass,true,true,true
+RESULT_002,result,exact field count,13,13,true
+RESULT_003,result,field order,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,true
+RESULT_004,result,schema version,covapie_unified_admission_rule_evaluation_v1,covapie_unified_admission_rule_evaluation_v1,true
+RESULT_005,result,global outcome vocabulary,passed|blocked|invalid|rejected,passed|blocked|invalid|rejected,true
+RESULT_006,result,ADMIT_004 outcomes,passed|blocked|invalid,passed|blocked|invalid,true
+RESULT_007,result,evaluator IO,false,false,true
+ERROR_001,dispatch_error,frozen dataclass exception,true,true,true
+ERROR_002,dispatch_error,exact field count,6,6,true
+ERROR_003,dispatch_error,field order,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,true
+ERROR_004,dispatch_error,code vocabulary,UNIFIED_ADMISSION_RULE_ID_TYPE_INVALID|UNIFIED_ADMISSION_RULE_ID_UNKNOWN|UNIFIED_ADMISSION_RULE_NOT_REGISTERED|UNIFIED_ADMISSION_RULE_ADAPTER_NOT_READY|UNIFIED_ADMISSION_CONTEXT_ROUTING_INVALID,UNIFIED_ADMISSION_RULE_ID_TYPE_INVALID|UNIFIED_ADMISSION_RULE_ID_UNKNOWN|UNIFIED_ADMISSION_RULE_NOT_REGISTERED|UNIFIED_ADMISSION_RULE_ADAPTER_NOT_READY|UNIFIED_ADMISSION_CONTEXT_ROUTING_INVALID,true
+REGISTRY_001,registry,known rule count,15,15,true
+REGISTRY_002,registry,callable discovered count,4,4,true
+REGISTRY_003,registry,adapter ready count,1,1,true
+REGISTRY_004,registry,registered rules,ADMIT_004,ADMIT_004,true
+REGISTRY_005,registry,immutable,true,true,true
+ADAPTER_001,adapter,adapter ID,covapie_admit_004_unified_adapter_v1,covapie_admit_004_unified_adapter_v1,true
+ADAPTER_002,adapter,standalone evaluator calls per dispatch,1,1,true
+ADAPTER_003,adapter,source result exact type required,true,true,true
+ADAPTER_004,adapter,candidate projection field count,9,9,true
+ADAPTER_005,adapter,evaluation context identity pass through,true,true,true
+BOUNDARY_001,boundary,legacy adapters implemented,false,false,true
+BOUNDARY_002,boundary,ADMIT_005 to ADMIT_015 implemented,false,false,true
+BOUNDARY_003,boundary,all-rules evaluator implemented,false,false,true
+BOUNDARY_004,boundary,combined candidate verdict,false,false,true
+BOUNDARY_005,boundary,cross-rule aggregation,false,false,true
+BOUNDARY_006,boundary,real candidate evaluation,false,false,true
+BOUNDARY_007,boundary,Exact11 real evaluation,false,false,true
