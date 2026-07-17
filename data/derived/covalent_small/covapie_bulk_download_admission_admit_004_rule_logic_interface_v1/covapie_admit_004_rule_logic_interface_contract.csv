@@ -1,0 +1,44 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+INTERFACE_001,public_interface,public callable,evaluate_admit_004,evaluate_admit_004,true
+INTERFACE_002,public_interface,result frozen dataclass field count,10,10,true
+INTERFACE_003,public_interface,admission rule ID,ADMIT_004,ADMIT_004,true
+INTERFACE_004,public_interface,outcome enum,passed|blocked|invalid,passed|blocked|invalid,true
+INTERFACE_005,public_interface,rejected outcome,forbidden,forbidden,true
+INTERFACE_006,public_interface,evaluator IO,false,false,true
+CANDIDATE_001,candidate,candidate Mapping accepted,true,true,true
+CANDIDATE_002,candidate,candidate dependency count,9,9,true
+CANDIDATE_003,candidate,missing-field validation order,exact9,exact9,true
+CANDIDATE_004,candidate,residue canonicalization,uppercase,uppercase,true
+CANDIDATE_005,candidate,generic atom identity,exact-preserve,exact-preserve,true
+CANDIDATE_006,candidate,generic atom semantic maximum,none,none,true
+CANDIDATE_007,candidate,locator namespace,auth|label,auth|label,true
+CANDIDATE_008,candidate,insertion state enum,absent|present|unknown,absent|present|unknown,true
+CANDIDATE_009,candidate,present-value slash,allowed,allowed,true
+CANDIDATE_010,candidate,present-value backslash and equals,forbidden,forbidden,true
+CANDIDATE_011,candidate,provenance SHA,lowercase-64-hex,lowercase-64-hex,true
+CONTEXT_001,context,top-level Mapping with unrelated keys,accepted,accepted,true
+CONTEXT_002,context,nested schema version,covapie_covalent_residue_identity_evidence_context_v1,covapie_covalent_residue_identity_evidence_context_v1,true
+CONTEXT_003,context,nested exact key count,6,6,true
+CONTEXT_004,context,attested candidate field count,9,9,true
+CONTEXT_005,context,attestation binding,raw-before-canonicalization,raw-before-canonicalization,true
+CONTEXT_006,context,provider outcome enum,passed|blocked|invalid,passed|blocked|invalid,true
+CONTEXT_007,context,attestation flags exact bool,true,true,true
+CONTEXT_008,context,missing context outcome,blocked,blocked,true
+CONTEXT_009,context,malformed context outcome,invalid,invalid,true
+PRECEDENCE_001,outcome_precedence,global precedence,invalid>blocked>passed,invalid>blocked>passed,true
+PRECEDENCE_002,outcome_precedence,unknown before missing/provider blocked,true,true,true
+PRECEDENCE_003,outcome_precedence,provider blocked before present attestations,true,true,true
+PRECEDENCE_004,outcome_precedence,four-way before quote-class,true,true,true
+DETERMINISM_001,purity,input mutation,none,none,true
+DETERMINISM_002,purity,repeated-call result,identical,identical,true
+EVIDENCE_001,predecessor,E1-E2 active issue count,9,9,true
+EVIDENCE_002,predecessor,provider blocking row count,11,11,true
+EXACT11_001,execution_boundary,Exact11 metadata count,11,11,true
+EXACT11_002,execution_boundary,Exact11 real evaluation,false,false,true
+READINESS_001,readiness,standalone evaluator implemented,true,true,true
+READINESS_002,readiness,ready for unified engine integration,true,true,true
+READINESS_003,readiness,unified engine integrated,false,false,true
+READINESS_004,readiness,ready for real candidate evaluation,false,false,true
+READINESS_005,readiness,ready for bulk download,false,false,true
+READINESS_006,readiness,ready for training,false,false,true
+READINESS_007,readiness,feature-semantics audit before training,required,required,true
