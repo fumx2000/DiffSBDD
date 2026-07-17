@@ -1,0 +1,23 @@
+case_id,case_group,residue_input_kind,residue_input_display,atom_input_kind,atom_input_display,expected_outcome,observed_outcome,expected_reason,observed_reason,canonical_residue_name,canonical_residue_atom_name,validated_candidate_fields_json,case_passed
+PASS_001,passed,str,"""CYS""",str,"""SG""",passed,passed,,,CYS,SG,"[[""covalent_residue_name"", ""CYS""], [""covalent_residue_atom_name"", ""SG""]]",true
+PASS_002,passed,str,"""cys""",str,"""SG""",passed,passed,,,CYS,SG,"[[""covalent_residue_name"", ""CYS""], [""covalent_residue_atom_name"", ""SG""]]",true
+REJECT_001,rejected,str,"""CYS""",str,"""CA""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYS,CA,"[[""covalent_residue_name"", ""CYS""], [""covalent_residue_atom_name"", ""CA""]]",true
+REJECT_002,rejected,str,"""CYS""",str,"""sg""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYS,sg,"[[""covalent_residue_name"", ""CYS""], [""covalent_residue_atom_name"", ""sg""]]",true
+REJECT_003,rejected,str,"""CYS""",str,"""A.B""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYS,A.B,"[[""covalent_residue_name"", ""CYS""], [""covalent_residue_atom_name"", ""A.B""]]",true
+REJECT_004,rejected,str,"""SER""",str,"""SG""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,SER,SG,"[[""covalent_residue_name"", ""SER""], [""covalent_residue_atom_name"", ""SG""]]",true
+REJECT_005,rejected,str,"""SER""",str,"""CA""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,SER,CA,"[[""covalent_residue_name"", ""SER""], [""covalent_residue_atom_name"", ""CA""]]",true
+REJECT_006,rejected,str,"""CYX""",str,"""SG""",rejected,rejected,ADMIT_005_CYS_SG_SCOPE_REJECTED,ADMIT_005_CYS_SG_SCOPE_REJECTED,CYX,SG,"[[""covalent_residue_name"", ""CYX""], [""covalent_residue_atom_name"", ""SG""]]",true
+INVALID_RESIDUE_001,invalid,non_str,7,str,"""SG""",invalid,invalid,COVALENT_RESIDUE_NAME_TYPE_INVALID,COVALENT_RESIDUE_NAME_TYPE_INVALID,,,[],true
+INVALID_RESIDUE_002,invalid,str_subclass,CYS,str,"""SG""",invalid,invalid,COVALENT_RESIDUE_NAME_TYPE_INVALID,COVALENT_RESIDUE_NAME_TYPE_INVALID,,,[],true
+INVALID_RESIDUE_003,invalid,str,"""""",str,"""SG""",invalid,invalid,COVALENT_RESIDUE_NAME_EMPTY,COVALENT_RESIDUE_NAME_EMPTY,,,[],true
+INVALID_RESIDUE_004,invalid,str,"""C\u00ddS""",str,"""SG""",invalid,invalid,COVALENT_RESIDUE_NAME_NON_ASCII,COVALENT_RESIDUE_NAME_NON_ASCII,,,[],true
+INVALID_RESIDUE_005,invalid,str,"""C-Y""",str,"""SG""",invalid,invalid,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,,,[],true
+INVALID_ATOM_001,invalid,str,"""CYS""",non_str,7,invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_002,invalid,str,"""CYS""",str_subclass,SG,invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,COVALENT_RESIDUE_ATOM_NAME_TYPE_INVALID,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_003,invalid,str,"""CYS""",str,"""""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_EMPTY,COVALENT_RESIDUE_ATOM_NAME_EMPTY,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_004,invalid,str,"""CYS""",str,"""S\u0120""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_NON_ASCII,COVALENT_RESIDUE_ATOM_NAME_NON_ASCII,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_005,invalid,str,"""CYS""",str,"""S G""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_006,invalid,str,"""CYS""",str,"""S\tG""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_WHITESPACE_FORBIDDEN,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_007,invalid,str,"""CYS""",str,""".""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+INVALID_ATOM_008,invalid,str,"""CYS""",str,"""?""",invalid,invalid,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,COVALENT_RESIDUE_ATOM_NAME_MARKER_FORBIDDEN,CYS,,"[[""covalent_residue_name"", ""CYS""]]",true
+PRECEDENCE_001,invalid,str,"""C-Y""",str,"""?""",invalid,invalid,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,COVALENT_RESIDUE_NAME_SYNTAX_INVALID,,,[],true
