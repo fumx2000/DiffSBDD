@@ -1,0 +1,35 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+API_001,public_api,callable,evaluate_admission_rule,evaluate_admission_rule,true
+API_002,public_api,signature,"(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'","(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'",true
+API_003,public_api,dispatch cardinality,single_rule_only,single_rule_only,true
+TYPE_001,phase2_identity,result class identity,true,true,true
+TYPE_002,phase2_identity,dispatch error class identity,true,true,true
+TYPE_003,phase2_identity,result exact field count,13,13,true
+TYPE_004,phase2_identity,dispatch error exact field count,6,6,true
+REGISTRY_001,registry,immutable,true,true,true
+REGISTRY_002,registry,registered rules,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004,true
+REGISTRY_003,registry,registered count,4,4,true
+ROUTING_001,context,ADMIT_001 ordered context reasons,8,8,true
+ROUTING_002,context,ADMIT_002 ordered context reasons,4,4,true
+ROUTING_003,context,ADMIT_003 ordered context reasons,4,4,true
+PROJECTION_001,candidate,required fields,candidate_record_id|pdb_id|ligand_comp_id,candidate_record_id|pdb_id|ligand_comp_id,true
+PROJECTION_002,candidate,adapter-side invalid payloads,6,6,true
+ADAPTER_001,legacy_adapter,legacy evaluator calls per valid dispatch,1,1,true
+ADAPTER_002,legacy_adapter,semantic oracle calls per valid dispatch,1,1,true
+ADAPTER_003,legacy_adapter,exact dict and key order,required,required,true
+ADAPTER_004,legacy_adapter,oracle field equivalence,required,required,true
+ADAPTER_005,legacy_adapter,unknown reason,fail_closed,fail_closed,true
+ADMIT004_001,preservation,delegation target,phase2.evaluate_admission_rule,phase2.evaluate_admission_rule,true
+ADMIT004_002,preservation,delegation calls,1,1,true
+TRUTH_001,synthetic_truth,row count,56,56,true
+TRUTH_002,synthetic_truth,group counts,passed=8|blocked=4|invalid_rule_result=24|dispatch_error=20,passed=8|blocked=4|invalid_rule_result=24|dispatch_error=20,true
+ISSUE_001,issues,removed issue,UNIFIED_ADMISSION_LEGACY_EVALUATOR_ADAPTER_IMPLEMENTATION_PENDING,UNIFIED_ADMISSION_LEGACY_EVALUATOR_ADAPTER_IMPLEMENTATION_PENDING,true
+ISSUE_002,issues,active issue count,11,11,true
+BOUNDARY_001,boundary,ADMIT_005 to ADMIT_015 registration,false,false,true
+BOUNDARY_002,boundary,all-rules evaluator,false,false,true
+BOUNDARY_003,boundary,combined candidate verdict,false,false,true
+BOUNDARY_004,boundary,cross-rule aggregation,false,false,true
+BOUNDARY_005,boundary,real candidate evaluation,false,false,true
+BOUNDARY_006,boundary,Exact11 real evaluation,false,false,true
+BOUNDARY_007,boundary,bulk download readiness,false,false,true
+BOUNDARY_008,boundary,training readiness,false,false,true

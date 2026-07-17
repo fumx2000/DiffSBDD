@@ -1,0 +1,16 @@
+admission_rule_id,known_rule,callable_discovered,adapter_ready,registered,dispatch_disposition,audit_passed
+ADMIT_001,true,true,true,true,registered_single_rule_runtime,true
+ADMIT_002,true,true,true,true,registered_single_rule_runtime,true
+ADMIT_003,true,true,true,true,registered_single_rule_runtime,true
+ADMIT_004,true,true,true,true,registered_single_rule_runtime,true
+ADMIT_005,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_006,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_007,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_008,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_009,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_010,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_011,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_012,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_013,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_014,true,false,false,false,known_not_registered_fail_closed,true
+ADMIT_015,true,false,false,false,known_not_registered_fail_closed,true
