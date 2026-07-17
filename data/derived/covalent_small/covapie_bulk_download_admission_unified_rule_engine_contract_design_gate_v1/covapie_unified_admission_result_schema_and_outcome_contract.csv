@@ -1,0 +1,30 @@
+contract_order,contract_kind,field_name,field_type,contract_value,contract_status
+1,result_field,schema_version,str,required,frozen
+2,result_field,admission_rule_id,str,required,frozen
+3,result_field,admission_rule_name,str,required,frozen
+4,result_field,outcome,str,required,frozen
+5,result_field,passed,bool,required,frozen
+6,result_field,blocks_candidate,bool,required,frozen
+7,result_field,reason,str,required,frozen
+8,result_field,normalized_values,"tuple[tuple[str, str], ...]",required,frozen
+9,result_field,validated_candidate_fields,"tuple[tuple[str, str], ...]",required,frozen
+10,result_field,consumed_candidate_fields,"tuple[str, ...]",required,frozen
+11,result_field,consumed_context_items,"tuple[str, ...]",required,frozen
+12,result_field,evaluator_io_used,bool,required,frozen
+13,result_field,adapter_id,str,required,frozen
+14,result_invariant,dataclass_mutability,,frozen,frozen
+15,result_invariant,schema_version,,covapie_unified_admission_rule_evaluation_v1,frozen
+16,result_invariant,outcome_vocabulary,,passed|blocked|invalid|rejected,frozen
+17,result_invariant,passed,,true_iff_outcome_passed,frozen
+18,result_invariant,blocks_candidate,,true_iff_outcome_not_passed,frozen
+19,result_invariant,passed_reason,,empty_exact_str,frozen
+20,result_invariant,nonpassed_reason,,nonempty_exact_str,frozen
+21,result_invariant,tuple_order,,deterministic,frozen
+22,result_invariant,evaluator_io_used,,false,frozen
+23,rule_outcome_subset,ADMIT_004,,passed|blocked|invalid,frozen
+24,rule_outcome_subset,ADMIT_005,,passed|rejected|invalid,frozen
+25,rule_outcome_subset,ADMIT_001|ADMIT_002|ADMIT_003,,adapter_mapping_unresolved,frozen
+26,rule_outcome_subset,ADMIT_006-ADMIT_015,,unresolved,frozen
+27,aggregation_boundary,global_engine_precedence,,not_frozen,frozen
+28,aggregation_boundary,local_precedence_evidence,,invalid>rejected>blocked>passed,frozen
+29,aggregation_boundary,local_precedence_promoted_globally,,false,frozen
