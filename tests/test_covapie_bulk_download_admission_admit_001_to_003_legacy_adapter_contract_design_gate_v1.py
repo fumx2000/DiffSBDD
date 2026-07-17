@@ -203,14 +203,44 @@ def test_legacy_callable_signatures_and_exact_dict_keysets(state):
         assert shapes[rule_id]["keys"] == spec["keys"]
 
 
-def test_legacy_evaluators_are_not_imported_or_executed(state):
-    assert state["all_checks_passed"] is True
-    forbidden = {
+def test_phase3_gate_import_does_not_import_or_execute_legacy_evaluators() -> None:
+    forbidden = (
         gate.ADMIT001_INTEGRATION_PATH.stem,
         gate.ADMIT002_INTEGRATION_PATH.stem,
         gate.ADMIT003_INTEGRATION_PATH.stem,
-    }
-    assert forbidden.isdisjoint({name.rsplit(".", 1)[-1] for name in sys.modules})
+    )
+    module_name = (
+        "covalent_ext."
+        "covapie_bulk_download_admission_"
+        "admit_001_to_003_legacy_adapter_contract_design_gate"
+    )
+    script = "\n".join(
+        (
+            "import json",
+            "import sys",
+            f"sys.path.insert(0, {str(gate.REPO_ROOT / 'src')!r})",
+            f"import {module_name}",
+            f"forbidden = {forbidden!r}",
+            (
+                "present = sorted("
+                "name.rsplit('.', 1)[-1] "
+                "for name in sys.modules "
+                "if name.rsplit('.', 1)[-1] in forbidden"
+                ")"
+            ),
+            "print(json.dumps(present))",
+        )
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=gate.REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout == "[]\n"
+    assert completed.stderr == ""
 
 
 def test_adapter_identities_and_rule_names(state):
