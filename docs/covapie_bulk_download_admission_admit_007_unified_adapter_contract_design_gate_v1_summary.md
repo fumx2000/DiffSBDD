@@ -1,0 +1,19 @@
+# CovaPIE ADMIT_007 unified adapter contract design gate v1
+
+This design-only gate freezes the future `ADMIT_007` adapter contract without implementing `_evaluate_registered_admit_007`, registering the rule, or modifying the current Exact6 runtime.
+
+The frozen identity is `ADMIT_007` / `distance_only_inference_forbidden` / `covapie_admit_007_unified_adapter_v1`. The formal evaluator is `evaluate_admit_007`, returning exact `Admit007EvaluationResult`; the independent oracle is `classify_admit_006_admit_007_evidence_design`, using `classification.admit_007`. The future registry, callable-discovered set, and adapter-ready set are ordered `ADMIT_001` through `ADMIT_007`. `ADMIT_008` through `ADMIT_015` remain known but unregistered and fail closed.
+
+The complete 16-step precedence runs global ID validation, known-rule validation, registry/readiness validation, all five ordered context gates, candidate Mapping validation, required-field lookup, adapter missing classification, exactly one positional formal call, Exact10 source prevalidation, exactly one independent oracle derivation, complete ordered Exact10 equality, and Exact13 construction. Every context envelope gate precedes candidate access, and source validation precedes oracle access. Failure produces no partial Exact13 result.
+
+`evaluation_context` accepts `Mapping` subclasses, requires `allowed_covalent_evidence_classes` through one lookup, ignores extra keys, and routes the original value without copying, mutation, or semantic prevalidation. The other three context envelopes require exact `None`. Envelope/key failures are Exact6 dispatch errors; malformed routed values reach the standalone evaluator and become Exact13 invalid results.
+
+The candidate accepts `Mapping` subclasses and ignores extra fields. Non-Mapping input becomes Exact13 invalid with `ADMIT_007_CANDIDATE_RECORD_MAPPING_INVALID`. Only an absent key, exact `None`, or exact built-in empty string maps to `covalent_event_evidence_missing` without formal or oracle calls. String subclasses, whitespace, malformed objects, and `distance_only_inference` are not missing.
+
+The future adapter must pass the two original objects in one positional `evaluate_admit_007` call. Its result must be exact `Admit007EvaluationResult`; subclasses are rejected. Before the oracle, the adapter validates exact `vars()` storage, ordered Exact10 keys, committed dataclass field order, ordered reads, reconstruction through the committed dataclass, and equality. Wrong type uses `ADMIT_007_UNIFIED_ADAPTER_SOURCE_TYPE_INVALID`; storage, invariant, reconstruction, or oracle mismatch uses `ADMIT_007_UNIFIED_ADAPTER_SOURCE_INVARIANT_INVALID` and fails adapter readiness.
+
+Exact10 projects directly to the existing Exact13 schema. `normalized_values` equals `source.validated_candidate_fields`. Explicit evidence passes; `distance_only_inference` remains blocked with `DISTANCE_ONLY_INFERENCE_NOT_ADMISSIBLE`; scalar-invalid state stays empty; context-invalid state retains a canonical pair. Adapter-missing and candidate-envelope invalid states have empty normalized and validated fields while preserving consumed candidate and context identities.
+
+The evidence contains Exact43 contract rows, Exact23 routing rows split 11 context / 12 candidate, Exact56 truth rows split 37 / 4 / 5 / 4 / 4 / 2, Exact41 safety rows, and a byte-identical Exact11 issue inventory. The fixed Exact14 source boundary is verified as tracked, base-tree regular blobs with matching expected, base-tree, and filesystem SHA256 values before frozen bytes are parsed.
+
+Readiness is limited to `implement_covapie_unified_dispatch_runtime_with_admit_001_to_007_v1`. ADMIT_008, provider mapping, real candidate evaluation, download, model execution, and training remain outside scope. A feature-semantics audit is still mandatory before training; Step12D was a smoke legality check, not the final training-feature contract.
