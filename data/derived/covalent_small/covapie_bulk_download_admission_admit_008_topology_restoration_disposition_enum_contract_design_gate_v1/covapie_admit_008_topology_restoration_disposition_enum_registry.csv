@@ -1,0 +1,5 @@
+enum_order,canonical_value,semantic_definition,normative_contract_member,passed_by_admit_008,blocked_by_admit_008,formal_reason,included_in_allowed_context,provider_mapping_required,alias_allowed,v1_enum_row_passed
+1,approved_restoration_template,approved reusable restoration template is valid for the current candidate or frozen scope,true,true,false,,true,true,false,true
+2,explicit_manual_review_approved,"candidate-specific manual review is complete, traceable, and explicitly approved",true,true,false,,true,true,false,true
+3,manual_review_required,topology restoration is not approved and requires completed human review,true,false,true,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,false,true,false,true
+4,quarantine_required,"unknown, untrusted, inapplicable, or quarantined residue-warhead restoration path",true,false,true,TOPOLOGY_RESTORATION_QUARANTINE_REQUIRED,false,true,false,true

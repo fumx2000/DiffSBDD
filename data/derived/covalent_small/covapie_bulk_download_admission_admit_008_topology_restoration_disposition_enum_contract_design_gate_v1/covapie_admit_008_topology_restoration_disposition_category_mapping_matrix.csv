@@ -1,0 +1,13 @@
+mapping_order,mapping_case_id,policy_evidence,expected_canonical_disposition,expected_outcome,expected_reason,mapping_precedence,real_provider_mapping_executed,mapping_contract_passed
+1,validated_current_scope_template,validated approved reusable template for current candidate/scope,approved_restoration_template,passed,,validated template after quarantine/review checks,false,true
+2,candidate_specific_manual_approval,traceable completed candidate-specific manual approval,explicit_manual_review_approved,passed,,explicit manual approval after quarantine checks,false,true
+3,manual_review_not_completed,manual review required but no completed approval,manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,unfinished review overrides approval claim,false,true
+4,deferred_or_new_rule,"deferred, unvalidated, or new restoration rule",manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,deferred/new rule requires review,false,true
+5,unknown_residue_warhead_pair,unknown residue-warhead pair,quarantine_required,blocked,TOPOLOGY_RESTORATION_QUARANTINE_REQUIRED,unknown pair quarantines,false,true
+6,quarantine_flag,quarantine flag is true,quarantine_required,blocked,TOPOLOGY_RESTORATION_QUARANTINE_REQUIRED,quarantine evidence first,false,true
+7,quarantine_over_template,quarantine flag plus template approval claim,quarantine_required,blocked,TOPOLOGY_RESTORATION_QUARANTINE_REQUIRED,quarantine overrides template claim,false,true
+8,quarantine_over_manual_approval,quarantine flag plus manual approval claim,quarantine_required,blocked,TOPOLOGY_RESTORATION_QUARANTINE_REQUIRED,quarantine overrides manual approval claim,false,true
+9,unvalidated_template,template exists but current sample/scope validation absent,manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,unvalidated template cannot approve,false,true
+10,manual_visual_review_required_true,manual_visual_review_required=true without completed decision,manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,review required is not review approved,false,true
+11,new_residue_or_warhead,template claim generalized to a new residue or warhead,manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,no residue/warhead auto-generalization,false,true
+12,no_v1_bypass,not_applicable or no_restoration_required bypass claim,manual_review_required,blocked,TOPOLOGY_RESTORATION_MANUAL_REVIEW_REQUIRED,V1 has no bypass member,false,true
