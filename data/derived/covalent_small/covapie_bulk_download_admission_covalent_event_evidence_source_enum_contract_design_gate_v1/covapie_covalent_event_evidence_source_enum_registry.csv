@@ -1,0 +1,4 @@
+enum_order,canonical_value,semantic_definition,normative_contract_member,observed_in_committed_metadata,explicit_covalent_evidence,distance_only,allowed_by_admit_006,allowed_by_admit_007,included_in_allowed_covalent_evidence_classes,alias_allowed,v1_enum_row_passed
+1,explicit_structure_bond_record,"upstream structured source explicitly encodes a covalent bond, link, or bond record; not distance-only",true,false,true,false,true,true,true,false,true
+2,explicit_curated_covalent_annotation,trusted curated annotation explicitly declares a covalent event linked to the candidate ligand/residue; not distance-only,true,false,true,false,true,true,true,false,true
+3,distance_only_inference,covalent-event judgment comes only from geometric distance or proximity without an explicit bond record or curated annotation,true,false,false,true,false,false,false,false,true
