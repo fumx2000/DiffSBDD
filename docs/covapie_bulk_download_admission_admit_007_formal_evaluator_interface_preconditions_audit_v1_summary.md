@@ -1,0 +1,13 @@
+# CovaPIE ADMIT_007 formal evaluator interface preconditions audit v1
+
+This read-only, metadata-only gate confirms that `ADMIT_007` (`distance_only_inference_forbidden`) has sufficient frozen semantics for a future standalone `evaluate_admit_007` interface. The candidate scalar is `covalent_event_evidence_source`; the context item is `allowed_covalent_evidence_classes`.
+
+The normative ordered enum is Exact3: `explicit_structure_bond_record`, `explicit_curated_covalent_annotation`, and `distance_only_inference`. The allowed context is the exact built-in tuple containing the first two members in that order. Scalar validation is exact built-in string, nonempty, ASCII, canonical syntax, then Exact3 membership; scalar failure precedes context failure, which precedes canonical-member classification. No trimming, case folding, aliasing, normalization, repair, catch-all member, manual-review pseudo-member, or geometry inference is permitted.
+
+Both explicit members pass. The canonical distance-only member is blocked, not invalid, with formal reason `DISTANCE_ONLY_INFERENCE_NOT_ADMISSIBLE`. The lowercase historical registry reason `distance_only_inference_not_admissible` remains a distinct historical declaration. Scalar-invalid input clears canonical and validated state; context-invalid input after a canonical scalar retains the canonical scalar and validated candidate pair. Standalone `None` is type-invalid, the exact empty string is empty-invalid, and candidate-key missing remains outside this standalone interface.
+
+ADMIT_006 and ADMIT_007 share the scalar, context, enum, and validation contract but retain distinct responsibilities and blocked reasons. The committed `classify_admit_006_admit_007_evidence_design` function is available as an independent audit oracle; this audit parses its frozen source bytes without executing it, and a future production evaluator must not call it.
+
+All Exact19 audit rows pass. PRE_001 through PRE_015 are complete and implementable. Real provider mapping and real candidate evaluation remain unvalidated and unauthorized; rule coverage and training feature semantics remain blocking. The Exact11 runtime issue inventory is preserved byte-for-byte, including resolved `COVALENT_EVIDENCE_ENUM_UNRESOLVED` and open coverage from ADMIT_007 through ADMIT_015.
+
+`ready_for_admit_007_standalone_evaluator_interface_implementation=true`. This gate does not implement an evaluator or adapter, modify the Exact6 runtime, register ADMIT_007, begin ADMIT_008, evaluate real candidates, authorize bulk download, or establish training readiness. The recommended next step is `implement_covapie_admit_007_standalone_evaluator_interface_v1`.
