@@ -1,0 +1,16 @@
+admission_rule_id,admission_rule_name,adapter_id,known_rule,callable_discovered,adapter_ready,registered,phase4_handler_identity_reused,successor_handler_implemented,expected_dispatch_behavior,audit_passed
+ADMIT_001,unique_candidate_identity,covapie_admit_001_unified_adapter_v1,true,true,true,true,true,false,registered_single_rule_runtime,true
+ADMIT_002,valid_pdb_id_format,covapie_admit_002_unified_adapter_v1,true,true,true,true,true,false,registered_single_rule_runtime,true
+ADMIT_003,ligand_or_het_identity_present,covapie_admit_003_unified_adapter_v1,true,true,true,true,true,false,registered_single_rule_runtime,true
+ADMIT_004,covalent_residue_identity_present,covapie_admit_004_unified_adapter_v1,true,true,true,true,true,false,registered_single_rule_runtime,true
+ADMIT_005,cys_sg_scope_only_v1,covapie_admit_005_unified_adapter_v1,true,true,true,true,false,true,registered_single_rule_runtime,true
+ADMIT_006,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_007,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_008,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_009,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_010,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_011,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_012,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_013,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_014,,,true,false,false,false,false,false,known_not_registered_fail_closed,true
+ADMIT_015,,,true,false,false,false,false,false,known_not_registered_fail_closed,true

@@ -1,0 +1,36 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+TYPE_001,type_identity,result type identity,true,true,true
+TYPE_002,type_identity,dispatch error type identity,true,true,true
+TYPE_003,type_identity,Exact13 fields,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,true
+TYPE_004,type_identity,Exact6 fields,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,true
+TYPE_005,type_identity,result schema,covapie_unified_admission_rule_evaluation_v1,covapie_unified_admission_rule_evaluation_v1,true
+TYPE_006,type_identity,outcome vocabulary,passed|blocked|invalid|rejected,passed|blocked|invalid|rejected,true
+API_001,public_api,signature,"(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'","(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'",true
+API_002,public_api,dispatch cardinality,single_rule_only,single_rule_only,true
+DISPATCH_001,global_dispatch,precedence,exact_str|known|registered|handler,exact_str|known|registered|handler,true
+REGISTRY_001,registry,immutable registry,true,true,true
+REGISTRY_002,registry,registered IDs,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004|ADMIT_005,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004|ADMIT_005,true
+REGISTRY_003,registry,registered count,5,5,true
+REUSE_001,phase4_reuse,first four handler identity,true,true,true
+REUSE_002,phase4_reuse,first four names and adapters,true,true,true
+A005_001,admit005_identity,rule name,cys_sg_scope_only_v1,cys_sg_scope_only_v1,true
+A005_002,admit005_identity,adapter ID,covapie_admit_005_unified_adapter_v1,covapie_admit_005_unified_adapter_v1,true
+CONTEXT_001,admit005_context,ordered None-only contexts,batch|evaluation|download_result|stage_authorization,batch|evaluation|download_result|stage_authorization,true
+CANDIDATE_001,candidate_projection,Exact2 projection,covalent_residue_name|covalent_residue_atom_name,covalent_residue_name|covalent_residue_atom_name,true
+CANDIDATE_002,candidate_projection,Mapping subclasses,accepted,accepted,true
+CANDIDATE_003,candidate_projection,extra fields,ignored,ignored,true
+FORMAL_001,formal_evaluator,positional original scalars,exact_once,exact_once,true
+STAGEA_001,source_prevalidation,exact standalone type,required,required,true
+STAGEA_002,source_prevalidation,Exact10 reconstruction,before_oracle,before_oracle,true
+STAGEA_003,source_prevalidation,failure Exact6 adapter readiness,false,false,true
+ORACLE_001,semantic_oracle,scope helper calls,1,1,true
+ORACLE_002,semantic_oracle,atom helper calls,1,1,true
+ORACLE_003,semantic_oracle,Exact10 equality,required,required,true
+PROJECTION_001,exact13,normalized from validated,true,true,true
+PROJECTION_002,exact13,rejected passthrough,true,true,true
+SAFETY_001,runtime_safety,candidate mutation,false,false,true
+SAFETY_002,runtime_safety,evaluator I/O,false,false,true
+BOUNDARY_001,boundary,ADMIT_006 to ADMIT_015 registered,false,false,true
+BOUNDARY_002,boundary,evaluate_all_rules,excluded,excluded,true
+BOUNDARY_003,boundary,real candidate and Exact11 evaluation,excluded,excluded,true
+BOUNDARY_004,boundary,download and training,excluded,excluded,true
