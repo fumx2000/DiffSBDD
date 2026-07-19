@@ -1,0 +1,78 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+TYPE_001,type_identity,result type identity,true,true,true
+TYPE_002,type_identity,dispatch error type identity,true,true,true
+TYPE_003,type_identity,Exact13 fields,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,schema_version|admission_rule_id|admission_rule_name|outcome|passed|blocks_candidate|reason|normalized_values|validated_candidate_fields|consumed_candidate_fields|consumed_context_items|evaluator_io_used|adapter_id,true
+TYPE_004,type_identity,Exact6 fields,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,code|admission_rule_id|known_rule|callable_discovered|adapter_ready|reason,true
+TYPE_005,type_identity,result schema,covapie_unified_admission_rule_evaluation_v1,covapie_unified_admission_rule_evaluation_v1,true
+TYPE_006,type_identity,outcome vocabulary,passed|blocked|invalid|rejected,passed|blocked|invalid|rejected,true
+API_001,public_api,signature,"(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'","(admission_rule_id: 'str', candidate_record: 'Mapping[str, object]', *, batch_context: 'Mapping[str, object] | None' = None, evaluation_context: 'Mapping[str, object] | None' = None, download_result_context: 'Mapping[str, object] | None' = None, stage_authorization_context: 'Mapping[str, object] | None' = None) -> 'UnifiedAdmissionRuleEvaluation'",true
+API_002,public_api,dispatch cardinality,single_rule_only,single_rule_only,true
+API_003,public_api,evaluate_all_rules,excluded,excluded,true
+API_004,public_api,combined candidate verdict,excluded,excluded,true
+DISPATCH_001,global_dispatch,precedence,exact_str|known|registered|handler,exact_str|known|registered|handler,true
+REGISTRY_001,registry,immutable registry,true,true,true
+REGISTRY_002,registry,registered IDs,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004|ADMIT_005|ADMIT_006|ADMIT_007|ADMIT_008,ADMIT_001|ADMIT_002|ADMIT_003|ADMIT_004|ADMIT_005|ADMIT_006|ADMIT_007|ADMIT_008,true
+REGISTRY_003,registry,registered count,8,8,true
+REGISTRY_004,registry,callable discovered count,8,8,true
+REGISTRY_005,registry,adapter ready count,8,8,true
+REUSE_001,predecessor_reuse,first seven handler identity,true,true,true
+REUSE_002,predecessor_reuse,first seven names and adapters,true,true,true
+A008_001,admit008_identity,rule name,topology_restoration_disposition,topology_restoration_disposition,true
+A008_002,admit008_identity,adapter ID,covapie_admit_008_unified_adapter_v1,covapie_admit_008_unified_adapter_v1,true
+CONTEXT_001,context_routing,precedence,batch|evaluation_mapping|evaluation_key|download_result|stage_authorization,batch|evaluation_mapping|evaluation_key|download_result|stage_authorization,true
+CONTEXT_002,context_routing,batch context,exact_none,exact_none,true
+CONTEXT_003,context_routing,evaluation Mapping subclass,accepted,accepted,true
+CONTEXT_004,context_routing,evaluation extra keys,ignored,ignored,true
+CONTEXT_005,context_routing,required value,original_identity_single_lookup_no_prevalidation,original_identity_single_lookup_no_prevalidation,true
+CONTEXT_006,context_routing,download result context,exact_none,exact_none,true
+CONTEXT_007,context_routing,stage authorization context,exact_none,exact_none,true
+CONTEXT_008,context_routing,candidate access before routing,false,false,true
+CANDIDATE_001,candidate_projection,field,topology_restoration_disposition,topology_restoration_disposition,true
+CANDIDATE_002,candidate_projection,Mapping subclasses,accepted,accepted,true
+CANDIDATE_003,candidate_projection,extra fields,ignored,ignored,true
+CANDIDATE_004,candidate_projection,non Mapping reason,ADMIT_008_CANDIDATE_RECORD_MAPPING_INVALID,ADMIT_008_CANDIDATE_RECORD_MAPPING_INVALID,true
+CANDIDATE_005,candidate_projection,consumed context retained,true,true,true
+MISSING_001,missing,only category,required_key_absent,required_key_absent,true
+MISSING_002,missing,reason,topology_restoration_disposition_missing,topology_restoration_disposition_missing,true
+FORWARD_001,forwarding,exact None,TOPOLOGY_RESTORATION_DISPOSITION_TYPE_INVALID,TOPOLOGY_RESTORATION_DISPOSITION_TYPE_INVALID,true
+FORWARD_002,forwarding,exact built-in empty str,TOPOLOGY_RESTORATION_DISPOSITION_EMPTY,TOPOLOGY_RESTORATION_DISPOSITION_EMPTY,true
+FORWARD_003,forwarding,empty str subclass,TOPOLOGY_RESTORATION_DISPOSITION_TYPE_INVALID,TOPOLOGY_RESTORATION_DISPOSITION_TYPE_INVALID,true
+FORWARD_004,forwarding,whitespace malformed unknown and blocked,standalone_exact_reason,standalone_exact_reason,true
+FORMAL_001,formal_evaluator,positional original objects,single_candidate_lookup_single_context_lookup_exact_once,single_candidate_lookup_single_context_lookup_exact_once,true
+FORMAL_002,formal_evaluator,normalization,none,none,true
+FORMAL_003,formal_evaluator,provider mapping,none,none,true
+FORMAL_004,formal_evaluator,I/O,false,false,true
+SOURCE_001,source_prevalidation,exact source type,required,required,true
+SOURCE_002,source_prevalidation,source subclass,rejected,rejected,true
+SOURCE_003,source_prevalidation,storage,exact_builtin_dict_exact10_key_order,exact_builtin_dict_exact10_key_order,true
+SOURCE_004,source_prevalidation,dataclass fields,exact10_order,exact10_order,true
+SOURCE_005,source_prevalidation,ordered reads and reconstruction,all_fields_before_oracle,all_fields_before_oracle,true
+SOURCE_006,source_prevalidation,cross field invariants,committed_post_init,committed_post_init,true
+SOURCE_007,source_prevalidation,failure adapter readiness,false,false,true
+SOURCE_008,source_prevalidation,oracle after failure,false,false,true
+ORACLE_001,semantic_oracle,identity,classify_admit_008_topology_restoration_disposition_design,classify_admit_008_topology_restoration_disposition_design,true
+ORACLE_002,semantic_oracle,outcome view,classification.admit_008,classification.admit_008,true
+ORACLE_003,semantic_oracle,original objects,exact_once,exact_once,true
+ORACLE_004,semantic_oracle,complete Exact10 construction,required,required,true
+ORACLE_005,semantic_oracle,complete Exact10 equality,required,required,true
+PROJECTION_001,exact13,normalized from validated,true,true,true
+PROJECTION_002,exact13,two passed passthrough,true,true,true
+PROJECTION_003,exact13,two blocked passthrough,true,true,true
+PROJECTION_004,exact13,blocked reasons distinct,true,true,true
+PROJECTION_005,exact13,scalar invalid empty pair,true,true,true
+PROJECTION_006,exact13,context invalid canonical retained,true,true,true
+PROJECTION_007,exact13,partial result on failure,false,false,true
+SAFETY_001,runtime_safety,candidate mutation,false,false,true
+SAFETY_002,runtime_safety,evaluation context mutation,false,false,true
+SAFETY_003,runtime_safety,public runtime metadata I/O,false,false,true
+SAFETY_004,runtime_safety,pure in memory runtime,true,true,true
+ISSUE_001,issues,authoritative predecessor,229251600f0c6ae389633fff86af8859280b86664521ecce04c494906dc39695,229251600f0c6ae389633fff86af8859280b86664521ecce04c494906dc39695,true
+ISSUE_002,issues,coverage transition,admit_008_implemented_and_removed_from_open_coverage_scope,admit_008_implemented_and_removed_from_open_coverage_scope,true
+ISSUE_003,issues,remaining coverage,ADMIT_009|ADMIT_010|ADMIT_011|ADMIT_012|ADMIT_013|ADMIT_014|ADMIT_015,ADMIT_009|ADMIT_010|ADMIT_011|ADMIT_012|ADMIT_013|ADMIT_014|ADMIT_015,true
+ISSUE_004,issues,topology enum,resolved,resolved,true
+BOUNDARY_001,boundary,ADMIT_009 to ADMIT_015 registered,false,false,true
+BOUNDARY_002,boundary,provider fields consumed,none,none,true
+BOUNDARY_003,boundary,provider values,zero,zero,true
+BOUNDARY_004,boundary,real candidate evaluation,excluded,excluded,true
+BOUNDARY_005,boundary,download and training,excluded,excluded,true
+BOUNDARY_006,boundary,ADMIT_009 implementation,excluded,excluded,true
