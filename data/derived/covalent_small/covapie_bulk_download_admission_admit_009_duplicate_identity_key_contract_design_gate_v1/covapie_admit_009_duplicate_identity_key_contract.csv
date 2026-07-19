@@ -1,0 +1,35 @@
+contract_order,contract_item,exact_requirement,forbidden_behavior,contract_passed
+1,identity,ADMIT_009/duplicate_identity_precheck uses duplicate_identity_key,substitute another identity,true
+2,exact_scalar_type,type(value) is str,accept subclasses or coercion,true
+3,versioned_prefix,covapie_dup_v1_sha256_,accept aliases or other versions,true
+4,exact_regex,^covapie_dup_v1_sha256_[0-9a-f]{64}$,partial match or alternate characters,true
+5,digest,64 lowercase hexadecimal characters,"uppercase, short, long, or non-hex digest",true
+6,scalar_precedence,"type, non-empty, ASCII, regex fullmatch",reorder or continue after failure,true
+7,normalization,canonical key equals input byte-for-byte,"trim, case-fold, Unicode-normalize, alias, repair, recompute, regenerate",true
+8,composition,atomic opaque producer-owned scalar,split or parse chemical components,true
+9,evaluator_visible_components,exactly zero,promote candidate/group fields as key components,true
+10,producer_descriptor,producer maintains canonical exact-duplicate descriptor,evaluator constructs descriptor,true
+11,producer_determinism,stable deterministic versioned assignment,unstable or unversioned assignment,true
+12,duplicate_equivalence,same key means producer-declared exact duplicate admission class,reinterpret as similarity or grouping,true
+13,different_key_claim,no duplicate is proved by this key,"claim chemical, ligand, protein, residue, or leakage distinctness",true
+14,collision_preimage,producer retains or can rebuild canonical descriptor,discard collision provenance,true
+15,collision_handling,producer fails closed on same digest for different descriptors,send ambiguous key to evaluator,true
+16,evaluator_collision_boundary,evaluator does not detect collision or validate provenance,assign collision responsibility to evaluator,true
+17,policy_context,covapie_duplicate_identity_key_contract_v1,"fallback, alias, trim, or case-normalize",true
+18,batch_container,type(value) is tuple; empty allowed,accept list/set/frozenset/subclass,true
+19,batch_member,each member exact str and full scalar-valid,coerce or normalize members,true
+20,batch_order,strict ascending original ASCII strings,sort automatically,true
+21,batch_uniqueness,members unique,deduplicate automatically,true
+22,snapshot,earlier admitted/queued canonical keys before current candidate,include current record itself,true
+23,self_exclusion,future caller excludes current record; equal key means another earlier candidate,use candidate_record_id or batch position,true
+24,membership,exact case-sensitive Python string equality,"prefix, substring, component, graph, or group comparison",true
+25,precedence,scalar then policy then batch then membership with short-circuit,evaluate later stages after invalid input,true
+26,outcomes,"passed, blocked, invalid",use rejected or unresolved umbrella outcome,true
+27,blocks_candidate_invariant,blocks_candidate is true exactly when outcome is not passed,invalid or blocked result with blocks_candidate=false,true
+28,unique_state,passed=true blocks=false reason empty; canonical pair retained,drop validated canonical state,true
+29,duplicate_state,blocked; DUPLICATE_IDENTITY_KEY_ALREADY_PRESENT; canonical pair retained,classify duplicate as invalid/rejected or use lowercase reason,true
+30,invalid_state,scalar invalid clears canonical/pair; policy or batch invalid retains them,invent or discard canonical state,true
+31,oracle,independent pure in-memory full-input design classifier,perform evaluator I/O,true
+32,provider_boundary,real provider mapping unvalidated and real key count zero,fabricate provider keys,true
+33,implementation_boundary,formal evaluator/result/adapter/registration/runtime changes absent,implement later stages in this gate,true
+34,execution_boundary,"no raw, network, download, training, model forward/loss",perform external or training operations,true

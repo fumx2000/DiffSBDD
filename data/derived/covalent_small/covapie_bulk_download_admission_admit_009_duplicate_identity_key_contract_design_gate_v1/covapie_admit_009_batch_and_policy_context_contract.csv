@@ -1,0 +1,16 @@
+context_order,context_item,scope,exact_contract,validation_precedence,invalid_reason,context_passed
+1,duplicate_identity_key,candidate_scalar,exact built-in str,1,DUPLICATE_IDENTITY_KEY_TYPE_INVALID,true
+2,duplicate_identity_key,candidate_scalar,non-empty,2,DUPLICATE_IDENTITY_KEY_EMPTY,true
+3,duplicate_identity_key,candidate_scalar,ASCII,3,DUPLICATE_IDENTITY_KEY_NON_ASCII,true
+4,duplicate_identity_key,candidate_scalar,^covapie_dup_v1_sha256_[0-9a-f]{64}$,4,DUPLICATE_IDENTITY_KEY_SYNTAX_INVALID,true
+5,duplicate_identity_key_contract,evaluation_policy,exact built-in str,5,DUPLICATE_IDENTITY_KEY_CONTRACT_TYPE_INVALID,true
+6,duplicate_identity_key_contract,evaluation_policy,covapie_duplicate_identity_key_contract_v1,6,DUPLICATE_IDENTITY_KEY_CONTRACT_VALUE_INVALID,true
+7,batch_duplicate_identity_keys,batch_snapshot,exact built-in tuple,7,BATCH_DUPLICATE_IDENTITY_KEYS_TYPE_INVALID,true
+8,batch_duplicate_identity_keys,batch_snapshot,member exact built-in str,8,BATCH_DUPLICATE_IDENTITY_KEYS_MEMBER_TYPE_INVALID,true
+9,batch_duplicate_identity_keys,batch_snapshot,every member full scalar-valid,9,BATCH_DUPLICATE_IDENTITY_KEYS_MEMBER_INVALID,true
+10,batch_duplicate_identity_keys,batch_snapshot,strict ascending and unique,10,BATCH_DUPLICATE_IDENTITY_KEYS_ORDER_OR_UNIQUENESS_INVALID,true
+11,batch_duplicate_identity_keys,batch_snapshot,empty tuple valid,11,,true
+12,batch_duplicate_identity_keys,caller_responsibility,snapshot excludes current record,12,,true
+13,batch_duplicate_identity_keys,membership,candidate key absent means unique,13,,true
+14,batch_duplicate_identity_keys,membership,candidate key present means earlier duplicate,14,DUPLICATE_IDENTITY_KEY_ALREADY_PRESENT,true
+15,batch_duplicate_identity_keys,membership,match multiplicity is zero or one,15,,true

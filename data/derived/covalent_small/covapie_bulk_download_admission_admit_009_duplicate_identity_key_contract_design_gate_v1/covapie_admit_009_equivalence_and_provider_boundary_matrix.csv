@@ -1,0 +1,19 @@
+boundary_order,boundary_item,is_duplicate_identity_key,exact_duplicate_claim_allowed,evaluator_visible_component,exact_statement,boundary_passed
+1,candidate_record_id,false,false,false,record identity is separate and not used for self-exclusion,true
+2,sample_index_row_id,false,false,false,sample row identity is not a duplicate key,true
+3,assignment_id,false,false,false,assignment identity is not a duplicate key,true
+4,pdb_id_alone,false,false,false,structure identifier alone is not a duplicate key,true
+5,ligand_comp_id_alone,false,false,false,ligand component alone is not a duplicate key,true
+6,ligand_graph_group_id,false,false,false,ligand graph group is not an exact duplicate class,true
+7,ligand_scaffold_group_id,false,false,false,scaffold group is not an exact duplicate class,true
+8,protein_group_id,false,false,false,protein grouping is not an exact duplicate class,true
+9,leakage_group_id,false,false,false,candidate leakage group is not an exact duplicate class,true
+10,final_leakage_group_id,false,false,false,conservative must-link union is not an exact duplicate class,true
+11,same_leakage_group,false,false,false,does not mean exact duplicate,true
+12,same_scaffold,false,false,false,does not mean exact duplicate,true
+13,same_ligand_graph_group,false,false,false,does not mean exact duplicate,true
+14,same_duplicate_identity_key,true,true,false,producer declares same exact duplicate admission class,true
+15,different_duplicate_identity_key,false,false,false,only means this key does not prove duplication,true
+16,canonical_descriptor,false,true,false,producer-owned and invisible to evaluator,true
+17,sha256_collision_detection,false,false,false,producer responsibility; evaluator does not inspect descriptor,true
+18,real_provider_mapping,false,false,false,unvalidated; zero real keys materialized,true

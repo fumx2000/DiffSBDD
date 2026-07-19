@@ -249,7 +249,7 @@ def test_rejects_source_symlink_before_content_read(tmp_path: Path, monkeypatch:
 
 def test_rejects_non_descendant_base() -> None:
     with pytest.raises(ValueError, match="not an ancestor"):
-        gate._validate_expected_base_lineage(REPO_ROOT, head_ref="HEAD^")
+        gate._validate_expected_base_lineage(REPO_ROOT, head_ref=f"{gate.EXPECTED_BASE_COMMIT}^")
 
 
 def test_rejects_missing_extra_and_symlink_outputs(tmp_path: Path) -> None:
