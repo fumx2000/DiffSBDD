@@ -1,0 +1,81 @@
+contract_id,contract_area,contract_statement,expected_value,observed_value,contract_passed
+TYPE_001,public_identity,result type Exact9 object identity,true,true,true
+TYPE_002,public_identity,dispatch error Exact9 object identity,true,true,true
+TYPE_003,public_identity,result schema Exact9 object identity,true,true,true
+TYPE_004,public_identity,Exact13 fields Exact9 object identity,true,true,true
+TYPE_005,public_identity,Exact6 fields Exact9 object identity,true,true,true
+TYPE_006,public_identity,dispatch codes Exact9 object identity,true,true,true
+TYPE_007,public_identity,outcomes Exact9 object identity,true,true,true
+DISPATCH_001,dispatcher,new successor function object,true,true,true
+DISPATCH_002,dispatcher,Exact9 signature equality,true,true,true
+DISPATCH_003,dispatcher,local Exact10 registry binding,true,true,true
+DISPATCH_004,dispatcher,exact built-in str precedence,first,first,true
+DISPATCH_005,dispatcher,known rule precedence,second,second,true
+DISPATCH_006,dispatcher,registered local registry precedence,third,third,true
+DISPATCH_007,dispatcher,local handler call precedence,fourth,fourth,true
+REGISTRY_001,registry,immutable MappingProxyType,true,true,true
+REGISTRY_002,registry,exact order,ADMIT_001_to_ADMIT_010,ADMIT_001_to_ADMIT_010,true
+REGISTRY_003,registry,first nine handler identities,9/9,9/9,true
+REGISTRY_004,registry,sole new handler,_evaluate_registered_admit_010,_evaluate_registered_admit_010,true
+REGISTRY_005,registry,known IDs,ADMIT_001_to_ADMIT_015,ADMIT_001_to_ADMIT_015,true
+REGISTRY_006,registry,callable IDs,ADMIT_001_to_ADMIT_010,ADMIT_001_to_ADMIT_010,true
+REGISTRY_007,registry,adapter-ready IDs,ADMIT_001_to_ADMIT_010,ADMIT_001_to_ADMIT_010,true
+REGISTRY_008,registry,legacy not-ready IDs,empty,empty,true
+IDENTITY_001,admit010_identity,rule ID,ADMIT_010,ADMIT_010,true
+IDENTITY_002,admit010_identity,rule name,leakage_group_assignment_before_split,leakage_group_assignment_before_split,true
+IDENTITY_003,admit010_identity,adapter ID,covapie_admit_010_unified_adapter_v1,covapie_admit_010_unified_adapter_v1,true
+IDENTITY_004,admit010_identity,candidate field,leakage_group_id,leakage_group_id,true
+IDENTITY_005,admit010_identity,context item,leakage_group_assignment_provenance_contract,leakage_group_assignment_provenance_contract,true
+ROUTING_001,context_routing,batch exact None,first,first,true
+ROUTING_002,context_routing,evaluation Mapping,second,second,true
+ROUTING_003,context_routing,provenance direct required lookup,third,third,true
+ROUTING_004,context_routing,download exact None,fourth,fourth,true
+ROUTING_005,context_routing,stage exact None,fifth,fifth,true
+ROUTING_006,context_routing,candidate Mapping,sixth,sixth,true
+ROUTING_007,context_routing,candidate direct required lookup,seventh,seventh,true
+ROUTING_008,context_routing,formal evaluator,eighth,eighth,true
+ROUTING_009,context_routing,source validation,ninth,ninth,true
+ROUTING_010,context_routing,independent oracle,tenth,tenth,true
+ROUTING_011,context_routing,full Exact10 equality,eleventh,eleventh,true
+ROUTING_012,context_routing,Exact13 projection,twelfth,twelfth,true
+MAPPING_001,mapping,collections.abc Mapping subclasses,accepted,accepted,true
+MAPPING_002,mapping,single direct getitem,exactly_once,exactly_once,true
+MAPPING_003,mapping,only KeyError means missing,true,true,true
+MAPPING_004,mapping,get contains iteration copy mutation,forbidden,forbidden,true
+MAPPING_005,mapping,present None,forwarded,forwarded,true
+CANDIDATE_001,candidate,non-Mapping reason,ADMIT_010_CANDIDATE_RECORD_MAPPING_INVALID,ADMIT_010_CANDIDATE_RECORD_MAPPING_INVALID,true
+CANDIDATE_002,candidate,missing reason,leakage_group_id_missing,leakage_group_id_missing,true
+CANDIDATE_003,candidate,invalid outcome,invalid_false_true,invalid_false_true,true
+CANDIDATE_004,candidate,invalid call counts,formal0_oracle0,formal0_oracle0,true
+CALL_001,formal,formal function,evaluate_admit_010,evaluate_admit_010,true
+CALL_002,formal,formal positional order,scalar_then_provenance,scalar_then_provenance,true
+CALL_003,formal,formal call count after gates,1,1,true
+CALL_004,formal,original object identities,2/2,2/2,true
+SOURCE_001,source,exact committed result type,required,required,true
+SOURCE_002,source,subclass,rejected,rejected,true
+SOURCE_003,source,vars storage,exact_dict,exact_dict,true
+SOURCE_004,source,storage field order,Exact10,Exact10,true
+SOURCE_005,source,dataclass field order,Exact10,Exact10,true
+SOURCE_006,source,all ordered field reads,Exact10,Exact10,true
+SOURCE_007,source,committed reconstruction/post-init,required,required,true
+SOURCE_008,source,full reconstruction equality,required,required,true
+SOURCE_009,source,source failure oracle count,0,0,true
+ORACLE_001,oracle,committed independent provenance oracle,required,required,true
+ORACLE_002,oracle,Mapping classification,required,required,true
+ORACLE_003,oracle,oracle call count,1,1,true
+ORACLE_004,oracle,same positional objects,2/2,2/2,true
+ORACLE_005,oracle,complete Exact10 construction,true,true,true
+ORACLE_006,oracle,full Exact10 equality,required,required,true
+ORACLE_007,oracle,partial equality,forbidden,forbidden,true
+PROJECTION_001,projection,normalized values,source.validated_candidate_fields,source.validated_candidate_fields,true
+PROJECTION_002,projection,validated fields,source.validated_candidate_fields,source.validated_candidate_fields,true
+PROJECTION_003,projection,source outcome/reason/consumption,preserved,preserved,true
+PROJECTION_004,projection,scalar-short context injection,forbidden,forbidden,true
+ISSUE_001,issue,coverage after,ADMIT_011_to_ADMIT_015,ADMIT_011_to_ADMIT_015,true
+ISSUE_002,issue,only coverage row fields changed,2,2,true
+BOUNDARY_001,boundary,provider mapping,false,false,true
+BOUNDARY_002,boundary,real provider leakage group IDs,0,0,true
+BOUNDARY_003,boundary,ADMIT_011,not_started,not_started,true
+BOUNDARY_004,boundary,evaluate_all_rules,absent,absent,true
+BOUNDARY_005,boundary,combined verdict,absent,absent,true
+BOUNDARY_006,boundary,training,forbidden,forbidden,true
