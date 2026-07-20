@@ -1,0 +1,16 @@
+precondition_id,semantic_area,verified,evidence,blocker_id,implementation_disposition
+PRE_001,canonical_identity,true,registry fixes ADMIT_011/raw_overwrite_forbidden/pre_download,,interface_evidence_only
+PRE_002,candidate_field,true,schema and Step14AU-A fix raw_target_relative_path,,interface_evidence_only
+PRE_003,historical_vocabulary,true,registry fixes target_does_not_overwrite_existing_raw/raw_target_overwrite_forbidden,,interface_evidence_only
+PRE_004,required_context_shape,true,existing_raw_target_relative_paths plus raw_target_relative_path_contract are named,,interface_evidence_only
+PRE_005,issue_and_coverage,true,Exact10 preserves blocker open and coverage ADMIT_011–ADMIT_015,,interface_evidence_only
+PRE_006,all_tracked_occurrences,true,all tracked non-raw field occurrences are frozen and inventoried,,interface_evidence_only
+PRE_007,observed_values_and_missing_states,true,CSV/manifest direct values are recorded without grammar promotion,,interface_evidence_only
+PRE_008,pure_memory_interface_feasibility,true,Step14AU-A declares filesystem/network false and pure interface possible,,interface_evidence_only
+PRE_009,relative_path_grammar,false,"absolute, traversal, empty segment, dot, separator, Windows, NUL and non-ASCII policy is not formally defined",RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_010,lexical_vs_resolved_boundary,false,no canonical lexical/resolved path boundary,RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_011,root_identity_and_allowlist,false,no canonical raw-root identity or allowlisted target root,RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_012,target_object_semantics,false,"existing target, overwrite, symlink, directory, FIFO and device semantics are not frozen",RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_013,context_responsibility,false,"candidate, batch snapshot, download and stage ownership is not fully allocated",RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_014,provider_mapping,false,candidate_metadata_provider is only a scope label; mapping remains unverified,RAW_TARGET_CONTEXT_CONTRACT_UNRESOLVED,retain_as_unverified_precondition
+PRE_015,admit_012_013_boundary,true,ADMIT_011 is pre_download target admission; ADMIT_012/013 are post_download result contracts,,interface_evidence_only
