@@ -1,0 +1,27 @@
+mapping_order,contract_area,contract_item,exact_requirement,historical_evidence_boundary,forbidden_behavior,mapping_passed
+1,grammar,exact_type,type(value) is builtins.str,historical values are evidence only,accept str subclass or coercion,true
+2,grammar,empty,empty string is unassigned blocked state,historical blocking reason retained,classify empty as syntax invalid,true
+3,grammar,ASCII,ASCII only,five observed IDs are ASCII,accept Unicode digits or letters,true
+4,grammar,regex,^COVAPIE_LEAKAGE_GROUP_[0-9]{6}$,explicit V1 design choice based on format/capacity/stability,infer natural universal grammar from five IDs,true
+5,grammar,prefix,COVAPIE_LEAKAGE_GROUP_,observed historical prefix,lowercase or altered prefix,true
+6,grammar,suffix,exactly six ASCII decimal digits [0-9]{6},observed corpus uses six digits,"sign, whitespace, short/long, Unicode digit",true
+7,grammar,normalization,none; canonical value equals input byte-for-byte,historical values unchanged,"trim, uppercase, repair, normalize",true
+8,mapping,canonical_field,leakage_group_id,future candidate schema,use historical name as candidate field,true
+9,mapping,historical_field,final_leakage_group_id,Step14AP artifact field,erase source lineage,true
+10,mapping,mapping_rule,exact_value_identity_after_provider_field_rename_only,mapping was previously unverified,transform beyond field rename,true
+11,mapping,value_identity,candidate leakage_group_id == provenance historical_leakage_group_id,future evaluator sees caller object only,re-number or change prefix,true
+12,forbidden_source,assignment_id,opaque record ID; never group ID,historical identifier only,generate group ID,true
+13,forbidden_source,group_order,not in Exact19 and never group ID,historical inventory ordering only,generate group ID,true
+14,forbidden_source,split_assignment,not in Exact19 and no reverse proof,Step14AQ follows Step14AP,infer group from assigned split,true
+15,forbidden_source,single_axis_group,not a substitute for final group,historical union uses multiple axes,choose ligand/protein group,true
+16,forbidden_source,duplicate_identity_key,separate ADMIT_009 identity,separate semantic domain,substitute for leakage group,true
+17,policy,policy_value,conservative_union_of_ligand_graph_scaffold_and_protein_accession_sequence_clusters_v1,Step14AP sole observed V1 policy,accept alternate policy,true
+18,policy,policy_version,v1,new explicit field; historical string embeds _v1,omit or infer field at runtime,true
+19,policy,policy_version_consistency,exact policy and exact version both required,design freezes explicit pairing,accept mismatched pair,true
+20,attestation,SHA_truth_boundary,caller attests four syntactically valid SHA256 values,evaluator performs no file access,treat syntax as authenticity proof,true
+21,membership,assignment_record,"assignment ID, historical group ID, sample ID and membership agree",historical IDs remain opaque,infer general ID grammar,true
+22,membership,tuple,strict ordered unique exact tuple includes sample,historical inventory supplies evidence pattern,auto-sort or deduplicate,true
+23,pre_split,assignment_evidence,assignment_passed=True; split_assignments_written=False; exact status,Step14AP precedes Step14AQ,use split output as proof,true
+24,excluded,historical_final_group_status,not in Exact19,historical sample-specific lifecycle text,promote to runtime contract,true
+25,excluded,split_ids_and_assigned_split,not in Exact19,post-assignment evidence,promote to pre-split proof,true
+26,provider,real_mapping,not validated in this design step,contract only,claim provider compliance,true

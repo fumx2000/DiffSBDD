@@ -1,0 +1,33 @@
+contract_order,contract_area,contract_item,exact_requirement,validation_precedence,failure_outcome,failure_reason,forbidden_behavior,contract_passed
+1,identity,rule_identity,ADMIT_010/leakage_group_assignment_before_split/pre_final_split,,,,substitute another rule or phase,true
+2,value_object,Exact19_type,frozen dataclass without slots; exact committed type required,5,invalid,see_frozen_reason_vocabulary,accept dict or subclass,true
+3,value_object,Exact19_field_order,contract_version|canonical_candidate_field_name|historical_artifact_field_name|field_mapping_rule|assignment_policy|assignment_policy_version|assignment_stage_kind|assignment_manifest_sha256|assignment_artifact_sha256|group_inventory_sha256|sample_index_sha256|assignment_id|historical_leakage_group_id|sample_index_row_id|member_sample_index_row_ids|member_count|assignment_passed|split_assignments_written|pre_split_assignment_status,5,invalid,see_frozen_reason_vocabulary,"reorder, add, remove, or rename fields",true
+4,static,contract_version,covapie_leakage_group_assignment_provenance_contract_v1,6,invalid,see_frozen_reason_vocabulary,fallback or alternate version,true
+5,static,canonical_candidate_field_name,leakage_group_id,7,invalid,see_frozen_reason_vocabulary,alias canonical field,true
+6,static,historical_artifact_field_name,final_leakage_group_id,7,invalid,see_frozen_reason_vocabulary,alias historical field,true
+7,mapping,field_mapping_rule,exact_value_identity_after_provider_field_rename_only,8,invalid,see_frozen_reason_vocabulary,transform or regenerate value,true
+8,policy,assignment_policy,conservative_union_of_ligand_graph_scaffold_and_protein_accession_sequence_clusters_v1,9,invalid,see_frozen_reason_vocabulary,accept another policy,true
+9,policy,assignment_policy_version,v1,10,invalid,see_frozen_reason_vocabulary,infer version without exact field,true
+10,stage,assignment_stage_kind,pre_final_split_leakage_group_assignment,11,invalid,see_frozen_reason_vocabulary,use split or final stage,true
+11,attestation,assignment_manifest_sha256,exact lowercase hexadecimal built-in str length 64,12,invalid,see_frozen_reason_vocabulary,read or trust referenced file,true
+12,attestation,assignment_artifact_sha256,exact lowercase hexadecimal built-in str length 64,12,invalid,see_frozen_reason_vocabulary,read or trust referenced file,true
+13,attestation,group_inventory_sha256,exact lowercase hexadecimal built-in str length 64,12,invalid,see_frozen_reason_vocabulary,read or trust referenced file,true
+14,attestation,sample_index_sha256,exact lowercase hexadecimal built-in str length 64,12,invalid,see_frozen_reason_vocabulary,read or trust referenced file,true
+15,opaque_id,assignment_id,exact built-in ASCII str; length 1-256; no surrounding whitespace,13,invalid,see_frozen_reason_vocabulary,interpret as group ID,true
+16,mapping,historical_leakage_group_id,^COVAPIE_LEAKAGE_GROUP_[0-9]{6}$,14,invalid,see_frozen_reason_vocabulary,derive from assignment ID or group order,true
+17,opaque_id,sample_index_row_id,exact built-in ASCII str; length 1-256; no surrounding whitespace,15,invalid,see_frozen_reason_vocabulary,infer grammar from historical 11 samples,true
+18,membership,member_sample_index_row_ids,exact nonempty tuple of exact opaque IDs in strict ascending ASCII order and unique,16,invalid,see_frozen_reason_vocabulary,accept/sort/deduplicate list or tuple subclass,true
+19,membership,member_count,exact built-in int > 0 equal to tuple length; bool rejected,17,invalid,see_frozen_reason_vocabulary,coerce count or accept mismatch,true
+20,evidence,assignment_passed,exact built-in bool True,18,blocked,leakage_group_unassigned,treat truthy value as proof,true
+21,evidence,split_assignments_written,exact built-in bool False,18,blocked,leakage_group_unassigned,use split artifact as reverse proof,true
+22,evidence,pre_split_assignment_status,leakage_group_assigned_before_final_split,18,blocked,leakage_group_unassigned,use historical final group status,true
+23,mapping,candidate_historical_equality,candidate leakage_group_id == provenance historical_leakage_group_id,19,blocked,leakage_group_unassigned,rename with value transformation,true
+24,membership,sample_membership,sample_index_row_id is a member of member_sample_index_row_ids,20,blocked,leakage_group_unassigned,claim assignment without membership,true
+25,state,passed,outcome=passed; passed=true; blocks_candidate=false; reason empty,21,,,pass partial evidence,true
+26,state,nonpassed,outcome blocked or invalid; passed=false; blocks_candidate=true; reason nonempty,,,,allow nonpassed without blocking,true
+27,oracle,purity,pure in-memory; evaluator_io_used=false,,,,"filesystem, network, assignment, or split",true
+28,trust,source_SHA256,caller/provider attestation syntax only,12,invalid,see_frozen_reason_vocabulary,claim SHA proves real file truth,true
+29,boundary,formal_evaluator,reserved only; not implemented,,,,define evaluate_admit_010 or Admit010EvaluationResult,true
+30,boundary,provider_mapping,contract frozen but real mapping unvalidated,,,,fabricate validation or nonzero count,true
+31,boundary,runtime,Exact9 unchanged; ADMIT_010 unregistered,,,,"implement adapter, Exact10, ADMIT_011, aggregate verdict",true
+32,boundary,training,feature-semantics audit required; Step12D smoke legality only,,,,claim training readiness,true
