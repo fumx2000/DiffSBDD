@@ -1,0 +1,11 @@
+field_order,field,contract,passed
+1,admission_rule_id,Exact10 formal result field order,true
+2,outcome,Exact10 formal result field order,true
+3,passed,Exact10 formal result field order,true
+4,blocks_candidate,Exact10 formal result field order,true
+5,reason,Exact10 formal result field order,true
+6,canonical_raw_target_relative_path,Exact10 formal result field order,true
+7,validated_candidate_fields,Exact10 formal result field order,true
+8,consumed_candidate_fields,Exact10 formal result field order,true
+9,consumed_context_items,Exact10 formal result field order,true
+10,evaluator_io_used,Exact10 formal result field order,true

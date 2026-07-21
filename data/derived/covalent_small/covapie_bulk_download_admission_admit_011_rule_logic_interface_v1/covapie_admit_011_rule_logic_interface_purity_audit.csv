@@ -1,0 +1,5 @@
+audit_order,audit_item,observed,passed
+1,public_evaluator,evaluate_admit_011,true
+2,reachable_helpers,_scalar_reason|_canonical_path|_result|_contract_valid|_snapshot_valid|Admit011EvaluationResult.__post_init__,true
+3,forbidden_reachable_symbols,Path|os|subprocess|open|classify_admit_011_raw_target_relative_path_design absent,true
+4,evaluator_io_used,false,true
