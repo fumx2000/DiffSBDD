@@ -1,0 +1,6 @@
+role_order,role,boundary,implemented
+1,standalone_evaluator,scalar + two exact context objects only,false
+2,future_unified_adapter,candidate/evaluation/batch envelope and identity routing,false
+3,snapshot_provider,filesystem namespace enumeration before call,false
+4,ADMIT_012_013,post-download result/integrity,false
+5,stage_authorization,separate authority,false
