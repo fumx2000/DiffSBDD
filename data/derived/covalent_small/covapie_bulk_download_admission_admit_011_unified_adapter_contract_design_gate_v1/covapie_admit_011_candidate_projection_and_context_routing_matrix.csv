@@ -1,0 +1,34 @@
+matrix_order,matrix_group,case_id,condition,expected_behavior,expected_reason,expected_result_json,formal_call_count,oracle_call_count,candidate_access_status,required_lookup_count,identity_preserved,case_passed
+1,context,batch_non_none,batch non-None,dispatch_error,ADMIT_011_BATCH_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,0,n/a,true
+2,context,evaluation_non_mapping,evaluation non-Mapping,dispatch_error,ADMIT_011_EVALUATION_CONTEXT_MAPPING_REQUIRED,,0,0,not_accessed,0,n/a,true
+3,context,contract_missing,contract key absent,dispatch_error,ADMIT_011_RAW_TARGET_RELATIVE_PATH_CONTRACT_REQUIRED,,0,0,not_accessed,1,n/a,true
+4,context,snapshot_missing,snapshot key absent,dispatch_error,ADMIT_011_EXISTING_RAW_TARGET_RELATIVE_PATHS_REQUIRED,,0,0,not_accessed,2,n/a,true
+5,context,download_non_none,download non-None,dispatch_error,ADMIT_011_DOWNLOAD_RESULT_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,2,n/a,true
+6,context,stage_non_none,stage non-None,dispatch_error,ADMIT_011_STAGE_AUTHORIZATION_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,2,n/a,true
+7,context,mapping_subclass,evaluation Mapping subclass,accepted,,,1,1,value_read_once,3,true,true
+8,context,extra_keys,extra evaluation keys,ignored,,,1,1,value_read_once,3,true,true
+9,context,contract_lookup_once,repeat lookup bomb,accepted_single_lookup,,,1,1,value_read_once,3,true,true
+10,context,snapshot_lookup_once,repeat lookup bomb,accepted_single_lookup,,,1,1,value_read_once,3,true,true
+11,precedence,batch_blocks_evaluation,batch and evaluation invalid,first_batch_error,ADMIT_011_BATCH_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,0,n/a,true
+12,precedence,evaluation_blocks_lookup,evaluation and keys invalid,evaluation_error,ADMIT_011_EVALUATION_CONTEXT_MAPPING_REQUIRED,,0,0,not_accessed,0,n/a,true
+13,precedence,contract_blocks_snapshot,both keys absent,contract_error,ADMIT_011_RAW_TARGET_RELATIVE_PATH_CONTRACT_REQUIRED,,0,0,not_accessed,1,n/a,true
+14,precedence,snapshot_blocks_candidate,snapshot absent and candidate bomb,snapshot_error,ADMIT_011_EXISTING_RAW_TARGET_RELATIVE_PATHS_REQUIRED,,0,0,not_accessed,2,n/a,true
+15,precedence,download_blocks_candidate,download invalid and candidate bomb,download_error,ADMIT_011_DOWNLOAD_RESULT_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,2,n/a,true
+16,precedence,stage_blocks_candidate,stage invalid and candidate bomb,stage_error,ADMIT_011_STAGE_AUTHORIZATION_CONTEXT_MUST_BE_NONE,,0,0,not_accessed,2,n/a,true
+17,candidate,non_mapping,candidate non-Mapping,exact13_invalid,ADMIT_011_CANDIDATE_RECORD_MAPPING_INVALID,"{""schema_version"":""covapie_unified_admission_rule_evaluation_v1"",""admission_rule_id"":""ADMIT_011"",""admission_rule_name"":""raw_overwrite_forbidden"",""outcome"":""invalid"",""passed"":false,""blocks_candidate"":true,""reason"":""ADMIT_011_CANDIDATE_RECORD_MAPPING_INVALID"",""normalized_values"":[],""validated_candidate_fields"":[],""consumed_candidate_fields"":[""raw_target_relative_path""],""consumed_context_items"":[""raw_target_relative_path_contract"",""existing_raw_target_relative_paths""],""evaluator_io_used"":false,""adapter_id"":""covapie_admit_011_unified_adapter_v1""}",0,0,envelope_checked,2,n/a,true
+18,candidate,field_missing,candidate key absent,exact13_invalid,raw_target_relative_path_missing,"{""schema_version"":""covapie_unified_admission_rule_evaluation_v1"",""admission_rule_id"":""ADMIT_011"",""admission_rule_name"":""raw_overwrite_forbidden"",""outcome"":""invalid"",""passed"":false,""blocks_candidate"":true,""reason"":""raw_target_relative_path_missing"",""normalized_values"":[],""validated_candidate_fields"":[],""consumed_candidate_fields"":[""raw_target_relative_path""],""consumed_context_items"":[""raw_target_relative_path_contract"",""existing_raw_target_relative_paths""],""evaluator_io_used"":false,""adapter_id"":""covapie_admit_011_unified_adapter_v1""}",0,0,single_lookup,3,n/a,true
+19,candidate,mapping_subclass,candidate Mapping subclass,accepted,,,1,1,value_read_once,3,true,true
+20,candidate,extra_keys,extra candidate keys,ignored,,,1,1,value_read_once,3,true,true
+21,candidate,lookup_once,candidate repeat lookup bomb,accepted_single_lookup,,,1,1,value_read_once,3,true,true
+22,call,formal_once,valid routing,one positional candidate_snapshot_contract call,,,1,1,value_read_once,3,true,true
+23,call,oracle_once,valid source,one positional candidate_snapshot_contract call,,,1,1,value_read_once,3,true,true
+24,call,formal_exception,formal raises,exception_no_source_or_oracle,,,1,0,value_read_once,3,true,true
+25,source,wrong_type,formal object,adapter_not_ready_no_oracle,ADMIT_011_UNIFIED_ADAPTER_SOURCE_TYPE_INVALID,,1,0,value_read_once,3,true,true
+26,source,subclass,formal subclass,adapter_not_ready_no_oracle,ADMIT_011_UNIFIED_ADAPTER_SOURCE_TYPE_INVALID,,1,0,value_read_once,3,true,true
+27,source,invariant,Exact10 invariant drift,adapter_not_ready_no_oracle,ADMIT_011_UNIFIED_ADAPTER_SOURCE_INVARIANT_INVALID,,1,0,value_read_once,3,true,true
+28,oracle,exception,oracle raises,adapter_not_ready_no_projection,ADMIT_011_UNIFIED_ADAPTER_SOURCE_INVARIANT_INVALID,,1,1,value_read_once,3,true,true
+29,oracle,type_drift,oracle wrong type,adapter_not_ready_no_projection,ADMIT_011_UNIFIED_ADAPTER_SOURCE_INVARIANT_INVALID,,1,1,value_read_once,3,true,true
+30,oracle,mismatch,full Exact10 mismatch,adapter_not_ready_no_projection,ADMIT_011_UNIFIED_ADAPTER_SOURCE_INVARIANT_INVALID,,1,1,value_read_once,3,true,true
+31,projection,passed,unoccupied canonical path,exact10_to_exact13,,,1,1,value_read_once,3,true,true
+32,projection,collision,occupied canonical path,exact10_to_exact13_blocked,,,1,1,value_read_once,3,true,true
+33,projection,invalid_scalar,scalar grammar invalid,exact10_to_exact13_invalid,,,1,1,value_read_once,3,true,true
