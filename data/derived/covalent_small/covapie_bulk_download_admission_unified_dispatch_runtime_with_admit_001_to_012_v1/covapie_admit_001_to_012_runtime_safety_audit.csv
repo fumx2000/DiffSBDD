@@ -1,0 +1,30 @@
+safety_order,safety_item,expected_executed,observed_executed,evidence,safety_passed
+1,admit012_adapter_runtime,true,true,formal handler implemented,true
+2,exact12_registry,true,true,immutable Exact12 registry,true
+3,exact12_dispatcher,true,true,new local dispatcher,true
+4,source_exact10_validation,true,true,exact type/storage/order/types/reconstruction,true
+5,independent_oracle_equality,true,true,complete Exact10 types and values,true
+6,typed_string_projection,true,true,no int reaches Exact13,true
+7,source_attestation,true,true,fixed ordered Exact23 pinned reads,true
+8,set_atomic_materialization,true,true,RENAME_NOREPLACE,true
+9,deterministic_evidence,true,true,double-build byte identity,true
+10,feature_semantics_audit_requirement,true,true,Step12D remains smoke only,true
+11,predecessor_change,false,false,Exact11 source frozen,true
+12,old_handler_reimplementation,false,false,eleven identities reused,true
+13,result_error_redefinition,false,false,identity re-export only,true
+14,exact13_schema_widening,false,false,string pairs remain exact,true
+15,private_missing_sentinel,false,false,not imported or passed,true
+16,candidate_field_sourcing,false,false,candidate envelope only,true
+17,candidate_key_access,false,false,zero,true
+18,int_pair_in_exact13,false,false,exact ints projected to decimal strings,true
+19,adapter_design_classifier_runtime_call,false,false,absent from closure,true
+20,admit013_judgment,false,false,not implemented,true
+21,combined_candidate_verdict,false,false,not implemented,true
+22,cross_rule_aggregation,false,false,not implemented,true
+23,provider_mapping,false,false,not implemented,true
+24,network,false,false,not executed,true
+25,real_download,false,false,not executed,true
+26,raw_read,false,false,source boundary excludes data/raw,true
+27,model_or_checkpoint,false,false,not accessed,true
+28,training_or_parameter_update,false,false,not executed,true
+29,stage_commit_push,false,false,not executed,true

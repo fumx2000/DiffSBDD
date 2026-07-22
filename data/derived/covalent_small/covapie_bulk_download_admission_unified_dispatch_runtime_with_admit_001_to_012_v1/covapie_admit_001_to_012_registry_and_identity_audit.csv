@@ -1,0 +1,40 @@
+audit_order,audit_item,expected_value,observed_value,audit_passed
+1,public_identity:UnifiedAdmissionRuleEvaluation,True,True,true
+2,original_authority_identity:UnifiedAdmissionRuleEvaluation,True,True,true
+3,public_identity:UnifiedAdmissionDispatchError,True,True,true
+4,original_authority_identity:UnifiedAdmissionDispatchError,True,True,true
+5,public_identity:RESULT_SCHEMA_VERSION,True,True,true
+6,original_authority_identity:RESULT_SCHEMA_VERSION,True,True,true
+7,public_identity:RESULT_FIELDS,True,True,true
+8,original_authority_identity:RESULT_FIELDS,True,True,true
+9,public_identity:DISPATCH_ERROR_FIELDS,True,True,true
+10,original_authority_identity:DISPATCH_ERROR_FIELDS,True,True,true
+11,public_identity:DISPATCH_ERROR_CODES,True,True,true
+12,original_authority_identity:DISPATCH_ERROR_CODES,True,True,true
+13,public_identity:OUTCOME_VOCABULARY,True,True,true
+14,original_authority_identity:OUTCOME_VOCABULARY,True,True,true
+15,exact11_registry_order,"('ADMIT_001', 'ADMIT_002', 'ADMIT_003', 'ADMIT_004', 'ADMIT_005', 'ADMIT_006', 'ADMIT_007', 'ADMIT_008', 'ADMIT_009', 'ADMIT_010', 'ADMIT_011')","('ADMIT_001', 'ADMIT_002', 'ADMIT_003', 'ADMIT_004', 'ADMIT_005', 'ADMIT_006', 'ADMIT_007', 'ADMIT_008', 'ADMIT_009', 'ADMIT_010', 'ADMIT_011')",true
+16,exact12_registry_order,"('ADMIT_001', 'ADMIT_002', 'ADMIT_003', 'ADMIT_004', 'ADMIT_005', 'ADMIT_006', 'ADMIT_007', 'ADMIT_008', 'ADMIT_009', 'ADMIT_010', 'ADMIT_011', 'ADMIT_012')","('ADMIT_001', 'ADMIT_002', 'ADMIT_003', 'ADMIT_004', 'ADMIT_005', 'ADMIT_006', 'ADMIT_007', 'ADMIT_008', 'ADMIT_009', 'ADMIT_010', 'ADMIT_011', 'ADMIT_012')",true
+17,handler_identity:ADMIT_001,True,True,true
+18,handler_identity:ADMIT_002,True,True,true
+19,handler_identity:ADMIT_003,True,True,true
+20,handler_identity:ADMIT_004,True,True,true
+21,handler_identity:ADMIT_005,True,True,true
+22,handler_identity:ADMIT_006,True,True,true
+23,handler_identity:ADMIT_007,True,True,true
+24,handler_identity:ADMIT_008,True,True,true
+25,handler_identity:ADMIT_009,True,True,true
+26,handler_identity:ADMIT_010,True,True,true
+27,handler_identity:ADMIT_011,True,True,true
+28,handler_binding:ADMIT_012,True,True,true
+29,rule_names,"{'ADMIT_001': 'unique_candidate_identity', 'ADMIT_002': 'valid_pdb_id_format', 'ADMIT_003': 'ligand_or_het_identity_present', 'ADMIT_004': 'covalent_residue_identity_present', 'ADMIT_005': 'cys_sg_scope_only_v1', 'ADMIT_006': 'explicit_covalent_event_evidence', 'ADMIT_007': 'distance_only_inference_forbidden', 'ADMIT_008': 'topology_restoration_disposition', 'ADMIT_009': 'duplicate_identity_precheck', 'ADMIT_010': 'leakage_group_assignment_before_split', 'ADMIT_011': 'raw_overwrite_forbidden', 'ADMIT_012': 'future_download_integrity_fields_required'}","{'ADMIT_001': 'unique_candidate_identity', 'ADMIT_002': 'valid_pdb_id_format', 'ADMIT_003': 'ligand_or_het_identity_present', 'ADMIT_004': 'covalent_residue_identity_present', 'ADMIT_005': 'cys_sg_scope_only_v1', 'ADMIT_006': 'explicit_covalent_event_evidence', 'ADMIT_007': 'distance_only_inference_forbidden', 'ADMIT_008': 'topology_restoration_disposition', 'ADMIT_009': 'duplicate_identity_precheck', 'ADMIT_010': 'leakage_group_assignment_before_split', 'ADMIT_011': 'raw_overwrite_forbidden', 'ADMIT_012': 'future_download_integrity_fields_required'}",true
+30,adapter_ids,"{'ADMIT_001': 'covapie_admit_001_unified_adapter_v1', 'ADMIT_002': 'covapie_admit_002_unified_adapter_v1', 'ADMIT_003': 'covapie_admit_003_unified_adapter_v1', 'ADMIT_004': 'covapie_admit_004_unified_adapter_v1', 'ADMIT_005': 'covapie_admit_005_unified_adapter_v1', 'ADMIT_006': 'covapie_admit_006_unified_adapter_v1', 'ADMIT_007': 'covapie_admit_007_unified_adapter_v1', 'ADMIT_008': 'covapie_admit_008_unified_adapter_v1', 'ADMIT_009': 'covapie_admit_009_unified_adapter_v1', 'ADMIT_010': 'covapie_admit_010_unified_adapter_v1', 'ADMIT_011': 'covapie_admit_011_unified_adapter_v1', 'ADMIT_012': 'covapie_admit_012_unified_adapter_v1'}","{'ADMIT_001': 'covapie_admit_001_unified_adapter_v1', 'ADMIT_002': 'covapie_admit_002_unified_adapter_v1', 'ADMIT_003': 'covapie_admit_003_unified_adapter_v1', 'ADMIT_004': 'covapie_admit_004_unified_adapter_v1', 'ADMIT_005': 'covapie_admit_005_unified_adapter_v1', 'ADMIT_006': 'covapie_admit_006_unified_adapter_v1', 'ADMIT_007': 'covapie_admit_007_unified_adapter_v1', 'ADMIT_008': 'covapie_admit_008_unified_adapter_v1', 'ADMIT_009': 'covapie_admit_009_unified_adapter_v1', 'ADMIT_010': 'covapie_admit_010_unified_adapter_v1', 'ADMIT_011': 'covapie_admit_011_unified_adapter_v1', 'ADMIT_012': 'covapie_admit_012_unified_adapter_v1'}",true
+31,mapping_proxy:RULE_NAMES,<class 'mappingproxy'>,<class 'mappingproxy'>,true
+32,mutation_rejected:RULE_NAMES,True,True,true
+33,mapping_proxy:ADAPTER_IDS,<class 'mappingproxy'>,<class 'mappingproxy'>,true
+34,mutation_rejected:ADAPTER_IDS,True,True,true
+35,mapping_proxy:EVALUATOR_REGISTRY,<class 'mappingproxy'>,<class 'mappingproxy'>,true
+36,mutation_rejected:EVALUATOR_REGISTRY,True,True,true
+37,not_registered:ADMIT_013,False,False,true
+38,not_registered:ADMIT_014,False,False,true
+39,not_registered:ADMIT_015,False,False,true

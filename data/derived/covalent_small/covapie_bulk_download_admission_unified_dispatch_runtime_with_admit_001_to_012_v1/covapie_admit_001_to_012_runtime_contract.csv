@@ -1,0 +1,43 @@
+contract_order,contract_id,contract_group,contract_subject,expected_value,observed_value,contract_passed
+1,CONTRACT_001,identity,Exact11 public result/error/constants identity,7/7,7/7,true
+2,CONTRACT_002,registry,Exact12 order,ADMIT_001_to_ADMIT_012,ADMIT_001_to_ADMIT_012,true
+3,CONTRACT_003,registry,first eleven handler object identities,11/11,11/11,true
+4,CONTRACT_004,registry,sole new handler,_evaluate_registered_admit_012,_evaluate_registered_admit_012,true
+5,CONTRACT_005,sets,known,ADMIT_001_to_ADMIT_015,ADMIT_001_to_ADMIT_015,true
+6,CONTRACT_006,sets,callable and ready,ADMIT_001_to_ADMIT_012,ADMIT_001_to_ADMIT_012,true
+7,CONTRACT_007,sets,legacy adapter not ready,empty,empty,true
+8,CONTRACT_008,routing,five-envelope signature,frozen,frozen,true
+9,CONTRACT_009,routing,precedence,batch|evaluation_mapping|policy4|download_mapping|stage|candidate_mapping|download4|formal|source|oracle|equality|projection,batch|evaluation_mapping|policy4|download_mapping|stage|candidate_mapping|download4|formal|source|oracle|equality|projection,true
+10,CONTRACT_010,routing,context reasons,Exact8,Exact8,true
+11,CONTRACT_011,candidate,Mapping envelope only,zero_key_access,zero_key_access,true
+12,CONTRACT_012,candidate,non-Mapping result,ADMIT_012_CANDIDATE_RECORD_MAPPING_INVALID,ADMIT_012_CANDIDATE_RECORD_MAPPING_INVALID,true
+13,CONTRACT_013,download,first missing,omit_keyword_and_stop_later_lookup,omit_keyword_and_stop_later_lookup,true
+14,CONTRACT_014,download,present None False zero,forwarded_by_identity,forwarded_by_identity,true
+15,CONTRACT_015,formal,call,keyword_only_exactly_once,keyword_only_exactly_once,true
+16,CONTRACT_016,formal,exception,propagated_oracle_zero,propagated_oracle_zero,true
+17,CONTRACT_017,source,type,exact_Admit012EvaluationResult,exact_Admit012EvaluationResult,true
+18,CONTRACT_018,source,Exact10,storage_order_types_reconstruction_invariants,storage_order_types_reconstruction_invariants,true
+19,CONTRACT_019,oracle,call,same_kwargs_exactly_once,same_kwargs_exactly_once,true
+20,CONTRACT_020,oracle,type,Admit012EvaluationResultContractDesign,Admit012EvaluationResultContractDesign,true
+21,CONTRACT_021,equality,full Exact10,exact_type_and_value_each_position,exact_type_and_value_each_position,true
+22,CONTRACT_022,projection,status,exact_str_unchanged,exact_str_unchanged,true
+23,CONTRACT_023,projection,HTTP,exact_int_to_decimal_str,exact_int_to_decimal_str,true
+24,CONTRACT_024,projection,content,exact_int_to_decimal_str,exact_int_to_decimal_str,true
+25,CONTRACT_025,projection,SHA,exact_str_unchanged,exact_str_unchanged,true
+26,CONTRACT_026,projection,prefix,empty_or_ordered_Exact4_prefix,empty_or_ordered_Exact4_prefix,true
+27,CONTRACT_027,projection,schema,Exact13_unchanged_string_pairs_only,Exact13_unchanged_string_pairs_only,true
+28,CONTRACT_028,projection,historical field names,download_result_semantics_not_candidate_source,download_result_semantics_not_candidate_source,true
+29,CONTRACT_029,dispatch,precedence,exact_str|known|callable|ready|local_handler,exact_str|known|callable|ready|local_handler,true
+30,CONTRACT_030,dispatch,ADMIT_013_to_015,known_not_registered,known_not_registered,true
+31,CONTRACT_031,truth,Exact11 regression,Exact534,Exact534,true
+32,CONTRACT_032,truth,ADMIT_012 formal,Exact105,Exact105,true
+33,CONTRACT_033,truth,ADMIT_012 adapter contract,Exact43,Exact43,true
+34,CONTRACT_034,issue,single transition,ADMIT_012_removed_from_open_coverage,ADMIT_012_removed_from_open_coverage,true
+35,CONTRACT_035,boundary,ADMIT_013,not_implemented,not_implemented,true
+36,CONTRACT_036,boundary,combined verdict and aggregation,not_implemented,not_implemented,true
+37,CONTRACT_037,boundary,provider network download raw,not_executed,not_executed,true
+38,CONTRACT_038,boundary,model checkpoint training,not_executed,not_executed,true
+39,CONTRACT_039,training,feature semantics audit,required_Step12D_smoke_only,required_Step12D_smoke_only,true
+40,CONTRACT_040,materializer,publication,set_atomic_RENAME_NOREPLACE,set_atomic_RENAME_NOREPLACE,true
+41,CONTRACT_041,materializer,GPFS EINVAL,fail_closed_no_replace,fail_closed_no_replace,true
+42,CONTRACT_042,materializer,existing exact set,inode_preserving_noop,inode_preserving_noop,true
