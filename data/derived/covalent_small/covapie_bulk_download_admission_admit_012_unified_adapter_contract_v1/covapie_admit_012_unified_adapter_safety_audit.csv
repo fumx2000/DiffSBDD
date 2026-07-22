@@ -1,0 +1,32 @@
+safety_order,safety_item,expected_executed,observed_executed,evidence,safety_passed
+1,production_design_only,true,true,Design API and evidence builder only,true
+2,exact10_source_validation,true,true,exact type/storage/order/types/reconstruction/invariants,true
+3,independent_oracle_equality,true,true,full Exact10 types and values,true
+4,typed_to_string_projection,true,true,exact int to canonical decimal str,true
+5,exact13_string_pair_enforcement,true,true,both pair fields remain exact string pairs,true
+6,deterministic_materialization,true,true,double build and set-atomic publish,true
+7,source_attestation,true,true,fixed ordered Exact19 pinned reads,true
+8,issue_continuity,true,true,standalone Exact16 byte-preserved,true
+9,runtime_handler,false,false,no future handler definition,true
+10,registry,false,false,no registry definition or modification,true
+11,dispatcher,false,false,no dispatcher definition or modification,true
+12,exact11_runtime_change,false,false,committed source SHA frozen,true
+13,UnifiedAdmissionRuleEvaluation_redefinition,false,false,Design suffix type only,true
+14,schema_widening,false,false,no object/int pair allowance,true
+15,int_pair_in_exact13,false,false,projection converts exact int,true
+16,private_standalone_sentinel,false,false,not imported or passed,true
+17,candidate_field_sourcing,false,false,candidate envelope only,true
+18,candidate_key_access,false,false,zero,true
+19,batch_context_sourcing,false,false,must be None,true
+20,stage_authorization_sourcing,false,false,must be None,true
+21,network,false,false,not imported or executed,true
+22,filesystem_in_adapter,false,false,adapter Design path is pure memory,true
+23,raw_read_or_enumeration,false,false,source boundary excludes data/raw,true
+24,provider_mapping,false,false,not implemented or validated,true
+25,download,false,false,not executed,true
+26,admit_013_judgment,false,false,not implemented,true
+27,model_or_checkpoint,false,false,not accessed or modified,true
+28,training,false,false,no backward/optimizer/parameter update,true
+29,stage,false,false,not executed,true
+30,commit,false,false,not executed,true
+31,push,false,false,not executed,true
