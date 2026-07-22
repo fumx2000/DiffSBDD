@@ -1,0 +1,33 @@
+precondition_order,precondition_id,precondition_group,precondition_subject,expected_contract,observed_evidence,completeness_status,implementation_blocking,blocking_reason,precondition_passed
+1,PRE_001,identity,rule ID,ADMIT_013,Step14AT exact registry row,complete,false,,true
+2,PRE_002,identity,rule name,download_failure_fail_closed,Step14AT exact registry row,complete,false,,true
+3,PRE_003,identity,evaluation phase,post_download,Step14AT exact registry row,complete,false,,true
+4,PRE_004,identity,evidence source,future_download_result,Step14AT exact registry row,complete,false,,true
+5,PRE_005,identity,required status,non_success_or_integrity_failure_not_admitted,Step14AT exact registry row,complete,false,,true
+6,PRE_006,identity,blocking reason,download_failure_must_fail_closed,Step14AT exact registry row,complete,false,,true
+7,PRE_007,structural,Exact4 field identity/order,download_result_status|observed_http_status|observed_content_length_bytes|observed_sha256,shared ADMIT_012 field contract exact order,complete,false,,true
+8,PRE_008,structural,download_result_status structural contract,exact built-in str; closed success|failure; no normalization,ADMIT_012 shared structural contract,complete,false,,true
+9,PRE_009,structural,observed_http_status structural contract,exact built-in int; bool/subclass rejected; 100..599,ADMIT_012 shared structural contract,complete,false,,true
+10,PRE_010,structural,observed_content_length_bytes structural contract,exact built-in int; >=0; zero allowed; no upper bound; no file recompute,ADMIT_012 shared structural contract,complete,false,,true
+11,PRE_011,structural,observed_sha256 structural contract,exact built-in str; ASCII lowercase [0-9a-f]{64}; no normalization or file recompute,ADMIT_012 shared structural contract,complete,false,,true
+12,PRE_012,structural,existing Exact4 policy-context identity,allowed statuses|HTTP contract|content contract|SHA format contract,ADMIT_012 formal interface freezes these identities for ADMIT_012,complete,false,,true
+13,PRE_013,routing,post-download routing responsibility,ADMIT_013 envelope sources and forbidden envelopes frozen,only ADMIT_012 routing is frozen,incomplete,true,ADMIT_013_POST_DOWNLOAD_ROUTING_RESPONSIBILITY_UNRESOLVED,false
+14,PRE_014,dependency,ADMIT_012 prerequisite/revalidation boundary,self-validation versus prior formal ADMIT_012 result frozen,single-rule runtime has no cross-rule prerequisite contract,incomplete,true,ADMIT_013_ADMIT_012_VALIDATION_DEPENDENCY_UNRESOLVED,false
+15,PRE_015,dependency,missing/presence behavior,ADMIT_013 missing handling and precedence frozen,ADMIT_012 presence semantics exist but ADMIT_013 adoption is absent,incomplete,true,ADMIT_013_ADMIT_012_VALIDATION_DEPENDENCY_UNRESOLVED,false
+16,PRE_016,outcome,canonical success-status decision,success alone has a deterministic ADMIT_013 disposition,only pending future integrity checks is stated,incomplete,true,ADMIT_013_DOWNLOAD_OUTCOME_POLICY_UNRESOLVED,false
+17,PRE_017,outcome,canonical failure-status decision,failure is blocked,registry non-success fail-closed plus shared status row blocked_not_implemented_here,complete,false,,true
+18,PRE_018,outcome,HTTP success-range adoption,ADMIT_013 explicitly adopts or rejects 200..299,future bounds exist but no ADMIT_013 adoption contract,incomplete,true,ADMIT_013_DOWNLOAD_OUTCOME_POLICY_UNRESOLVED,false
+19,PRE_019,outcome,status/HTTP contradiction behavior,success+non-2xx and failure+2xx precedence frozen,no committed ADMIT_013 contradiction table,incomplete,true,ADMIT_013_DOWNLOAD_OUTCOME_POLICY_UNRESOLVED,false
+20,PRE_020,integrity,zero-content-length disposition,zero allowed/blocked cases frozen,zero is structurally legal; business disposition absent,incomplete,true,ADMIT_013_INTEGRITY_COMPARISON_AUTHORITY_UNRESOLVED,false
+21,PRE_021,integrity,expected content-length authority,trusted producer/context/type frozen,no assigned authoritative field or context,incomplete,true,ADMIT_013_INTEGRITY_COMPARISON_AUTHORITY_UNRESOLVED,false
+22,PRE_022,integrity,content-length comparison contract,observed-versus-expected comparison/reason/precedence frozen,no authoritative comparison contract,incomplete,true,ADMIT_013_INTEGRITY_COMPARISON_AUTHORITY_UNRESOLVED,false
+23,PRE_023,integrity,expected SHA256 authority,trusted producer/context/type frozen,source/artifact hashes exist but no download authority,incomplete,true,ADMIT_013_INTEGRITY_COMPARISON_AUTHORITY_UNRESOLVED,false
+24,PRE_024,integrity,SHA comparison contract,observed-versus-expected comparison/reason/precedence frozen,no authoritative comparison contract or verdict,incomplete,true,ADMIT_013_INTEGRITY_COMPARISON_AUTHORITY_UNRESOLVED,false
+25,PRE_025,integrity,syntactic SHA versus integrity semantics,valid grammar is not an integrity verdict,ADMIT_012 explicitly limits SHA to representation grammar,complete,false,,true
+26,PRE_026,outcome,provider/transport failure taxonomy,HTTP timeout DNS partial empty checksum provider write failures represented,success|failure does not freeze category mapping or reasons,incomplete,true,ADMIT_013_DOWNLOAD_OUTCOME_POLICY_UNRESOLVED,false
+27,PRE_027,precedence,multi-failure precedence,missing invalid status HTTP length SHA conflicts ordered,no committed ADMIT_013 precedence table,incomplete,true,ADMIT_013_MULTI_FAILURE_PRECEDENCE_UNRESOLVED,false
+28,PRE_028,result,closed reason vocabulary,complete ADMIT_013 reason vocabulary frozen,registry blocker is not a closed result-reason vocabulary,incomplete,true,ADMIT_013_DOWNLOAD_OUTCOME_POLICY_UNRESOLVED,false
+29,PRE_029,interface,public standalone signature,scalar/context/prior-result/Mapping choice frozen,no ADMIT_013 standalone signature contract,incomplete,true,ADMIT_013_STANDALONE_SIGNATURE_UNRESOLVED,false
+30,PRE_030,interface,formal result contract,representation/prefix/consumption/outcome/reason invariants frozen,ADMIT_012 Exact10 is rule-specific; no ADMIT_013 result contract,incomplete,true,ADMIT_013_RESULT_CONTRACT_UNRESOLVED,false
+31,PRE_031,boundary,pure in-memory/no-I/O boundary,future evaluator may be pure; no network/raw/filesystem,Step14AT/AU-A exact false I/O requirements,complete,false,,true
+32,PRE_032,authorization,authorization/training boundary,no provider/network/download/raw/runtime/training; feature audit required,current task and committed readiness fail closed,complete,false,,true
