@@ -1,0 +1,248 @@
+{
+  "ADMIT_012_RESULT_CONTRACT_UNRESOLVED": "open",
+  "ADMIT_012_STANDALONE_SIGNATURE_UNRESOLVED": "open",
+  "Admit012EvaluationResult_implemented": false,
+  "admission_rule_id": "ADMIT_012",
+  "admission_rule_name": "future_download_integrity_fields_required",
+  "admit_012_admit_013_field_contract_boundary_frozen": true,
+  "admit_012_download_integrity_field_contract_frozen": true,
+  "admit_012_download_result_status_enum_frozen": true,
+  "admit_012_field_semantics_complete": true,
+  "admit_012_non_responsibilities": [
+    "status_success_judgment",
+    "HTTP_2xx_judgment",
+    "content_length_header_or_file_match",
+    "SHA256_expected_digest_match",
+    "candidate_materialization_admission"
+  ],
+  "admit_012_preconditions_audited": true,
+  "admit_012_presence_semantics_resolved": true,
+  "admit_012_registered_in_engine": false,
+  "admit_012_responsibilities": [
+    "Exact4_presence",
+    "exact_builtin_types",
+    "status_enum_membership",
+    "HTTP_structural_range",
+    "content_length_structural_range",
+    "SHA256_representation_grammar",
+    "deterministic_reason_precedence"
+  ],
+  "admit_012_routing_responsibility_resolved": false,
+  "admit_012_rule_logic_implemented": false,
+  "admit_012_unified_adapter_contract_frozen": false,
+  "admit_012_unified_adapter_implemented": false,
+  "admit_012_validation_precedence_resolved": true,
+  "all_checks_passed": true,
+  "authorized_admit_012_download_execution_count": 0,
+  "base_commit": "62b2ba8de9a38f48ae35b1fd217897191a0519cd",
+  "base_subject": "add CovaPIE ADMIT_012 formal evaluator interface preconditions audit v1",
+  "blocking_reason": "download_integrity_fields_missing",
+  "combined_candidate_verdict_implemented": false,
+  "contract_outcomes": [
+    "contract_valid",
+    "missing",
+    "invalid"
+  ],
+  "design_classifier_only": true,
+  "evaluate_admit_012_implemented": false,
+  "evaluation_phase": "post_download",
+  "evidence_source": "future_download_result",
+  "exact4_fields": [
+    "download_result_status",
+    "observed_http_status",
+    "observed_content_length_bytes",
+    "observed_sha256"
+  ],
+  "exact4_presence_required": true,
+  "feature_semantics_audit_required_before_training": true,
+  "formal_evaluator_implemented": false,
+  "formal_result_contract_defined": false,
+  "future_admit_013_responsibilities_not_implemented_here": [
+    "non_success_status_fail_closed",
+    "non_2xx_fail_closed",
+    "integrity_mismatch_fail_closed",
+    "combined_download_admission_verdict"
+  ],
+  "historical_status_literal_count": 14,
+  "historical_status_literals_promoted_automatically": false,
+  "issue_integration_transition": "admit_012_download_integrity_field_contract_frozen_v1",
+  "manifest_schema_version": "covapie_admit_012_download_integrity_field_contract_manifest_v1",
+  "observed_content_length_bytes_contract": {
+    "exact_builtin_type": "int",
+    "legal_maximum": null,
+    "legal_minimum": 0,
+    "recomputed_from_file_inside_classifier": false,
+    "subclasses_allowed": false,
+    "zero_allowed": true
+  },
+  "observed_http_status_contract": {
+    "admit_012_executes_success_judgment": false,
+    "exact_builtin_type": "int",
+    "future_success_maximum": 299,
+    "future_success_minimum": 200,
+    "legal_maximum": 599,
+    "legal_minimum": 100,
+    "subclasses_allowed": false
+  },
+  "observed_sha256_contract": {
+    "case_policy": "ASCII_lowercase_only",
+    "exact_builtin_type": "str",
+    "grammar": "[0-9a-f]{64}",
+    "length": 64,
+    "normalization_allowed": false,
+    "recomputed_from_file_inside_classifier": false,
+    "subclasses_allowed": false
+  },
+  "ordered_allowed_download_result_statuses": [
+    "success",
+    "failure"
+  ],
+  "output_file_count": 6,
+  "output_files": [
+    "covapie_admit_012_download_integrity_field_contract.csv",
+    "covapie_admit_012_download_result_status_enum.csv",
+    "covapie_admit_012_download_integrity_validation_truth_matrix.csv",
+    "covapie_admit_012_download_integrity_contract_source_boundary_audit.csv",
+    "covapie_admit_012_download_integrity_contract_issue_readiness_inventory.csv",
+    "covapie_admit_012_download_integrity_field_contract_manifest.json"
+  ],
+  "output_sha256": {
+    "covapie_admit_012_download_integrity_contract_issue_readiness_inventory.csv": "dfe8e16d741548323cddfcdf3db86bdf0c098d6bb2a86fcb8ec0914ebe924855",
+    "covapie_admit_012_download_integrity_contract_source_boundary_audit.csv": "73393c6c540cb00d040fa8154948f544e445bbcb63323d9f463709c7ee8b16ed",
+    "covapie_admit_012_download_integrity_field_contract.csv": "03aef0a14257d9a2c028fcc3dd84c161c29b09bca1a1c71456edc66e2e73c9ce",
+    "covapie_admit_012_download_integrity_validation_truth_matrix.csv": "766506f8c0bf2d7734b9c379c9437e1a48a2117873f7e974325b00ab685a39e1",
+    "covapie_admit_012_download_result_status_enum.csv": "4c016e8c325ce6a422dff618ae166ec4f42243cc0d1fbf8f6a722c13f63139f6"
+  },
+  "presence_semantics": {
+    "none_empty_zero_false_implicitly_missing": false,
+    "only_private_design_missing_sentinel_means_missing": true,
+    "order": [
+      "download_result_status",
+      "observed_http_status",
+      "observed_content_length_bytes",
+      "observed_sha256"
+    ],
+    "phase_before_type_value_validation": true
+  },
+  "project": "CovaPIE",
+  "provider_mapping_validated": false,
+  "readiness": {
+    "Admit012EvaluationResult_implemented": false,
+    "admit_012_admit_013_field_contract_boundary_frozen": true,
+    "admit_012_download_integrity_field_contract_frozen": true,
+    "admit_012_download_result_status_enum_frozen": true,
+    "admit_012_field_semantics_complete": true,
+    "admit_012_preconditions_audited": true,
+    "admit_012_presence_semantics_resolved": true,
+    "admit_012_registered_in_engine": false,
+    "admit_012_routing_responsibility_resolved": false,
+    "admit_012_rule_logic_implemented": false,
+    "admit_012_unified_adapter_contract_frozen": false,
+    "admit_012_unified_adapter_implemented": false,
+    "admit_012_validation_precedence_resolved": true,
+    "combined_candidate_verdict_implemented": false,
+    "evaluate_admit_012_implemented": false,
+    "feature_semantics_audit_required_before_training": true,
+    "provider_mapping_validated": false,
+    "ready_for_admit_012_standalone_evaluator_interface_implementation": false,
+    "ready_for_bulk_download_now": false,
+    "ready_for_training": false,
+    "real_provider_evaluation_ready": false,
+    "step12d_is_final_training_feature_contract": false,
+    "unified_dispatch_runtime_with_admit_001_to_012_implemented": false
+  },
+  "ready_for_admit_012_standalone_evaluator_interface_implementation": false,
+  "ready_for_bulk_download_now": false,
+  "ready_for_training": false,
+  "real_provider_evaluation_ready": false,
+  "reason_vocabulary": [
+    "DOWNLOAD_RESULT_STATUS_MISSING",
+    "OBSERVED_HTTP_STATUS_MISSING",
+    "OBSERVED_CONTENT_LENGTH_BYTES_MISSING",
+    "OBSERVED_SHA256_MISSING",
+    "DOWNLOAD_RESULT_STATUS_TYPE_INVALID",
+    "DOWNLOAD_RESULT_STATUS_VALUE_INVALID",
+    "OBSERVED_HTTP_STATUS_TYPE_INVALID",
+    "OBSERVED_HTTP_STATUS_RANGE_INVALID",
+    "OBSERVED_CONTENT_LENGTH_BYTES_TYPE_INVALID",
+    "OBSERVED_CONTENT_LENGTH_BYTES_RANGE_INVALID",
+    "OBSERVED_SHA256_TYPE_INVALID",
+    "OBSERVED_SHA256_FORMAT_INVALID"
+  ],
+  "recommended_next_step": "design_covapie_admit_012_formal_evaluator_interface_contract_v1",
+  "renameat2_policy": "RENAME_NOREPLACE_required;_EINVAL_fails_closed_without_os.replace_fallback",
+  "required_open_issue_ids": [
+    "ADMIT_012_POST_DOWNLOAD_ROUTING_RESPONSIBILITY_UNRESOLVED",
+    "ADMIT_012_RESULT_CONTRACT_UNRESOLVED",
+    "ADMIT_012_STANDALONE_SIGNATURE_UNRESOLVED",
+    "UNIFIED_ADMISSION_CROSS_RULE_AGGREGATION_SEMANTICS_UNRESOLVED",
+    "UNIFIED_ADMISSION_RULE_COVERAGE_INCOMPLETE"
+  ],
+  "required_status": "download_status_http_status_content_length_and_sha256_present",
+  "resolved_issue_ids": [
+    "ADMIT_012_MULTI_INVALID_PRECEDENCE_UNRESOLVED",
+    "ADMIT_012_PRESENCE_SEMANTICS_UNRESOLVED",
+    "DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED",
+    "DOWNLOAD_RESULT_STATUS_ENUM_UNRESOLVED"
+  ],
+  "row_counts": {
+    "field_contract": 4,
+    "issue_inventory": 16,
+    "source_boundary": 29,
+    "status_enum_and_history": 16,
+    "truth_matrix": 52
+  },
+  "safety": {
+    "model_or_checkpoint": false,
+    "network": false,
+    "provider_mapping": false,
+    "raw": false,
+    "real_download": false,
+    "runtime_change": false,
+    "training": false
+  },
+  "source_count": 29,
+  "source_path_list_sha256": "02979f002c72725ffb30b5367a923d7b0e61ac13a88b594a3ecb0c74b5403c85",
+  "source_path_sha256_pairs_sha256": "fab86f35f2adcc12e3cbb99ac36bf05074e53b8b547a550b7e9503ab4cc011a9",
+  "stage": "covapie_bulk_download_admission_admit_012_download_integrity_field_contract_v1",
+  "status_enum_version": "covapie_download_result_status_v1",
+  "step12d_is_final_training_feature_contract": false,
+  "step12d_status": "smoke_legality_only_not_final_training_feature_contract",
+  "success_download_result_status_subset": [
+    "success"
+  ],
+  "truth_matrix_group_counts": {
+    "admit_013_boundary": 3,
+    "canonical_valid": 9,
+    "content_invalid": 4,
+    "http_invalid": 5,
+    "missing": 6,
+    "multi_invalid_precedence": 7,
+    "sha_invalid": 12,
+    "status_invalid": 6
+  },
+  "unified_adapter_or_runtime_changed": false,
+  "unified_dispatch_runtime_with_admit_001_to_012_implemented": false,
+  "validation_precedence": {
+    "phase_order": [
+      "presence",
+      "type_and_value"
+    ],
+    "presence_order": [
+      "download_result_status",
+      "observed_http_status",
+      "observed_content_length_bytes",
+      "observed_sha256"
+    ],
+    "validation_order": [
+      "download_result_status",
+      "observed_http_status",
+      "observed_content_length_bytes",
+      "observed_sha256"
+    ],
+    "within_field_order": [
+      "exact_type",
+      "enum_range_or_grammar"
+    ]
+  }
+}
