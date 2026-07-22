@@ -1,0 +1,25 @@
+precondition_order,precondition_id,precondition_group,precondition_subject,expected_contract,observed_evidence,completeness_status,implementation_blocking,blocking_reason,precondition_passed
+1,PRE_001,identity,rule identity,ADMIT_012 exact,registry exact,complete,false,,true
+2,PRE_002,identity,phase,post_download,registry exact,complete,false,,true
+3,PRE_003,identity,required status,exact status,registry exact,complete,false,,true
+4,PRE_004,identity,blocking reason,exact blocker,registry exact,complete,false,,true
+5,PRE_005,field,Exact4 identity/order,frozen ordered fields,Step14AU-A exact,complete,false,,true
+6,PRE_006,routing,future result producer,download execution result,field matrix exact,complete,false,,true
+7,PRE_007,routing,candidate versus result envelope,future consumer envelope frozen,candidate false but envelope allocation absent,incomplete,true,ADMIT_012_POST_DOWNLOAD_ROUTING_RESPONSIBILITY_UNRESOLVED,false
+8,PRE_008,type,download_result_status type,exact built-in str,no exact type contract,incomplete,true,DOWNLOAD_RESULT_STATUS_ENUM_UNRESOLVED,false
+9,PRE_009,type,download_result_status vocabulary,allowed vocabulary,context exact=false,incomplete,true,DOWNLOAD_RESULT_STATUS_ENUM_UNRESOLVED,false
+10,PRE_010,type,observed_http_status type/range,"exact int, bool rejection, range",no exact contract,incomplete,true,DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED,false
+11,PRE_011,type,content length type/range,"exact int, bool rejection, range",no exact contract,incomplete,true,DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED,false
+12,PRE_012,type,SHA256 grammar/case,exact grammar and case policy,no exact contract,incomplete,true,DOWNLOAD_INTEGRITY_VALIDATION_CONTRACT_UNRESOLVED,false
+13,PRE_013,validation,presence semantics,defined key/value/type meaning,no exact contract,incomplete,true,ADMIT_012_PRESENCE_SEMANTICS_UNRESOLVED,false
+14,PRE_014,validation,multi-invalid precedence,deterministic reason order,no exact contract,incomplete,true,ADMIT_012_MULTI_INVALID_PRECEDENCE_UNRESOLVED,false
+15,PRE_015,interface,public standalone signature,scalar/object/mapping resolved,routing/validation unresolved,incomplete,true,ADMIT_012_STANDALONE_SIGNATURE_UNRESOLVED,false
+16,PRE_016,interface,Exact10 result contract,result object/shape resolved,not designed,incomplete,true,ADMIT_012_RESULT_CONTRACT_UNRESOLVED,false
+17,PRE_017,purity,pure in-memory,possible,Step14AU-A exact,complete,false,,true
+18,PRE_018,purity,no network/filesystem/raw,forbidden inside evaluator,network/filesystem false,complete,false,,true
+19,PRE_019,boundary,ADMIT_012/013 responsibility,presence versus fail-closed outcome,separate registry rules,complete,false,,true
+20,PRE_020,boundary,provider mapping required,not required inside evaluator,pure interface evidence,complete,false,,true
+21,PRE_021,authorization,real provider mapping,not validated,not authorized,complete,false,,true
+22,PRE_022,authorization,real download evaluation,not authorized,not authorized,complete,false,,true
+23,PRE_023,authorization,runtime integration,not authorized,Exact11 unchanged,complete,false,,true
+24,PRE_024,training,feature audit,still required before training,historical readiness,complete,false,,true
