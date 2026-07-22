@@ -1,0 +1,71 @@
+contract_order,contract_section,section_order,public_name,formal_type,default_or_missing_behavior,required,source_envelope,validation_rule,invariant,contract_passed
+1,signature_parameter,1,download_result_status,object,private_singleton_missing_default,false,download_result_context,keyword_only; exact field contract,Exact4 field order; no Mapping record,true
+2,signature_parameter,2,observed_http_status,object,private_singleton_missing_default,false,download_result_context,keyword_only; exact field contract,Exact4 field order; no Mapping record,true
+3,signature_parameter,3,observed_content_length_bytes,object,private_singleton_missing_default,false,download_result_context,keyword_only; exact field contract,Exact4 field order; no Mapping record,true
+4,signature_parameter,4,observed_sha256,object,private_singleton_missing_default,false,download_result_context,keyword_only; exact field contract,Exact4 field order; no Mapping record,true
+5,signature_parameter,5,allowed_download_result_statuses,object,no_default,true,evaluation_context,keyword_only; required by Python signature,"missing is signature failure, not result semantics",true
+6,signature_parameter,6,successful_http_status_contract,object,no_default,true,evaluation_context,keyword_only; required by Python signature,"missing is signature failure, not result semantics",true
+7,signature_parameter,7,content_length_contract,object,no_default,true,evaluation_context,keyword_only; required by Python signature,"missing is signature failure, not result semantics",true
+8,signature_parameter,8,sha256_format_contract,object,no_default,true,evaluation_context,keyword_only; required by Python signature,"missing is signature failure, not result semantics",true
+9,policy_context_shape,1,allowed_download_result_statuses,"exact tuple[str,str]",not_applicable,true,evaluation_context,"('success', 'failure')","exact outer type, pair shape/order/key/value/type; no normalization",true
+10,policy_context_shape,2,successful_http_status_contract,"exact tuple[exact tuple[str,int_or_bool],...]",not_applicable,true,evaluation_context,"(('legal_minimum', 100), ('legal_maximum', 599), ('future_success_minimum', 200), ('future_success_maximum', 299), ('admit_012_executes_success_judgment', False))","exact outer type, pair shape/order/key/value/type; no normalization",true
+11,policy_context_shape,3,content_length_contract,"exact tuple[exact tuple[str,int_or_bool_or_None],...]",not_applicable,true,evaluation_context,"(('legal_minimum', 0), ('legal_maximum', None), ('zero_allowed', True), ('recomputed_from_file_inside_evaluator', False))","exact outer type, pair shape/order/key/value/type; no normalization",true
+12,policy_context_shape,4,sha256_format_contract,"exact tuple[exact tuple[str,int_or_bool],...]",not_applicable,true,evaluation_context,"(('length', 64), ('grammar', '[0-9a-f]{64}'), ('case_policy', 'ASCII_lowercase_only'), ('normalization_allowed', False), ('recomputed_from_file_inside_evaluator', False))","exact outer type, pair shape/order/key/value/type; no normalization",true
+13,result_field,1,admission_rule_id,exact str,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+14,result_field,2,outcome,exact str,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+15,result_field,3,passed,exact bool,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+16,result_field,4,blocks_candidate,exact bool,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+17,result_field,5,reason,exact str,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+18,result_field,6,canonical_download_result_record,exact tuple,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+19,result_field,7,validated_download_result_fields,exact tuple,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+20,result_field,8,consumed_download_result_fields,"exact tuple[str,...]",not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+21,result_field,9,consumed_context_items,"exact tuple[str,...]",not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+22,result_field,10,evaluator_io_used,exact bool,not_applicable,true,standalone_evaluator_result,Exact10 ordered field,see frozen outcome/canonical/validated/consumed invariants,true
+23,outcome_invariant,1,passed_iff_outcome,invariant,not_applicable,true,result_contract,passed == (outcome == 'passed'),passed == (outcome == 'passed'),true
+24,outcome_invariant,2,blocks_iff_not_passed,invariant,not_applicable,true,result_contract,blocks_candidate == (outcome != 'passed'),blocks_candidate == (outcome != 'passed'),true
+25,outcome_invariant,3,reason_empty_iff_passed,invariant,not_applicable,true,result_contract,reason empty iff outcome passed,reason empty iff outcome passed,true
+26,outcome_invariant,4,missing_outcome,invariant,not_applicable,true,result_contract,field missing reasons imply blocked,field missing reasons imply blocked,true
+27,outcome_invariant,5,field_invalid_outcome,invariant,not_applicable,true,result_contract,field type/value reasons imply invalid,field type/value reasons imply invalid,true
+28,outcome_invariant,6,context_invalid_outcome,invariant,not_applicable,true,result_contract,context reasons imply invalid,context reasons imply invalid,true
+29,outcome_invariant,7,canonical_shape,invariant,not_applicable,true,result_contract,empty on field failure; complete Exact4 on context failure/pass,empty on field failure; complete Exact4 on context failure/pass,true
+30,outcome_invariant,8,validated_prefix,invariant,not_applicable,true,result_contract,ordered prefix excluding failure field,ordered prefix excluding failure field,true
+31,outcome_invariant,9,consumption_prefix,invariant,not_applicable,true,result_contract,fields/contexts reflect actual ordered consumption,fields/contexts reflect actual ordered consumption,true
+32,outcome_invariant,10,io,invariant,not_applicable,true,result_contract,evaluator_io_used is exact false,evaluator_io_used is exact false,true
+33,reason_vocabulary,1,<empty>,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+34,reason_vocabulary,2,DOWNLOAD_RESULT_STATUS_MISSING,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+35,reason_vocabulary,3,OBSERVED_HTTP_STATUS_MISSING,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+36,reason_vocabulary,4,OBSERVED_CONTENT_LENGTH_BYTES_MISSING,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+37,reason_vocabulary,5,OBSERVED_SHA256_MISSING,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+38,reason_vocabulary,6,DOWNLOAD_RESULT_STATUS_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+39,reason_vocabulary,7,DOWNLOAD_RESULT_STATUS_VALUE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+40,reason_vocabulary,8,OBSERVED_HTTP_STATUS_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+41,reason_vocabulary,9,OBSERVED_HTTP_STATUS_RANGE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+42,reason_vocabulary,10,OBSERVED_CONTENT_LENGTH_BYTES_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+43,reason_vocabulary,11,OBSERVED_CONTENT_LENGTH_BYTES_RANGE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+44,reason_vocabulary,12,OBSERVED_SHA256_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+45,reason_vocabulary,13,OBSERVED_SHA256_FORMAT_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+46,reason_vocabulary,14,ALLOWED_DOWNLOAD_RESULT_STATUSES_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+47,reason_vocabulary,15,ALLOWED_DOWNLOAD_RESULT_STATUSES_CONTENT_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+48,reason_vocabulary,16,SUCCESSFUL_HTTP_STATUS_CONTRACT_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+49,reason_vocabulary,17,SUCCESSFUL_HTTP_STATUS_CONTRACT_CONTENT_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+50,reason_vocabulary,18,CONTENT_LENGTH_CONTRACT_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+51,reason_vocabulary,19,CONTENT_LENGTH_CONTRACT_CONTENT_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+52,reason_vocabulary,20,SHA256_FORMAT_CONTRACT_TYPE_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+53,reason_vocabulary,21,SHA256_FORMAT_CONTRACT_CONTENT_INVALID,exact str,not_applicable,true,result_contract,closed vocabulary member,no catch-all reason,true
+54,validation_precedence,1,presence:download_result_status,precedence_step,not_applicable,true,standalone_evaluator,presence:download_result_status,first failure returns immediately,true
+55,validation_precedence,2,presence:observed_http_status,precedence_step,not_applicable,true,standalone_evaluator,presence:observed_http_status,first failure returns immediately,true
+56,validation_precedence,3,presence:observed_content_length_bytes,precedence_step,not_applicable,true,standalone_evaluator,presence:observed_content_length_bytes,first failure returns immediately,true
+57,validation_precedence,4,presence:observed_sha256,precedence_step,not_applicable,true,standalone_evaluator,presence:observed_sha256,first failure returns immediately,true
+58,validation_precedence,5,type_then_value:download_result_status,precedence_step,not_applicable,true,standalone_evaluator,type_then_value:download_result_status,first failure returns immediately,true
+59,validation_precedence,6,type_then_value:observed_http_status,precedence_step,not_applicable,true,standalone_evaluator,type_then_value:observed_http_status,first failure returns immediately,true
+60,validation_precedence,7,type_then_value:observed_content_length_bytes,precedence_step,not_applicable,true,standalone_evaluator,type_then_value:observed_content_length_bytes,first failure returns immediately,true
+61,validation_precedence,8,type_then_value:observed_sha256,precedence_step,not_applicable,true,standalone_evaluator,type_then_value:observed_sha256,first failure returns immediately,true
+62,validation_precedence,9,context_type:allowed_download_result_statuses,precedence_step,not_applicable,true,standalone_evaluator,context_type:allowed_download_result_statuses,first failure returns immediately,true
+63,validation_precedence,10,context_type:successful_http_status_contract,precedence_step,not_applicable,true,standalone_evaluator,context_type:successful_http_status_contract,first failure returns immediately,true
+64,validation_precedence,11,context_type:content_length_contract,precedence_step,not_applicable,true,standalone_evaluator,context_type:content_length_contract,first failure returns immediately,true
+65,validation_precedence,12,context_type:sha256_format_contract,precedence_step,not_applicable,true,standalone_evaluator,context_type:sha256_format_contract,first failure returns immediately,true
+66,validation_precedence,13,context_content:allowed_download_result_statuses,precedence_step,not_applicable,true,standalone_evaluator,context_content:allowed_download_result_statuses,first failure returns immediately,true
+67,validation_precedence,14,context_content:successful_http_status_contract,precedence_step,not_applicable,true,standalone_evaluator,context_content:successful_http_status_contract,first failure returns immediately,true
+68,validation_precedence,15,context_content:content_length_contract,precedence_step,not_applicable,true,standalone_evaluator,context_content:content_length_contract,first failure returns immediately,true
+69,validation_precedence,16,context_content:sha256_format_contract,precedence_step,not_applicable,true,standalone_evaluator,context_content:sha256_format_contract,first failure returns immediately,true
+70,validation_precedence,17,passed,precedence_step,not_applicable,true,standalone_evaluator,passed,first failure returns immediately,true
