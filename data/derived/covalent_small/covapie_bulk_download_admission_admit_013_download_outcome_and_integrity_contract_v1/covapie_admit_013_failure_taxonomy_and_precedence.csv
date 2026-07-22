@@ -1,0 +1,9 @@
+precedence_rank,outcome,reason,layer,unique_trigger_condition,requires_structural_validation,blocks_candidate,reason_empty,catch_all_allowed,contract_passed
+1,blocked,DOWNLOAD_RESULT_STATUS_FAILURE,business_outcome,download_result_status is exact canonical failure,true,true,false,false,true
+2,blocked,OBSERVED_HTTP_STATUS_NOT_SUCCESS,business_outcome,status is success and observed_http_status is outside inclusive 200..299,true,true,false,false,true
+3,blocked,OBSERVED_CONTENT_EMPTY,business_outcome,status is success and HTTP is 2xx and observed_content_length_bytes equals 0,true,true,false,false,true
+4,blocked,OBSERVED_SHA256_MISMATCH,business_outcome,earlier reasons absent and expected_sha256 is present but differs from observed_sha256,true,true,false,false,true
+5,blocked,EXPLICIT_INTEGRITY_VERDICT_FAILED,business_outcome,earlier reasons absent and explicit_integrity_verdict equals failed,true,true,false,false,true
+6,blocked,OBSERVED_CONTENT_LENGTH_MISMATCH,business_outcome,earlier reasons absent and expected_content_length_bytes is present but differs from observed_content_length_bytes,true,true,false,false,true
+7,blocked,INTEGRITY_AUTHORITY_MISSING,business_outcome,earlier reasons absent and neither exact expected SHA match nor explicit verified is present,true,true,false,false,true
+8,passed,,terminal_pass,no rank 1..7 failure after structural validation,true,false,true,false,true

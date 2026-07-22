@@ -1,0 +1,325 @@
+{
+  "admission_rule_id": "ADMIT_013",
+  "admission_rule_name": "download_failure_fail_closed",
+  "admit_012_dependency_boundary": {
+    "Admit012EvaluationResult_consumed": false,
+    "direct_cross_rule_result_consumption_allowed": false,
+    "pipeline_level_prerequisite_allowed": true,
+    "standalone_evaluator_self_validation_required": true
+  },
+  "all_checks_passed": true,
+  "base_commit": "30c644de3973ba2968ecaa8ebff97159c07678b9",
+  "base_parent": "5ff12d358a633c44c333022f7e0ebe30f039d6fc",
+  "base_subject": "add CovaPIE ADMIT_013 formal evaluator preconditions audit v1",
+  "blocking_reason": "download_failure_must_fail_closed",
+  "business_failure_precedence": [
+    "DOWNLOAD_RESULT_STATUS_FAILURE",
+    "OBSERVED_HTTP_STATUS_NOT_SUCCESS",
+    "OBSERVED_CONTENT_EMPTY",
+    "OBSERVED_SHA256_MISMATCH",
+    "EXPLICIT_INTEGRITY_VERDICT_FAILED",
+    "OBSERVED_CONTENT_LENGTH_MISMATCH",
+    "INTEGRITY_AUTHORITY_MISSING"
+  ],
+  "evaluation_phase": "post_download",
+  "evidence_source": "future_download_result",
+  "exact4_fields": [
+    "download_result_status",
+    "observed_http_status",
+    "observed_content_length_bytes",
+    "observed_sha256"
+  ],
+  "failure_severity": "blocking",
+  "forbidden_pseudo_authorities": [
+    "candidate_self_report",
+    "test_fixture",
+    "artifact_sha256",
+    "checker_sha256",
+    "git_sha256",
+    "source_boundary_sha256",
+    "post_download_self_generated_observed_sha256",
+    "historical_pilot_download_value"
+  ],
+  "http_success_range": [
+    200,
+    299
+  ],
+  "insufficient_pass_conditions": [
+    "status success alone",
+    "HTTP 2xx alone",
+    "content length > 0 alone",
+    "valid SHA grammar alone",
+    "expected content length match alone",
+    "nonzero content plus valid SHA grammar"
+  ],
+  "integrity_authority_fields": [
+    "expected_content_length_bytes",
+    "expected_sha256",
+    "explicit_integrity_verdict"
+  ],
+  "issue_transition_counts": {
+    "inherited": 23,
+    "remaining_open_admit_013": 2,
+    "resolved_by_this_stage": 5
+  },
+  "manifest_schema_version": "covapie_admit_013_download_outcome_and_integrity_contract_manifest_v1",
+  "outcome_vocabulary": [
+    "passed",
+    "blocked"
+  ],
+  "output_file_count": 6,
+  "output_files": [
+    "covapie_admit_013_download_outcome_policy_contract.csv",
+    "covapie_admit_013_integrity_authority_contract.csv",
+    "covapie_admit_013_failure_taxonomy_and_precedence.csv",
+    "covapie_admit_013_download_outcome_and_integrity_truth_matrix.csv",
+    "covapie_admit_013_issue_readiness_inventory.csv",
+    "covapie_admit_013_download_outcome_and_integrity_contract_manifest.json"
+  ],
+  "output_sha256": {
+    "covapie_admit_013_download_outcome_and_integrity_truth_matrix.csv": "7e856eb5ebd995793dcd82fb75266c7ee6f6a8b06b7785f3a70713a96b8efdbb",
+    "covapie_admit_013_download_outcome_policy_contract.csv": "2b64ce56c122ede2ea125944c164243e5bb7dc3da89c50607f29dd647208b43a",
+    "covapie_admit_013_failure_taxonomy_and_precedence.csv": "42bead68915f7260aa2c48dabfe2968623de85a039a20a3b78682af246469031",
+    "covapie_admit_013_integrity_authority_contract.csv": "d95035d109a2c62646f11c822b50b18ab2e25ded1bfebd13e82a37b9723fa0e1",
+    "covapie_admit_013_issue_readiness_inventory.csv": "240012c88668a3228139052d3920d02b839329fdda41280d31b5382b9de3620c"
+  },
+  "pass_conditions": [
+    "download_result_status == success",
+    "200 <= observed_http_status <= 299",
+    "observed_content_length_bytes > 0",
+    "all provided trusted authorities agree",
+    "expected SHA exact match or explicit verified"
+  ],
+  "project": "CovaPIE",
+  "readiness": {
+    "Admit013EvaluationResult_implemented": false,
+    "admit_013_admit_012_validation_dependency_resolved": true,
+    "admit_013_download_outcome_and_integrity_contract_designed": true,
+    "admit_013_download_outcome_policy_frozen": true,
+    "admit_013_formal_result_contract_frozen": false,
+    "admit_013_future_evaluator_pure_in_memory_possible": true,
+    "admit_013_integrity_comparison_authority_resolved": true,
+    "admit_013_multi_failure_precedence_resolved": true,
+    "admit_013_preconditions_audited": true,
+    "admit_013_reason_vocabulary_frozen": true,
+    "admit_013_registered_in_engine": false,
+    "admit_013_routing_responsibility_resolved": true,
+    "admit_013_standalone_signature_frozen": false,
+    "admit_013_unified_adapter_contract_frozen": false,
+    "admit_013_unified_adapter_implemented": false,
+    "combined_candidate_verdict_implemented": false,
+    "cross_rule_aggregation_implemented": false,
+    "evaluate_admit_013_implemented": false,
+    "feature_semantics_audit_required_before_training": true,
+    "provider_mapping_validated": false,
+    "ready_for_admit_013_formal_evaluator_interface_contract_design": true,
+    "ready_for_admit_013_standalone_evaluator_interface_implementation": false,
+    "ready_for_bulk_download_now": false,
+    "ready_for_training": false,
+    "real_provider_evaluation_ready": false,
+    "step12d_is_final_training_feature_contract": false,
+    "unified_dispatch_runtime_with_admit_001_to_013_implemented": false
+  },
+  "reason_vocabulary": [
+    "",
+    "DOWNLOAD_RESULT_STATUS_FAILURE",
+    "OBSERVED_HTTP_STATUS_NOT_SUCCESS",
+    "OBSERVED_CONTENT_EMPTY",
+    "OBSERVED_SHA256_MISMATCH",
+    "EXPLICIT_INTEGRITY_VERDICT_FAILED",
+    "OBSERVED_CONTENT_LENGTH_MISMATCH",
+    "INTEGRITY_AUTHORITY_MISSING"
+  ],
+  "recommended_next_step": "design_covapie_admit_013_formal_evaluator_interface_contract_v1",
+  "remaining_open_precondition_ids": [
+    "PRE_029",
+    "PRE_030"
+  ],
+  "renameat2_policy": "RENAME_NOREPLACE_required;_EINVAL_fails_closed_without_os.replace_fallback",
+  "required_status": "non_success_or_integrity_failure_not_admitted",
+  "resolved_precondition_ids": [
+    "PRE_013",
+    "PRE_014",
+    "PRE_015",
+    "PRE_016",
+    "PRE_018",
+    "PRE_019",
+    "PRE_020",
+    "PRE_021",
+    "PRE_022",
+    "PRE_023",
+    "PRE_024",
+    "PRE_026",
+    "PRE_027",
+    "PRE_028"
+  ],
+  "routing_contract": {
+    "download_result_context": [
+      "download_result_status",
+      "observed_http_status",
+      "observed_content_length_bytes",
+      "observed_sha256"
+    ],
+    "evaluation_context": [
+      "expected_content_length_bytes",
+      "expected_sha256",
+      "explicit_integrity_verdict"
+    ],
+    "forbidden_envelopes": [
+      "candidate_record",
+      "batch_context",
+      "stage_authorization_context",
+      "fallback_envelope"
+    ],
+    "normalization_inference_file_network_recompute_allowed": false
+  },
+  "row_counts": {
+    "failure_taxonomy": 8,
+    "integrity_authority": 3,
+    "issue_inventory": 23,
+    "outcome_policy": 16,
+    "truth_matrix": 23
+  },
+  "safety": {
+    "dataloader": false,
+    "download": false,
+    "model_or_checkpoint": false,
+    "network": false,
+    "provider": false,
+    "raw": false,
+    "runtime_change": false,
+    "stage_commit_push": false,
+    "training": false
+  },
+  "source_boundary": [
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_design_gate_v1/covapie_bulk_download_admission_rule_registry.csv",
+      "sha256": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_design_gate_v1/covapie_bulk_download_admission_schema_contract.csv",
+      "sha256": "44ca53db60e210ffe1200d32f449c1fd94107f2775ed19b9c14f3a1e982e9710"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_rule_executability_matrix.csv",
+      "sha256": "a7782e48cac282b047a392ee20b5b26a72fa1b2208a3889edf8b1c8af923921b"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_field_semantics_matrix.csv",
+      "sha256": "a64a746cd13eb8f8421fcab1298f5657147e7882b8c786cf956f8096187966a1"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_implementation_precondition_gate_v1/covapie_bulk_download_admission_evaluation_context_contract.csv",
+      "sha256": "1146ba9f7dce648726b54401ece8e7f5e94e9feea8057ab29d4fea8a8bf6f8b0"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_download_integrity_field_contract_v1/covapie_admit_012_download_integrity_field_contract.csv",
+      "sha256": "03aef0a14257d9a2c028fcc3dd84c161c29b09bca1a1c71456edc66e2e73c9ce"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_download_integrity_field_contract_v1/covapie_admit_012_download_result_status_enum.csv",
+      "sha256": "4c016e8c325ce6a422dff618ae166ec4f42243cc0d1fbf8f6a722c13f63139f6"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_download_integrity_field_contract_v1/covapie_admit_012_download_integrity_field_contract_manifest.json",
+      "sha256": "9fadff44ae15474783df2a3997c45f2c4d57a41ca2adbab0b40f1d890f51039f"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_formal_evaluator_interface_contract_v1/covapie_admit_012_formal_evaluator_interface_and_result_contract.csv",
+      "sha256": "682192b492979d9b6114381cbfc02d57c349e3cd8db2541a01177235d34c04e6"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_formal_evaluator_interface_contract_v1/covapie_admit_012_formal_evaluator_routing_and_consumption_contract.csv",
+      "sha256": "44709c3a679368476c87bcd97dafa2f9cf9bddb4af534c6eb950c565d0919aec"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_formal_evaluator_interface_contract_v1/covapie_admit_012_formal_evaluator_interface_contract_manifest.json",
+      "sha256": "2845c2623a01087af8842177f4502402d0a8875a77ce12c6a49e2f77c60dae01"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_rule_logic_interface_v1/covapie_admit_012_rule_logic_interface_contract.csv",
+      "sha256": "c5c383e9a9e17c5eb5a4b2c92455da89a78e66f75df7ff31ce0494f08281433e"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_rule_logic_interface_v1/covapie_admit_012_rule_logic_interface_manifest.json",
+      "sha256": "ad131895c0acfdaf5b350105031647bdcac9667370fb6cd43baf8826bea995c8"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_unified_adapter_contract_v1/covapie_admit_012_unified_adapter_contract.csv",
+      "sha256": "12228051428134223dc4db4ec418ced573637047189056f1fb8df908ca2fe6c8"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_012_unified_adapter_contract_v1/covapie_admit_012_unified_adapter_contract_manifest.json",
+      "sha256": "1df0e2a09817b7763ec4eb767663db169d3239385094da151af28150c2c55d25"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "src/covalent_ext/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_012.py",
+      "sha256": "4d9a49806d4ef71a95c8ad032dfa061f7473b1cb55a573459c155f0cd5d57282"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_012_v1/covapie_admit_001_to_012_registry_and_identity_audit.csv",
+      "sha256": "57ed1f04df27c7b30ec4cea97aead99e7788a2968f77245280850ae26f399e59"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_012_v1/covapie_admit_001_to_012_runtime_issue_readiness_inventory.csv",
+      "sha256": "6b6a543dd9fcce9a4b4451a05eae296a482093bba0bdb33bb37247bca4d17cfb"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_012_v1/covapie_admit_001_to_012_runtime_manifest.json",
+      "sha256": "bc909aefd86b62139fbb62025d9c323988a4c232ab9c960efb291fb0c196cee3"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_013_rule_logic_interface_preconditions_audit_v1/covapie_admit_013_formal_evaluator_precondition_matrix.csv",
+      "sha256": "4b411c86cce23351d4aec3d58a894d161ab163e0305fdd91853bc54f16aa1fdf"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_013_rule_logic_interface_preconditions_audit_v1/covapie_admit_013_issue_readiness_inventory.csv",
+      "sha256": "204923bbf26c286c14ce4feaeb7934b279cafa54287ba96b4e2455fd84cf1198"
+    },
+    {
+      "base_tree_mode": "100644",
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_013_rule_logic_interface_preconditions_audit_v1/covapie_admit_013_formal_evaluator_preconditions_manifest.json",
+      "sha256": "63f0f96a960135117b0c4c8d3f80d1991cb8138e7df69d3917e921a6a4c74ce0"
+    }
+  ],
+  "source_count": 22,
+  "source_path_list_sha256": "55a730466aa737f4cff3aae242c1a98d5fdb2e5c488f6ef022412c82d6d7bbe6",
+  "source_path_sha256_pairs_sha256": "d7a962279f119491be51e2c2fd9f8726217a6b5de948f7b45b36fddc24ad17b3",
+  "stage": "covapie_bulk_download_admission_admit_013_download_outcome_and_integrity_contract_v1",
+  "step12d_status": "smoke_legality_only_not_final_training_feature_contract",
+  "structural_validation_precedes_business_outcome": true,
+  "truth_matrix_group_counts": {
+    "adjacent_precedence": 6,
+    "authority": 2,
+    "content": 1,
+    "http": 1,
+    "integrity": 3,
+    "pass": 3,
+    "precedence": 4,
+    "status": 2,
+    "triple_failure": 1
+  },
+  "zero_content_length_admitted": false,
+  "zero_content_length_structurally_allowed": true
+}

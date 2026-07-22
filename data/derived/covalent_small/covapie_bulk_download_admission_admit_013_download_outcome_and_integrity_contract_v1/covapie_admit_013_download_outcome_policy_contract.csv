@@ -1,0 +1,17 @@
+policy_order,policy_id,policy_area,subject,source_envelope,contract,disposition,precedence_or_continuation,forbidden_behavior,contract_passed
+1,DEPENDENCY_PIPELINE,dependency,pipeline-level prerequisite,combined_pipeline,ADMIT_012 may run first logically,logical_prerequisite_only,before ADMIT_013 when combined,direct result consumption,true
+2,DEPENDENCY_SELF_VALIDATION,dependency,standalone self-validation,standalone_future_evaluator,repeat shared Exact4 presence/type/value validation,required,before business precedence,trusting prior validation without revalidation,true
+3,DEPENDENCY_NO_RESULT_OBJECT,dependency,direct cross-rule result consumption,none,Admit012EvaluationResult is not an ADMIT_013 input,forbidden,not applicable,Python result-object dependency,true
+4,ROUTE_EXACT4,routing,Exact4 observations,download_result_context,source exactly the shared Exact4 in canonical order,required,structural validation first,candidate/batch/stage/fallback sourcing,true
+5,ROUTE_AUTHORITY,routing,integrity comparison authority,evaluation_context,source exactly the three authority fields,optional individually,authority validation before business precedence,candidate/batch/stage/fallback sourcing,true
+6,ROUTE_FORBIDDEN_ENVELOPES,routing,candidate_record|batch_context|stage_authorization_context,forbidden,must provide neither observations nor authority,forbidden,fail closed at future routing layer,fallback envelope,true
+7,NO_IO_OR_NORMALIZATION,boundary,future standalone evaluator,pure_memory,no normalization inference file network provider read or recomputation,required,all phases,I/O or现场重算,true
+8,HTTP_SUCCESS_RANGE,outcome,observed_http_status,download_result_context,inclusive success range 200..299,continue_only,after successful status,treating structural 100..599 as success,true
+9,STATUS_FAILURE,outcome,download_result_status=failure,download_result_context,always blocked,blocked,business rank 1,override by 2xx length SHA or verdict,true
+10,STATUS_SUCCESS_NON2XX,outcome,success plus HTTP outside 200..299,download_result_context,blocked,blocked,business rank 2,treating status success as sufficient,true
+11,STATUS_SUCCESS_2XX,outcome,success plus HTTP 200..299,download_result_context,continue to content and integrity checks,continue_only,not a pass,automatic pass,true
+12,ZERO_CONTENT,outcome,observed_content_length_bytes=0,download_result_context,always blocked even when expected length is zero and authorities appear to pass,blocked,business rank 3,zero-byte materialization,true
+13,ALL_AUTHORITIES_MUST_AGREE,integrity,provided trusted authorities,evaluation_context,every provided authority must avoid failure or mismatch,required,business ranks 4..6,ignoring a provided mismatch,true
+14,STRONG_AUTHORITY,integrity,expected SHA match or explicit verified,evaluation_context,at least one strong authority is required,required,business rank 7 if absent,length-only or grammar-only authority,true
+15,LENGTH_COMPARISON,integrity,expected_content_length_bytes,evaluation_context,when present require exact integer equality,required_if_present,rank 6 mismatch,length match as sufficient pass,true
+16,PASS_CONJUNCTION,outcome,complete business outcome,pure_memory,success AND HTTP 2xx AND nonzero AND no provided mismatch/failure AND strong authority,passed,rank 8,any simpler condition treated as pass,true
