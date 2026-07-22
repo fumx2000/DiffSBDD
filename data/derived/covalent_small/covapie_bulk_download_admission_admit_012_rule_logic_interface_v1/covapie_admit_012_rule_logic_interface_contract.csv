@@ -1,0 +1,19 @@
+contract_order,contract_section,section_order,public_name,parameter_kind_or_result_role,formal_type,default_behavior,required,source_envelope,formal_invariant,contract_passed
+1,signature_parameter,1,download_result_status,keyword_only,object,private_shared_missing_singleton,false,download_result_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+2,signature_parameter,2,observed_http_status,keyword_only,object,private_shared_missing_singleton,false,download_result_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+3,signature_parameter,3,observed_content_length_bytes,keyword_only,object,private_shared_missing_singleton,false,download_result_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+4,signature_parameter,4,observed_sha256,keyword_only,object,private_shared_missing_singleton,false,download_result_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+5,signature_parameter,5,allowed_download_result_statuses,keyword_only,object,no_default,true,evaluation_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+6,signature_parameter,6,successful_http_status_contract,keyword_only,object,no_default,true,evaluation_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+7,signature_parameter,7,content_length_contract,keyword_only,object,no_default,true,evaluation_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+8,signature_parameter,8,sha256_format_contract,keyword_only,object,no_default,true,evaluation_context,Exact8 order; no positional/varargs/varkw/Mapping; exact validation,true
+9,result_field,1,admission_rule_id,Exact10_frozen_result_field,str,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+10,result_field,2,outcome,Exact10_frozen_result_field,str,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+11,result_field,3,passed,Exact10_frozen_result_field,bool,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+12,result_field,4,blocks_candidate,Exact10_frozen_result_field,bool,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+13,result_field,5,reason,Exact10_frozen_result_field,str,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+14,result_field,6,canonical_download_result_record,Exact10_frozen_result_field,tuple,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+15,result_field,7,validated_download_result_fields,Exact10_frozen_result_field,tuple,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+16,result_field,8,consumed_download_result_fields,Exact10_frozen_result_field,"tuple[str,...]",not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+17,result_field,9,consumed_context_items,Exact10_frozen_result_field,"tuple[str,...]",not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
+18,result_field,10,evaluator_io_used,Exact10_frozen_result_field,bool,not_applicable,true,Admit012EvaluationResult,exact built-in type; ordered frozen reason-specific state contract,true
