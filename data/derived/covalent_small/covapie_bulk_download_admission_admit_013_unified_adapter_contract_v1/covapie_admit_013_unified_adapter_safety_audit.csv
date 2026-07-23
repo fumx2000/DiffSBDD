@@ -1,0 +1,33 @@
+safety_order,safety_item,expected_executed,observed_executed,evidence,safety_passed
+1,production_design_only,true,true,"simulator, validators, evidence builder only",true
+2,exact12_source_validation,true,true,exact type/storage/order/types/reconstruction/invariants,true
+3,independent_oracle_equality,true,true,full Exact12 exact types and values,true
+4,typed_to_string_projection,true,true,exact integers to canonical decimal strings,true
+5,exact13_schema_identity,true,true,shared Exact13 field order and string-pair types,true
+6,candidate_zero_access,true,true,candidate Mapping envelope only,true
+7,evaluator_io_false,true,true,formal and projected results exact false,true
+8,deterministic_materialization,true,true,build-before-mutation and set-atomic publish,true
+9,source_attestation,true,true,fixed ordered Exact19 pinned no-follow reads,true
+10,issue_continuity,true,true,standalone Exact23 byte-preserved with zero transitions,true
+11,canonical_runtime,true,true,CPython 3.10.4,true
+12,runtime_handler,false,false,future handler not defined,true
+13,registry,false,false,registry not defined or mutated,true
+14,dispatcher,false,false,dispatcher not defined or mutated,true
+15,runtime_source_change,false,false,committed current runtime SHA frozen,true
+16,schema_widening,false,false,shared Exact13 not redefined or extended,true
+17,authority_in_validated_candidate_fields,false,false,authority only in normalized/context mappings,true
+18,private_standalone_sentinel,false,false,"not imported, inspected, or passed",true
+19,candidate_key_access,false,false,zero,true
+20,provider_mapping,false,false,not implemented or validated,true
+21,network,false,false,not imported or executed,true
+22,download,false,false,not executed,true
+23,raw,false,false,not read or enumerated,true
+24,model,false,false,not accessed or changed,true
+25,checkpoint,false,false,not accessed or changed,true
+26,dataloader,false,false,not accessed or changed,true
+27,training,false,false,"no backward, optimizer, fine-tune, or parameter update",true
+28,combined_candidate_verdict,false,false,not implemented,true
+29,cross_rule_aggregation,false,false,not implemented,true
+30,stage,false,false,current main not staged,true
+31,commit,false,false,current main not committed,true
+32,push,false,false,current main not pushed,true
