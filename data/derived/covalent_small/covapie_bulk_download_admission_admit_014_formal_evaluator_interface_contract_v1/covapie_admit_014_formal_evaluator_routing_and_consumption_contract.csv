@@ -1,0 +1,9 @@
+routing_order,routing_case,input_state,lookup_attempted,canonical_record,validated_fields,consumed_fields,expected_outcome,expected_reason,routing_passed
+1,OMITTED,_MISSING,false,(),(),(),blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,true
+2,EXPLICIT_NONE,None,false,(),(),(),blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,true
+3,NON_MAPPING,object,false,(),(),(),blocked,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,true
+4,TARGET_KEYERROR,Mapping target lookup raises KeyError,true,(),(),"('current_stage_download_authorized',)",blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,true
+5,TARGET_NONKEYERROR,Mapping target lookup raises non-KeyError,true,(),(),"('current_stage_download_authorized',)",blocked,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,true
+6,INVALID_TYPE,Mapping target value type is not exact bool,true,(),(),"('current_stage_download_authorized',)",blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,true
+7,EXACT_FALSE,Mapping target exact False,true,"(('current_stage_download_authorized', False),)","('current_stage_download_authorized',)","('current_stage_download_authorized',)",blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,true
+8,EXACT_TRUE,Mapping target exact True,true,"(('current_stage_download_authorized', True),)","('current_stage_download_authorized',)","('current_stage_download_authorized',)",passed,,true

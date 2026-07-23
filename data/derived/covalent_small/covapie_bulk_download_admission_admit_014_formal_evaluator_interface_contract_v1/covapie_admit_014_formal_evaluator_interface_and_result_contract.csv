@@ -1,0 +1,23 @@
+contract_order,contract_group,contract_item,future_public_name,exact_contract,exact_type_or_value,contract_passed
+1,signature,function,evaluate_admit_014,"evaluate_admit_014(*, stage_authorization_context: object = _MISSING) -> Admit014EvaluationResult",public name,true
+2,signature,parameter count,evaluate_admit_014,1,int,true
+3,signature,stage_authorization_context,evaluate_admit_014,keyword-only; annotation object; private _MISSING default,inspect.Parameter,true
+4,signature,return annotation,evaluate_admit_014,Admit014EvaluationResult,str forward annotation,true
+5,signature,forbidden call shapes,evaluate_admit_014,no positional; no *args; no **kwargs; no extra parameters,closed signature,true
+6,result_field,admission_rule_id,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,str,true
+7,result_field,outcome,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,str,true
+8,result_field,passed,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,bool,true
+9,result_field,blocks_candidate,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,bool,true
+10,result_field,reason,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,str,true
+11,result_field,canonical_stage_authorization_record,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,tuple,true
+12,result_field,validated_stage_authorization_fields,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,tuple,true
+13,result_field,consumed_stage_authorization_fields,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,tuple,true
+14,result_field,evaluator_io_used,Admit014EvaluationResult,Exact9 ordered frozen dataclass field,bool,true
+15,representation,canonical_stage_authorization_record,Admit014EvaluationResult,() or exact one-pair tuple retaining exact False|True,exact tuple of exact pair tuple,true
+16,representation,validated_stage_authorization_fields,Admit014EvaluationResult,"() or ('current_stage_download_authorized',)",exact tuple of exact str,true
+17,representation,consumed_stage_authorization_fields,Admit014EvaluationResult,"() or ('current_stage_download_authorized',)",exact tuple of exact str,true
+18,invariant,outcome and flags,Admit014EvaluationResult,passed iff outcome passed; blocks iff outcome blocked,closed invariant,true
+19,invariant,reason,Admit014EvaluationResult,empty iff passed; six exact blockers,closed vocabulary,true
+20,invariant,evaluator_io_used,Admit014EvaluationResult,exact False,bool,true
+21,formal_symbol_state,formal evaluator,evaluate_admit_014,not implemented,design assertion,true
+22,formal_symbol_state,formal result,Admit014EvaluationResult,not defined,design assertion,true
