@@ -1,0 +1,52 @@
+precondition_order,precondition_id,precondition_group,precondition_subject,expected_contract,observed_evidence,completeness_status,implementation_blocking,blocking_reason,precondition_passed
+1,PRE_001,identity,rule ID,ADMIT_014,ADMIT_014 registry identity exact,complete,false,,true
+2,PRE_002,identity,rule name,current_gate_grants_no_download_permission,Step14AT registry exact,complete,false,,true
+3,PRE_003,identity,evidence source,current_design_gate,Step14AT registry exact,complete,false,,true
+4,PRE_004,identity,required status,bulk_download_not_authorized_now,Step14AT registry exact,complete,false,,true
+5,PRE_005,identity,failure severity,blocking,Step14AT registry exact,complete,false,,true
+6,PRE_006,identity,blocking reason,bulk_download_not_authorized,Step14AT registry exact,complete,false,,true
+7,PRE_007,identity,evaluation phase,current_step,Step14AT registry exact,complete,false,,true
+8,PRE_008,identity,network/raw/future-implementation flags,false|false|true,Step14AT registry exact; future-ready means design may continue only,complete,false,,true
+9,PRE_009,current_committed_state,current gate explicitly grants no download permission,bulk download not authorized,Step14AT ADMIT_014 required status and manifest,complete,false,,true
+10,PRE_010,current_committed_state,current step network execution count is zero,zero,Step14AT and Exact13 safety,complete,false,,true
+11,PRE_011,current_committed_state,current step download queue/manifest/raw-write count is zero,zero|zero|zero,Step14AT safety and manifest,complete,false,,true
+12,PRE_012,current_committed_state,ADMIT_014 is known but not registered,known=true; registered=false,Exact13 manifest and registry audit,complete,false,,true
+13,PRE_013,current_committed_state,ready_for_bulk_download_now is false,false,"Step14AT, Step14AU-A, Exact13, and QA manifests",complete,false,,true
+14,PRE_014,current_committed_state,provider mapping and real download readiness are false,false|false,Exact13 manifest,complete,false,,true
+15,PRE_015,authority_and_evidence,authoritative permission producer identity,one explicit trusted producer,no committed future permission producer identity,incomplete,true,ADMIT_014_AUTHORIZATION_EVIDENCE_SOURCE_UNRESOLVED,true
+16,PRE_016,authority_and_evidence,current-design-gate versus future authority boundary,current fact must not be promoted into future authorization,Step14AU-A selects explicit future-caller stage context; current value remains false,complete,false,,true
+17,PRE_017,authority_and_evidence,stage_authorization_context routing responsibility,exact sourcing and ownership contract,signature envelope exists; ADMIT_014 semantics absent,incomplete,true,ADMIT_014_STAGE_AUTHORIZATION_ROUTING_RESPONSIBILITY_UNRESOLVED,true
+18,PRE_018,authority_and_evidence,exact authorization field identity,one frozen field name,current_stage_download_authorized committed by Step14AU-A,complete,false,,true
+19,PRE_019,authority_and_evidence,exact built-in scalar/container type,one exact built-in representation,not committed,incomplete,true,ADMIT_014_PERMISSION_VALUE_VOCABULARY_UNRESOLVED,true
+20,PRE_020,authority_and_evidence,closed authorization value vocabulary,closed exact values,not committed,incomplete,true,ADMIT_014_PERMISSION_VALUE_VOCABULARY_UNRESOLVED,true
+21,PRE_021,authority_and_evidence,normalization forbidden,no coercion or normalization,not committed for a future evaluator,incomplete,true,ADMIT_014_PERMISSION_VALUE_VOCABULARY_UNRESOLVED,true
+22,PRE_022,authority_and_evidence,missing authority behavior,fail closed with frozen reason,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+23,PRE_023,authority_and_evidence,invalid authority behavior,fail closed with frozen reason,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+24,PRE_024,authority_and_evidence,contradictory authority behavior,fail closed with frozen reason,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+25,PRE_025,authority_and_evidence,freshness/version/replay semantics,frozen trust lifetime and replay rules,not committed,incomplete,true,ADMIT_014_AUTHORIZATION_EVIDENCE_SOURCE_UNRESOLVED,true
+26,PRE_026,authority_and_evidence,trusted producer and provenance contract,authenticated producer and provenance,not committed,incomplete,true,ADMIT_014_AUTHORIZATION_EVIDENCE_SOURCE_UNRESOLVED,true
+27,PRE_027,authority_and_evidence,current-stage constant versus future-context evaluator scope,inherit exactly one committed model,future_explicit_authorization_context selected; current_stage_constant_guard rejected,complete,false,,true
+28,PRE_028,scope_and_routing,global-stage versus per-candidate scope,stage-global scope,Step14AU-A context_scope=stage,complete,false,,true
+29,PRE_029,scope_and_routing,candidate_record responsibility,authorization sourcing forbidden,candidate_field_dependencies is empty,complete,false,,true
+30,PRE_030,scope_and_routing,batch_context responsibility,authorization sourcing forbidden,batch_context_dependencies is empty,complete,false,,true
+31,PRE_031,scope_and_routing,evaluation_context responsibility,forbidden or exact routing responsibility,evaluation sourcing is not authorized,incomplete,true,ADMIT_014_STAGE_AUTHORIZATION_ROUTING_RESPONSIBILITY_UNRESOLVED,true
+32,PRE_032,scope_and_routing,download_result_context responsibility,authorization sourcing forbidden,"Step14AU-A dependency is a stage-scoped authorization context, not a download result",complete,false,,true
+33,PRE_033,scope_and_routing,stage_authorization_context responsibility,exact responsibility if future-context model selected,likely envelope candidate only; not frozen,incomplete,true,ADMIT_014_STAGE_AUTHORIZATION_ROUTING_RESPONSIBILITY_UNRESOLVED,true
+34,PRE_034,scope_and_routing,first-failure routing precedence,closed envelope validation precedence,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+35,PRE_035,outcome_and_interface,current no-permission blocking outcome,required status with blocking reason,Step14AT registry exact,complete,false,,true
+36,PRE_036,outcome_and_interface,future authorized transition semantics,exact trusted transition only,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+37,PRE_037,outcome_and_interface,closed outcome vocabulary,closed exact outcomes,not committed,incomplete,true,ADMIT_014_RESULT_CONTRACT_UNRESOLVED,true
+38,PRE_038,outcome_and_interface,closed reason vocabulary,closed exact reasons,not committed,incomplete,true,ADMIT_014_RESULT_CONTRACT_UNRESOLVED,true
+39,PRE_039,outcome_and_interface,public standalone signature,exact keyword and default contract,no formal ADMIT_014 evaluator contract,incomplete,true,ADMIT_014_STANDALONE_SIGNATURE_UNRESOLVED,true
+40,PRE_040,outcome_and_interface,formal result contract,exact result type and fields,not committed,incomplete,true,ADMIT_014_RESULT_CONTRACT_UNRESOLVED,true
+41,PRE_041,outcome_and_interface,normalized/validated/consumed representation,exact ordered representation,not committed,incomplete,true,ADMIT_014_RESULT_CONTRACT_UNRESOLVED,true
+42,PRE_042,outcome_and_interface,multi-invalid precedence,closed first-failure precedence,not committed,incomplete,true,ADMIT_014_PERMISSION_TRANSITION_AND_PRECEDENCE_UNRESOLVED,true
+43,PRE_043,outcome_and_interface,pure in-memory/no-I/O boundary,no evaluator filesystem or network I/O,Step14AU-A records pure in-memory possible,complete,false,,true
+44,PRE_044,integration_and_enforcement,dependency on ADMIT_001..013,standalone evaluator independent of earlier rule-result inputs,Step14AU-A lists only current_stage_download_authorized; workflow enforcement remains unresolved,complete,false,,true
+45,PRE_045,integration_and_enforcement,single-rule runtime versus mandatory download enforcement,caller-level enforcement contract,Exact13 is single-rule dispatch only,incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+46,PRE_046,integration_and_enforcement,caller obligation to evaluate ADMIT_014 before any download,mandatory fail-closed caller guard,not implemented or committed,incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+47,PRE_047,integration_and_enforcement,combined-verdict/aggregation dependency,explicit enforcement without ambiguity,combined verdict and aggregation absent,incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+48,PRE_048,integration_and_enforcement,adapter and Exact13 projection boundary,future adapter contract,no ADMIT_014 adapter contract,incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+49,PRE_049,integration_and_enforcement,registration boundary,register only after evaluator and adapter contracts,known but not registered,incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+50,PRE_050,integration_and_enforcement,provider/download authorization boundary,no execution before explicit authority and enforcement,"provider, network, and download remain unauthorized",incomplete,true,ADMIT_014_RUNTIME_ENFORCEMENT_WITHOUT_AGGREGATION_UNRESOLVED,true
+51,PRE_051,integration_and_enforcement,training and feature-semantics boundary,feature-semantics audit required before training,canonical QA and Exact13 preserve blocker,complete,false,,true
