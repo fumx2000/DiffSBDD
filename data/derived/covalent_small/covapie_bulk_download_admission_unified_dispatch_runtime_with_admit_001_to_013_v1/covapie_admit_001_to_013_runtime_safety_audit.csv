@@ -1,0 +1,31 @@
+safety_order,safety_item,expected_executed,observed_executed,evidence,safety_passed
+1,public_closure_pure_memory,true,true,AST and marker-prefix attested,true
+2,evaluator_io_used_false,true,true,formal and projected results,true
+3,exact12_source_validation,true,true,precedes output projection,true
+4,independent_oracle_equality,true,true,full Exact12,true
+5,shared_exact13_identity,true,true,identity re-export,true
+6,first12_handler_identity,true,true,all predecessor objects reused,true
+7,successor_dispatcher,true,true,new local function and registry,true
+8,canonical_evidence_runtime,true,true,CPython 3.10.4,true
+9,pinned_source_boundary,true,true,Exact20 tracked base blobs,true
+10,pinned_candidate_source,true,true,path mode bytes marker AST,true
+11,set_atomic_materialization,true,true,RENAME_NOREPLACE,true
+12,deterministic_evidence,true,true,byte-identical build,true
+13,feature_semantics_audit_required,true,true,Step12D smoke only,true
+14,adapter_design_simulator_runtime_call,false,false,absent,true
+15,schema_widening,false,false,absent,true
+16,predecessor_mutation,false,false,absent,true
+17,shared_object_redefinition,false,false,absent,true
+18,candidate_key_access,false,false,zero,true
+19,private_missing_sentinel,false,false,not imported/read/passed,true
+20,provider_mapping,false,false,not implemented,true
+21,network,false,false,not executed,true
+22,download,false,false,not executed,true
+23,raw,false,false,not read,true
+24,model,false,false,not accessed,true
+25,checkpoint,false,false,not accessed,true
+26,dataloader,false,false,not accessed,true
+27,training,false,false,not executed,true
+28,combined_candidate_verdict,false,false,not implemented,true
+29,cross_rule_aggregation,false,false,not implemented,true
+30,current_main_stage_commit_push,false,false,not executed,true
