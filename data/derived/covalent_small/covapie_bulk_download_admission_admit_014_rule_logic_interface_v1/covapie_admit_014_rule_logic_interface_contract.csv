@@ -1,0 +1,38 @@
+contract_order,contract_section,section_order,public_name,formal_type,required,frozen_value,formal_invariant,implementation_source,contract_passed
+1,signature_parameter,1,stage_authorization_context,object,false,keyword_only|private_missing_singleton,one parameter; no positional/varargs/varkw/unknown keyword,formal_closure,true
+2,result_field,1,admission_rule_id,str,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+3,result_field,2,outcome,str,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+4,result_field,3,passed,bool,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+5,result_field,4,blocks_candidate,bool,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+6,result_field,5,reason,str,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+7,result_field,6,canonical_stage_authorization_record,tuple,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+8,result_field,7,validated_stage_authorization_fields,tuple,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+9,result_field,8,consumed_stage_authorization_fields,tuple,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+10,result_field,9,evaluator_io_used,bool,true,Exact9_ordered,exact built-in top-level type and reason-state invariant,formal_closure,true
+11,reason_vocabulary,1,<empty>,str,true,,closed Exact7 ordered vocabulary,formal_closure,true
+12,reason_vocabulary,2,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,str,true,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,closed Exact7 ordered vocabulary,formal_closure,true
+13,reason_vocabulary,3,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,str,true,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,closed Exact7 ordered vocabulary,formal_closure,true
+14,reason_vocabulary,4,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,str,true,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,closed Exact7 ordered vocabulary,formal_closure,true
+15,reason_vocabulary,5,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,str,true,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,closed Exact7 ordered vocabulary,formal_closure,true
+16,reason_vocabulary,6,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,str,true,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,closed Exact7 ordered vocabulary,formal_closure,true
+17,reason_vocabulary,7,BULK_DOWNLOAD_NOT_AUTHORIZED,str,true,BULK_DOWNLOAD_NOT_AUTHORIZED,closed Exact7 ordered vocabulary,formal_closure,true
+18,formal_closure,1,_MissingAdmit014Value,normalized_ast_sha256,true,ee7527b1c1d027aeb6f1dd6e8f9f161f8e6dc2755d49d3a676598c81e21a14f9,pure in-memory reachable definition,formal_closure,true
+19,formal_closure,2,_canonical_record_valid,normalized_ast_sha256,true,9e04222a22ae478a9bd53403c1258f39ba5daa2b5e94c7eb7b51a46510c6c6e0,pure in-memory reachable definition,formal_closure,true
+20,formal_closure,3,_field_tuple_valid,normalized_ast_sha256,true,403164b296b64d7f06e27187dafd6346a9bc22cd24e60b72e9f7f738ecd12374,pure in-memory reachable definition,formal_closure,true
+21,formal_closure,4,Admit014EvaluationResult,normalized_ast_sha256,true,d9580ade59b9935b80b4972a20d5b5ce2c9a4d481681e29cabe08580e60aa638,pure in-memory reachable definition,formal_closure,true
+22,formal_closure,5,Admit014EvaluationResult.__post_init__,normalized_ast_sha256,true,a4b01999539926b13d0d48fca38f7bce29da3606ecb5d02f25a53ec86fa1e2f5,pure in-memory reachable definition,formal_closure,true
+23,formal_closure,6,_make_result,normalized_ast_sha256,true,90a1edd05e6248f6e11c8487dc352a07cefd9130091799ca403bd6007ea6d370,pure in-memory reachable definition,formal_closure,true
+24,formal_closure,7,evaluate_admit_014,normalized_ast_sha256,true,bf00f8b471ec5f179d0c2378096077fc850bed0342fe1fe9337d871b2ee87471,pure in-memory reachable definition,formal_closure,true
+25,result_invariant,1,exact_result_type,invariant,true,type(self) is Admit014EvaluationResult,fail closed,formal_closure,true
+26,result_invariant,2,exact_result_storage,invariant,true,dataclass fields equal RESULT_FIELDS,fail closed,formal_closure,true
+27,result_invariant,3,exact_top_level_types,invariant,true,exact str/bool/tuple only,fail closed,formal_closure,true
+28,result_invariant,4,identity,invariant,true,admission_rule_id == ADMIT_014,fail closed,formal_closure,true
+29,result_invariant,5,outcome,invariant,true,closed passed|blocked,fail closed,formal_closure,true
+30,result_invariant,6,reason,invariant,true,closed Exact7,fail closed,formal_closure,true
+31,result_invariant,7,flags,invariant,true,passed/blocks agree with outcome,fail closed,formal_closure,true
+32,result_invariant,8,reason_emptiness,invariant,true,reason empty iff passed,fail closed,formal_closure,true
+33,result_invariant,9,evaluator_io,invariant,true,evaluator_io_used is exact False,fail closed,formal_closure,true
+34,result_invariant,10,projection,invariant,true,canonical/validated/consumed agree with reason,fail closed,formal_closure,true
+35,safety_boundary,1,no_adapter_registry_runtime,boolean,true,true,absence attested,formal_closure,true
+36,safety_boundary,2,no_provider_network_download_raw,boolean,true,true,absence attested,formal_closure,true
+37,safety_boundary,3,no_model_checkpoint_dataloader_training,boolean,true,true,absence attested,formal_closure,true
