@@ -1,0 +1,77 @@
+contract_order,contract_section,section_order,public_name,formal_type,required,frozen_value,formal_invariant,implementation_source,contract_passed
+1,signature_parameter,1,download_result_status,object,true,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+2,signature_parameter,2,observed_http_status,object,true,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+3,signature_parameter,3,observed_content_length_bytes,object,true,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+4,signature_parameter,4,observed_sha256,object,true,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+5,signature_parameter,5,expected_content_length_bytes,object,false,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+6,signature_parameter,6,expected_sha256,object,false,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+7,signature_parameter,7,explicit_integrity_verdict,object,false,keyword_only|private_shared_missing_singleton,Exact7 order; no positional/varargs/varkw/Mapping/normalization,formal_closure,true
+8,result_field,1,admission_rule_id,str,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+9,result_field,2,outcome,str,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+10,result_field,3,passed,bool,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+11,result_field,4,blocks_candidate,bool,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+12,result_field,5,reason,str,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+13,result_field,6,canonical_download_result_record,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+14,result_field,7,canonical_integrity_authority_record,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+15,result_field,8,validated_download_result_fields,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+16,result_field,9,validated_integrity_authority_fields,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+17,result_field,10,consumed_download_result_fields,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+18,result_field,11,consumed_integrity_authority_fields,tuple,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+19,result_field,12,evaluator_io_used,bool,true,Exact12_ordered,exact built-in top-level type and reason-phase state invariant,formal_closure,true
+20,reason_vocabulary,1,<empty>,str,true,,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+21,reason_vocabulary,2,DOWNLOAD_RESULT_STATUS_MISSING,str,true,DOWNLOAD_RESULT_STATUS_MISSING,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+22,reason_vocabulary,3,OBSERVED_HTTP_STATUS_MISSING,str,true,OBSERVED_HTTP_STATUS_MISSING,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+23,reason_vocabulary,4,OBSERVED_CONTENT_LENGTH_BYTES_MISSING,str,true,OBSERVED_CONTENT_LENGTH_BYTES_MISSING,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+24,reason_vocabulary,5,OBSERVED_SHA256_MISSING,str,true,OBSERVED_SHA256_MISSING,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+25,reason_vocabulary,6,DOWNLOAD_RESULT_STATUS_TYPE_INVALID,str,true,DOWNLOAD_RESULT_STATUS_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+26,reason_vocabulary,7,DOWNLOAD_RESULT_STATUS_VALUE_INVALID,str,true,DOWNLOAD_RESULT_STATUS_VALUE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+27,reason_vocabulary,8,OBSERVED_HTTP_STATUS_TYPE_INVALID,str,true,OBSERVED_HTTP_STATUS_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+28,reason_vocabulary,9,OBSERVED_HTTP_STATUS_RANGE_INVALID,str,true,OBSERVED_HTTP_STATUS_RANGE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+29,reason_vocabulary,10,OBSERVED_CONTENT_LENGTH_BYTES_TYPE_INVALID,str,true,OBSERVED_CONTENT_LENGTH_BYTES_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+30,reason_vocabulary,11,OBSERVED_CONTENT_LENGTH_BYTES_RANGE_INVALID,str,true,OBSERVED_CONTENT_LENGTH_BYTES_RANGE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+31,reason_vocabulary,12,OBSERVED_SHA256_TYPE_INVALID,str,true,OBSERVED_SHA256_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+32,reason_vocabulary,13,OBSERVED_SHA256_FORMAT_INVALID,str,true,OBSERVED_SHA256_FORMAT_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+33,reason_vocabulary,14,EXPECTED_CONTENT_LENGTH_BYTES_TYPE_INVALID,str,true,EXPECTED_CONTENT_LENGTH_BYTES_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+34,reason_vocabulary,15,EXPECTED_CONTENT_LENGTH_BYTES_RANGE_INVALID,str,true,EXPECTED_CONTENT_LENGTH_BYTES_RANGE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+35,reason_vocabulary,16,EXPECTED_SHA256_TYPE_INVALID,str,true,EXPECTED_SHA256_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+36,reason_vocabulary,17,EXPECTED_SHA256_FORMAT_INVALID,str,true,EXPECTED_SHA256_FORMAT_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+37,reason_vocabulary,18,EXPLICIT_INTEGRITY_VERDICT_TYPE_INVALID,str,true,EXPLICIT_INTEGRITY_VERDICT_TYPE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+38,reason_vocabulary,19,EXPLICIT_INTEGRITY_VERDICT_VALUE_INVALID,str,true,EXPLICIT_INTEGRITY_VERDICT_VALUE_INVALID,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+39,reason_vocabulary,20,DOWNLOAD_RESULT_STATUS_FAILURE,str,true,DOWNLOAD_RESULT_STATUS_FAILURE,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+40,reason_vocabulary,21,OBSERVED_HTTP_STATUS_NOT_SUCCESS,str,true,OBSERVED_HTTP_STATUS_NOT_SUCCESS,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+41,reason_vocabulary,22,OBSERVED_CONTENT_EMPTY,str,true,OBSERVED_CONTENT_EMPTY,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+42,reason_vocabulary,23,OBSERVED_SHA256_MISMATCH,str,true,OBSERVED_SHA256_MISMATCH,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+43,reason_vocabulary,24,EXPLICIT_INTEGRITY_VERDICT_FAILED,str,true,EXPLICIT_INTEGRITY_VERDICT_FAILED,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+44,reason_vocabulary,25,OBSERVED_CONTENT_LENGTH_MISMATCH,str,true,OBSERVED_CONTENT_LENGTH_MISMATCH,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+45,reason_vocabulary,26,INTEGRITY_AUTHORITY_MISSING,str,true,INTEGRITY_AUTHORITY_MISSING,closed Exact26 ordered vocabulary; no catch-all or free text,formal_closure,true
+46,validation_phase,1,Exact4_presence,phase,true,Exact4_presence,first failure returns; frozen Exact5 order,formal_closure,true
+47,validation_phase,2,Exact4_type_value,phase,true,Exact4_type_value,first failure returns; frozen Exact5 order,formal_closure,true
+48,validation_phase,3,Exact3_optional_authority_type_value,phase,true,Exact3_optional_authority_type_value,first failure returns; frozen Exact5 order,formal_closure,true
+49,validation_phase,4,Exact7_business_outcome,phase,true,Exact7_business_outcome,first failure returns; frozen Exact5 order,formal_closure,true
+50,validation_phase,5,passed,phase,true,passed,first failure returns; frozen Exact5 order,formal_closure,true
+51,formal_closure,1,evaluate_admit_013,normalized_ast_sha256,true,0b42e4c6e4d51e1b60a39af66d42ba3b0a86c5daa3e088bec1dbabb4995eb91f,pure in-memory reachable definition,formal_closure,true
+52,formal_closure,2,_make_result,normalized_ast_sha256,true,6c404d01cde2b88b4103996606421f975087dcc15fbdf6ac67985a8b9a109379,pure in-memory reachable definition,formal_closure,true
+53,formal_closure,3,_business_reason,normalized_ast_sha256,true,eb714b15ae11489501c7e6c3bc96fd8b66c2f926784a1870d67f6329ef68af52,pure in-memory reachable definition,formal_closure,true
+54,formal_closure,4,Admit013EvaluationResult,normalized_ast_sha256,true,30793fc44c5522e9408241349b1801e8591bdb21fe5f8008238dd0bee59ae113,pure in-memory reachable definition,formal_closure,true
+55,formal_closure,5,Admit013EvaluationResult.__post_init__,normalized_ast_sha256,true,5d3d041f10e11e204d5eb0e9b2ff754a4b71d6bff801c63603de85c2fd6ae2d5,pure in-memory reachable definition,formal_closure,true
+56,formal_closure,6,_download_value_valid,normalized_ast_sha256,true,5da80ba5d90e13579caca05cc291d05a05e7be4e080d486a557f371ce4bfc815,pure in-memory reachable definition,formal_closure,true
+57,formal_closure,7,_authority_value_valid,normalized_ast_sha256,true,ff60eb0868bdc31784cc8be92e05260a170b39f654092513c3166199faea0919,pure in-memory reachable definition,formal_closure,true
+58,formal_closure,8,_pair_record_shape_valid,normalized_ast_sha256,true,6aaa58c523af2eaf7e1b23560ee2977cbbbe2d7967d6f4f6a4879ebff625b1ef,pure in-memory reachable definition,formal_closure,true
+59,formal_closure,9,_name_tuple_valid,normalized_ast_sha256,true,8428ddcce209873193f9cc59690ed9ac915f6811e3b685ca5107cfcd6014a030,pure in-memory reachable definition,formal_closure,true
+60,formal_closure,10,_MissingAdmit013Value,normalized_ast_sha256,true,036c3099407e7a052d48a6a6dc37b269b41c7144bfe52a0c1e96eb623944ca0b,pure in-memory reachable definition,formal_closure,true
+61,result_invariant,1,exact_result_type,invariant,true,type(self) is Admit013EvaluationResult,fail closed,formal_closure,true
+62,result_invariant,2,exact_result_storage,invariant,true,dataclass fields equal RESULT_FIELDS,fail closed,formal_closure,true
+63,result_invariant,3,exact_top_level_types,invariant,true,exact str/bool/tuple only,fail closed,formal_closure,true
+64,result_invariant,4,identity,invariant,true,admission_rule_id == ADMIT_013,fail closed,formal_closure,true
+65,result_invariant,5,outcome,invariant,true,closed Exact3,fail closed,formal_closure,true
+66,result_invariant,6,reason,invariant,true,closed Exact26,fail closed,formal_closure,true
+67,result_invariant,7,passed,invariant,true,passed iff outcome passed,fail closed,formal_closure,true
+68,result_invariant,8,blocks_candidate,invariant,true,blocks iff outcome not passed,fail closed,formal_closure,true
+69,result_invariant,9,reason_emptiness,invariant,true,reason empty iff outcome passed,fail closed,formal_closure,true
+70,result_invariant,10,evaluator_io,invariant,true,evaluator_io_used is False,fail closed,formal_closure,true
+71,result_invariant,11,canonical_records,invariant,true,exact ordered raw pair tuples; no sentinel,fail closed,formal_closure,true
+72,result_invariant,12,phase_state,invariant,true,canonical/validated/consumed agree with reason phase,fail closed,formal_closure,true
+73,safety_boundary,1,no_adapter_or_runtime,boolean,true,true,absence attested,formal_closure,true
+74,safety_boundary,2,no_provider_or_network,boolean,true,true,absence attested,formal_closure,true
+75,safety_boundary,3,no_raw_or_download,boolean,true,true,absence attested,formal_closure,true
+76,safety_boundary,4,no_model_checkpoint_dataloader_training,boolean,true,true,absence attested,formal_closure,true
