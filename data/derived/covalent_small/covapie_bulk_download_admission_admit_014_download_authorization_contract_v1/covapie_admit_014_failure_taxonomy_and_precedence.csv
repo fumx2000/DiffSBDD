@@ -1,0 +1,8 @@
+precedence_order,failure_or_pass_id,trigger,outcome,passed,blocks_candidate,reason,later_checks_executed,taxonomy_passed
+1,CONTEXT_REQUIRED,stage_authorization_context is None,blocked,false,true,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,false,true
+2,CONTEXT_MAPPING_INVALID,context is not Mapping,blocked,false,true,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,false,true
+3,TARGET_MISSING,first target __getitem__ raises KeyError,blocked,false,true,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,false,true
+4,LOOKUP_FAILED,target __getitem__ raises non-KeyError,blocked,false,true,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,false,true
+5,TYPE_INVALID,type(value) is not bool,blocked,false,true,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,false,true
+6,FALSE_BLOCK,value is False,blocked,false,true,BULK_DOWNLOAD_NOT_AUTHORIZED,false,true
+7,TRUE_PASS,value is True,passed,true,false,,false,true

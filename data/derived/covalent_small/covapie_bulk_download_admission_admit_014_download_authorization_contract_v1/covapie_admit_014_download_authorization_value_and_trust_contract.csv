@@ -1,0 +1,21 @@
+contract_order,contract_item,contract_group,expected_contract,observed_contract,responsibility_owner,contract_passed
+1,authoritative envelope,authority,stage_authorization_context,stage_authorization_context,evaluator,true
+2,authoritative key,authority,current_stage_download_authorized,current_stage_download_authorized,evaluator,true
+3,exact value type,value,type(value) is bool,type(value) is bool,evaluator,true
+4,closed value vocabulary,value,False|True,False|True,evaluator,true
+5,false semantics,value,blocked|BULK_DOWNLOAD_NOT_AUTHORIZED,blocked|BULK_DOWNLOAD_NOT_AUTHORIZED,evaluator,true
+6,true semantics,value,passed|empty reason,passed|empty reason,evaluator,true
+7,normalization,value,forbidden,forbidden,evaluator,true
+8,truthiness coercion,value,forbidden; bool(value) not used,forbidden; bool(value) not used,evaluator,true
+9,producer boundary,trust,trusted_future_stage_orchestrator,trusted_future_stage_orchestrator,trusted caller,true
+10,trust source,trust,invocation boundary; not mapping self-report,invocation boundary; not mapping self-report,trusted caller,true
+11,invocation lifetime,freshness,invocation-local,invocation-local,trusted caller,true
+12,explicit reconstruction,freshness,required for every stage invocation,required for every stage invocation,trusted caller,true
+13,artifact/cache/raw replay,freshness,forbidden,forbidden,trusted caller,true
+14,identity authentication,trust,outside evaluator,outside evaluator,future orchestration,true
+15,signature verification,trust,outside evaluator,outside evaluator,future orchestration,true
+16,evaluator filesystem access,safety,false,false,evaluator,true
+17,evaluator network access,safety,false,false,evaluator,true
+18,evaluator responsibility,responsibility,consume and validate one exact bool,consume and validate one exact bool,evaluator,true
+19,caller responsibility,responsibility,construct fresh trusted stage context,construct fresh trusted stage context,trusted caller,true
+20,orchestration responsibility,responsibility,enforce trust boundary and pre-download guard,enforce trust boundary and pre-download guard,future orchestration,true

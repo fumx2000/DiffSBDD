@@ -1,0 +1,26 @@
+routing_order,routing_item,envelope_or_stage,authority_status,access_or_enforcement_contract,expected_behavior,observed_design,routing_passed
+1,only authority,stage_authorization_context,authoritative,ordered target __getitem__ only,consume target key once,consume target key once,true
+2,candidate source,candidate_record,forbidden,zero access,cannot authorize or override,cannot authorize or override,true
+3,batch source,batch_context,forbidden,zero access,cannot authorize or override,cannot authorize or override,true
+4,evaluation source,evaluation_context,forbidden,zero access,cannot authorize or override,cannot authorize or override,true
+5,download-result source,download_result_context,forbidden,zero access,cannot authorize or override,cannot authorize or override,true
+6,provider source,provider_result,forbidden,zero access,cannot authorize or override,cannot authorize or override,true
+7,environment source,environment_variable,forbidden,zero access,cannot authorize,cannot authorize,true
+8,filesystem source,filesystem_marker|raw_file,forbidden,zero access,cannot authorize,cannot authorize,true
+9,self-report source,manifest|fixture|artifact|git SHA,forbidden,zero access,cannot authorize,cannot authorize,true
+10,extra stage keys,stage_authorization_context,allowed,do not iterate/len/get/contains,target-only lookup,target-only lookup,true
+11,missing context,stage_authorization_context,fail_closed,no fallback/default,blocked required reason,blocked required reason,true
+12,missing key,current_stage_download_authorized,fail_closed,first KeyError classified missing,blocked missing reason,blocked missing reason,true
+13,lookup exception,current_stage_download_authorized,fail_closed,non-KeyError classified lookup failed,blocked lookup reason,blocked lookup reason,true
+14,invalid type,current_stage_download_authorized,fail_closed,exact built-in bool required,blocked type reason,blocked type reason,true
+15,false permission,current_stage_download_authorized,authoritative,hard block,no protected action,no protected action,true
+16,true permission,current_stage_download_authorized,authoritative,permission verdict only,may continue to later independent gates,may continue to later independent gates,true
+17,stage-global guard,real-download stage invocation,mandatory,evaluate once per invocation,before protected actions,before protected actions,true
+18,provider network call,pre-download,protected action,ADMIT_014 pass required,blocked count=0,blocked count=0,true
+19,remote metadata fetch,pre-download,protected action,ADMIT_014 pass required,blocked count=0,blocked count=0,true
+20,file download,pre-download,protected action,ADMIT_014 pass required,blocked count=0,blocked count=0,true
+21,raw write,pre-download,protected action,ADMIT_014 pass required,blocked count=0,blocked count=0,true
+22,download result materialization,pre-download,protected action,ADMIT_014 pass required,blocked count=0,blocked count=0,true
+23,aggregation independence,combined verdict,not_required,hard guard independent,cannot override blocked,cannot override blocked,true
+24,pass limitation,ADMIT_014 pass,permission_only,no readiness implication,does not prove provider/candidate/download/ADMIT_012/013,does not prove provider/candidate/download/ADMIT_012/013,true
+25,current permission,current project state,false,synthetic True cannot change it,ready_for_bulk_download_now=false,ready_for_bulk_download_now=false,true

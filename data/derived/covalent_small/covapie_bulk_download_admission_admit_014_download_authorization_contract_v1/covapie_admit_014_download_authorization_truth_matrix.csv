@@ -1,0 +1,41 @@
+case_order,case_id,case_group,stage_context_representation,forbidden_envelope_representation,expected_outcome,observed_outcome,expected_reason,observed_reason,target_key_access_count,mapping_iteration_count,mapping_len_count,mapping_get_count,mapping_contains_count,forbidden_envelope_access_count,case_passed
+1,CONTEXT_NONE,context_structure,None,,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,0,0,0,0,0,0,true
+2,CONTEXT_OBJECT,context_structure,object,,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,0,0,0,0,0,0,true
+3,CONTEXT_INT,context_structure,int,,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,0,0,0,0,0,0,true
+4,CONTEXT_STR,context_structure,str,,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,0,0,0,0,0,0,true
+5,CONTEXT_LIST,context_structure,list,,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,STAGE_AUTHORIZATION_CONTEXT_MAPPING_INVALID,0,0,0,0,0,0,true
+6,EMPTY_MAPPING,context_structure,{},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,1,0,0,0,0,0,true
+7,UNRELATED_ONLY,context_structure,{'other': True},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,1,0,0,0,0,0,true
+8,EXACT_FALSE,exact_bool,{'current_stage_download_authorized': False},,blocked,blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,BULK_DOWNLOAD_NOT_AUTHORIZED,1,0,0,0,0,0,true
+9,EXACT_TRUE,exact_bool,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+10,INT_ZERO,non_exact_bool,{'current_stage_download_authorized': 0},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+11,INT_ONE,non_exact_bool,{'current_stage_download_authorized': 1},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+12,FLOAT_ZERO,non_exact_bool,{'current_stage_download_authorized': 0.0},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+13,FLOAT_ONE,non_exact_bool,{'current_stage_download_authorized': 1.0},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+14,STRING_FALSE,non_exact_bool,{'current_stage_download_authorized': 'false'},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+15,STRING_TRUE,non_exact_bool,{'current_stage_download_authorized': 'true'},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+16,EMPTY_STRING,non_exact_bool,{'current_stage_download_authorized': ''},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+17,NONE_VALUE,non_exact_bool,{'current_stage_download_authorized': None},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+18,LIST_VALUE,non_exact_bool,{'current_stage_download_authorized': []},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+19,DICT_VALUE,non_exact_bool,{'current_stage_download_authorized': {}},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+20,CUSTOM_TRUTHY,non_exact_bool,{'current_stage_download_authorized': <CUSTOM_TRUTHY>},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+21,CUSTOM_FALSY,non_exact_bool,{'current_stage_download_authorized': <CUSTOM_FALSY>},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_TYPE_INVALID,1,0,0,0,0,0,true
+22,LOOKUP_KEYERROR,mapping_behavior,{},,blocked,blocked,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,CURRENT_STAGE_DOWNLOAD_AUTHORIZED_MISSING,1,0,0,0,0,0,true
+23,LOOKUP_RUNTIMEERROR,mapping_behavior,{},,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,1,0,0,0,0,0,true
+24,LOOKUP_VALUEERROR,mapping_behavior,{},,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,STAGE_AUTHORIZATION_CONTEXT_LOOKUP_FAILED,1,0,0,0,0,0,true
+25,ADMIT015_PLUS_TRUE,mapping_behavior,"{'current_stage_training_authorized': False, 'current_stage_download_authorized': True}",,passed,passed,,,1,0,0,0,0,0,true
+26,ADMIT015_PLUS_FALSE,mapping_behavior,"{'current_stage_training_authorized': True, 'current_stage_download_authorized': False}",,blocked,blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,BULK_DOWNLOAD_NOT_AUTHORIZED,1,0,0,0,0,0,true
+27,MANY_EXTRA_PLUS_TRUE,mapping_behavior,"{'extra_0': <OPAQUE_OBJECT>, 'extra_1': <OPAQUE_OBJECT>, 'extra_2': <OPAQUE_OBJECT>, 'extra_3': <OPAQUE_OBJECT>, 'extra_4': <OPAQUE_OBJECT>, 'extra_5': <OPAQUE_OBJECT>, 'extra_6': <OPAQUE_OBJECT>, 'extra_7': <OPAQUE_OBJECT>, 'extra_8': <OPAQUE_OBJECT>, 'extra_9': <OPAQUE_OBJECT>, 'extra_10': <OPAQUE_OBJECT>, 'extra_11': <OPAQUE_OBJECT>, 'extra_12': <OPAQUE_OBJECT>, 'extra_13': <OPAQUE_OBJECT>, 'extra_14': <OPAQUE_OBJECT>, 'extra_15': <OPAQUE_OBJECT>, 'extra_16': <OPAQUE_OBJECT>, 'extra_17': <OPAQUE_OBJECT>, 'extra_18': <OPAQUE_OBJECT>, 'extra_19': <OPAQUE_OBJECT>, 'current_stage_download_authorized': True}",,passed,passed,,,1,0,0,0,0,0,true
+28,ITERATION_RAISES,mapping_behavior,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+29,LEN_RAISES,mapping_behavior,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+30,GET_RAISES,mapping_behavior,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+31,CONTAINS_RAISES,mapping_behavior,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+32,CANDIDATE_TRUE_STAGE_MISSING,forbidden_pseudo_authority,None,candidate_record,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,0,0,0,0,0,0,true
+33,BATCH_TRUE_STAGE_MISSING,forbidden_pseudo_authority,None,batch_context,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,0,0,0,0,0,0,true
+34,EVALUATION_TRUE_STAGE_MISSING,forbidden_pseudo_authority,None,evaluation_context,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,0,0,0,0,0,0,true
+35,DOWNLOAD_TRUE_STAGE_MISSING,forbidden_pseudo_authority,None,download_result_context,blocked,blocked,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,STAGE_AUTHORIZATION_CONTEXT_REQUIRED,0,0,0,0,0,0,true
+36,CANDIDATE_TRUE_STAGE_FALSE,forbidden_pseudo_authority,{'current_stage_download_authorized': False},candidate_record,blocked,blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,BULK_DOWNLOAD_NOT_AUTHORIZED,1,0,0,0,0,0,true
+37,EVALUATION_FALSE_STAGE_TRUE,forbidden_pseudo_authority,{'current_stage_download_authorized': True},evaluation_context,passed,passed,,,1,0,0,0,0,0,true
+38,SYNTHETIC_TRUE_DESIGN,current_future,{'current_stage_download_authorized': True},,passed,passed,,,1,0,0,0,0,0,true
+39,CURRENT_PERMISSION_FALSE,current_future,{'current_stage_download_authorized': False},,blocked,blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,BULK_DOWNLOAD_NOT_AUTHORIZED,1,0,0,0,0,0,true
+40,CURRENT_READINESS_FALSE,current_future,{'current_stage_download_authorized': False},,blocked,blocked,BULK_DOWNLOAD_NOT_AUTHORIZED,BULK_DOWNLOAD_NOT_AUTHORIZED,1,0,0,0,0,0,true
