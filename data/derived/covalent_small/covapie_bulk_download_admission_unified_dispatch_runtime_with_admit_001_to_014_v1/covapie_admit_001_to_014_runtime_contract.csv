@@ -1,0 +1,46 @@
+contract_order,contract_group,contract_item,expected_value,observed_value,contract_passed
+1,identity,shared Exact13 result,object_identity_preserved,object_identity_preserved,true
+2,identity,shared dispatch error,object_identity_preserved,object_identity_preserved,true
+3,identity,shared constants,5/5_identity_preserved,5/5_identity_preserved,true
+4,dispatcher,signature,exact_predecessor_match,exact_predecessor_match,true
+5,dispatcher,precedence,exact_str|known|callable|ready|local_handler,exact_str|known|callable|ready|local_handler,true
+6,dispatcher,cardinality,single_rule_only,single_rule_only,true
+7,registry,order,ADMIT_001_to_ADMIT_014,ADMIT_001_to_ADMIT_014,true
+8,registry,first thirteen handlers,13/13_identity_preserved,13/13_identity_preserved,true
+9,registry,ADMIT_014 handler,_evaluate_registered_admit_014,_evaluate_registered_admit_014,true
+10,registry,immutability,MappingProxyType,MappingProxyType,true
+11,sets,known,ADMIT_001_to_ADMIT_015,ADMIT_001_to_ADMIT_015,true
+12,sets,callable,ADMIT_001_to_ADMIT_014,ADMIT_001_to_ADMIT_014,true
+13,sets,adapter ready,ADMIT_001_to_ADMIT_014,ADMIT_001_to_ADMIT_014,true
+14,sets,legacy adapter not ready,empty,empty,true
+15,routing,precedence,batch|evaluation|download|candidate|stage_forward|formal|source|oracle|equality|projection,batch|evaluation|download|candidate|stage_forward|formal|source|oracle|equality|projection,true
+16,candidate,non-Mapping,fixed_invalid_Exact13,fixed_invalid_Exact13,true
+17,candidate,key access,zero,zero,true
+18,source,Exact9,type|storage|order|types|reconstruction|invariants,type|storage|order|types|reconstruction|invariants,true
+19,source,validation before oracle,true,true,true
+20,oracle,call count,exactly_once_after_valid_source,exactly_once_after_valid_source,true
+21,oracle,same stage object,identity_preserved,identity_preserved,true
+22,equality,Exact9,exact_type_and_value_all_fields,exact_type_and_value_all_fields,true
+23,projection,normalized,exact_bool_to_lowercase_string,exact_bool_to_lowercase_string,true
+24,projection,validated candidate,empty,empty,true
+25,projection,consumed candidate,empty,empty,true
+26,projection,consumed context,source_consumed_stage_fields,source_consumed_stage_fields,true
+27,truth,inherited routing,Exact42_actual_runtime_execution,Exact42_actual_runtime_execution,true
+28,truth,source negatives,Exact11_actual_fail_closed,Exact11_actual_fail_closed,true
+29,truth,oracle negatives,Exact8_actual_fail_closed,Exact8_actual_fail_closed,true
+30,continuity,predecessor truth,committed_Exact885_all_passed,committed_Exact885_all_passed,true
+31,continuity,predecessor registry,committed_Exact39_all_passed,committed_Exact39_all_passed,true
+32,issue,single transition,coverage_removes_ADMIT_014_only,coverage_removes_ADMIT_014_only,true
+33,precondition,PRE_049,resolved,resolved,true
+34,precondition,counts,total=51|complete=51|incomplete=0|blocking=0,total=51|complete=51|incomplete=0|blocking=0,true
+35,readiness,current permission,false,false,true
+36,readiness,authorized execution count,0,0,true
+37,boundary,ADMIT_015,not_implemented_or_registered,not_implemented_or_registered,true
+38,boundary,mandatory enforcement,not_implemented,not_implemented,true
+39,boundary,combined verdict and aggregation,not_implemented,not_implemented,true
+40,boundary,provider network download raw,not_executed,not_executed,true
+41,boundary,model checkpoint dataloader training,not_modified,not_modified,true
+42,training,feature semantics audit,required_Step12D_smoke_only,required_Step12D_smoke_only,true
+43,materializer,publication,set_atomic_RENAME_NOREPLACE,set_atomic_RENAME_NOREPLACE,true
+44,materializer,existing exact set,inode_preserving_noop,inode_preserving_noop,true
+45,materializer,GPFS EINVAL,fail_closed,fail_closed,true
