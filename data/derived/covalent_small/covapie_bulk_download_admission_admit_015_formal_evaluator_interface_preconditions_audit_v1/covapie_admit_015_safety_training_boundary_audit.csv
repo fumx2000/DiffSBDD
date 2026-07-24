@@ -1,0 +1,21 @@
+audit_order,audit_item,required_state,observed_state,audit_passed,blocking_reason
+1,ADMIT_015 evaluator,absent,absent,true,
+2,ADMIT_015 result type,absent,absent,true,
+3,ADMIT_015 adapter/handler,absent,absent,true,
+4,ADMIT_015 registry/Exact15 runtime,absent,absent,true,
+5,mandatory training enforcement,absent,absent,true,
+6,current training permission,false,false,true,training_not_authorized
+7,authorized training execution count,0,0,true,training_not_authorized
+8,feature semantics audit completed,false,false,true,feature_semantics_audit_required
+9,Step12D final contract,false,false,true,step12d_smoke_only
+10,ready for training,false,false,true,training_not_authorized
+11,dataloader instantiated,false,false,true,
+12,checkpoint loaded,false,false,true,
+13,model forward/loss/backward,false,false,true,
+14,optimizer/parameter update,false,false,true,
+15,provider/network/download,false,false,true,
+16,raw structure read/write,false,false,true,
+17,canonical mask count,5,5,true,
+18,canonical mask B3,scaffold_only / B3 present,present,true,
+19,combined verdict,not implemented,not implemented,true,
+20,cross-rule aggregation,not implemented,not implemented,true,
