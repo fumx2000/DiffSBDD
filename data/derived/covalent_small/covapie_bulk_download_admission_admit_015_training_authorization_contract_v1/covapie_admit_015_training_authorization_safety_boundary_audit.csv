@@ -1,0 +1,32 @@
+audit_order,audit_item,required_state,observed_state,audit_passed,blocking_reason
+1,current training permission,false,false,true,training_not_authorized
+2,authorized training execution count,0,0,true,training_not_authorized
+3,ADMIT_015 evaluator,absent,absent,true,
+4,ADMIT_015 result type,absent,absent,true,
+5,ADMIT_015 independent oracle,absent,absent,true,
+6,ADMIT_015 standalone evaluator,absent,absent,true,
+7,ADMIT_015 adapter/handler,absent,absent,true,
+8,ADMIT_015 registry/Exact15 runtime,absent,absent,true,
+9,mandatory enforcement API frozen,false,false,true,
+10,mandatory enforcement implemented,false,false,true,
+11,blocked dataloader instantiation count,0,0,true,
+12,blocked checkpoint load count,0,0,true,
+13,blocked model forward count,0,0,true,
+14,blocked loss count,0,0,true,
+15,blocked backward count,0,0,true,
+16,blocked optimizer creation count,0,0,true,
+17,blocked parameter update count,0,0,true,
+18,blocked checkpoint write count,0,0,true,
+19,provider/network/download,false,false,true,
+20,raw structure read/write,false,false,true,
+21,feature semantics audit completed,false,false,true,feature_semantics_audit_required
+22,Step12D final contract,false,false,true,step12d_smoke_only
+23,ready for training,false,false,true,training_not_authorized
+24,combined verdict,not implemented,not implemented,true,
+25,cross-rule aggregation,not implemented,not implemented,true,
+26,canonical mask count,5,5,true,
+27,canonical mask warhead_only/A,present,present,true,
+28,canonical mask linker_plus_warhead/B,present,present,true,
+29,canonical mask scaffold_plus_warhead/B2,present,present,true,
+30,canonical mask scaffold_only/B3,present,present,true,
+31,canonical mask scaffold_plus_linker_plus_warhead/C,present,present,true,
