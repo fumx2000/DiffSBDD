@@ -1,0 +1,12 @@
+action_order,action_id,action_semantic_name,guard_required_before_action,blocked_count_expected,design_pass_executes_action,combined_verdict_override_forbidden,real_implementation_status,boundary_passed
+1,TRAIN_ACTION_001,dataloader instantiation,true,0,false,true,false,true
+2,TRAIN_ACTION_002,checkpoint loading,true,0,false,true,false,true
+3,TRAIN_ACTION_003,model initialization,true,0,false,true,false,true
+4,TRAIN_ACTION_004,model forward,true,0,false,true,false,true
+5,TRAIN_ACTION_005,loss computation,true,0,false,true,false,true
+6,TRAIN_ACTION_006,backward,true,0,false,true,false,true
+7,TRAIN_ACTION_007,optimizer creation,true,0,false,true,false,true
+8,TRAIN_ACTION_008,scheduler creation,true,0,false,true,false,true
+9,TRAIN_ACTION_009,parameter update,true,0,false,true,false,true
+10,TRAIN_ACTION_010,checkpoint write,true,0,false,true,false,true
+11,TRAIN_ACTION_011,training-result materialization,true,0,false,true,false,true
