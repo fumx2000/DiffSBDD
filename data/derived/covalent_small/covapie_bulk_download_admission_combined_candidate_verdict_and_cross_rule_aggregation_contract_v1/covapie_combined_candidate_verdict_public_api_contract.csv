@@ -1,0 +1,25 @@
+contract_order,contract_item,frozen_value,design_boundary,contract_passed
+1,function_name,aggregate_admission_rule_evaluations,future production API,true
+2,signature,"aggregate_admission_rule_evaluations(scope_id: str, *, ordered_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]) -> CombinedAdmissionCandidateVerdict",future production API,true
+3,scope_id_parameter_kind,positional_or_keyword,future production API,true
+4,ordered_vector_parameter_kind,keyword_only,future production API,true
+5,parameter_defaults,none,future production API,true
+6,var_positional,forbidden,future production API,true
+7,var_keyword,forbidden,future production API,true
+8,candidate_parameter,forbidden,future production API,true
+9,context_parameters,forbidden,future production API,true
+10,dispatcher_injection,forbidden,future production API,true
+11,registry_injection,forbidden,future production API,true
+12,override_or_fallback_parameter,forbidden,future production API,true
+13,input_element_type,Exact15 runtime UnifiedAdmissionRuleEvaluation,future production API,true
+14,output_type,CombinedAdmissionCandidateVerdict,future production API,true
+15,dispatcher_call_count,0,aggregation boundary,true
+16,single_rule_handler_call_count,0,aggregation boundary,true
+17,aggregation_io_used,false,aggregation boundary,true
+18,design_oracle,classify_combined_candidate_verdict_contract_design,not future production API,true
+19,design_child_type,UnifiedAdmissionRuleEvaluationContractDesign,not Exact15 runtime class,true
+20,design_result_type,CombinedAdmissionCandidateVerdictContractDesign,not future production result class,true
+21,runtime_outcome_vocabulary,passed|blocked|invalid|rejected,Exact15 runtime structural contract,true
+22,aggregation_admissible_child_outcomes,passed|blocked|invalid,combined permission aggregation subset,true
+23,runtime_nested_duplicate_policy,permitted_by_exact_shape_contract_and_not_interpreted_by_aggregator,Exact15 runtime compatibility,true
+24,rejected_child_aggregation_policy,runtime_valid_but_aggregation_inadmissible_fail_closed_as_evaluation_invariant_invalid,combined permission aggregation subset,true

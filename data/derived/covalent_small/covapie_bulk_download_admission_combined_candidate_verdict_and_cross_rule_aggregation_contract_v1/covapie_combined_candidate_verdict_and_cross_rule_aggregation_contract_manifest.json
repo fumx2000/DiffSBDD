@@ -1,0 +1,622 @@
+{
+  "all_checks_passed": true,
+  "authorized_admit_015_training_execution_count": 0,
+  "base_identity": {
+    "commit": "71fe2a41ecdf9e2317994e755ce21fc64bd05b87",
+    "parent": "bb282ef24343baebc05212715a8c7d56bc8224ad",
+    "subject": "add CovaPIE combined permission semantics contract v1",
+    "tree": "a50b5a13fc9b476e20fad80b15fa408b8e0a0eae"
+  },
+  "canonical_evidence_runtime": {
+    "implementation": "cpython",
+    "version": [
+      3,
+      10,
+      4
+    ]
+  },
+  "canonical_mask_count": 5,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "current_permission": false,
+  "derived_output_sha256": {
+    "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1/covapie_combined_candidate_verdict_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1/covapie_combined_candidate_verdict_public_api_contract.csv": "05db18369fadea8d4387ef4188aee0c922dffc0b0216a3f6abd0532ebd696f55",
+    "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1/covapie_cross_rule_aggregation_result_contract.csv": "34bf7ac21a78d0c93f73dbe7371e7b00ea48bec18308e5d8fcd82ea8c408fa8d",
+    "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1/covapie_cross_rule_aggregation_safety_audit.csv": "4b26fc147e8b5eca0a41329729a9a0caa9895aa0faef524afc1768230253d494",
+    "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1/covapie_cross_rule_aggregation_truth_matrix.csv": "eed3774028ec7db33f923c2866f7d322dac68d605e5e2e3b9924521283de1e40"
+  },
+  "design_only_boundary": {
+    "candidate_or_context_consumed": false,
+    "combined_candidate_verdict_implemented": false,
+    "cross_rule_aggregation_implemented": false,
+    "design_oracle_is_future_production_function": false,
+    "design_result_is_future_production_class": false,
+    "dispatcher_called": false,
+    "mirror_child_is_runtime_actual_type": false,
+    "orchestrator_implemented": false,
+    "provider_network_download_raw_training_executed": false,
+    "runtime_dispatcher_call_order_frozen": false,
+    "single_rule_handler_called": false,
+    "stage_global_rule_evaluation_orchestration_frozen": false
+  },
+  "embedded_stage_residue_lifecycle_closure": {
+    "business_semantics_changed": false,
+    "derived_parent_prefix_policy_unchanged": true,
+    "embedded_stage_directory_residue_rejected": true,
+    "embedded_stage_file_residue_rejected": true,
+    "four_bounded_support_roots": [
+      "src/covalent_ext",
+      "scripts",
+      "tests",
+      "docs"
+    ],
+    "git_ignored_same_stage_residue_rejected": true,
+    "git_untracked_inventory_not_relied_upon": true,
+    "matched_directory_descendants_observed": true,
+    "support_root_stage_match_policy": "complete_stage_token_at_any_basename_position",
+    "unrelated_ignored_regular_file_outside_stage_family_allowed": true
+  },
+  "exact10_file_count": 10,
+  "fail_closed_precedence": [
+    "invalid",
+    "blocked",
+    "passed"
+  ],
+  "feature_semantics_warning": "feature-semantics audit remains mandatory before training; Step12D was only a smoke legality check; historical UNKNOWN_ATOM_FEATURE_POLICY and feature_semantics_known=False remain unresolved",
+  "full_vector_aggregation": {
+    "aggregation_io_used": false,
+    "all_blocked_ids_collected": true,
+    "all_invalid_ids_collected": true,
+    "complete_membership_validation": true,
+    "complete_outcome_scan": true,
+    "complete_structure_validation": true,
+    "dispatcher_calls": 0,
+    "full_failing_ordered_union_collected": true,
+    "reorders_or_copies_valid_input": false,
+    "scoring_weighting_voting_fallback": false,
+    "short_circuit": false,
+    "single_rule_handler_calls": 0,
+    "valid_input_tuple_identity_preserved": true
+  },
+  "future_public_api": {
+    "candidate_or_context_parameters": false,
+    "defaults": false,
+    "dispatcher_or_registry_injection": false,
+    "function_name": "aggregate_admission_rule_evaluations",
+    "input_runtime_type": "UnifiedAdmissionRuleEvaluation",
+    "ordered_rule_evaluations_parameter_kind": "keyword_only",
+    "output_future_type": "CombinedAdmissionCandidateVerdict",
+    "override_or_fallback_parameters": false,
+    "scope_id_parameter_kind": "positional_or_keyword",
+    "signature": "aggregate_admission_rule_evaluations(scope_id: str, *, ordered_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]) -> CombinedAdmissionCandidateVerdict",
+    "var_keyword": false,
+    "var_positional": false
+  },
+  "future_result_contract": {
+    "aggregation_io_used": false,
+    "class_name": "CombinedAdmissionCandidateVerdict",
+    "dataclass_field_order_required": true,
+    "exact_vars_dict_and_order_required": true,
+    "field_count": 13,
+    "fields": [
+      "schema_version",
+      "scope_id",
+      "outcome",
+      "passed",
+      "blocks_scope_action",
+      "reason",
+      "required_rule_ids",
+      "evaluated_rule_ids",
+      "rule_evaluations",
+      "invalid_rule_ids",
+      "blocked_rule_ids",
+      "failing_rule_ids",
+      "aggregation_io_used"
+    ],
+    "frozen_dataclass": true,
+    "mutable_container_fields": false,
+    "reconstruct_equality_required": true,
+    "schema_version": "covapie_combined_admission_candidate_verdict_v1"
+  },
+  "input_single_rule_result_contract": {
+    "adapter_ids": {
+      "ADMIT_001": "covapie_admit_001_unified_adapter_v1",
+      "ADMIT_002": "covapie_admit_002_unified_adapter_v1",
+      "ADMIT_003": "covapie_admit_003_unified_adapter_v1",
+      "ADMIT_004": "covapie_admit_004_unified_adapter_v1",
+      "ADMIT_005": "covapie_admit_005_unified_adapter_v1",
+      "ADMIT_006": "covapie_admit_006_unified_adapter_v1",
+      "ADMIT_007": "covapie_admit_007_unified_adapter_v1",
+      "ADMIT_008": "covapie_admit_008_unified_adapter_v1",
+      "ADMIT_009": "covapie_admit_009_unified_adapter_v1",
+      "ADMIT_010": "covapie_admit_010_unified_adapter_v1",
+      "ADMIT_011": "covapie_admit_011_unified_adapter_v1",
+      "ADMIT_012": "covapie_admit_012_unified_adapter_v1",
+      "ADMIT_013": "covapie_admit_013_unified_adapter_v1",
+      "ADMIT_014": "covapie_admit_014_unified_adapter_v1",
+      "ADMIT_015": "covapie_admit_015_unified_adapter_v1"
+    },
+    "aggregation_admissible_outcomes": [
+      "passed",
+      "blocked",
+      "invalid"
+    ],
+    "aggregator_interprets_nested_payloads": false,
+    "dataclass_field_order_required": true,
+    "evaluator_io_used": false,
+    "exact_type_required": true,
+    "exact_vars_dict_and_order_required": true,
+    "field_count": 13,
+    "fields": [
+      "schema_version",
+      "admission_rule_id",
+      "admission_rule_name",
+      "outcome",
+      "passed",
+      "blocks_candidate",
+      "reason",
+      "normalized_values",
+      "validated_candidate_fields",
+      "consumed_candidate_fields",
+      "consumed_context_items",
+      "evaluator_io_used",
+      "adapter_id"
+    ],
+    "reconstruct_equality_required": true,
+    "rejected_combined_reason": "COMBINED_ADMISSION_RULE_EVALUATION_INVARIANT_INVALID",
+    "rejected_is_aggregation_admissible": false,
+    "rejected_is_runtime_valid": true,
+    "rule_names": {
+      "ADMIT_001": "unique_candidate_identity",
+      "ADMIT_002": "valid_pdb_id_format",
+      "ADMIT_003": "ligand_or_het_identity_present",
+      "ADMIT_004": "covalent_residue_identity_present",
+      "ADMIT_005": "cys_sg_scope_only_v1",
+      "ADMIT_006": "explicit_covalent_event_evidence",
+      "ADMIT_007": "distance_only_inference_forbidden",
+      "ADMIT_008": "topology_restoration_disposition",
+      "ADMIT_009": "duplicate_identity_precheck",
+      "ADMIT_010": "leakage_group_assignment_before_split",
+      "ADMIT_011": "raw_overwrite_forbidden",
+      "ADMIT_012": "future_download_integrity_fields_required",
+      "ADMIT_013": "download_failure_fail_closed",
+      "ADMIT_014": "current_gate_grants_no_download_permission",
+      "ADMIT_015": "current_gate_grants_no_training_permission"
+    },
+    "runtime_nested_duplicates_rejected": false,
+    "runtime_outcomes": [
+      "passed",
+      "blocked",
+      "invalid",
+      "rejected"
+    ],
+    "runtime_owner": "covapie_bulk_download_admission_minimal_unified_dispatch_shell_with_admit_004",
+    "schema_version": "covapie_unified_admission_rule_evaluation_v1"
+  },
+  "issue_continuity": {
+    "byte_identical_to_predecessor": true,
+    "new_issue_count": 0,
+    "remaining_open_issue_ids": [
+      "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+      "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+    ],
+    "row_count": 30,
+    "transition_count": 0
+  },
+  "manifest_self_sha256_recorded": false,
+  "permission_scope_count": 4,
+  "permission_scopes": [
+    {
+      "required_rule_count": 11,
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011",
+        "ADMIT_014"
+      ],
+      "scope_id": "download_execution_permission",
+      "scope_order": 1,
+      "scope_semantic_name": "download execution permission"
+    },
+    {
+      "required_rule_count": 13,
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014"
+      ],
+      "scope_id": "post_download_acceptance_permission",
+      "scope_order": 2,
+      "scope_semantic_name": "post-download acceptance permission"
+    },
+    {
+      "required_rule_count": 14,
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014"
+      ],
+      "scope_id": "pre_final_split_acceptance_permission",
+      "scope_order": 3,
+      "scope_semantic_name": "pre-final-split acceptance permission"
+    },
+    {
+      "required_rule_count": 15,
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014",
+        "ADMIT_015"
+      ],
+      "scope_id": "training_execution_admission_permission",
+      "scope_order": 4,
+      "scope_semantic_name": "training execution admission permission"
+    }
+  ],
+  "precondition_continuity": {
+    "complete_count": 42,
+    "implementation_blocking_count": 3,
+    "incomplete_count": 3,
+    "pre_036_remains_open_because_aggregator_not_implemented": true,
+    "pre_036_required_state": "implemented only after contract",
+    "remaining_open_precondition_ids": [
+      "PRE_036",
+      "PRE_038",
+      "PRE_042"
+    ],
+    "resolved_in_this_stage": [],
+    "row_count": 45,
+    "supported_but_not_frozen_count": 0
+  },
+  "project": "CovaPIE",
+  "readiness": {
+    "combined_candidate_verdict_contract_frozen": true,
+    "combined_candidate_verdict_implemented": false,
+    "combined_permission_semantics_frozen": true,
+    "cross_rule_aggregation_contract_frozen": true,
+    "cross_rule_aggregation_full_vector_semantics_frozen": true,
+    "cross_rule_aggregation_implemented": false,
+    "cross_rule_aggregation_public_api_frozen": true,
+    "cross_rule_aggregation_result_contract_frozen": true,
+    "cross_rule_aggregation_validation_precedence_frozen": true,
+    "feature_semantics_audit_completed": false,
+    "feature_semantics_audit_required_before_training": true,
+    "historical_feature_semantics_known": false,
+    "historical_unknown_atom_feature_policy_resolved": false,
+    "ready_for_cross_rule_aggregation_implementation": true,
+    "ready_for_training": false,
+    "real_training_ready": false,
+    "runtime_dispatcher_call_order_frozen": false,
+    "stage_global_rule_evaluation_orchestration_frozen": false,
+    "training_orchestrator_integration_implemented": false
+  },
+  "reason_vocabulary": {
+    "nonempty_reason_count": 6,
+    "nonempty_reasons": [
+      "COMBINED_ADMISSION_SCOPE_ID_INVALID",
+      "COMBINED_ADMISSION_RULE_EVALUATION_VECTOR_TYPE_INVALID",
+      "COMBINED_ADMISSION_RULE_EVALUATION_INVARIANT_INVALID",
+      "COMBINED_ADMISSION_RULE_MEMBERSHIP_INVALID",
+      "COMBINED_ADMISSION_REQUIRED_RULE_INVALID",
+      "COMBINED_ADMISSION_REQUIRED_RULE_BLOCKED"
+    ],
+    "pass_reason": ""
+  },
+  "recommended_next_step": "implement_covapie_combined_candidate_verdict_and_cross_rule_aggregation_v1",
+  "revised1_infrastructure_closure": {
+    "checker_full_index_bytes_snapshotted": true,
+    "checker_recursive_lifecycle_fd_pinned": true,
+    "exact6_parent_root_set_reader_fd_pinned": true,
+    "existing_exact_set_inode_preserving_noop": true,
+    "git_write_tree_index_snapshot_used": false,
+    "materializer_authenticated_staging_retained": true,
+    "materializer_build_before_mutation": true,
+    "materializer_gpfs_einval_fail_closed": true,
+    "materializer_no_os_replace": true,
+    "materializer_o_excl_and_fsync": true,
+    "materializer_rename_noreplace": true,
+    "source_parent_chain_fd_pinned": true,
+    "strict_initial_final_head_bound": true
+  },
+  "revised2_final_lifecycle_closure": {
+    "business_semantics_changed": false,
+    "final_recursive_lifecycle_is_last_filesystem_validation": true,
+    "full_recursive_lifecycle_runs_after_candidate": true,
+    "full_recursive_lifecycle_runs_before_candidate": true,
+    "generic_symlink_after_candidate_rejected": true,
+    "ignored_residue_after_candidate_rejected": true,
+    "revision": "revise_covapie_combined_candidate_verdict_and_cross_rule_aggregation_contract_final_lifecycle_closure_v2",
+    "synchronized_tamper_uses_real_fail_closed_verifier": true
+  },
+  "safety_audit": {
+    "columns": [
+      "audit_order",
+      "audit_item",
+      "expected_state",
+      "observed_state",
+      "safety_passed"
+    ],
+    "row_count": 30
+  },
+  "source_boundary": [
+    {
+      "base_tree_blob": "39e336fe86b4e235c6e7d4f33e2ec0192ea6ce00",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "823250a84d637625abd20c11244614eb86492b010b75becbe03ce6b83fe0c328",
+      "index_blob": "39e336fe86b4e235c6e7d4f33e2ec0192ea6ce00",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_combined_permission_semantics_contract_design_gate.py",
+      "sha256": "823250a84d637625abd20c11244614eb86492b010b75becbe03ce6b83fe0c328",
+      "source_order": 1
+    },
+    {
+      "base_tree_blob": "63deacc3aae08928bdd53bcc690d31c2584379b6",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "ffc919f2f1ac0c9248ebdb86c61a18ad713d15cfefb12d181f981271bb275fb1",
+      "index_blob": "63deacc3aae08928bdd53bcc690d31c2584379b6",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_semantics_contract_manifest.json",
+      "sha256": "ffc919f2f1ac0c9248ebdb86c61a18ad713d15cfefb12d181f981271bb275fb1",
+      "source_order": 2
+    },
+    {
+      "base_tree_blob": "70d745c0090fba15d94330756c94e53bf4880c12",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "3e74d0ac1d7be7bd23cf6d243c9593e01099a6dd55ed5079d27b01c12cb71b55",
+      "index_blob": "70d745c0090fba15d94330756c94e53bf4880c12",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_scope_and_rule_membership_contract.csv",
+      "sha256": "3e74d0ac1d7be7bd23cf6d243c9593e01099a6dd55ed5079d27b01c12cb71b55",
+      "source_order": 3
+    },
+    {
+      "base_tree_blob": "3db5aa83538b1c9df3c5e328ca229c6807cb884c",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "0cf2c6fd4adf6b8e9f4ca87bcdb033024de9e54c15594f8d7282b4bde5da265e",
+      "index_blob": "3db5aa83538b1c9df3c5e328ca229c6807cb884c",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_precedence_and_non_override_contract.csv",
+      "sha256": "0cf2c6fd4adf6b8e9f4ca87bcdb033024de9e54c15594f8d7282b4bde5da265e",
+      "source_order": 4
+    },
+    {
+      "base_tree_blob": "00a8cdd43592c09ba145f87af00f43bdfcbbef88",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "9c9f8aa30cf1882ffbccfcf721f298030ab479636641d79e9755019c55065d5e",
+      "index_blob": "00a8cdd43592c09ba145f87af00f43bdfcbbef88",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_truth_matrix.csv",
+      "sha256": "9c9f8aa30cf1882ffbccfcf721f298030ab479636641d79e9755019c55065d5e",
+      "source_order": 5
+    },
+    {
+      "base_tree_blob": "5f3c17a80fad6c84bb0a69506260e18bafe2e488",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "1fc5ac24e54d134d3f1f7054dfd2f264a2d76f17f0602bac216bb2e4e7e00bd1",
+      "index_blob": "5f3c17a80fad6c84bb0a69506260e18bafe2e488",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_015.py",
+      "sha256": "1fc5ac24e54d134d3f1f7054dfd2f264a2d76f17f0602bac216bb2e4e7e00bd1",
+      "source_order": 6
+    },
+    {
+      "base_tree_blob": "78b54694a31225f7eb8499e0e618bfc79aa43896",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "0fbd5999977d025a44b4bef854d9edfda5ea0e5ed79a7d5ff7b17cef7b6186d3",
+      "index_blob": "78b54694a31225f7eb8499e0e618bfc79aa43896",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_015_v1/covapie_admit_001_to_015_runtime_manifest.json",
+      "sha256": "0fbd5999977d025a44b4bef854d9edfda5ea0e5ed79a7d5ff7b17cef7b6186d3",
+      "source_order": 7
+    },
+    {
+      "base_tree_blob": "56b3629140b540acdc6afe15b3a275487d11bf5b",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "46023c4c3fc221a3e87c513210079e6ef5909ed7c377c1b52dc564fcf171f978",
+      "index_blob": "56b3629140b540acdc6afe15b3a275487d11bf5b",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_minimal_unified_dispatch_shell_with_admit_004.py",
+      "sha256": "46023c4c3fc221a3e87c513210079e6ef5909ed7c377c1b52dc564fcf171f978",
+      "source_order": 8
+    },
+    {
+      "base_tree_blob": "7fe859b762afb3b37e0d3712a9eae374026be845",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc",
+      "index_blob": "7fe859b762afb3b37e0d3712a9eae374026be845",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_design_gate_v1/covapie_bulk_download_admission_rule_registry.csv",
+      "sha256": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc",
+      "source_order": 9
+    },
+    {
+      "base_tree_blob": "e91421b30afa063cf689a81bb36e19563d4ce0a9",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "706fe24fe585cccaf9c4691adda673290e7604f35b6e63ffe2096087b17d1d77",
+      "index_blob": "e91421b30afa063cf689a81bb36e19563d4ce0a9",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_015_mandatory_training_authorization_enforcement_v1/covapie_admit_015_mandatory_training_authorization_enforcement_manifest.json",
+      "sha256": "706fe24fe585cccaf9c4691adda673290e7604f35b6e63ffe2096087b17d1d77",
+      "source_order": 10
+    },
+    {
+      "base_tree_blob": "fa9af90c3e47160d9fa7268b4dc4695263cd9588",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "c52287ac5a435e58a400be0e33e17c1096b7b0d3b2671be0398a6be03e409839",
+      "index_blob": "fa9af90c3e47160d9fa7268b4dc4695263cd9588",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_015_formal_evaluator_interface_preconditions_audit_v1/covapie_admit_015_formal_evaluator_interface_precondition_inventory.csv",
+      "sha256": "c52287ac5a435e58a400be0e33e17c1096b7b0d3b2671be0398a6be03e409839",
+      "source_order": 11
+    },
+    {
+      "base_tree_blob": "e91dddd5276f37d6dc31456623f853c0f585788c",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+      "index_blob": "e91dddd5276f37d6dc31456623f853c0f585788c",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_issue_readiness_inventory.csv",
+      "sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+      "source_order": 12
+    }
+  ],
+  "source_boundary_count": 12,
+  "source_boundary_name": "fixed_ordered_exact12_committed_source_boundary",
+  "stage": "covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1",
+  "stage_owned_staging_namespace_closure": {
+    "business_semantics_changed": false,
+    "empty_retained_staging_detected_by_recursive_lifecycle": true,
+    "git_empty_directory_visibility_not_relied_upon": true,
+    "legacy_misnamed_empty_staging_rejected": true,
+    "legacy_misnamed_staging_prefix": ".combined-permission-semantics-stage-",
+    "materializer_staging_name_prefix": "covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1.__staging__.",
+    "partial_retained_staging_detected": true,
+    "staging_prefix_belongs_to_current_stage": true
+  },
+  "step": "combined candidate verdict and cross-rule aggregation contract v1",
+  "step12d_boundary": "smoke_legality_check_not_final_training_feature_contract",
+  "support_file_sha256": {
+    "docs/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1_summary.md": "b6bb07687e8d4fcff894c8a4abedf2ae839de133e867cf1d86772aa8f7f6629c",
+    "scripts/check_covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1.py": "d988f8fefa151464ae00e240fdedf3e14c4fdf464f01bb8ed9bba8c073ca1088",
+    "src/covalent_ext/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_design_gate.py": "351e46eff9fce8cb735282cedc5ca531866d03439d582762d5827d2252f973e2",
+    "tests/test_covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_contract_v1.py": "518f9c562951869d7cfa44f0e01110d723e86d8ea2cf79560518fbc9c1aa2ad2"
+  },
+  "truth_matrix": {
+    "columns": [
+      "case_order",
+      "case_id",
+      "case_group",
+      "scope_id_representation",
+      "vector_type",
+      "input_rule_ids",
+      "input_outcomes",
+      "expected_outcome",
+      "observed_outcome",
+      "expected_reason",
+      "observed_reason",
+      "required_rule_ids",
+      "evaluated_rule_ids",
+      "invalid_rule_ids",
+      "blocked_rule_ids",
+      "failing_rule_ids",
+      "rule_evaluations_retained",
+      "input_tuple_identity_retained",
+      "aggregation_io_used",
+      "dispatcher_calls",
+      "handler_calls",
+      "current_permission",
+      "authorized_execution_count",
+      "case_passed"
+    ],
+    "generated_by_pure_memory_design_oracle": true,
+    "group_count": 23,
+    "group_counts": {
+      "all_blocked_full_collection": 4,
+      "all_invalid_full_collection": 4,
+      "canonical_all_pass": 4,
+      "child_invariant_mutation": 10,
+      "child_type_invalid": 2,
+      "duplicate_rule": 4,
+      "every_required_rule_blocked": 53,
+      "every_required_rule_invalid": 53,
+      "exact13_field_invariant_mutation": 13,
+      "extra_rule": 4,
+      "identity_preservation": 1,
+      "invalid_blocked_full_collection": 4,
+      "missing_required": 12,
+      "multi_blocked_full_collection": 4,
+      "multi_invalid_full_collection": 4,
+      "no_permission_mutation": 1,
+      "reordered_rule": 4,
+      "runtime_valid_duplicate_nested_compatibility": 4,
+      "runtime_valid_rejected_aggregation_inadmissible": 1,
+      "scope_external_substitution": 4,
+      "scope_invalid": 3,
+      "unknown_rule": 4,
+      "vector_type_invalid": 4
+    },
+    "row_count": 201
+  },
+  "validation_precedence": [
+    "scope_id",
+    "ordered_vector_exact_tuple",
+    "all_child_runtime_exact13_structure",
+    "all_child_aggregation_identity_and_outcome_admissibility",
+    "full_exact_membership",
+    "all_child_invalid_outcomes",
+    "all_child_blocked_outcomes",
+    "all_child_passed"
+  ]
+}
