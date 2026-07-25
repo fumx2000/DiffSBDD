@@ -1,0 +1,61 @@
+scope_order,scope_id,scope_semantic_name,required_rule_order,admission_rule_id,registry_evaluation_phase,included,exclusion_or_inclusion_reason,contract_passed
+1,download_execution_permission,download execution permission,1,ADMIT_001,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,2,ADMIT_002,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,3,ADMIT_003,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,4,ADMIT_004,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,5,ADMIT_005,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,6,ADMIT_006,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,7,ADMIT_007,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,8,ADMIT_008,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,9,ADMIT_009,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,,ADMIT_010,pre_final_split,false,excluded: pre_final_split is not a download prerequisite,true
+1,download_execution_permission,download execution permission,10,ADMIT_011,pre_download,true,required admission rule for this phase-scoped permission,true
+1,download_execution_permission,download execution permission,,ADMIT_012,post_download,false,excluded: post_download evidence is unavailable before download,true
+1,download_execution_permission,download execution permission,,ADMIT_013,post_download,false,excluded: post_download evidence is unavailable before download,true
+1,download_execution_permission,download execution permission,11,ADMIT_014,current_step,true,required stage download authorization; necessary not sufficient,true
+1,download_execution_permission,download execution permission,,ADMIT_015,current_step,false,excluded: training permission is phase-isolated,true
+2,post_download_acceptance_permission,post-download acceptance permission,1,ADMIT_001,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,2,ADMIT_002,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,3,ADMIT_003,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,4,ADMIT_004,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,5,ADMIT_005,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,6,ADMIT_006,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,7,ADMIT_007,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,8,ADMIT_008,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,9,ADMIT_009,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,,ADMIT_010,pre_final_split,false,excluded: scope has not entered pre_final_split,true
+2,post_download_acceptance_permission,post-download acceptance permission,10,ADMIT_011,pre_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,11,ADMIT_012,post_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,12,ADMIT_013,post_download,true,required admission rule for this phase-scoped permission,true
+2,post_download_acceptance_permission,post-download acceptance permission,13,ADMIT_014,current_step,true,required stage download authorization; necessary not sufficient,true
+2,post_download_acceptance_permission,post-download acceptance permission,,ADMIT_015,current_step,false,excluded: training permission is phase-isolated,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,1,ADMIT_001,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,2,ADMIT_002,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,3,ADMIT_003,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,4,ADMIT_004,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,5,ADMIT_005,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,6,ADMIT_006,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,7,ADMIT_007,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,8,ADMIT_008,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,9,ADMIT_009,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,10,ADMIT_010,pre_final_split,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,11,ADMIT_011,pre_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,12,ADMIT_012,post_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,13,ADMIT_013,post_download,true,required admission rule for this phase-scoped permission,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,14,ADMIT_014,current_step,true,required stage download authorization; necessary not sufficient,true
+3,pre_final_split_acceptance_permission,pre-final-split acceptance permission,,ADMIT_015,current_step,false,excluded: training permission is phase-isolated,true
+4,training_execution_admission_permission,training execution admission permission,1,ADMIT_001,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,2,ADMIT_002,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,3,ADMIT_003,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,4,ADMIT_004,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,5,ADMIT_005,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,6,ADMIT_006,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,7,ADMIT_007,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,8,ADMIT_008,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,9,ADMIT_009,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,10,ADMIT_010,pre_final_split,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,11,ADMIT_011,pre_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,12,ADMIT_012,post_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,13,ADMIT_013,post_download,true,required admission rule for this phase-scoped permission,true
+4,training_execution_admission_permission,training execution admission permission,14,ADMIT_014,current_step,true,required stage download authorization; necessary not sufficient,true
+4,training_execution_admission_permission,training execution admission permission,15,ADMIT_015,current_step,true,required only for training admission; necessary not sufficient,true

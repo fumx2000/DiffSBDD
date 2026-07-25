@@ -1,0 +1,26 @@
+contract_order,contract_group,contract_item,frozen_value,contract_passed
+1,vocabulary,rule state vocabulary,passed|blocked|invalid,true
+2,vocabulary,combined outcome vocabulary,passed|blocked|invalid,true
+3,precedence,fail-closed precedence,invalid>blocked>passed,true
+4,precedence,precedence meaning,deterministic failure priority only,true
+5,combination,combination operator,monotone conjunction,true
+6,combination,OR,forbidden,true
+7,combination,majority vote,forbidden,true
+8,combination,weighted score,forbidden,true
+9,combination,fallback,forbidden,true
+10,combination,latest pass,forbidden,true
+11,membership,omission as pass,forbidden,true
+12,membership,extra as ignore,forbidden,true
+13,membership,scope-external substitution,forbidden,true
+14,non_override,required blocked non-override,frozen,true
+15,non_override,required invalid non-override,frozen,true
+16,non_override,ADMIT_014 pass override,forbidden,true
+17,non_override,ADMIT_015 pass override,forbidden,true
+18,sufficiency,ADMIT_014 alone,necessary_not_sufficient,true
+19,sufficiency,ADMIT_015 alone,necessary_not_sufficient,true
+20,authority,bool/CLI/env/manifest/config override,forbidden,true
+21,authority,checkpoint/provider override,forbidden,true
+22,boundary,all-pass meaning,admission_layer_only,true
+23,boundary,real action permission,not_implied,true
+24,boundary,training readiness,not_implied,true
+25,boundary,current_permission,false,true
