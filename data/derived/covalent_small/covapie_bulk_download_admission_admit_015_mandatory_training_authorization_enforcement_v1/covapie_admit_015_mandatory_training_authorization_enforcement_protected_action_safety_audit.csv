@@ -1,0 +1,12 @@
+action_order,action_id,action_semantic_name,implementation_call_count,blocked_call_count,canonical_pass_call_count,guard_only_in_memory,no_training_integration,safety_passed
+1,TRAIN_ACTION_001,dataloader instantiation,0,0,0,true,true,true
+2,TRAIN_ACTION_002,checkpoint loading,0,0,0,true,true,true
+3,TRAIN_ACTION_003,model initialization,0,0,0,true,true,true
+4,TRAIN_ACTION_004,model forward,0,0,0,true,true,true
+5,TRAIN_ACTION_005,loss computation,0,0,0,true,true,true
+6,TRAIN_ACTION_006,backward,0,0,0,true,true,true
+7,TRAIN_ACTION_007,optimizer creation,0,0,0,true,true,true
+8,TRAIN_ACTION_008,scheduler creation,0,0,0,true,true,true
+9,TRAIN_ACTION_009,parameter update,0,0,0,true,true,true
+10,TRAIN_ACTION_010,checkpoint write,0,0,0,true,true,true
+11,TRAIN_ACTION_011,training-result materialization,0,0,0,true,true,true

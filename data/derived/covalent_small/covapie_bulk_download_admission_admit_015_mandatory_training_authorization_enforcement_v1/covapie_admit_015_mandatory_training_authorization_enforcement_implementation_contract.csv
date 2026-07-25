@@ -1,0 +1,39 @@
+contract_order,contract_group,contract_item,frozen_value,implementation_status,contract_passed
+1,identity,public_function,require_admit_015_training_authorization,implemented,true
+2,identity,public_signature,"candidate_record positional-or-keyword; stage_authorization_context keyword-only",implemented,true
+3,identity,return_type,UnifiedAdmissionRuleEvaluation,implemented,true
+4,identity,error_type,Admit015TrainingAuthorizationEnforcementError,implemented,true
+5,identity,error_schema,covapie_admit_015_training_authorization_enforcement_error_v1,implemented,true
+6,identity,error_fields,schema_version|error_code|admission_rule_id|reason,implemented,true
+7,identity,error_field_types,exact built-in str|str|str|str,implemented,true
+8,dependency,direct_production_dependency,current committed Exact15 runtime only,implemented,true
+9,runtime,selected_rule_id,ADMIT_015,implemented,true
+10,runtime,dispatcher_call_sites,1,implemented,true
+11,runtime,dispatcher_calls_per_invocation,exactly 1,implemented,true
+12,routing,candidate_record,same object without guard access,implemented,true
+13,routing,batch_context,None,implemented,true
+14,routing,evaluation_context,None,implemented,true
+15,routing,download_result_context,None,implemented,true
+16,routing,stage_authorization_context,same object without guard access,implemented,true
+17,validation,result_exact_type,no subclass,implemented,true
+18,validation,result_storage,exact dict and Exact13 order,implemented,true
+19,validation,dataclass_fields,Exact13 order,implemented,true
+20,validation,top_level_types,exact str/bool/tuple contract,implemented,true
+21,validation,reconstruction,equal exact result,implemented,true
+22,validation,pass_invariants,complete frozen Exact13 pass contract,implemented,true
+23,behavior,canonical_pass_return,original result identity,implemented,true
+24,behavior,dispatcher_exception,raise DISPATCH_FAILED,implemented,true
+25,behavior,wrong_type_or_subclass,raise RESULT_INVALID,implemented,true
+26,behavior,exact_type_nonpass_or_drift,raise DENIED,implemented,true
+27,behavior,error_reason,deterministic error_code with no exception leak,implemented,true
+28,forbidden,external_dispatcher_injection,rejected by exact signature,implemented,true
+29,forbidden,precomputed_result_or_permission,rejected by exact signature,implemented,true
+30,forbidden,combined_verdict_or_admit014_permission,rejected by exact signature,implemented,true
+31,forbidden,retry_loop_recursion_fallback,absent,implemented,true
+32,boundary,training_orchestrator_integration,false,not_implemented,true
+33,boundary,protected_action_execution_count,0,not_executed,true
+34,boundary,combined_permission_or_cross_rule_aggregation,false,not_implemented,true
+35,boundary,feature_semantics_resolution,false,not_resolved,true
+36,status,mandatory_training_authorization_enforcement_api_frozen,true,implemented,true
+37,status,mandatory_training_authorization_enforcement_implemented,true,implemented,true
+38,status,ready_for_combined_permission_semantics_contract_design,true,ready,true
