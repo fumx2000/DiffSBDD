@@ -1,0 +1,55 @@
+contract_area,contract_order,contract_item,exact_requirement,observed_contract,contract_passed
+future_public_api,1,function_name,orchestrate_stage_admission_scope,orchestrate_stage_admission_scope,true
+future_public_api,2,parameter_count,4,4,true
+future_public_api,3,scope_id_parameter_kind,positional_or_keyword,positional_or_keyword,true
+future_public_api,4,scope_id_annotation,str,str,true
+future_public_api,5,scope_id_default,absent,absent,true
+future_public_api,6,candidate_inputs_parameter_kind,positional_or_keyword,positional_or_keyword,true
+future_public_api,7,candidate_inputs_annotation,"tuple[AdmissionCandidateOrchestrationInput, ...]","tuple[AdmissionCandidateOrchestrationInput, ...]",true
+future_public_api,8,candidate_inputs_default,absent,absent,true
+future_public_api,9,batch_context_parameter_kind,required_keyword_only,required_keyword_only,true
+future_public_api,10,batch_context_annotation,"Mapping[str, object] | None","Mapping[str, object] | None",true
+future_public_api,11,batch_context_default,absent,absent,true
+future_public_api,12,stage_authorization_context_parameter_kind,required_keyword_only,required_keyword_only,true
+future_public_api,13,stage_authorization_context_annotation,"Mapping[str, object] | None","Mapping[str, object] | None",true
+future_public_api,14,stage_authorization_context_default,absent,absent,true
+future_public_api,15,return_annotation,StageAdmissionOrchestrationResult,StageAdmissionOrchestrationResult,true
+future_public_api,16,var_positional_parameter,absent,absent,true
+future_public_api,17,var_keyword_parameter,absent,absent,true
+future_public_api,18,forbidden_injection_or_training_parameters,absent:dispatcher|aggregator|registry|override|fallback|model|dataloader|checkpoint|training,absent:dispatcher|aggregator|registry|override|fallback|model|dataloader|checkpoint|training,true
+AdmissionCandidateOrchestrationInput,1,candidate_record,"candidate_record: Mapping[str, object]","candidate_record: Mapping[str, object]",true
+AdmissionCandidateOrchestrationInput,2,evaluation_context,"evaluation_context: Mapping[str, object] | None","evaluation_context: Mapping[str, object] | None",true
+AdmissionCandidateOrchestrationInput,3,download_result_context,"download_result_context: Mapping[str, object] | None","download_result_context: Mapping[str, object] | None",true
+CandidateAdmissionOrchestrationResult,1,candidate_index,candidate_index: int,candidate_index: int,true
+CandidateAdmissionOrchestrationResult,2,ordered_rule_evaluations,"ordered_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]","ordered_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]",true
+CandidateAdmissionOrchestrationResult,3,combined_verdict,combined_verdict: CombinedAdmissionCandidateVerdict,combined_verdict: CombinedAdmissionCandidateVerdict,true
+CandidateAdmissionOrchestrationResult,4,dispatcher_call_count,dispatcher_call_count: int,dispatcher_call_count: int,true
+CandidateAdmissionOrchestrationResult,5,aggregator_call_count,aggregator_call_count: int,aggregator_call_count: int,true
+StageAdmissionOrchestrationResult,1,schema_version,schema_version: str,schema_version: str,true
+StageAdmissionOrchestrationResult,2,scope_id,scope_id: str,scope_id: str,true
+StageAdmissionOrchestrationResult,3,candidate_count,candidate_count: int,candidate_count: int,true
+StageAdmissionOrchestrationResult,4,required_rule_ids,"required_rule_ids: tuple[str, ...]","required_rule_ids: tuple[str, ...]",true
+StageAdmissionOrchestrationResult,5,stage_global_rule_ids,"stage_global_rule_ids: tuple[str, ...]","stage_global_rule_ids: tuple[str, ...]",true
+StageAdmissionOrchestrationResult,6,candidate_rule_ids,"candidate_rule_ids: tuple[str, ...]","candidate_rule_ids: tuple[str, ...]",true
+StageAdmissionOrchestrationResult,7,stage_global_rule_evaluations,"stage_global_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]","stage_global_rule_evaluations: tuple[UnifiedAdmissionRuleEvaluation, ...]",true
+StageAdmissionOrchestrationResult,8,candidate_results,"candidate_results: tuple[CandidateAdmissionOrchestrationResult, ...]","candidate_results: tuple[CandidateAdmissionOrchestrationResult, ...]",true
+StageAdmissionOrchestrationResult,9,dispatcher_call_count,dispatcher_call_count: int,dispatcher_call_count: int,true
+StageAdmissionOrchestrationResult,10,aggregator_call_count,aggregator_call_count: int,aggregator_call_count: int,true
+StageAdmissionOrchestrationResult,11,orchestration_io_used,orchestration_io_used: bool,orchestration_io_used: bool,true
+StageAdmissionOrchestrationResult,12,action_permission_granted,action_permission_granted: bool,action_permission_granted: bool,true
+StageAdmissionOrchestrationError,1,code,code: str,code: str,true
+StageAdmissionOrchestrationError,2,scope_id,scope_id: str,scope_id: str,true
+StageAdmissionOrchestrationError,3,candidate_index,candidate_index: int,candidate_index: int,true
+StageAdmissionOrchestrationError,4,admission_rule_id,admission_rule_id: str,admission_rule_id: str,true
+StageAdmissionOrchestrationError,5,dispatcher_call_count,dispatcher_call_count: int,dispatcher_call_count: int,true
+StageAdmissionOrchestrationError,6,aggregator_call_count,aggregator_call_count: int,aggregator_call_count: int,true
+StageAdmissionOrchestrationError,7,reason,reason: str,reason: str,true
+StageAdmissionOrchestrationError,8,cause_type,cause_type: str,cause_type: str,true
+StageAdmissionOrchestrationErrorCode,1,STAGE_ORCHESTRATION_SCOPE_ID_INVALID,STAGE_ORCHESTRATION_SCOPE_ID_INVALID,STAGE_ORCHESTRATION_SCOPE_ID_INVALID,true
+StageAdmissionOrchestrationErrorCode,2,STAGE_ORCHESTRATION_CANDIDATE_INPUT_VECTOR_INVALID,STAGE_ORCHESTRATION_CANDIDATE_INPUT_VECTOR_INVALID,STAGE_ORCHESTRATION_CANDIDATE_INPUT_VECTOR_INVALID,true
+StageAdmissionOrchestrationErrorCode,3,STAGE_ORCHESTRATION_CANDIDATE_INPUT_INVARIANT_INVALID,STAGE_ORCHESTRATION_CANDIDATE_INPUT_INVARIANT_INVALID,STAGE_ORCHESTRATION_CANDIDATE_INPUT_INVARIANT_INVALID,true
+StageAdmissionOrchestrationErrorCode,4,STAGE_ORCHESTRATION_BATCH_CONTEXT_INVALID,STAGE_ORCHESTRATION_BATCH_CONTEXT_INVALID,STAGE_ORCHESTRATION_BATCH_CONTEXT_INVALID,true
+StageAdmissionOrchestrationErrorCode,5,STAGE_ORCHESTRATION_STAGE_AUTHORIZATION_CONTEXT_INVALID,STAGE_ORCHESTRATION_STAGE_AUTHORIZATION_CONTEXT_INVALID,STAGE_ORCHESTRATION_STAGE_AUTHORIZATION_CONTEXT_INVALID,true
+StageAdmissionOrchestrationErrorCode,6,STAGE_ORCHESTRATION_DISPATCH_ERROR,STAGE_ORCHESTRATION_DISPATCH_ERROR,STAGE_ORCHESTRATION_DISPATCH_ERROR,true
+StageAdmissionOrchestrationErrorCode,7,STAGE_ORCHESTRATION_RULE_RESULT_INVARIANT_INVALID,STAGE_ORCHESTRATION_RULE_RESULT_INVARIANT_INVALID,STAGE_ORCHESTRATION_RULE_RESULT_INVARIANT_INVALID,true
+StageAdmissionOrchestrationErrorCode,8,STAGE_ORCHESTRATION_AGGREGATOR_RESULT_INVARIANT_INVALID,STAGE_ORCHESTRATION_AGGREGATOR_RESULT_INVARIANT_INVALID,STAGE_ORCHESTRATION_AGGREGATOR_RESULT_INVARIANT_INVALID,true

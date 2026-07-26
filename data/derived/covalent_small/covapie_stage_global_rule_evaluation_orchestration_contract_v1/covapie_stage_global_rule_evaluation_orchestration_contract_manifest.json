@@ -1,0 +1,978 @@
+{
+  "all_checks_passed": true,
+  "api_result_contract_row_count": 54,
+  "base_identity": {
+    "commit": "3e55b6e58668ce66ba74df8e0894b15641601e52",
+    "parent": "38eb228f6507bb36c19433050c75d4b28e2e65a2",
+    "subject": "add CovaPIE combined candidate verdict and cross-rule aggregation v1",
+    "tree": "3717e7a8c436a949fecf16ee4e8220e604c10d74"
+  },
+  "call_plan_row_count": 53,
+  "candidate_result_contract": {
+    "class_name": "CandidateAdmissionOrchestrationResult",
+    "field_count": 5,
+    "fields": [
+      "candidate_index",
+      "ordered_rule_evaluations",
+      "combined_verdict",
+      "dispatcher_call_count",
+      "aggregator_call_count"
+    ],
+    "frozen": true,
+    "slots": false
+  },
+  "candidate_scoped_membership": {
+    "download_execution_permission": [
+      "ADMIT_001",
+      "ADMIT_002",
+      "ADMIT_003",
+      "ADMIT_004",
+      "ADMIT_005",
+      "ADMIT_006",
+      "ADMIT_007",
+      "ADMIT_008",
+      "ADMIT_009",
+      "ADMIT_011"
+    ],
+    "post_download_acceptance_permission": [
+      "ADMIT_001",
+      "ADMIT_002",
+      "ADMIT_003",
+      "ADMIT_004",
+      "ADMIT_005",
+      "ADMIT_006",
+      "ADMIT_007",
+      "ADMIT_008",
+      "ADMIT_009",
+      "ADMIT_011",
+      "ADMIT_012",
+      "ADMIT_013"
+    ],
+    "pre_final_split_acceptance_permission": [
+      "ADMIT_001",
+      "ADMIT_002",
+      "ADMIT_003",
+      "ADMIT_004",
+      "ADMIT_005",
+      "ADMIT_006",
+      "ADMIT_007",
+      "ADMIT_008",
+      "ADMIT_009",
+      "ADMIT_010",
+      "ADMIT_011",
+      "ADMIT_012",
+      "ADMIT_013"
+    ],
+    "training_execution_admission_permission": [
+      "ADMIT_001",
+      "ADMIT_002",
+      "ADMIT_003",
+      "ADMIT_004",
+      "ADMIT_005",
+      "ADMIT_006",
+      "ADMIT_007",
+      "ADMIT_008",
+      "ADMIT_009",
+      "ADMIT_010",
+      "ADMIT_011",
+      "ADMIT_012",
+      "ADMIT_013"
+    ]
+  },
+  "canonical_mask_count": 5,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "context_routing": {
+    "ADMIT_001": {
+      "batch_context_source": "api_batch_context_same_identity",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_002": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_003": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_004": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_005": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_006": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_007": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_008": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_009": {
+      "batch_context_source": "api_batch_context_same_identity",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_010": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_011": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_012": {
+      "batch_context_source": "None",
+      "download_result_context_source": "candidate_input.download_result_context_same_identity",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_013": {
+      "batch_context_source": "None",
+      "download_result_context_source": "candidate_input.download_result_context_same_identity",
+      "evaluation_context_source": "candidate_input.evaluation_context_same_identity",
+      "stage_authorization_context_source": "None"
+    },
+    "ADMIT_014": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "api_stage_authorization_context_same_identity"
+    },
+    "ADMIT_015": {
+      "batch_context_source": "None",
+      "download_result_context_source": "None",
+      "evaluation_context_source": "None",
+      "stage_authorization_context_source": "api_stage_authorization_context_same_identity"
+    }
+  },
+  "derived_output_sha256": {
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_public_api_and_result_contract.csv": "b7d8e8cae56eed7550a6870da668e9efe4793929923f1b09674f8367d47ec6ae",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_safety_audit.csv": "da9fd93a9d6b944871c488ede1325ad1f876482d41d94752dd1943c09fb4cb6b",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_scope_rule_call_plan.csv": "4773cc3032b68d06be22dd84f86c98489c17a2dd21b085f1e84ad645c5250013",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_truth_matrix.csv": "d54b32c53014263c8fe28f700deb328e3989c71e17edbc00b076403ab0d28d67"
+  },
+  "design_only_boundary": {
+    "candidate_loop_runtime_implemented": false,
+    "dispatcher_loop_implemented": false,
+    "download_or_training_action_implemented": false,
+    "real_orchestrator_implemented": false
+  },
+  "error_contract": {
+    "all_failures_raise_error": true,
+    "caught_cause_base": "Exception_only_not_BaseException",
+    "cause_repr_used": false,
+    "cause_type_projection": "type(cause).__name__",
+    "class_name": "StageAdmissionOrchestrationError",
+    "code_count": 8,
+    "codes": [
+      "STAGE_ORCHESTRATION_SCOPE_ID_INVALID",
+      "STAGE_ORCHESTRATION_CANDIDATE_INPUT_VECTOR_INVALID",
+      "STAGE_ORCHESTRATION_CANDIDATE_INPUT_INVARIANT_INVALID",
+      "STAGE_ORCHESTRATION_BATCH_CONTEXT_INVALID",
+      "STAGE_ORCHESTRATION_STAGE_AUTHORIZATION_CONTEXT_INVALID",
+      "STAGE_ORCHESTRATION_DISPATCH_ERROR",
+      "STAGE_ORCHESTRATION_RULE_RESULT_INVARIANT_INVALID",
+      "STAGE_ORCHESTRATION_AGGREGATOR_RESULT_INVARIANT_INVALID"
+    ],
+    "deterministic_reason_projection": true,
+    "error_is_never_normal_return_value": true,
+    "error_stops_immediately": true,
+    "exception_args_equal_reason_singleton": true,
+    "field_count": 8,
+    "fields": [
+      "code",
+      "scope_id",
+      "candidate_index",
+      "admission_rule_id",
+      "dispatcher_call_count",
+      "aggregator_call_count",
+      "reason",
+      "cause_type"
+    ],
+    "frozen": true,
+    "inherits_exception": true,
+    "partial_stage_result_returned": false,
+    "pre_dispatch_projection": {
+      "admission_rule_id": "",
+      "aggregator_call_count": 0,
+      "candidate_index": -1,
+      "cause_type": "",
+      "dispatcher_call_count": 0,
+      "reason": "code"
+    },
+    "raise_from_cause": true,
+    "slots": false,
+    "success_returns_stage_result_only": true
+  },
+  "exact10_file_count": 10,
+  "exact10_files": [
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_contract_design_gate.py",
+    "scripts/check_covapie_stage_global_rule_evaluation_orchestration_contract_v1.py",
+    "tests/test_covapie_stage_global_rule_evaluation_orchestration_contract_v1.py",
+    "docs/covapie_stage_global_rule_evaluation_orchestration_contract_v1_summary.md",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_public_api_and_result_contract.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_scope_rule_call_plan.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_truth_matrix.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_safety_audit.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_orchestration_issue_readiness_inventory.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_contract_v1/covapie_stage_global_rule_evaluation_orchestration_contract_manifest.json"
+  ],
+  "exact14_runtime_actual_sha256": "c5f5cfc57155f34ee2435228b3bf53ae8d1f6d81c32e097c43668c0b272fd1a2",
+  "failure_coordinate_formulas": {
+    "attempt_inclusive": true,
+    "candidate_aggregator": {
+      "admission_rule_id": "",
+      "aggregator_call_count": "i+1",
+      "dispatcher_call_count": "G + (i+1)*R"
+    },
+    "candidate_dispatch": {
+      "aggregator_call_count": "i",
+      "dispatcher_call_count": "G + i*R + j"
+    },
+    "candidate_indices": [
+      0,
+      1,
+      2
+    ],
+    "definitions": {
+      "G": "stage_global_rule_count",
+      "R": "candidate_scoped_rule_count",
+      "i": "zero_based_candidate_index",
+      "j": "one_based_candidate_rule_position",
+      "k": "one_based_stage_global_rule_position"
+    },
+    "exact4_scope_matrix_executed": true,
+    "stage_global_dispatch": {
+      "aggregator_call_count": "0",
+      "candidate_index": "-1",
+      "dispatcher_call_count": "k"
+    }
+  },
+  "feature_semantics_warning": "A feature-semantics audit remains mandatory before training; UNKNOWN_ATOM_FEATURE_POLICY and feature_semantics_known=False remain unresolved",
+  "future_public_api": {
+    "aggregator_injection": false,
+    "dispatcher_injection": false,
+    "implemented": false,
+    "name": "orchestrate_stage_admission_scope",
+    "parameter_defaults": {
+      "batch_context": "absent",
+      "candidate_inputs": "absent",
+      "scope_id": "absent",
+      "stage_authorization_context": "absent"
+    },
+    "registry_injection": false,
+    "signature": "orchestrate_stage_admission_scope(scope_id: str, candidate_inputs: tuple[AdmissionCandidateOrchestrationInput, ...], *, batch_context: Mapping[str, object] | None, stage_authorization_context: Mapping[str, object] | None) -> StageAdmissionOrchestrationResult"
+  },
+  "infrastructure_hardening": {
+    "checker_complete_index_bytes": true,
+    "checker_git_write_tree_snapshot": false,
+    "detached_candidate_post_commit_supported": true,
+    "exact6_parent_root_all_leaf_fd_pinned": true,
+    "existing_exact_set_inode_preserving_noop": true,
+    "final_recursive_lifecycle_is_last_filesystem_validation": true,
+    "formal_commit_subject_frozen": true,
+    "formal_main_post_commit_unpushed_supported": true,
+    "formal_main_post_push_supported": true,
+    "formal_main_real_local_git_simulation_passed": true,
+    "full_recursive_lifecycle_run_count": 2,
+    "lifecycle_mode_count": 4,
+    "materializer_authenticated_staging_retained": true,
+    "materializer_build_before_mutation": true,
+    "materializer_gpfs_einval_fail_closed": true,
+    "materializer_no_destructive_cleanup": true,
+    "materializer_no_os_replace": true,
+    "materializer_o_excl_and_fsync": true,
+    "materializer_rename_noreplace": true,
+    "pre_commit_lifecycle_supported": true,
+    "source_base_ancestry_verified": true,
+    "source_initial_final_strict_head": true,
+    "source_parent_chain_fd_pinned": true
+  },
+  "input_contract": {
+    "class_name": "AdmissionCandidateOrchestrationInput",
+    "field_count": 3,
+    "fields": [
+      "candidate_record",
+      "evaluation_context",
+      "download_result_context"
+    ],
+    "frozen": true,
+    "mapping_copy_or_iteration": false,
+    "object_identity_preserved": true,
+    "slots": false
+  },
+  "issue_continuity": {
+    "byte_identical": true,
+    "new_issue_count": 0,
+    "remaining_open_issue_ids": [
+      "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+      "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+    ],
+    "row_count": 30,
+    "sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "transition_count": 0
+  },
+  "manifest_self_sha256_recorded": false,
+  "normal_result_semantics": {
+    "outcomes": [
+      "passed",
+      "blocked",
+      "invalid",
+      "rejected"
+    ],
+    "rejected_canonical_empty_diagnostics_accepted": true,
+    "rejected_complete_vector_forwarded": true,
+    "rejected_delegated_to_aggregator_fail_closed": true,
+    "rejected_fail_closed_is_not_result_corruption": true,
+    "rejected_is_aggregator_inadmissible_child_outcome": true,
+    "rejected_reinterpreted_by_orchestrator": false,
+    "short_circuit": false
+  },
+  "precondition_continuity": {
+    "complete_count": 43,
+    "implementation_blocking_count": 2,
+    "incomplete_count": 2,
+    "pre_036_status": "complete/non-blocking",
+    "remaining_open_precondition_ids": [
+      "PRE_038",
+      "PRE_042"
+    ],
+    "row_count": 45,
+    "supported_but_not_frozen_count": 0,
+    "transition_count": 0
+  },
+  "project": "CovaPIE",
+  "readiness": {
+    "aggregator_call_order_frozen": true,
+    "candidate_vector_assembly_contract_frozen": true,
+    "combined_candidate_verdict_implemented": true,
+    "combined_permission_semantics_frozen": true,
+    "context_routing_plan_frozen": true,
+    "cross_rule_aggregation_implemented": true,
+    "current_permission": false,
+    "dispatcher_call_cardinality_frozen": true,
+    "dispatcher_call_order_frozen": true,
+    "download_action_implemented": false,
+    "feature_semantics_audit_completed": false,
+    "feature_semantics_audit_required_before_training": true,
+    "historical_feature_semantics_known": false,
+    "historical_unknown_atom_feature_policy_resolved": false,
+    "orchestration_error_contract_frozen": true,
+    "pre_036_resolved": true,
+    "ready_for_stage_global_rule_evaluation_orchestration_implementation": true,
+    "ready_for_training": false,
+    "real_training_ready": false,
+    "stage_global_exactly_once_semantics_frozen": true,
+    "stage_global_rule_evaluation_orchestration_contract_frozen": true,
+    "stage_global_rule_evaluation_orchestration_implemented": false,
+    "stage_global_rule_partition_frozen": true,
+    "training_action_implemented": false,
+    "training_orchestrator_integration_implemented": false
+  },
+  "recommended_next_step": "implement_covapie_stage_global_rule_evaluation_orchestration_v1",
+  "result_invariant_validators": {
+    "combined_candidate_verdict": {
+      "aggregation_io_used_false": true,
+      "aggregator_admissible_child_outcomes": [
+        "passed",
+        "blocked",
+        "invalid"
+      ],
+      "exact13_storage_and_field_order": true,
+      "exact_type_and_subclass_rejection": true,
+      "expected_scope_and_membership": true,
+      "failure_code": "STAGE_ORCHESTRATION_AGGREGATOR_RESULT_INVARIANT_INVALID",
+      "normal_outcome_retained_vector_identity_required": true,
+      "passed_blocked_invalid_projection": true,
+      "reconstructability": true,
+      "rejected_aggregator_reason": "COMBINED_ADMISSION_RULE_EVALUATION_INVARIANT_INVALID",
+      "rejected_fail_closed_empty_diagnostics_required": true,
+      "rejected_fail_closed_retained_vector_forbidden": true,
+      "rejected_input_complete_vector_required": true,
+      "rejected_precedes_blocked_and_invalid_projection": true
+    },
+    "unified_rule_evaluation": {
+      "evaluator_io_used_false": true,
+      "exact13_storage_and_field_order": true,
+      "exact_top_level_types": true,
+      "exact_tuple_representations": true,
+      "exact_type_and_subclass_rejection": true,
+      "expected_rule_name_and_adapter_identity": true,
+      "failure_code": "STAGE_ORCHESTRATION_RULE_RESULT_INVARIANT_INVALID",
+      "reconstructability": true,
+      "rejected_is_structurally_valid": true,
+      "schema_and_outcome_projection": true
+    }
+  },
+  "runtime_safety_boundary": {
+    "action_permission_granted": false,
+    "actual_aggregator_called": false,
+    "actual_dispatcher_called": false,
+    "actual_handler_called": false,
+    "authorized_admit_015_training_execution_count": 0,
+    "current_permission": false,
+    "download_action_performed": false,
+    "feature_semantics_audit_still_required": true,
+    "ready_for_training": false,
+    "real_orchestrator_implemented": false,
+    "training_action_performed": false
+  },
+  "safety_audit": {
+    "row_count": 30
+  },
+  "scope_count": 4,
+  "scopes": [
+    {
+      "aggregator_cardinality": "N",
+      "candidate_rule_count": 10,
+      "candidate_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011"
+      ],
+      "dispatcher_cardinality": "1 + 10*N",
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011",
+        "ADMIT_014"
+      ],
+      "scope_id": "download_execution_permission",
+      "scope_order": 1,
+      "stage_global_rule_ids": [
+        "ADMIT_014"
+      ]
+    },
+    {
+      "aggregator_cardinality": "N",
+      "candidate_rule_count": 12,
+      "candidate_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013"
+      ],
+      "dispatcher_cardinality": "1 + 12*N",
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014"
+      ],
+      "scope_id": "post_download_acceptance_permission",
+      "scope_order": 2,
+      "stage_global_rule_ids": [
+        "ADMIT_014"
+      ]
+    },
+    {
+      "aggregator_cardinality": "N",
+      "candidate_rule_count": 13,
+      "candidate_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013"
+      ],
+      "dispatcher_cardinality": "1 + 13*N",
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014"
+      ],
+      "scope_id": "pre_final_split_acceptance_permission",
+      "scope_order": 3,
+      "stage_global_rule_ids": [
+        "ADMIT_014"
+      ]
+    },
+    {
+      "aggregator_cardinality": "N",
+      "candidate_rule_count": 13,
+      "candidate_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013"
+      ],
+      "dispatcher_cardinality": "2 + 13*N",
+      "required_rule_ids": [
+        "ADMIT_001",
+        "ADMIT_002",
+        "ADMIT_003",
+        "ADMIT_004",
+        "ADMIT_005",
+        "ADMIT_006",
+        "ADMIT_007",
+        "ADMIT_008",
+        "ADMIT_009",
+        "ADMIT_010",
+        "ADMIT_011",
+        "ADMIT_012",
+        "ADMIT_013",
+        "ADMIT_014",
+        "ADMIT_015"
+      ],
+      "scope_id": "training_execution_admission_permission",
+      "scope_order": 4,
+      "stage_global_rule_ids": [
+        "ADMIT_014",
+        "ADMIT_015"
+      ]
+    }
+  ],
+  "source_boundary": [
+    {
+      "base_tree_blob": "d133f2a6711e01972069331f9b7570dbb2fae24a",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "8810d4bab34b2c5067b51dedb3edaa4a20e25c82c89576265986285e64f59904",
+      "index_blob": "d133f2a6711e01972069331f9b7570dbb2fae24a",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1.py",
+      "sha256": "8810d4bab34b2c5067b51dedb3edaa4a20e25c82c89576265986285e64f59904",
+      "source_order": 1
+    },
+    {
+      "base_tree_blob": "5b4e7d4c0d532ffd92e8884d371575fb1418389c",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "66ceb15d169e84b1fec1040efde53ad791fadd86bb63becfe5c5421c75acfb43",
+      "index_blob": "5b4e7d4c0d532ffd92e8884d371575fb1418389c",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "scripts/check_covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1.py",
+      "sha256": "66ceb15d169e84b1fec1040efde53ad791fadd86bb63becfe5c5421c75acfb43",
+      "source_order": 2
+    },
+    {
+      "base_tree_blob": "f16b5dd25347159b968c8d74490fa78b9a185b31",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "bc8c5a5fc52b74d9e6f6e9da0b75dd69832b09213a996a4c73913660ab3d87d6",
+      "index_blob": "f16b5dd25347159b968c8d74490fa78b9a185b31",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_combined_candidate_verdict_and_cross_rule_aggregation_implementation_manifest.json",
+      "sha256": "bc8c5a5fc52b74d9e6f6e9da0b75dd69832b09213a996a4c73913660ab3d87d6",
+      "source_order": 3
+    },
+    {
+      "base_tree_blob": "41a1e509559f42f15c75035e6af0a610bd26cad6",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "ae08a579aaeddd933f235bb7f380758eeb96825c7664ea77c3da4840eb474635",
+      "index_blob": "41a1e509559f42f15c75035e6af0a610bd26cad6",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_combined_candidate_verdict_and_cross_rule_aggregation_runtime_contract.csv",
+      "sha256": "ae08a579aaeddd933f235bb7f380758eeb96825c7664ea77c3da4840eb474635",
+      "source_order": 4
+    },
+    {
+      "base_tree_blob": "fe639b52e7e675a9e6e95d7173de7c259cd0da25",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "04342ff96a73990cb5432271652dd384b520b27723066e1e154a15e878b1df19",
+      "index_blob": "fe639b52e7e675a9e6e95d7173de7c259cd0da25",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_cross_rule_aggregation_implementation_truth_matrix.csv",
+      "sha256": "04342ff96a73990cb5432271652dd384b520b27723066e1e154a15e878b1df19",
+      "source_order": 5
+    },
+    {
+      "base_tree_blob": "be76d8c9ab5bed0656e4b36c22f6831119ca35b6",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "1566c9e4915da8009cc34d739d5221d4a12305b79fe858b994592fbd9f1056f0",
+      "index_blob": "be76d8c9ab5bed0656e4b36c22f6831119ca35b6",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_cross_rule_aggregation_implementation_safety_audit.csv",
+      "sha256": "1566c9e4915da8009cc34d739d5221d4a12305b79fe858b994592fbd9f1056f0",
+      "source_order": 6
+    },
+    {
+      "base_tree_blob": "718a56331aba65cb348d63f8a463d52162abbd9d",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "9d8ef1265ff50d45dac3f95b4696a33c510d4272e2208a0cb1f87058d5054dd4",
+      "index_blob": "718a56331aba65cb348d63f8a463d52162abbd9d",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_cross_rule_aggregation_precondition_transition_inventory.csv",
+      "sha256": "9d8ef1265ff50d45dac3f95b4696a33c510d4272e2208a0cb1f87058d5054dd4",
+      "source_order": 7
+    },
+    {
+      "base_tree_blob": "e91dddd5276f37d6dc31456623f853c0f585788c",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+      "index_blob": "e91dddd5276f37d6dc31456623f853c0f585788c",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1/covapie_cross_rule_aggregation_issue_readiness_inventory.csv",
+      "sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+      "source_order": 8
+    },
+    {
+      "base_tree_blob": "5f3c17a80fad6c84bb0a69506260e18bafe2e488",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "1fc5ac24e54d134d3f1f7054dfd2f264a2d76f17f0602bac216bb2e4e7e00bd1",
+      "index_blob": "5f3c17a80fad6c84bb0a69506260e18bafe2e488",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_015.py",
+      "sha256": "1fc5ac24e54d134d3f1f7054dfd2f264a2d76f17f0602bac216bb2e4e7e00bd1",
+      "source_order": 9
+    },
+    {
+      "base_tree_blob": "78b54694a31225f7eb8499e0e618bfc79aa43896",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "0fbd5999977d025a44b4bef854d9edfda5ea0e5ed79a7d5ff7b17cef7b6186d3",
+      "index_blob": "78b54694a31225f7eb8499e0e618bfc79aa43896",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_015_v1/covapie_admit_001_to_015_runtime_manifest.json",
+      "sha256": "0fbd5999977d025a44b4bef854d9edfda5ea0e5ed79a7d5ff7b17cef7b6186d3",
+      "source_order": 10
+    },
+    {
+      "base_tree_blob": "a4c25175b45589fa115da04ae7b570c39ca21962",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "c5f5cfc57155f34ee2435228b3bf53ae8d1f6d81c32e097c43668c0b272fd1a2",
+      "index_blob": "a4c25175b45589fa115da04ae7b570c39ca21962",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "src/covalent_ext/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_014.py",
+      "sha256": "c5f5cfc57155f34ee2435228b3bf53ae8d1f6d81c32e097c43668c0b272fd1a2",
+      "source_order": 11
+    },
+    {
+      "base_tree_blob": "02f9baf39f99d41ae0dfbe384f850a2c5510f3f2",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "bf7bbe3c2158f661c6e71835bf603af76ffbb315d4ef377c9f72da246619ba40",
+      "index_blob": "02f9baf39f99d41ae0dfbe384f850a2c5510f3f2",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_014_v1/covapie_admit_001_to_014_runtime_manifest.json",
+      "sha256": "bf7bbe3c2158f661c6e71835bf603af76ffbb315d4ef377c9f72da246619ba40",
+      "source_order": 12
+    },
+    {
+      "base_tree_blob": "70d745c0090fba15d94330756c94e53bf4880c12",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "3e74d0ac1d7be7bd23cf6d243c9593e01099a6dd55ed5079d27b01c12cb71b55",
+      "index_blob": "70d745c0090fba15d94330756c94e53bf4880c12",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_combined_permission_semantics_contract_v1/covapie_combined_permission_scope_and_rule_membership_contract.csv",
+      "sha256": "3e74d0ac1d7be7bd23cf6d243c9593e01099a6dd55ed5079d27b01c12cb71b55",
+      "source_order": 13
+    },
+    {
+      "base_tree_blob": "e91421b30afa063cf689a81bb36e19563d4ce0a9",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "706fe24fe585cccaf9c4691adda673290e7604f35b6e63ffe2096087b17d1d77",
+      "index_blob": "e91421b30afa063cf689a81bb36e19563d4ce0a9",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_015_mandatory_training_authorization_enforcement_v1/covapie_admit_015_mandatory_training_authorization_enforcement_manifest.json",
+      "sha256": "706fe24fe585cccaf9c4691adda673290e7604f35b6e63ffe2096087b17d1d77",
+      "source_order": 14
+    },
+    {
+      "base_tree_blob": "fa9af90c3e47160d9fa7268b4dc4695263cd9588",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "c52287ac5a435e58a400be0e33e17c1096b7b0d3b2671be0398a6be03e409839",
+      "index_blob": "fa9af90c3e47160d9fa7268b4dc4695263cd9588",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_015_formal_evaluator_interface_preconditions_audit_v1/covapie_admit_015_formal_evaluator_interface_precondition_inventory.csv",
+      "sha256": "c52287ac5a435e58a400be0e33e17c1096b7b0d3b2671be0398a6be03e409839",
+      "source_order": 15
+    },
+    {
+      "base_tree_blob": "7fe859b762afb3b37e0d3712a9eae374026be845",
+      "base_tree_mode": "100644",
+      "filesystem_sha256": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc",
+      "index_blob": "7fe859b762afb3b37e0d3712a9eae374026be845",
+      "index_mode": "100644",
+      "index_stage": 0,
+      "path": "data/derived/covalent_small/covapie_canonical_final_dataset_bulk_download_admission_design_gate_v1/covapie_bulk_download_admission_rule_registry.csv",
+      "sha256": "9b16919a08d166a8daf223c7b6a04078ae10aa00206daefc18f2c5a5060783fc",
+      "source_order": 16
+    }
+  ],
+  "source_boundary_count": 16,
+  "source_boundary_name": "fixed_ordered_exact16_committed_source_boundary",
+  "stage": "covapie_stage_global_rule_evaluation_orchestration_contract_v1",
+  "stage_global_exactly_once": {
+    "call_order": [
+      "ADMIT_014",
+      "ADMIT_015"
+    ],
+    "no_cross_invocation_cache": true,
+    "no_global_mutable_cache": true,
+    "not_per_candidate": true,
+    "per_top_level_invocation": true,
+    "same_result_identity_reused_across_candidates": true
+  },
+  "stage_global_membership": {
+    "download_execution_permission": [
+      "ADMIT_014"
+    ],
+    "post_download_acceptance_permission": [
+      "ADMIT_014"
+    ],
+    "pre_final_split_acceptance_permission": [
+      "ADMIT_014"
+    ],
+    "training_execution_admission_permission": [
+      "ADMIT_014",
+      "ADMIT_015"
+    ]
+  },
+  "stage_global_rule_ids": [
+    "ADMIT_014",
+    "ADMIT_015"
+  ],
+  "stage_global_sentinel": {
+    "candidate_specific_keys_absent": true,
+    "immutable_empty_mapping": true,
+    "name": "STAGE_GLOBAL_CANDIDATE_SENTINEL",
+    "same_identity_within_invocation": true
+  },
+  "stage_result_contract": {
+    "action_permission_granted": false,
+    "action_permission_policy": "always_false_even_when_all_combined_verdicts_passed",
+    "class_name": "StageAdmissionOrchestrationResult",
+    "field_count": 12,
+    "fields": [
+      "schema_version",
+      "scope_id",
+      "candidate_count",
+      "required_rule_ids",
+      "stage_global_rule_ids",
+      "candidate_rule_ids",
+      "stage_global_rule_evaluations",
+      "candidate_results",
+      "dispatcher_call_count",
+      "aggregator_call_count",
+      "orchestration_io_used",
+      "action_permission_granted"
+    ],
+    "frozen": true,
+    "orchestration_io_used": false,
+    "schema_version": "covapie_stage_admission_orchestration_result_v1",
+    "slots": false
+  },
+  "step": "stage-global rule evaluation orchestration design contract v1",
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "support_file_sha256": {
+    "docs/covapie_stage_global_rule_evaluation_orchestration_contract_v1_summary.md": "34130a5d60285a6b76dce161112593cdb299cf6e1bd7eac18e19325787b318f6",
+    "scripts/check_covapie_stage_global_rule_evaluation_orchestration_contract_v1.py": "d8214e16157c22361eeb83e59590b105d92b210a407c05843b169d7ccf4eb85f",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_contract_design_gate.py": "68ddcede8c56c1db51a7a49e2fb5943e12818e0412f6463238865a39a47d4548",
+    "tests/test_covapie_stage_global_rule_evaluation_orchestration_contract_v1.py": "376c067a532bb3b9d353edf8b317443c815bd829df62b92b2a971c07678bf917"
+  },
+  "truth_matrix": {
+    "actual_aggregator_calls": 0,
+    "actual_dispatcher_calls": 0,
+    "actual_handler_calls": 0,
+    "group_count": 50,
+    "group_counts": {
+      "action_permission_always_false": 12,
+      "action_permission_granted_false": 1,
+      "actual_aggregator_calls_zero": 1,
+      "actual_dispatcher_calls_zero": 1,
+      "actual_handler_calls_zero": 1,
+      "admit_014_exactly_once": 1,
+      "admit_015_exactly_once": 1,
+      "admit_015_training_only": 3,
+      "aggregator_cardinality": 12,
+      "authorized_execution_count_zero": 1,
+      "batch_context_type_invalid": 1,
+      "blocked_stage_result_diagnostics_continue": 1,
+      "candidate_aggregator_failure_formula": 12,
+      "candidate_count": 12,
+      "candidate_dispatch_failure_formula": 36,
+      "candidate_inputs_empty": 1,
+      "candidate_inputs_non_tuple": 1,
+      "candidate_order": 12,
+      "candidate_record_non_mapping": 1,
+      "candidate_result_insertion": 1,
+      "candidate_rule_order": 12,
+      "canonical_plan": 12,
+      "combined_result_validator_fail_closed": 7,
+      "combined_result_validator_valid": 12,
+      "combined_validator_branch_isolation_fail_closed": 5,
+      "complete_vector_membership": 12,
+      "current_permission_false": 1,
+      "design_oracle_io_false": 12,
+      "dispatcher_cardinality": 12,
+      "download_context_type_invalid": 1,
+      "error_exception_inheritance": 1,
+      "evaluation_context_type_invalid": 1,
+      "exception_delivery_raise_from_cause": 3,
+      "input_object_identity": 12,
+      "input_subclass_rejected": 1,
+      "invalid_candidate_result_later_candidates_continue": 1,
+      "invalid_scope": 1,
+      "no_normal_result_short_circuit": 1,
+      "prevalidation_error_projection": 10,
+      "rejected_combined_validator_fail_closed": 15,
+      "rejected_exact4_position_validator_valid": 12,
+      "rejected_mixed_precedence_validator_valid": 4,
+      "stage_authorization_context_type_invalid": 1,
+      "stage_global_dispatch_failure_formula": 5,
+      "stage_global_result_identity_reuse": 15,
+      "stage_global_result_insertion": 1,
+      "unified_rejected_structurally_valid": 1,
+      "unified_result_validator_fail_closed": 8,
+      "unified_result_validator_valid": 15,
+      "wrong_input_element_type": 1
+    },
+    "pure_design_oracle": true,
+    "row_count": 307
+  },
+  "v1_action_permission_boundary": {
+    "action_permission_granted": false,
+    "all_combined_verdicts_passed_does_not_grant_action": true,
+    "authorized_admit_015_training_execution_count": 0,
+    "combined_verdict_is_diagnostic_not_execution_authorization": true,
+    "current_permission": false,
+    "download_or_training_triggered": false,
+    "future_action_permission_bridge_requires_separate_contract_and_gate": true,
+    "rules_and_diagnostic_aggregation_are_in_memory_only": true
+  },
+  "validation_precedence": [
+    "scope_exact_str_and_exact4_membership",
+    "candidate_inputs_exact_nonempty_tuple",
+    "all_candidate_input_exact_type_and_invariants",
+    "batch_context_type",
+    "stage_authorization_context_type",
+    "stage_global_dispatch_plan",
+    "all_stage_global_result_exact13_validation",
+    "per_candidate_dispatch_plan",
+    "every_candidate_result_exact13_validation",
+    "complete_vector_assembly",
+    "aggregator_result_exact13_validation",
+    "complete_stage_result_construction"
+  ],
+  "vector_assembly": {
+    "aggregator_exactly_once_per_candidate": true,
+    "candidate_result_identity_inserted": true,
+    "category_group_before_aggregation": false,
+    "copy": false,
+    "ordered_by_scope_required_rule_ids": true,
+    "outcome_sort": false,
+    "rebuild_result": false,
+    "reevaluate": false,
+    "stage_result_identity_inserted": true
+  }
+}
