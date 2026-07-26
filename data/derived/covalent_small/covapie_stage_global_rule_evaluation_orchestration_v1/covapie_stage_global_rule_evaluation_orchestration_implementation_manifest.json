@@ -1,0 +1,101 @@
+{
+  "action_permission_granted": false,
+  "aggregator_runtime_called_by_orchestrator": true,
+  "all_checks_passed": true,
+  "artifact_sha256": {
+    "covapie_stage_global_orchestration_call_trace_matrix.csv": "19304186a4fd0384a8175f5c8e7c48ff01abd60e0fd2d4ef1465c726c828f42b",
+    "covapie_stage_global_orchestration_implementation_safety_audit.csv": "63599d278e8162703e6bef19fe10e4b28eb5fbea1e82f8dc9b0462f4cd31ec2a",
+    "covapie_stage_global_orchestration_implementation_truth_matrix.csv": "936a2339185b9202db40594d832a05911bf53d926da5637f1748ba7c84dfbd76",
+    "covapie_stage_global_orchestration_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_stage_global_orchestration_runtime_contract.csv": "0243fccab6eabb61d9bab34b64ade00cc7ec72778d98b9f6aa00d04e7c8aa3d9"
+  },
+  "base_identity": {
+    "commit": "a677414ffcfe30db463f6bed33d1fbbedb10e398",
+    "parent": "3e55b6e58668ce66ba74df8e0894b15641601e52",
+    "subject": "add CovaPIE stage-global rule evaluation orchestration contract v1",
+    "tree": "0688b000345449fae40e80659367ece799576391"
+  },
+  "call_trace_row_count": 131,
+  "candidate_vector_assembly_runtime_verified": true,
+  "canonical_mask_count": 5,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "current_permission": false,
+  "dispatcher_runtime_called_by_orchestrator": true,
+  "download_action_implemented": false,
+  "effective_open_issues": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "exact10_files": [
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_v1.py",
+    "scripts/check_covapie_stage_global_rule_evaluation_orchestration_v1.py",
+    "tests/test_covapie_stage_global_rule_evaluation_orchestration_v1.py",
+    "docs/covapie_stage_global_rule_evaluation_orchestration_v1_summary.md",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_orchestration_runtime_contract.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_orchestration_call_trace_matrix.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_orchestration_implementation_truth_matrix.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_orchestration_implementation_safety_audit.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_orchestration_issue_readiness_inventory.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_v1/covapie_stage_global_rule_evaluation_orchestration_implementation_manifest.json"
+  ],
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "formal_commit_subject": "add CovaPIE stage-global rule evaluation orchestration runtime v1",
+  "issue_inventory_row_count": 30,
+  "issue_inventory_sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+  "orchestration_error_runtime_verified": true,
+  "precondition_continuity": {
+    "complete_count": 43,
+    "implementation_blocking_count": 2,
+    "incomplete_count": 2,
+    "newly_resolved_count": 0,
+    "remaining_open_precondition_ids": [
+      "PRE_038",
+      "PRE_042"
+    ],
+    "row_count": 45,
+    "supported_but_not_frozen_count": 0,
+    "transition_count": 0
+  },
+  "ready_for_training": false,
+  "recommended_next_step": "run_covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1",
+  "runtime_contract_row_count": 36,
+  "safety_audit_row_count": 19,
+  "stage": "covapie_stage_global_rule_evaluation_orchestration_v1",
+  "stage_global_exactly_once_runtime_verified": true,
+  "stage_global_rule_evaluation_orchestration_contract_frozen": true,
+  "stage_global_rule_evaluation_orchestration_implemented": true,
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "support_file_sha256": {
+    "docs/covapie_stage_global_rule_evaluation_orchestration_v1_summary.md": "5085aef3ba3ee8574296a91bca86617a3b476a1338aa592c971302b123bd9bd5",
+    "scripts/check_covapie_stage_global_rule_evaluation_orchestration_v1.py": "ad9dfb1187667108dc6741d3f15c6b1ea93f829a04447cd0a6f30b91b1f729f0",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_v1.py": "5b5b85eceee3a9aada2dc6ae57c8af4a365dfc74677facdceeda7f0bde8a86bc",
+    "tests/test_covapie_stage_global_rule_evaluation_orchestration_v1.py": "8f4c55c01f0f9412c0411a7337001b88b60cd0105768d873ee2474594b15c7e1"
+  },
+  "training_action_implemented": false,
+  "truth_matrix_group_count": 14,
+  "truth_matrix_row_count": 92,
+  "unknown_atom_feature_policy_resolved": false
+}
