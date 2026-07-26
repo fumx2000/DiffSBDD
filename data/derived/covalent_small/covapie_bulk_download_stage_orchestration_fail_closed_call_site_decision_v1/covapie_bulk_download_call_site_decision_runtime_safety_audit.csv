@@ -1,0 +1,23 @@
+safety_item,expected,observed,evidence,verified
+network,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+provider,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+download_callable,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+download_io,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+raw,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+torch,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+model,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+checkpoint,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+dataloader,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+forward,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+loss,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+backward,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+optimizer,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+scheduler,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+parameter_update,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+checkpoint_write,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+training,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+current_permission,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+action_permission,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+authorized_decision,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+ready_for_download,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
+ready_for_training,false,false,"runtime AST, exact signature, and 77 exact-result probes",true
