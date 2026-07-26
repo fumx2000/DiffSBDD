@@ -1,0 +1,16 @@
+area,item,requirement,verified
+public_api,exercise_hermetic_git_lifecycle_matrix,requires source_repository|workspace_root|base_commit|formal_commit_subject|exact_paths,true
+base_seed,explicit_base_commit,temporary remote refs/heads/main is seeded only from explicit base_commit,true
+base_seed,ambient_fallback,ambient HEAD|main|origin/main never selects BASE,true
+clone_boundary,clone_source,temporary bare remote only,true
+lifecycle,exact4,pre_commit|detached_candidate_post_commit|formal_main_post_commit_unpushed|formal_main_post_push,true
+topology,detached,main at BASE plus one detached candidate worktree,true
+topology,formal,one main worktree for unpushed and pushed states,true
+candidate,commit_contract,parent=BASE|subject=exact|files=exact_paths|modes=100644,true
+source_safety,snapshot_stability,HEAD|index bytes|status bytes|refs|worktree list are byte-identical,true
+cleanup,temporary_resources,bare remote|clones|detached worktree|temporary refs are absent,true
+safety,network,network_used=false,true
+safety,forbidden_suffixes,.pt|.ckpt|.pth|.pkl|.lmdb|.tar|.zip|.tgz|.npz|.tmp|.part rejected,true
+push,formal_main,ordinary local git push only,true
+reuse_policy,future_stages,shared harness required; copied lifecycle Git fixtures forbidden,true
+readiness,training,ready_for_training=false,true

@@ -1,0 +1,80 @@
+{
+  "all_checks_passed": true,
+  "ambient_head_independence_verified": true,
+  "base_identity": {
+    "commit": "fdbc79d8b5b6c9a9c8d85528321082cff73631a4",
+    "parent": "a677414ffcfe30db463f6bed33d1fbbedb10e398",
+    "subject": "add CovaPIE stage-global rule evaluation orchestration runtime v1",
+    "tree": "3cd390e4ff04d86eb6ef22746edeed7e0264070c"
+  },
+  "candidate_changed_files_exact": true,
+  "candidate_modes_100644": true,
+  "candidate_parent_is_explicit_base": true,
+  "candidate_subject_exact": true,
+  "clone_source_is_temporary_bare_remote": true,
+  "contract_row_count": 15,
+  "contract_sha256": "a26731230476c2111b2005fa76f6f5e36fe5fcc3cf52f927ab3e8848323a336d",
+  "detached_candidate_post_commit_verified": true,
+  "detached_worktree_count": 2,
+  "download_used": false,
+  "exact6_files": [
+    "src/covalent_ext/covapie_hermetic_git_lifecycle_harness_v1.py",
+    "tests/test_covapie_hermetic_git_lifecycle_harness_v1.py",
+    "scripts/check_covapie_hermetic_git_lifecycle_harness_v1.py",
+    "docs/covapie_hermetic_git_lifecycle_harness_v1_summary.md",
+    "data/derived/covalent_small/covapie_hermetic_git_lifecycle_harness_v1/covapie_hermetic_git_lifecycle_harness_contract.csv",
+    "data/derived/covalent_small/covapie_hermetic_git_lifecycle_harness_v1/covapie_hermetic_git_lifecycle_harness_manifest.json"
+  ],
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "formal_commit_subject": "add CovaPIE shared hermetic Git lifecycle harness v1",
+  "formal_main_post_commit_unpushed_verified": true,
+  "formal_main_post_push_verified": true,
+  "formal_worktree_count": 1,
+  "future_reuse_policy": {
+    "clone_from_ambient_root_main_or_head_forbidden": true,
+    "copying_lifecycle_git_fixtures_forbidden": true,
+    "expected_lifecycle_must_not_follow_ambient_state": true,
+    "integration_smoke_must_reuse_shared_harness_first": true,
+    "shared_harness_required": true
+  },
+  "hermetic_base_seed_verified": true,
+  "lifecycle_mode_count": 4,
+  "network_used": false,
+  "no_ambient_base_fallback": true,
+  "checkpoint_used": false,
+  "dataloader_used": false,
+  "forward_loss_backward_used": false,
+  "model_used": false,
+  "optimizer_or_parameter_update_used": false,
+  "ordinary_local_push_only": true,
+  "pre_commit_verified": true,
+  "public_api": {
+    "dataclasses_frozen": true,
+    "exact_paths_requires_exact_tuple": true,
+    "function": "exercise_hermetic_git_lifecycle_matrix",
+    "required_parameters": [
+      "source_repository",
+      "workspace_root",
+      "base_commit",
+      "formal_commit_subject",
+      "exact_paths"
+    ]
+  },
+  "ready_for_training": false,
+  "provider_used": false,
+  "raw_data_used": false,
+  "recommended_next_step": "run_covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1",
+  "source_repository_unchanged": true,
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "support_file_sha256": {
+    "docs/covapie_hermetic_git_lifecycle_harness_v1_summary.md": "0792825284303fe5c59020fb1348045bde001c9cf375475d9b48d039914cf899",
+    "scripts/check_covapie_hermetic_git_lifecycle_harness_v1.py": "5f5dece24fb7909202fc3d40bd04bc5d6bc9a29dbe220b717c47bf3cf744decc",
+    "src/covalent_ext/covapie_hermetic_git_lifecycle_harness_v1.py": "99f4c85b685697f734968a0678a1e7915fb04bcf1929c4db30160689e576bbae",
+    "tests/test_covapie_hermetic_git_lifecycle_harness_v1.py": "19345c432082ae84bd2d7172c2ad281351524255b14f35e593b6d5a723aff9b8"
+  },
+  "temporary_resources_cleaned": true,
+  "training_used": false,
+  "unknown_atom_feature_policy_resolved": false
+}
