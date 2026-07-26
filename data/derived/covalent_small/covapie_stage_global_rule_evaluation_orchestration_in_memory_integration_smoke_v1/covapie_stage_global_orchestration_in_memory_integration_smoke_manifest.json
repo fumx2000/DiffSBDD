@@ -1,0 +1,85 @@
+{
+  "action_permission_granted": false,
+  "actual_aggregator_called": true,
+  "actual_dispatcher_called": true,
+  "actual_handler_registry_unchanged": true,
+  "actual_orchestrator_called": true,
+  "base_commit": "92aaa56a590e063b8fb0defda54444dc3bd1e6f8",
+  "candidate_observation_count": 6,
+  "canonical_fixture_semantics_audited": true,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "current_permission": false,
+  "deterministic_repeated_execution_verified": true,
+  "direct_aggregation_parity_verified": true,
+  "direct_dispatch_parity_verified": true,
+  "direct_parity_row_count": 1323,
+  "download_used": false,
+  "effective_open_issues": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "evidence_sha256": {
+    "covapie_orchestration_in_memory_direct_parity_matrix.csv": "b1c52041a2d4bd36ae6b75c03609473e4358e609a307e37ace0273726c1e22be",
+    "covapie_orchestration_in_memory_fixture_provenance.csv": "fa09b551fddff8c5543ca84318b35bb85d94df45d84e1fbb2261f1bf868f30af",
+    "covapie_orchestration_in_memory_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_orchestration_in_memory_safety_audit.csv": "6f857aea628ffb641fa59b170085bffdfc8a1999215d101cb75bf8ea5ac79336",
+    "covapie_orchestration_in_memory_scope_result_matrix.csv": "2c5fba6b704fc6b49798a6eb3dd556c73f50b6a4ee10ec5b6f5ecc57ea7e73a6"
+  },
+  "exact10_files": [
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1.py",
+    "tests/test_covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1.py",
+    "scripts/check_covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1.py",
+    "docs/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1_summary.md",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_fixture_provenance.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_scope_result_matrix.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_direct_parity_matrix.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_safety_audit.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_issue_readiness_inventory.csv",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_stage_global_orchestration_in_memory_integration_smoke_manifest.json"
+  ],
+  "exact4_scopes_verified": true,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "fixture_provenance_row_count": 113,
+  "formal_commit_subject": "add CovaPIE stage-global orchestration in-memory integration smoke v1",
+  "in_memory_integration_smoke_completed": true,
+  "issue_inventory_row_count": 30,
+  "monkeypatch_used_for_success_evidence": false,
+  "network_used": false,
+  "normal_retained_vector_identity_verified": true,
+  "observation_count": 5,
+  "provider_used": false,
+  "ready_for_training": false,
+  "recommended_next_step": "design_covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1",
+  "safety_audit_row_count": 19,
+  "scope_result_row_count": 90,
+  "single_candidate_profile_verified": true,
+  "stage": "covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1",
+  "stage_global_result_identity_reuse_verified": true,
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "training_used": false,
+  "two_candidate_training_profile_verified": true,
+  "unknown_atom_feature_policy_resolved": false
+}
