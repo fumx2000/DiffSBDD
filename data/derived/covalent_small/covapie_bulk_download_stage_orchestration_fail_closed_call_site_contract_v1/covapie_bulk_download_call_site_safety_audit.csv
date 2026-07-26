@@ -1,0 +1,23 @@
+safety_item,expected,observed,evidence,verified
+network,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+provider,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+download_callable,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+download_io,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+raw,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+torch,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+model,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+checkpoint,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+dataloader,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+forward,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+loss,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+backward,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+optimizer,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+scheduler,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+parameter_update,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+checkpoint_write,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+training,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+current_permission,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+action_permission,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+authorized_decision,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+ready_for_download,false,false,AST/source scan plus public-signature inspection and decision invariant,true
+ready_for_training,false,false,AST/source scan plus public-signature inspection and decision invariant,true

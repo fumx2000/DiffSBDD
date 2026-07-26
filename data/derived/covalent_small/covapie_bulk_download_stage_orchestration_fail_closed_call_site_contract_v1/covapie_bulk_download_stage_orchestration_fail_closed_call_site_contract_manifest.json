@@ -1,0 +1,124 @@
+{
+  "action_permission_granted": false,
+  "action_permission_true_currently_invalid": true,
+  "authorized_decision_count": 0,
+  "base_commit": "0963f4dbbd4d16eab8aaac1640d224ec135673ed",
+  "call_site_classifier_design_available": true,
+  "call_site_contract_frozen": true,
+  "candidate_blocked_precedes_permission_not_granted": true,
+  "candidate_diagnostic_projection_verified": true,
+  "candidate_invalid_precedes_blocked": true,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "cross_phase_precedence_verified": true,
+  "current_authorized_branch_reachable": false,
+  "current_permission": false,
+  "download_action_count": 0,
+  "download_callable_accepted": false,
+  "download_callable_invoked": false,
+  "download_used": false,
+  "effective_open_issues": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "error_exact8_full_projection_verified": true,
+  "evidence_sha256": {
+    "covapie_bulk_download_call_site_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_bulk_download_call_site_precedence_truth_matrix.csv": "9d61a53501b7d062f3795742520b7e61bbbe367a18d90973da7cdb5e5b3eeae2",
+    "covapie_bulk_download_call_site_public_api_and_decision_contract.csv": "5aaacc46110634a9f8706dd4469e5d05a9891fe811ee291008c19719dbf27ca3",
+    "covapie_bulk_download_call_site_safety_audit.csv": "b3306dd78314d1b199ea94e9fb5c7f3d6a31c62ac8e036e4409b03da1c4384d8",
+    "covapie_bulk_download_call_site_source_result_invariant_matrix.csv": "ead4def87ad9681795841e10f833fcdf3893036fe2bbf6104e203af299c64017"
+  },
+  "exact10_files": [
+    "src/covalent_ext/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_design_gate.py",
+    "tests/test_covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1.py",
+    "scripts/check_covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1.py",
+    "docs/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1_summary.md",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_call_site_public_api_and_decision_contract.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_call_site_precedence_truth_matrix.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_call_site_source_result_invariant_matrix.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_call_site_safety_audit.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_call_site_issue_readiness_inventory.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1/covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_manifest.json"
+  ],
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "formal_commit_subject": "add CovaPIE bulk-download orchestration fail-closed call-site contract v1",
+  "full_exact15_truth_projection_verified": true,
+  "future_action_permission_bridge_implemented": false,
+  "future_action_permission_bridge_required": true,
+  "invariant_matrix_executable_evidence_verified": true,
+  "issue_inventory_row_count": 30,
+  "malformed_stage_result_fail_closed": true,
+  "network_used": false,
+  "orchestration_error_fail_closed": true,
+  "precondition_continuity": {
+    "complete_count": 43,
+    "implementation_blocking_count": 2,
+    "incomplete_count": 2,
+    "remaining_open_precondition_ids": [
+      "PRE_038",
+      "PRE_042"
+    ],
+    "row_count": 45,
+    "supported_but_not_frozen_count": 0,
+    "transition_count": 0
+  },
+  "provider_used": false,
+  "public_result_contract_row_count": 38,
+  "ready_for_download": false,
+  "ready_for_training": false,
+  "real_call_site_implemented": false,
+  "recommended_next_step": "implement_covapie_bulk_download_stage_orchestration_fail_closed_call_site_decision_v1",
+  "safety_audit_row_count": 22,
+  "source_boundary_sha256": {
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_orchestration_in_memory_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "data/derived/covalent_small/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1/covapie_stage_global_orchestration_in_memory_integration_smoke_manifest.json": "691d1dd23e72c74ebc112ef3141c314dd31999422d4cab4ef0cb25a8063d5ea7",
+    "src/covalent_ext/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1.py": "8810d4bab34b2c5067b51dedb3edaa4a20e25c82c89576265986285e64f59904",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_contract_design_gate.py": "68ddcede8c56c1db51a7a49e2fb5943e12818e0412f6463238865a39a47d4548",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1.py": "e4a17a0250d9b229daa4e23cc9874d0cd9126ff18daea55492af0819bace8db8",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_v1.py": "5b5b85eceee3a9aada2dc6ae57c8af4a365dfc74677facdceeda7f0bde8a86bc"
+  },
+  "source_result_invariant_row_count": 31,
+  "stage": "covapie_bulk_download_stage_orchestration_fail_closed_call_site_contract_v1",
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "truth_group_count": 11,
+  "truth_group_counts": {
+    "candidate_precedence": 12,
+    "cross_phase_precedence": 9,
+    "current_real_path": 1,
+    "error_exact8_codes": 8,
+    "error_invariant": 9,
+    "identity": 5,
+    "input_cardinality": 4,
+    "precedence": 1,
+    "scope": 4,
+    "stage_result_invariant": 20,
+    "type": 4
+  },
+  "truth_row_count": 77,
+  "unknown_atom_feature_policy": "UNKNOWN_ATOM_FEATURE_POLICY",
+  "unknown_atom_feature_policy_resolved": false,
+  "wrong_scope_fail_closed": true
+}
