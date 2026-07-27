@@ -1,0 +1,106 @@
+{
+  "action_permission_bridge_in_memory_integration_smoke_completed": true,
+  "action_permission_granted": false,
+  "action_permission_granted_count": 0,
+  "actual_bridge_runtime_called": true,
+  "actual_call_site_runtime_called": true,
+  "actual_orchestrator_called": true,
+  "base_commit": "beb42c497d3f0e47e009b2dc84aac929938824e5",
+  "bridge_io_count": 0,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "current_blocked_actual_chain_verified": true,
+  "current_permission": false,
+  "download_action_count": 0,
+  "download_callable_accepted": false,
+  "download_used": false,
+  "effective_open_issues": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "evidence_sha256": {
+    "covapie_action_permission_bridge_actual_chain_exact19_matrix.csv": "a8999622c210afd7016d3dd58c9565122fc575729d7be8c4ff7abad733c2cd53",
+    "covapie_action_permission_bridge_in_memory_fixture_provenance.csv": "7607f9e2bacced30855670e6ffbc5196c601b1c8c649b31edd8c92ee02d0d97a",
+    "covapie_action_permission_bridge_in_memory_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_action_permission_bridge_in_memory_safety_audit.csv": "493a2e6c33ab6ee78be74be15dc5f4b0fbf08f8e2776c9030e68dcb99acc9ee5",
+    "covapie_action_permission_bridge_runtime_identity_matrix.csv": "44e176d899eed711fbc0b8c786e16264728c61189939373524141da17c5225a8"
+  },
+  "exact10_files": [
+    "src/covalent_ext/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1.py",
+    "tests/test_covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1.py",
+    "scripts/check_covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1.py",
+    "docs/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1_summary.md",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_action_permission_bridge_in_memory_fixture_provenance.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_action_permission_bridge_actual_chain_exact19_matrix.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_action_permission_bridge_runtime_identity_matrix.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_action_permission_bridge_in_memory_safety_audit.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_action_permission_bridge_in_memory_issue_readiness_inventory.csv",
+    "data/derived/covalent_small/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1/covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_manifest.json"
+  ],
+  "exact19_matrix_row_count": 38,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "fixture_provenance_row_count": 2,
+  "formal_commit_subject": "add CovaPIE bulk-download orchestration action-permission bridge integration smoke v1",
+  "full_exact19_actual_chain_verified": true,
+  "future_eligible_actual_chain_verified": true,
+  "issue_inventory_data_row_count": 30,
+  "monkeypatch_used_for_success_evidence": false,
+  "network_used": false,
+  "observation_count": 2,
+  "permission_transition_attempted": false,
+  "permission_transition_callable_accepted": false,
+  "permission_transition_completed": false,
+  "project": "CovaPIE",
+  "provider_used": false,
+  "public_observation_field_count": 15,
+  "public_report_field_count": 15,
+  "public_smoke_parameter_count": 0,
+  "ready_for_download": false,
+  "ready_for_training": false,
+  "recommended_next_step": "review_covapie_post_admission_control_plane_completion_and_select_next_training_preparation_blocker_v1",
+  "recommended_next_step_adds_permission_layer": false,
+  "recommended_next_step_selection_options": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "runtime_identities_unchanged": true,
+  "runtime_identity_row_count": 7,
+  "safety_row_count": 23,
+  "source_boundary_sha256": {
+    "src/covalent_ext/covapie_bulk_download_admission_combined_candidate_verdict_and_cross_rule_aggregation_v1.py": "8810d4bab34b2c5067b51dedb3edaa4a20e25c82c89576265986285e64f59904",
+    "src/covalent_ext/covapie_bulk_download_admission_unified_dispatch_runtime_with_admit_001_to_015.py": "1fc5ac24e54d134d3f1f7054dfd2f264a2d76f17f0602bac216bb2e4e7e00bd1",
+    "src/covalent_ext/covapie_bulk_download_stage_orchestration_action_permission_bridge_contract_design_gate.py": "8cebc0a4016f11ad93373103f852ea4a22b7f78336295a7b9699ef72af69a368",
+    "src/covalent_ext/covapie_bulk_download_stage_orchestration_action_permission_bridge_v1.py": "864ec156650d8aa4b13b5d78fef13ec98461988f3bc4833215410a9e96141981",
+    "src/covalent_ext/covapie_bulk_download_stage_orchestration_fail_closed_call_site_decision_v1.py": "dc51597773bd0d6d98c7c299e5bf0c5889396a865120f692724653fc4b8e4352",
+    "src/covalent_ext/covapie_hermetic_git_lifecycle_harness_v1.py": "99f4c85b685697f734968a0678a1e7915fb04bcf1929c4db30160689e576bbae",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_in_memory_integration_smoke_v1.py": "e4a17a0250d9b229daa4e23cc9874d0cd9126ff18daea55492af0819bace8db8",
+    "src/covalent_ext/covapie_stage_global_rule_evaluation_orchestration_v1.py": "5b5b85eceee3a9aada2dc6ae57c8af4a365dfc74677facdceeda7f0bde8a86bc"
+  },
+  "stage": "covapie_bulk_download_stage_orchestration_action_permission_bridge_in_memory_integration_smoke_v1",
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "training_used": false,
+  "transition_eligible_count": 1,
+  "unknown_atom_feature_policy": "UNKNOWN_ATOM_FEATURE_POLICY"
+}
