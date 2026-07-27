@@ -1,0 +1,33 @@
+failure_case,expected_outcome,observed_outcome,unknown_atom_policy_contract_resolved,feature_semantics_known,ready_for_tensor_label_loss_mask_contract_design,ready_for_tensorization,ready_for_model_integration,ready_for_training,unknown_issue_effective_status,fails_closed,verified
+predecessor SHA drift,invalid,invalid,false,false,false,false,false,false,open,true,true
+predecessor audit not completed,invalid,invalid,false,false,false,false,false,false,open,true,true
+predecessor open issue set not exact,invalid,invalid,false,false,false,false,false,false,open,true,true
+atom table count not 22,invalid,invalid,false,false,false,false,false,false,open,true,true
+atom disposition count not 2870,invalid,invalid,false,false,false,false,false,false,open,true,true
+duplicate source atom identity,invalid,invalid,false,false,false,false,false,false,open,true,true
+missing type_symbol accepted,invalid,invalid,false,false,false,false,false,false,open,true,true
+atom-name inference attempted,invalid,invalid,false,false,false,false,false,false,open,true,true
+supported heavy atom excluded,invalid,invalid,false,false,false,false,false,false,open,true,true
+explicit H retained,invalid,invalid,false,false,false,false,false,false,open,true,true
+explicit H mapped to zero vector,invalid,invalid,false,false,false,false,false,false,open,true,true
+explicit H mapped to others,invalid,invalid,false,false,false,false,false,false,open,true,true
+unsupported non-H retained,invalid,invalid,false,false,false,false,false,false,open,true,true
+unsupported non-H mapped to zero vector,invalid,invalid,false,false,false,false,false,false,open,true,true
+unsupported non-H mapped to others,invalid,invalid,false,false,false,false,false,false,open,true,true
+checkpoint width changed to 11,invalid,invalid,false,false,false,false,false,false,open,true,true
+checkpoint channel order drift,invalid,invalid,false,false,false,false,false,false,open,true,true
+filtering applied after centering,invalid,invalid,false,false,false,false,false,false,open,true,true
+projected index not contiguous,invalid,invalid,false,false,false,false,false,false,open,true,true
+projected source order changed,invalid,invalid,false,false,false,false,false,false,open,true,true
+duplicate projected index,invalid,invalid,false,false,false,false,false,false,open,true,true
+excluded row assigned projected index,invalid,invalid,false,false,false,false,false,false,open,true,true
+retained row missing projected index,invalid,invalid,false,false,false,false,false,false,open,true,true
+residue pair atom excluded,invalid,invalid,false,false,false,false,false,false,open,true,true
+ligand pair atom excluded,invalid,invalid,false,false,false,false,false,false,open,true,true
+residue pair remap mismatch,invalid,invalid,false,false,false,false,false,false,open,true,true
+ligand pair remap mismatch,invalid,invalid,false,false,false,false,false,false,open,true,true
+sample empty after projection,invalid,invalid,false,false,false,false,false,false,open,true,true
+B3 mask omitted,invalid,invalid,false,false,false,false,false,false,open,true,true
+unknown issue resolved before complete projection,invalid,invalid,false,false,false,false,false,false,open,true,true
+ready-for-tensorization prematurely true,invalid,invalid,false,false,false,false,false,false,open,true,true
+model/dataloader/forward/loss/checkpoint/training boundary crossed,invalid,invalid,false,false,false,false,false,false,open,true,true
