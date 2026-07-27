@@ -1,0 +1,84 @@
+{
+  "action_permission_granted": false,
+  "actual_decision_runtime_called": true,
+  "actual_error_chain_verified": true,
+  "actual_error_path_count": 1,
+  "actual_orchestration_error_code": "STAGE_ORCHESTRATION_SCOPE_ID_INVALID",
+  "actual_orchestration_error_consumed": true,
+  "actual_orchestrator_called": true,
+  "actual_result_chain_verified": true,
+  "actual_result_path_count": 5,
+  "authorized_decision_count": 0,
+  "base_commit": "6e5f3b02183086fea4bb4f35fd03a5c5def7ed8e",
+  "call_site_io_count": 0,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "current_authorized_branch_reachable": false,
+  "current_permission": false,
+  "decision_in_memory_integration_smoke_completed": true,
+  "download_action_count": 0,
+  "download_callable_accepted": false,
+  "download_callable_invoked": false,
+  "download_used": false,
+  "effective_open_issues": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "error_exact15_row_count": 15,
+  "evidence_sha256": {
+    "covapie_call_site_decision_actual_chain_result_matrix.csv": "6467edc23590fa08a86b266ec19dcce577d7c149b2755ea76477ad61c27d1a4c",
+    "covapie_call_site_decision_actual_error_chain_matrix.csv": "b864696cebd47db48e63df12ddf8a6630ea0ed04354cfb630139b37619b0111e",
+    "covapie_call_site_decision_in_memory_fixture_provenance.csv": "936ee532012907f44aea54ebf73b3a44222872b56db8931ddc2f7d3904712942",
+    "covapie_call_site_decision_in_memory_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_call_site_decision_in_memory_safety_audit.csv": "53e04523c7f79059aabba7e7e49e543091a55d28e976f9f5a0b523663ea716c0"
+  },
+  "exact4_result_scopes_verified": true,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "fixture_provenance_row_count": 6,
+  "full_exact15_actual_chain_verified": true,
+  "future_action_permission_bridge_implemented": false,
+  "future_action_permission_bridge_required": true,
+  "issue_inventory_data_row_count": 30,
+  "monkeypatch_used_for_success_evidence": false,
+  "network_used": false,
+  "observation_count": 6,
+  "project": "CovaPIE",
+  "provider_used": false,
+  "public_observation_field_count": 17,
+  "public_report_field_count": 16,
+  "public_smoke_parameter_count": 0,
+  "ready_for_download": false,
+  "ready_for_training": false,
+  "recommended_next_step": "design_covapie_bulk_download_stage_orchestration_action_permission_bridge_contract_v1",
+  "recommended_next_step_executes_real_download": false,
+  "result_exact15_row_count": 75,
+  "runtime_callable_identities_unchanged": true,
+  "safety_row_count": 22,
+  "stage": "covapie_bulk_download_stage_orchestration_fail_closed_call_site_decision_in_memory_integration_smoke_v1",
+  "step12d_warning": "Step12D was a smoke legality check, not a final training-feature contract",
+  "two_candidate_wrong_scope_verified": true,
+  "unknown_atom_feature_policy": "UNKNOWN_ATOM_FEATURE_POLICY",
+  "unknown_atom_feature_policy_resolved": false
+}
