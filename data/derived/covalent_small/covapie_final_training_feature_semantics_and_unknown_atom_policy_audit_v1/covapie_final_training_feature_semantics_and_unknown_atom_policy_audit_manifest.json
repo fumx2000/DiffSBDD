@@ -1,0 +1,133 @@
+{
+  "all_current_model_input_semantics_frozen": true,
+  "ambiguous_semantics_count": 0,
+  "atom_coverage": [
+    {
+      "atom_row_count": 2531,
+      "domain": "protein_or_pocket_atom",
+      "missing_feature_value_count": 0,
+      "observed_explicit_element_or_token_count": 2531,
+      "observed_vocabulary": {
+        "C": 1323,
+        "H": 329,
+        "N": 405,
+        "O": 442,
+        "S": 32
+      },
+      "policy_disposition": "unknown_atom_policy_unresolved",
+      "source_table_count": 11,
+      "supported_row_count": 2202,
+      "unknown_or_unsupported_row_count": 329,
+      "verified": true
+    },
+    {
+      "atom_row_count": 339,
+      "domain": "ligand_atom",
+      "missing_feature_value_count": 0,
+      "observed_explicit_element_or_token_count": 339,
+      "observed_vocabulary": {
+        "C": 227,
+        "F": 1,
+        "H": 16,
+        "N": 34,
+        "O": 59,
+        "P": 1,
+        "S": 1
+      },
+      "policy_disposition": "unknown_atom_policy_unresolved",
+      "source_table_count": 11,
+      "supported_row_count": 323,
+      "unknown_or_unsupported_row_count": 16,
+      "verified": true
+    }
+  ],
+  "audit_outcome": "audited_with_blockers",
+  "base_commit": "66d488ba829dad29d17e8a0ec07fa9798bae90b2",
+  "canonical_mask_count": 5,
+  "canonical_masks": [
+    {
+      "display_alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "display_alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "display_alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "display_alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "display_alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "checkpoint_access": false,
+  "checkpoint_compatibility_preserved": true,
+  "contradictory_semantics_count": 0,
+  "current_model_input_feature_count": 10,
+  "dataloader_changed": false,
+  "deterministically_derived_semantics_count": 7,
+  "discovered_feature_count": 30,
+  "download_used": false,
+  "effective_open_issue_count": 1,
+  "effective_open_issues": [
+    "UNKNOWN_ATOM_FEATURE_POLICY_UNRESOLVED"
+  ],
+  "evidence_sha256": {
+    "covapie_feature_semantics_failure_matrix.csv": "047853131916a141dd016d10e57cb0e6b002a6039b960af890cd32a45b316636",
+    "covapie_feature_semantics_issue_readiness_inventory.csv": "38469f4d1fff515b47d47463bd085844e64109aed3875723710776e4f36c7128",
+    "covapie_training_feature_semantics_registry.csv": "820e0abaa8dad761d66950ee85b3ba0f0078448ca33180c29c9238572a91995f",
+    "covapie_training_feature_semantics_source_inventory.csv": "7144f31871764cd2d7a87667d62dd8a0b2759f7b72ae3141998d76405e327e4f",
+    "covapie_unknown_atom_policy_audit_matrix.csv": "f6aeeb1528563429652a4ab8441d785547b0a44385c628448c04e18a99b4c5bd"
+  },
+  "explicit_semantics_count": 16,
+  "failure_matrix_all_cases_verified": true,
+  "failure_matrix_row_count": 34,
+  "feature_registry_row_count": 30,
+  "feature_semantics_audit_completed": true,
+  "feature_semantics_known": false,
+  "forward_changed": false,
+  "future_not_integrated_feature_count": 6,
+  "integrated_covalent_model_module_count": 0,
+  "issue_inventory_row_count": 32,
+  "ligand_unknown_atom_policy": "unknown_atom_policy_unresolved",
+  "ligand_unknown_atom_policy_resolved": false,
+  "loss_changed": false,
+  "metadata_only_feature_count": 10,
+  "missing_semantics_count": 0,
+  "model_changed": false,
+  "network_used": false,
+  "planned_covalent_model_module_count": 5,
+  "planned_covalent_model_modules": [
+    "target residue/atom condition adapter",
+    "role/mask/anchor-distance encoding",
+    "ligand atom \u2194 residue atom pair prediction head",
+    "covalent geometry prediction head",
+    "pair contrastive loss"
+  ],
+  "protein_unknown_atom_policy": "unknown_atom_policy_unresolved",
+  "protein_unknown_atom_policy_resolved": false,
+  "provider_used": false,
+  "raw_read": false,
+  "raw_write": false,
+  "ready_for_model_integration": false,
+  "ready_for_tensor_label_loss_mask_contract_design": false,
+  "ready_for_tensorization": false,
+  "ready_for_training": false,
+  "recommended_next_step": "resolve_covapie_training_feature_semantics_and_unknown_atom_policy_gaps_v1",
+  "schema_version": "covapie_final_training_feature_semantics_and_unknown_atom_policy_audit_v1",
+  "source_inventory_row_count": 73,
+  "stage": "covapie_final_training_feature_semantics_and_unknown_atom_policy_audit_v1",
+  "step12d_final_feature_semantics_contract": false,
+  "step12d_smoke_legality_verified": true,
+  "step12d_training_readiness_authority": false,
+  "tensorization_used": false,
+  "training_used": false,
+  "unknown_atom_feature_policy_resolved": false,
+  "unknown_policy_matrix_row_count": 40
+}

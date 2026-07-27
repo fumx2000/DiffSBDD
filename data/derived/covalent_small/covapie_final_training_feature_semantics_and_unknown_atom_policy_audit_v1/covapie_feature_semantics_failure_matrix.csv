@@ -1,0 +1,35 @@
+failure_case,expected_outcome,observed_outcome,feature_semantics_known,unknown_atom_feature_policy_resolved,ready_for_tensor_label_loss_mask_contract_design,ready_for_tensorization,ready_for_model_integration,ready_for_training,fails_closed,verified
+predecessor SHA drift,invalid,invalid,False,False,False,False,False,False,True,True
+predecessor not feature-audit-ready,invalid,invalid,False,False,False,False,False,False,True,True
+existing effective-open issue unexpectedly present,invalid,invalid,False,False,False,False,False,False,True,True
+feature registry empty,invalid,invalid,False,False,False,False,False,False,True,True
+duplicate feature ID,invalid,invalid,False,False,False,False,False,False,True,True
+current model input missing producer,invalid,invalid,False,False,False,False,False,False,True,True
+current model input missing consumer,invalid,invalid,False,False,False,False,False,False,True,True
+current model input width missing,invalid,invalid,False,False,False,False,False,False,True,True
+current model input dtype missing,invalid,invalid,False,False,False,False,False,False,True,True
+current model input vocabulary missing,invalid,invalid,False,False,False,False,False,False,True,True
+coordinate unit missing,invalid,invalid,False,False,False,False,False,False,True,True
+coordinate frame missing,invalid,invalid,False,False,False,False,False,False,True,True
+normalization semantics missing,invalid,invalid,False,False,False,False,False,False,True,True
+unknown protein policy unresolved but marked resolved,invalid,invalid,False,False,False,False,False,False,True,True
+unknown ligand policy unresolved but marked resolved,invalid,invalid,False,False,False,False,False,False,True,True
+unsupported atom silently mapped to carbon,invalid,invalid,False,False,False,False,False,False,True,True
+unsupported atom silently mapped to zero vector,invalid,invalid,False,False,False,False,False,False,True,True
+unsupported atom silently mapped to first index,invalid,invalid,False,False,False,False,False,False,True,True
+unknown channel added with checkpoint width change,invalid,invalid,False,False,False,False,False,False,True,True
+metadata-only feature marked current model input,invalid,invalid,False,False,False,False,False,False,True,True
+future planned feature marked current model input,invalid,invalid,False,False,False,False,False,False,True,True
+B3 mask omitted,invalid,invalid,False,False,False,False,False,False,True,True
+short alias used as sole mask semantics,invalid,invalid,False,False,False,False,False,False,True,True
+Step12D smoke treated as final contract,invalid,invalid,False,False,False,False,False,False,True,True
+ambiguous feature marked semantics-known,invalid,invalid,False,False,False,False,False,False,True,True
+missing feature marked semantics-known,invalid,invalid,False,False,False,False,False,False,True,True
+contradictory feature marked semantics-known,invalid,invalid,False,False,False,False,False,False,True,True
+ready-for-tensorization prematurely true,invalid,invalid,False,False,False,False,False,False,True,True
+ready-for-model-integration prematurely true,invalid,invalid,False,False,False,False,False,False,True,True
+ready-for-training prematurely true,invalid,invalid,False,False,False,False,False,False,True,True
+model modification attempted,invalid,invalid,False,False,False,False,False,False,True,True
+dataloader modification attempted,invalid,invalid,False,False,False,False,False,False,True,True
+checkpoint access attempted,invalid,invalid,False,False,False,False,False,False,True,True
+training attempted,invalid,invalid,False,False,False,False,False,False,True,True
