@@ -1,0 +1,18 @@
+case_id,input_condition,expected_disposition,expected_reason,resolution_allowed,quarantine_allowed,contradiction_resolution_required,provider_row_mutation_allowed,fails_closed,verified
+POLICY_001,explicit present state + nonempty consistent code,explicitly_resolvable_from_committed_evidence,committed evidence explicitly and uniquely supports the state/code pair,True,False,False,False,True,True
+POLICY_002,explicit absent state + empty code,explicitly_resolvable_from_committed_evidence,committed evidence explicitly and uniquely supports the state/code pair,True,False,False,False,True,True
+POLICY_003,unknown state + empty code,quarantine_required_pending_provider_reexport,insertion-code provenance state is unknown; new raw/provider evidence is required to resolve,False,True,False,False,True,True
+POLICY_004,missing state,quarantine_required_pending_provider_reexport,missing insertion-code state requires provider re-export or curated explicit evidence,False,True,False,False,True,True
+POLICY_005,missing code field,quarantine_required_pending_provider_reexport,missing insertion-code value field requires provider re-export or curated explicit evidence,False,True,False,False,True,True
+POLICY_006,present state + empty code,contradictory_or_invalid_committed_evidence,state/code combination contradicts the committed ADMIT_004 contract,False,False,True,False,True,True
+POLICY_007,absent state + nonempty code,contradictory_or_invalid_committed_evidence,state/code combination contradicts the committed ADMIT_004 contract,False,False,True,False,True,True
+POLICY_008,unsupported state,contradictory_or_invalid_committed_evidence,state/code combination contradicts the committed ADMIT_004 contract,False,False,True,False,True,True
+POLICY_009,duplicate identical evidence,quarantine_required_pending_provider_reexport,residue identity is not unique,False,True,False,False,True,True
+POLICY_010,duplicate conflicting evidence,contradictory_or_invalid_committed_evidence,duplicate identity has conflicting locator evidence,False,False,True,False,True,True
+POLICY_011,auth/label consistent locator,explicitly_resolvable_from_committed_evidence,committed evidence explicitly and uniquely supports the state/code pair,True,False,False,False,True,True
+POLICY_012,auth/label conflicting locator,quarantine_required_pending_provider_reexport,auth/label locator evidence is conflicting,False,True,False,False,True,True
+POLICY_013,provider provenance missing,quarantine_required_pending_provider_reexport,provider provenance is incomplete,False,True,False,False,True,True
+POLICY_014,raw required,quarantine_required_pending_provider_reexport,new raw/provider evidence is required to resolve,False,True,False,False,True,True
+POLICY_015,heuristic-only resolution,quarantine_required_pending_provider_reexport,resolution would require forbidden heuristic inference,False,True,False,False,True,True
+POLICY_016,ADMIT_004 blocked reproducibly,quarantine_required_pending_provider_reexport,insertion-code provenance state is unknown,False,True,False,False,True,True
+POLICY_017,ADMIT_004 outcome mismatch,contradictory_or_invalid_committed_evidence,provider row and reproduced ADMIT_004 evaluation disagree,False,False,True,False,True,True

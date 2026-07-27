@@ -1,0 +1,102 @@
+{
+  "admit_004_contract_verified": true,
+  "admit_004_insertion_code_state_vocabulary": [
+    "absent",
+    "present",
+    "unknown"
+  ],
+  "all_rows_classified": true,
+  "atom_pair_issue_resolved": true,
+  "atom_pair_ready_for_downstream_contracts": true,
+  "audit_outcome": "audited_policy_frozen",
+  "base_commit": "e5563ed50db6e56cbdfb6cc629e5eb4fe9137edf",
+  "blocking_row_audit_matrix_row_count": 11,
+  "blocking_row_count": 11,
+  "canonical_masks": [
+    {
+      "display_alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "display_alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "display_alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "display_alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "display_alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "checkpoint_access": false,
+  "contradictory_or_invalid_count": 0,
+  "dataloader_changed": false,
+  "deleted_issue_count": 0,
+  "download_used": false,
+  "effective_open_issue_count": 1,
+  "effective_open_issues": [
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "evidence_sha256": {
+    "covapie_real_provider_export_blocking_row_audit_matrix.csv": "0d2299d4d95dcbf328407063269ca73e92a9501fa24ef2d477b45971085e70fa",
+    "covapie_real_provider_export_blocking_row_source_inventory.csv": "b8c5a16c05967f70c388c96bbaca5459d3799f402d6c7648e5995ae876ead69d",
+    "covapie_real_provider_export_insertion_code_evidence_sufficiency_matrix.csv": "8cc17d04453f05043ef7f94b0f155a3ee86c4222cccca0697a8535c74d85d633",
+    "covapie_real_provider_export_issue_readiness_inventory.csv": "09ee8271157343c4fd39c2edd73e38d6f0e896b8da247d8e3a8588c0b1cd0afa",
+    "covapie_real_provider_export_resolution_or_quarantine_policy_matrix.csv": "cde3b64e70401ab9bb9f13f9eedeb2ddf28f29f3de7855fa77c618872a14f4d2"
+  },
+  "evidence_sufficiency_matrix_row_count": 165,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "forward_changed": false,
+  "issue_inventory_row_count": 30,
+  "issue_status_changed": false,
+  "loss_changed": false,
+  "missing_code_field_disposition": "quarantine_required_pending_provider_reexport",
+  "missing_state_disposition": "quarantine_required_pending_provider_reexport",
+  "model_changed": false,
+  "negative_pair_construction_defined": false,
+  "negative_sampling_defined": false,
+  "network_used": false,
+  "new_issue_count": 0,
+  "pair_contrastive_loss_implemented": false,
+  "pair_head_implemented": false,
+  "pair_loss_mask_defined": false,
+  "pair_tensor_materialized": false,
+  "pair_tensor_shape_defined": false,
+  "policy_matrix_classifier_consistency_verified": true,
+  "policy_matrix_executable": true,
+  "policy_matrix_row_count": 17,
+  "provider_issue_resolved": false,
+  "provider_reexport_performed": false,
+  "provider_rows_mutated": false,
+  "provider_used": false,
+  "quarantine_materialized": false,
+  "quarantine_required_count": 11,
+  "raw_read": false,
+  "raw_write": false,
+  "ready_for_feature_semantics_audit": false,
+  "ready_for_quarantine_materialization": true,
+  "ready_for_resolution_materialization": false,
+  "ready_for_tensorization": false,
+  "ready_for_training": false,
+  "real_provider_export_blocking_rows_policy_audit_completed": true,
+  "recommended_next_step": "materialize_covapie_real_provider_export_blocking_row_quarantine_v1",
+  "resolution_materialized": false,
+  "resolution_or_quarantine_policy_frozen": true,
+  "resolvable_from_committed_evidence_count": 0,
+  "resolved_issue_count": 0,
+  "schema_version": "covapie_real_provider_export_blocking_rows_policy_audit_v1",
+  "source_inventory_row_count": 28,
+  "stage": "covapie_real_provider_export_blocking_rows_resolution_or_quarantine_policy_audit_v1",
+  "training_used": false,
+  "unique_blocking_row_count": 11,
+  "unknown_atom_feature_policy_resolved": false,
+  "unsupported_state_disposition": "contradictory_or_invalid_committed_evidence"
+}
