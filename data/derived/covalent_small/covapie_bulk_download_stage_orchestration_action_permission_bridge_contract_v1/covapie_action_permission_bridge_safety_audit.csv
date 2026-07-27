@@ -1,0 +1,24 @@
+safety_area,expected,observed,evidence,verified
+network,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+provider,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+download_callable,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+download_io,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+raw,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+torch,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+model,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+checkpoint,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+dataloader,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+forward,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+loss,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+backward,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+optimizer,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+scheduler,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+parameter_update,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+checkpoint_write,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+training,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+current_permission,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+action_permission,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+download_action,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+bridge_io,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+ready_for_download,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
+ready_for_training,false,false,AST/source scan; public signature; truth cases; zero-action invariants,true
