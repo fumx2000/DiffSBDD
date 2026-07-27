@@ -1,0 +1,10 @@
+dependency_order,dependency_step,prerequisite,implemented_current_review,ordering_reason,verified
+1,audit current covalent_bond_atom_pair semantics and all consumers,post-admission control-plane closure,false,observe current semantics and consumers before defining encoding,true
+2,freeze covalent bond atom-pair encoding contract,dependency step 1,false,freeze encoding only after the audit,true
+3,validate encoding against existing canonical/real evidence,dependency step 2,false,cross-check the frozen contract against committed evidence,true
+4,resolve or quarantine real-provider export blocking rows under explicit policy,dependency step 3,false,complete real-provider coverage under an explicit fail-closed policy,true
+5,perform feature-semantics audit,dependency step 4,false,audit features only after label and provider-data semantics are ordered,true
+6,freeze dataloader/tensor/label/loss-mask contracts,dependency step 5,false,freeze tensors and masks after feature semantics,true
+7,begin first checkpoint-compatible auxiliary-module integration,dependency step 6,false,preserve checkpoint compatibility for the first auxiliary increment,true
+8,run no-parameter-update forward/loss smoke,dependency step 7,false,prove forward/loss legality without parameter updates,true
+9,only then prepare formal training,dependency step 8,false,formal training remains last and separately gated,true
