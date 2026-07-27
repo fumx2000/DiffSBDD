@@ -1,0 +1,95 @@
+{
+  "atom_pair_issue_resolved": true,
+  "atom_pair_ready_for_downstream_contracts": true,
+  "atom_table_mapping_row_count": 22,
+  "base_commit": "7f432cecec8a3abed2339e4dd60dfa239cd2cbe7",
+  "canonical_masks": [
+    {
+      "display_alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "display_alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "display_alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "display_alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "display_alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "canonical_record_valid_count": 11,
+  "canonical_record_validation_row_count": 11,
+  "checkpoint_access": false,
+  "current_canonical_record_count": 11,
+  "dataloader_changed": false,
+  "deleted_issue_count": 0,
+  "distance_used_for_mapping_selection": false,
+  "download_used": false,
+  "effective_open_issue_count": 1,
+  "effective_open_issues": [
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "encoding_contract_validation_completed": true,
+  "evidence_sha256": {
+    "covapie_atom_pair_atom_table_mapping_validation_matrix.csv": "9f26b25ed11d186a02a1f859de10a105605ce3af13805ac5a4be1ad73199df45",
+    "covapie_atom_pair_canonical_record_validation_matrix.csv": "c756e6ce601bad1d10cfba5cac6129f9f688d00451cc1d805edff938ccee6ca0",
+    "covapie_atom_pair_contract_validation_failure_matrix.csv": "107ba4d67c1a5444e667fb60ed68eaac1f4e26dc7dc0239c58e8bcd36523913e",
+    "covapie_atom_pair_contract_validation_issue_readiness_inventory.csv": "09ee8271157343c4fd39c2edd73e38d6f0e896b8da247d8e3a8588c0b1cd0afa",
+    "covapie_atom_pair_contract_validation_source_inventory.csv": "655f253d8dab54365c4b3d7a9203c55a666632446f2c353cc5eabad3f611ff8f"
+  },
+  "exact_one_ligand_mapping_count": 11,
+  "exact_one_residue_mapping_count": 11,
+  "explicit_bond_authority_preserved_count": 11,
+  "failure_matrix_all_cases_verified": true,
+  "failure_matrix_executable": true,
+  "failure_matrix_required_for_issue_resolution": true,
+  "failure_matrix_row_count": 27,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "first_row_fallback_used": false,
+  "forward_changed": false,
+  "issue_inventory_row_count": 30,
+  "issue_status_changed": true,
+  "legacy_projection_match_count": 11,
+  "loss_changed": false,
+  "model_changed": false,
+  "nearest_atom_fallback_used": false,
+  "negative_pair_construction_defined": false,
+  "negative_sampling_defined": false,
+  "new_issue_count": 0,
+  "next_training_preparation_blocker": "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT",
+  "pair_contrastive_loss_implemented": false,
+  "pair_head_implemented": false,
+  "pair_loss_mask_defined": false,
+  "pair_table_atom_site_crosscheck_count": 11,
+  "pair_table_coordinate_crosscheck_count": 11,
+  "pair_tensor_materialized": false,
+  "pair_tensor_shape_defined": false,
+  "provider_issue_resolved": false,
+  "provider_used": false,
+  "raw_read": false,
+  "raw_write": false,
+  "ready_for_tensorization": false,
+  "ready_for_training": false,
+  "recommended_next_step": "audit_covapie_real_provider_export_blocking_rows_and_freeze_resolution_or_quarantine_policy_v1",
+  "resolved_issue_count": 1,
+  "row_index_base": 0,
+  "row_index_semantic_identity": false,
+  "row_indices_materialized_as_metadata_only": true,
+  "row_order_validation_completed": true,
+  "schema_version": "covapie_covalent_bond_atom_pair_encoding_contract_validation_v1",
+  "source_inventory_row_count": 49,
+  "stage": "covapie_covalent_bond_atom_pair_encoding_contract_current_canonical_evidence_validation_v1",
+  "training_used": false,
+  "unknown_atom_feature_policy_resolved": false,
+  "validation_outcome": "validated"
+}

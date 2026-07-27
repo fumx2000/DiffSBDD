@@ -1,0 +1,28 @@
+failure_case,expected_outcome,observed_outcome,fails_closed,record_retained,mapping_retained,issue_resolved,verified
+contract predecessor SHA drift,invalid,invalid,true,false,false,false,true
+invalid canonical record schema,invalid,invalid,true,false,false,false,true
+unsupported authority,invalid,invalid,true,false,false,false,true
+missing authority provenance,invalid,invalid,true,false,false,false,true
+legacy projection mismatch,invalid,invalid,true,false,false,false,true
+event pair mismatch,invalid,invalid,true,false,false,false,true
+zero pair-table rows,invalid,invalid,true,false,false,false,true
+multiple pair-table rows,invalid,invalid,true,false,false,false,true
+missing pocket match,invalid,invalid,true,false,false,false,true
+duplicate pocket match,invalid,invalid,true,false,false,false,true
+missing ligand match,invalid,invalid,true,false,false,false,true
+duplicate ligand match,invalid,invalid,true,false,false,false,true
+target residue mismatch,invalid,invalid,true,false,false,false,true
+ligand instance mismatch,invalid,invalid,true,false,false,false,true
+pair-table residue atom_site mismatch,invalid,invalid,true,false,false,false,true
+pair-table ligand atom_site mismatch,invalid,invalid,true,false,false,false,true
+coordinate mismatch,invalid,invalid,true,false,false,false,true
+row-count mismatch,invalid,invalid,true,false,false,false,true
+row-order drift,invalid,invalid,true,false,false,false,true
+non-zero index base,invalid,invalid,true,false,false,false,true
+model ambiguity,invalid,invalid,true,false,false,false,true
+altloc ambiguity,invalid,invalid,true,false,false,false,true
+missing target table,invalid,invalid,true,false,false,false,true
+residue model field unavailable,invalid,invalid,true,false,false,false,true
+residue altloc field unavailable,invalid,invalid,true,false,false,false,true
+residue insertion-code field unavailable,invalid,invalid,true,false,false,false,true
+ligand insertion-code field unavailable,invalid,invalid,true,false,false,false,true
