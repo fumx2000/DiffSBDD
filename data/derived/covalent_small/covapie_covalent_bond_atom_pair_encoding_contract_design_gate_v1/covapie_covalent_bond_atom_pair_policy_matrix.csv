@@ -1,0 +1,27 @@
+case_id,input_condition,expected_outcome,expected_reason,pair_retained,mapping_allowed,fails_closed,verified
+valid_explicit_single_pair,one explicit accepted-authority pair; unique locators and mappings,valid,explicit_single_pair_accepted,true,true,false,true
+distance_only_candidate,candidate supported only by distance or nearest-atom geometry,invalid,distance_only_inference_forbidden,false,false,true,true
+zero_pair,no explicit positive pair,invalid,zero_explicit_pair,false,false,true,true
+exact_duplicate_evidence,"same event, structured pair, and authority fields repeated exactly",valid_deduplicated,exact_duplicate_deduplicated,true,true,false,true
+conflicting_duplicate,same event carries conflicting structured pairs,invalid,conflicting_pair,false,false,true,true
+multiple_distinct_pairs,more than one distinct explicit pair in a sample,invalid,multiple_distinct_pairs_unsupported_v1,false,false,true,true
+missing_residue_locator,target-residue semantic locator is missing,invalid,missing_residue_locator,false,false,true,true
+missing_ligand_locator,ligand semantic locator is missing,invalid,missing_ligand_locator,false,false,true,true
+ambiguous_residue_mapping,residue locator matches other than exactly one pocket row,invalid,ambiguous_residue_mapping,false,false,true,true
+ambiguous_ligand_mapping,ligand locator matches other than exactly one ligand row,invalid,ambiguous_ligand_mapping,false,false,true,true
+target_residue_mismatch,mapped receptor atom is outside specified target residue,invalid,target_residue_mismatch,false,false,true,true
+ligand_instance_mismatch,mapped ligand atom is outside current ligand instance,invalid,ligand_instance_mismatch,false,false,true,true
+legacy_string_mismatch,legacy projection differs from structured atom names,invalid,legacy_value_structured_name_mismatch,false,false,true,true
+legacy_string_only,legacy string is supplied without structured identity/provenance,invalid,legacy_string_is_not_a_sole_locator,false,false,true,true
+non_zero_based_requested_index,future derived model index requests a nonzero base,invalid,model_index_base_must_be_zero,false,false,true,true
+row_order_drift,atom-table row order is not verified at mapping time,invalid,atom_table_row_order_not_verified,false,false,true,true
+altloc_ambiguity,locator leaves multiple altloc rows,invalid,altloc_ambiguity,false,false,true,true
+model_ambiguity,locator leaves multiple model rows,invalid,model_ambiguity,false,false,true,true
+insertion_code_ambiguity,locator leaves multiple insertion-code rows,invalid,insertion_code_ambiguity,false,false,true,true
+unsupported_explicit_authority,canonical record carries an authority outside the Exact2 vocabulary,invalid,unsupported_explicit_authority,false,false,true,true
+missing_explicit_authority_provenance,canonical record provenance ID is empty,invalid,missing_explicit_authority_provenance,false,false,true,true
+residue_role_mismatch,residue locator role is not target_residue_atom,invalid,residue_role_mismatch,false,false,true,true
+ligand_role_mismatch,ligand locator role is not ligand_atom,invalid,ligand_role_mismatch,false,false,true,true
+event_identity_mismatch,residue and ligand locator event IDs differ,invalid,event_identity_mismatch,false,false,true,true
+pdb_identity_mismatch,residue and ligand locator PDB IDs differ,invalid,pdb_identity_mismatch,false,false,true,true
+model_identity_mismatch,residue and ligand locator model IDs differ,invalid,model_identity_mismatch,false,false,true,true

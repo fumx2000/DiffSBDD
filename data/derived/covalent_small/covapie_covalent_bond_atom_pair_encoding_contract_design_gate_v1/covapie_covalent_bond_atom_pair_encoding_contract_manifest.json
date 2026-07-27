@@ -1,0 +1,163 @@
+{
+  "accepted_explicit_bond_authority_classes": [
+    "validated_struct_conn",
+    "explicit_curated_covalent_annotation"
+  ],
+  "atom_pair_issue_resolved": false,
+  "b3_pair_auxiliary_loss_activation_defined": false,
+  "b3_warhead_retention_changes_pair_identity": false,
+  "base_commit": "6f04eb7036aa926e433a02de3e244412af038800",
+  "canonical_encoding_kind": "structured_role_labeled_record",
+  "canonical_mask_pair_identity_invariant": true,
+  "canonical_masks": [
+    {
+      "alias": "A",
+      "semantic_name": "warhead_only"
+    },
+    {
+      "alias": "B",
+      "semantic_name": "linker_plus_warhead"
+    },
+    {
+      "alias": "B2",
+      "semantic_name": "scaffold_plus_warhead"
+    },
+    {
+      "alias": "B3",
+      "semantic_name": "scaffold_only"
+    },
+    {
+      "alias": "C",
+      "semantic_name": "scaffold_plus_linker_plus_warhead"
+    }
+  ],
+  "canonical_pair_record_field_count": 5,
+  "canonical_pair_record_identity_consistency_enforced": true,
+  "canonical_pair_record_roles_enforced": true,
+  "canonical_pair_record_schema_frozen": true,
+  "canonical_pair_record_schema_version": "covapie_covalent_bond_atom_pair_canonical_record_v1",
+  "canonical_pair_record_validator_available": true,
+  "cardinality_and_fail_closed_policy_frozen": true,
+  "checkpoint_access": false,
+  "conflicting_existing_index_space_contract_present": false,
+  "covalent_bond_atom_pair_encoding_contract_frozen": true,
+  "current_pair_tensor_index_contract_present": false,
+  "current_semantics_audit_precondition_verified": true,
+  "dataloader_changed": false,
+  "deleted_issue_count": 0,
+  "distance_only_inference_forbidden": true,
+  "download_used": false,
+  "effective_open_issue_ids": [
+    "COVALENT_ATOM_PAIR_ENCODING_UNRESOLVED",
+    "REAL_PROVIDER_EXPORT_BLOCKING_ROWS_PRESENT"
+  ],
+  "encoding_contract_validation_completed": false,
+  "entity_role_vocabulary": [
+    "target_residue_atom",
+    "ligand_atom"
+  ],
+  "evidence_sha256": {
+    "covapie_covalent_bond_atom_locator_schema_contract.csv": "9b8e1beb339b228cacb5d1eb19e6acc34c40da97c91120e667a01843e1af0544",
+    "covapie_covalent_bond_atom_pair_encoding_public_contract.csv": "f5094813d3c705dbd0bd083669c83ed80656720caa7a9a35926a1a82f7906850",
+    "covapie_covalent_bond_atom_pair_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "covapie_covalent_bond_atom_pair_legacy_compatibility_matrix.csv": "115065856229043320fb86a25eca8619ff37af8580296d85fa414baba581835f",
+    "covapie_covalent_bond_atom_pair_policy_matrix.csv": "cf9cc674ef4b23f6437cf79dd4685aee5c478b1b1367662787da44194bedf26b"
+  },
+  "explicit_authority_embedded_in_canonical_record": true,
+  "explicit_bond_authority_policy_frozen": true,
+  "explicit_provenance_embedded_in_canonical_record": true,
+  "feature_semantics_audit_completed": false,
+  "feature_semantics_audit_required_before_training": true,
+  "feature_semantics_known": false,
+  "final_dataset_ligand_atom_table_reference_present": true,
+  "final_dataset_pocket_atom_table_reference_present": true,
+  "formal_commit_subject": "add CovaPIE covalent bond atom-pair encoding contract v1",
+  "forward_changed": false,
+  "full_protein_mapping_role": "trace_or_qa_only_not_v1_model_target",
+  "future_atom_table_mapping_policy_frozen": true,
+  "issue_inventory_data_row_count": 30,
+  "issue_inventory_source_sha256": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+  "issue_status_changed": false,
+  "legacy_compatibility_data_row_count": 7,
+  "legacy_compatibility_policy_frozen": true,
+  "legacy_delimiter": "--",
+  "legacy_projection_function_available": true,
+  "legacy_string_is_canonical_identity": false,
+  "legacy_string_is_display_only": true,
+  "legacy_value_may_be_used_as_sole_locator": false,
+  "legacy_value_may_be_used_as_tensor_target": false,
+  "legacy_value_must_match_structured_atom_names": true,
+  "legacy_visible_order": "residue_atom_name_then_ligand_atom_name",
+  "ligand_model_index_space": "ligand_atom_table_row_index",
+  "locator_schema_data_row_count": 13,
+  "locator_schema_version": "covapie_covalent_atom_locator_v1",
+  "loss_changed": false,
+  "model_changed": false,
+  "model_index_base": 0,
+  "model_input_index_space_compatibility_derived_from_committed_evidence": true,
+  "model_input_index_space_compatibility_evidence_paths": [
+    "data/derived/covalent_small/covapie_final_dataset_design_gate_v0/covapie_final_dataset_schema_contract.csv",
+    "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/final_dataset_index.csv",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_manifest.json",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_unresolved_semantics_inventory.csv",
+    "data/derived/covalent_small/covapie_feature_semantics_tensorization_audit_gate_v0/covapie_label_tensorization_blocker_audit.csv",
+    "data/derived/covalent_small/covapie_actual_dataloader_design_gate_v0/covapie_actual_dataloader_tensorization_input_contract.csv"
+  ],
+  "model_input_index_space_compatibility_evidence_selectors": [
+    "final_dataset_schema:required pocket_atom_table_path and ligand_atom_table_path",
+    "final_dataset_index:11 nonempty pocket_atom_table_path and ligand_atom_table_path values",
+    "current_audit_manifest:no pair index/dataloader/forward/loss/training target",
+    "unresolved_semantics:no current protein/pocket/ligand mapping; row order deferred",
+    "tensorization_blockers:pair label, collate, loss, and training targets blocked",
+    "dataloader_tensorization_contract:pocket/ligand sources present; pair label blocked; no pair-index contract"
+  ],
+  "model_input_index_space_compatibility_evidence_sha256": {
+    "data/derived/covalent_small/covapie_actual_dataloader_design_gate_v0/covapie_actual_dataloader_tensorization_input_contract.csv": "b88b7012cffe4d6689e14f63732e5edea64c28e22fb1b3e1c6e53cd25e9ba5eb",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_manifest.json": "334a0dfe5b37b41f134c9a66ad9b0237431e0798f926b32bda4101a8e8f0571c",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_unresolved_semantics_inventory.csv": "00722f0c2370d458cdcac7d50c18914b4f36a393e237cf2ecc40f81965bca428",
+    "data/derived/covalent_small/covapie_feature_semantics_tensorization_audit_gate_v0/covapie_label_tensorization_blocker_audit.csv": "ce1ab5c8024b360ef72c95718898e4c052a5fd0c8a3d07c76bf92f50db64ae0a",
+    "data/derived/covalent_small/covapie_final_dataset_design_gate_v0/covapie_final_dataset_schema_contract.csv": "2ea572efb4d9df1a168ba6b056ffa14593315ac148d589f86a5ea8f607c2469c",
+    "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/final_dataset_index.csv": "c4c31888cb0f7c148b00656ccf22ab68fab842fcdafdee049b2f420eddc1302d"
+  },
+  "model_input_index_space_compatibility_verified": true,
+  "negative_pair_construction_defined": false,
+  "negative_sampling_defined": false,
+  "new_issue_count": 0,
+  "outcome": "frozen",
+  "pair_contrastive_loss_implemented": false,
+  "pair_head_implemented": false,
+  "pair_loss_mask_defined": false,
+  "pair_tensor_materialized": false,
+  "pair_tensor_shape_defined": false,
+  "pair_tensorization_currently_blocked": true,
+  "policy_matrix_data_row_count": 26,
+  "positive_pair_cardinality_policy": "exactly_one_positive_explicit_pair_per_sample",
+  "predecessor_outcome": "audited",
+  "predecessor_sha256": {
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_current_representation_audit.csv": "f63a5a8b0ed1d7ad0284a89826325f0d429ab33b202a5f2e468ae8a370eb1968",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_manifest.json": "334a0dfe5b37b41f134c9a66ad9b0237431e0798f926b32bda4101a8e8f0571c",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_issue_readiness_inventory.csv": "fb4d2dfae7ffc056e3856c94e2f5a135d468eb3801144f9a698f95d9b812ace7",
+    "data/derived/covalent_small/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1/covapie_covalent_bond_atom_pair_unresolved_semantics_inventory.csv": "00722f0c2370d458cdcac7d50c18914b4f36a393e237cf2ecc40f81965bca428",
+    "src/covalent_ext/covapie_covalent_bond_atom_pair_current_semantics_and_downstream_consumers_audit_gate_v1.py": "f905174e6bb471475bc34ce6ff3d35034755daec913da2cc81bfcf94b5112112"
+  },
+  "provider_issue_resolved": false,
+  "provider_used": false,
+  "public_contract_data_row_count": 26,
+  "raw_read": false,
+  "raw_write": false,
+  "ready_for_contract_validation": true,
+  "ready_for_tensorization": false,
+  "ready_for_training": false,
+  "recommended_next_step": "validate_covapie_covalent_bond_atom_pair_encoding_contract_against_current_canonical_evidence_v1",
+  "residue_model_index_space": "pocket_atom_table_row_index",
+  "resolved_issue_count": 0,
+  "row_index_is_derived_view": true,
+  "row_order_validation_deferred_to_contract_validation": true,
+  "schema_version": "covapie_covalent_bond_atom_pair_encoding_contract_v1",
+  "semantic_locator_is_authority": true,
+  "stage": "covapie_covalent_bond_atom_pair_encoding_contract_design_gate_v1",
+  "structured_atom_locator_schema_frozen": true,
+  "structured_canonical_encoding_frozen": true,
+  "training_used": false,
+  "unknown_atom_feature_policy_resolved": false
+}

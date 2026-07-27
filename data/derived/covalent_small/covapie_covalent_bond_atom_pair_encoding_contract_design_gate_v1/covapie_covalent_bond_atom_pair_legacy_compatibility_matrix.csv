@@ -1,0 +1,8 @@
+legacy_value,observed_residue_atom_name,observed_ligand_atom_name,reconstructed_legacy_value,matches_current_observation,canonical_identity_source,legacy_is_display_only,current_cys_sg_compatible,verified
+SG--C17,SG,C17,SG--C17,true,structured_role_labeled_record,true,true,true
+SG--C2,SG,C2,SG--C2,true,structured_role_labeled_record,true,true,true
+SG--C21,SG,C21,SG--C21,true,structured_role_labeled_record,true,true,true
+SG--C22,SG,C22,SG--C22,true,structured_role_labeled_record,true,true,true
+SG--C6,SG,C6,SG--C6,true,structured_role_labeled_record,true,true,true
+SG--CAG,SG,CAG,SG--CAG,true,structured_role_labeled_record,true,true,true
+SG--CM,SG,CM,SG--CM,true,structured_role_labeled_record,true,true,true
