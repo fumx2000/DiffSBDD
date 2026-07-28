@@ -1,0 +1,22 @@
+rule_id,rule_name,priority,rule_status,rule_semantics,failure_reason,fails_closed,verified
+LRMSR_001,known reactive atom required,10,required,exact known ligand reactive atom,known_reactive_atom_missing,true,true
+LRMSR_002,approved reaction family required,20,required,frozen family and version,approved_warhead_rule_missing,true,true
+LRMSR_003,warhead exact-one match,30,required,deduplicated atom set exact-one,warhead_atom_set_not_exact_one,true,true
+LRMSR_004,warhead includes reactive atom,40,required,mapped reactive atom is in match,warhead_match_excludes_reactive_atom,true,true
+LRMSR_005,warhead attachment boundary exact-one,50,required,one attachment to rest of ligand,warhead_attachment_boundary_not_exact_one,true,true
+LRMSR_006,Murcko proposal only,60,proposal_only,core metadata never final role,murcko_direct_label_forbidden,true,true
+LRMSR_007,BRICS supporting evidence only,70,supporting_only,boundary support never final authority,brics_direct_label_forbidden,true,true
+LRMSR_008,ringless fallback requires review,80,review_required,deterministic fallback cannot be auto-exact,ringless_fallback_review_missing,true,true
+LRMSR_009,unique linker bridge component,90,required,one component touches S_core and W,linker_bridge_not_exact_one,true,true
+LRMSR_010,scaffold-side substituent assignment,100,required,core-only component joins scaffold,scaffold_side_unassigned,true,true
+LRMSR_011,warhead-only-side component explained,110,required,family rule must explain component,warhead_side_component_unexplained,true,true
+LRMSR_012,multiple bridge components blocked,120,required,no silent path selection,multi_path_linker_ambiguous_blocked,true,true
+LRMSR_013,partition disjoint,130,required,pairwise disjoint Exact3,partition_overlap,true,true
+LRMSR_014,partition exhaustive,140,required,union equals retained heavy atoms,partition_incomplete,true,true
+LRMSR_015,all three roles nonempty,150,required,V1 scaffold linker warhead nonempty,empty_role,true,true
+LRMSR_016,boundary bond exact-one,160,required,unique scaffold-linker and linker-warhead bonds,boundary_not_exact_one,true,true
+LRMSR_017,minimal seed subset of scaffold,170,required,seed never fourth role,seed_outside_scaffold,true,true
+LRMSR_018,minimal seed connected,180,required,seed induced subgraph connected,seed_disconnected,true,true
+LRMSR_019,minimal seed size 2 or 3,190,required,s0 s1 optional s2,seed_size_not_2_or_3,true,true
+LRMSR_020,canonical-rank deterministic selection,200,required,stable chemical identity tie-break,canonical_ranking_nondeterministic,true,true
+LRMSR_021,current11 human gold review required,210,required,training authority is gold_curated only,current11_gold_without_human_review,true,true

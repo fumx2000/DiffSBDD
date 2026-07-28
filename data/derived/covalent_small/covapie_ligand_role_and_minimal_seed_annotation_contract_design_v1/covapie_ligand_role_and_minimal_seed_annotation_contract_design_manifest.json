@@ -1,0 +1,223 @@
+{
+  "annotation_scenario_exact_scalar_types_verified": true,
+  "annotation_statuses": [
+    "proposal_only",
+    "auto_exact",
+    "gold_curated",
+    "ambiguous_blocked"
+  ],
+  "b3_context": [
+    "linker",
+    "warhead"
+  ],
+  "b3_target": [
+    "scaffold"
+  ],
+  "boolean_rejected_for_role_atom_indices": true,
+  "boundary_and_bridge_counts_exact_int_verified": true,
+  "canonical_role_count": 3,
+  "canonical_roles": [
+    "scaffold",
+    "linker",
+    "warhead"
+  ],
+  "canonical_task_count": 5,
+  "canonical_tasks": [
+    {
+      "alias": "A",
+      "context": [
+        "scaffold",
+        "linker"
+      ],
+      "semantic_name": "warhead_only",
+      "target": [
+        "warhead"
+      ],
+      "task_id": 0
+    },
+    {
+      "alias": "B",
+      "context": [
+        "scaffold"
+      ],
+      "semantic_name": "linker_plus_warhead",
+      "target": [
+        "linker",
+        "warhead"
+      ],
+      "task_id": 1
+    },
+    {
+      "alias": "B2",
+      "context": [
+        "linker"
+      ],
+      "semantic_name": "scaffold_plus_warhead",
+      "target": [
+        "scaffold",
+        "warhead"
+      ],
+      "task_id": 2
+    },
+    {
+      "alias": "B3",
+      "context": [
+        "linker",
+        "warhead"
+      ],
+      "semantic_name": "scaffold_only",
+      "target": [
+        "scaffold"
+      ],
+      "task_id": 3
+    },
+    {
+      "alias": "C",
+      "context": [
+        "minimal_seed"
+      ],
+      "semantic_name": "scaffold_plus_linker_plus_warhead",
+      "target": [
+        "scaffold",
+        "linker",
+        "warhead"
+      ],
+      "task_id": 4
+    }
+  ],
+  "checkpoint_access": false,
+  "compressed_archive_read": false,
+  "contract_design_completed": true,
+  "contract_registry_row_count": 14,
+  "current11_approved_warhead_rule_available_count": 0,
+  "current11_gold_review_completed": false,
+  "current11_human_gold_review_completed_count": 0,
+  "current11_minimal_seed_proposal_generation_ready_count": 0,
+  "current11_pre_reaction_bond_order_available_count": 0,
+  "current11_pre_reaction_connectivity_available_count": 0,
+  "current11_reaction_family_label_available_count": 0,
+  "current11_readiness_row_count": 11,
+  "current11_role_proposal_generation_ready_count": 0,
+  "dataloader_changed": false,
+  "design_outcome": "designed_contract_with_input_authority_gaps",
+  "duplicate_role_atom_indices_rejected": true,
+  "evidence_sha256": {
+    "covapie_current11_role_annotation_input_readiness_matrix.csv": "6def11ca3c1ec974479c3fa96d3f2c985b994eed86d6132008236fb18bca3d4b",
+    "covapie_ligand_role_and_seed_contract_registry.csv": "872ecd0754ff941bee207161a54eecd1dd256d382044c38075b1c8ede89dba3d",
+    "covapie_ligand_role_and_seed_failure_matrix.csv": "a050b86e7a03af54034b5112c295287da9440bdb4d6639d7a04b0a3d841c3ca9",
+    "covapie_ligand_role_annotation_rule_registry.csv": "329d739587c525d76891f3a81689e397ea088b89a142361696a36f0e58f95889",
+    "covapie_ligand_role_annotation_source_inventory.csv": "cab7579c365e04dbaf03c48450fa9de0704579d7f362c8b7fc85abb1bae7d0de"
+  },
+  "failure_expected_reasons_verified": true,
+  "failure_matrix_row_count": 42,
+  "failure_mutation_exact_types_verified": true,
+  "failure_mutation_signature_count": 42,
+  "failure_mutation_signatures_unique": true,
+  "formal_base": {
+    "commit": "335a0320e8bd8ee125e51f927e6cd26d0c05707e",
+    "parent": "160cdbda8800a535b5c0a81d501babfae9a8615b",
+    "subject": "add CovaPIE tensor label and loss-mask contract v1",
+    "tree": "6581ab0d6e28385300eaa0f6262b4b3ad5be8cfa"
+  },
+  "formal_commit_subject": "add CovaPIE ligand role and minimal seed annotation contract v1",
+  "forward_changed": false,
+  "future_visualization_layers": [
+    "scaffold",
+    "linker",
+    "warhead",
+    "minimal_seed",
+    "ligand_reactive_atom",
+    "Cys_SG",
+    "scaffold_linker_boundary_bond",
+    "linker_warhead_boundary_bond"
+  ],
+  "gold_curated_requires_human_review": true,
+  "image_generated": false,
+  "integrated_covalent_model_module_count": 0,
+  "lmdb_read": false,
+  "loss_changed": false,
+  "masking_code_changed": false,
+  "minimal_seed_materialized": false,
+  "model_changed": false,
+  "npz_read": false,
+  "pipeline": [
+    "known_covalent_ligand_reactive_atom",
+    "approved_reaction_family_warhead_rule",
+    "exact_warhead_atom_set_proposal",
+    "murcko_scaffold_core_proposal",
+    "brics_supporting_boundary_evidence",
+    "graph_connectivity_linker_proposal",
+    "scaffold_role_remainder",
+    "exit_vector_minimal_seed_proposal",
+    "partition_gate",
+    "ambiguity_quarantine",
+    "current11_human_gold_review"
+  ],
+  "planned_covalent_model_module_count": 5,
+  "public_role_atom_index_helpers_exact_types_verified": true,
+  "raw_read": false,
+  "rdkit_current11_segmentation_run": false,
+  "ready_for_current11_minimal_seed_proposal_generation": false,
+  "ready_for_current11_role_annotation_proposal_generation": false,
+  "ready_for_mask_materialization": false,
+  "ready_for_model_integration": false,
+  "ready_for_tensorization": false,
+  "ready_for_training": false,
+  "recommended_next_step": "resolve_covapie_role_annotation_input_authority_gaps_v1",
+  "remaining_readiness_blockers": [
+    "atom_indexed_pre_reaction_connectivity_not_frozen",
+    "atom_indexed_pre_reaction_bond_orders_not_frozen",
+    "reaction_family_labels_missing",
+    "approved_warhead_rules_missing",
+    "current11_human_gold_review_missing",
+    "COVALENT_CONDITION_AND_TASK_MASK_TENSOR_CONTRACT_UNRESOLVED",
+    "COVALENT_GEOMETRY_AND_AUXILIARY_LABEL_CONTRACT_UNRESOLVED"
+  ],
+  "review_package_fields": [
+    "sample_index_row_id",
+    "ligand_atom_identity_table",
+    "known_ligand_reactive_atom",
+    "reaction_family_id",
+    "warhead_rule_id",
+    "warhead_atom_indices",
+    "scaffold_core_proposal_indices",
+    "scaffold_atom_indices",
+    "linker_atom_indices",
+    "scaffold_linker_boundary_bond",
+    "linker_warhead_boundary_bond",
+    "minimal_seed_atom_indices",
+    "primary_anchor_atom",
+    "direction_anchor_atom",
+    "optional_plane_anchor_atom",
+    "partition_gate_passed",
+    "ambiguity_reasons",
+    "annotation_status",
+    "human_reviewer",
+    "human_review_decision",
+    "human_review_notes"
+  ],
+  "ringless_fallback_auto_exact_forbidden": true,
+  "role_annotation_materialized": false,
+  "rule_registry_row_count": 21,
+  "schema_changed": false,
+  "schema_version": "covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1",
+  "source_inventory_row_count": 17,
+  "structure_file_written": false,
+  "tensor_materialized": false,
+  "training_eligibility_requires_gold_curated": true,
+  "training_used": false,
+  "warhead_rule_fields": [
+    "reaction_family_id",
+    "reaction_family_version",
+    "target_residue_types",
+    "target_residue_reactive_atom_name",
+    "warhead_smarts",
+    "ligand_reactive_atom_map_number",
+    "warhead_atom_map_numbers",
+    "warhead_attachment_atom_map_number",
+    "expected_pre_reaction_bond_orders",
+    "allowed_formal_charge_pattern",
+    "allowed_match_count",
+    "priority"
+  ]
+}
