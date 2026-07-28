@@ -10,3 +10,5 @@ example/*demo*.sdf
 data/processed/*.npz
 data/processed/*.pt
 data/processed/*.pkl
+# CovaPIE SHA-audited local CCD cache; commit only derived authority
+/data/raw/covalent_sources/ccd/independence_evidence_batch_000001/
