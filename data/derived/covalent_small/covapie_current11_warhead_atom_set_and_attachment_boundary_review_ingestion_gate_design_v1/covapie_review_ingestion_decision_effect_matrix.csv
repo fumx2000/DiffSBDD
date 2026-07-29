@@ -1,0 +1,5 @@
+review_decision,completed_submission_ingestible,future_outcome,reason_code,blocks_batch,review_completed,authority_disposition,authority_status,complete_warhead_atom_set_authority_available,exact_one_attachment_boundary_authority_available,sample_quarantined,approves_reaction_family,approves_warhead_rule,approves_SMARTS,creates_human_gold_label,creates_training_label,verified
+not_reviewed,false,blocked,REVIEW_NOT_COMPLETED,true,false,,,false,false,false,false,false,false,false,false,true
+select_admitted_candidate,true,passed,PASSED,false,true,reviewed_authority_materialized,active,true,true,false,false,false,false,false,false,true
+revise_atom_set_and_boundary,true,passed,PASSED,false,true,reviewed_authority_materialized,active,true,true,false,false,false,false,false,false,true
+quarantine,true,passed,PASSED,false,true,reviewed_quarantine_no_authority,quarantined,false,false,true,false,false,false,false,false,true
