@@ -4,8 +4,8 @@
 
 This step turns the committed Current11 review packages into a practical
 external workspace for real human review. It does not perform chemical review,
-choose a candidate, compile a submission bundle, call the public submission
-adapter, run ingestion, or create authority.
+choose a candidate, run the submission compiler, call the public submission
+adapter, run ingestion, or create authority while preparing the workspace.
 
 The frozen package contains 11 samples and 200 candidate options: 185 are
 review-eligible and 15 are review-ineligible. All 11 samples begin with
@@ -75,9 +75,34 @@ The workspace copies only the 185 rows whose frozen `review_eligible` field is
 `true`; it preserves all 28 fields, source order, atom IDs, boundaries, and
 candidate hashes without recalculating chemistry.
 
+## Compile a completed workspace
+
+The implemented production function
+`compile_covapie_current11_real_human_review_submission_bundle_v1` compiles
+the completed worklist and frozen option/package inputs entirely in memory.
+Use its CLI with all four required arguments:
+
+```bash
+"$PY310" -B \
+  scripts/compile_covapie_current11_real_human_review_submission_bundle_v1.py \
+  --repo-root /path/to/DiffSBDD-base \
+  --workspace-dir /path/to/completed/current11-workspace \
+  --output-file /external/existing-directory/submission.json \
+  --submission-batch-id covapie_current11_real_human_review_submission_batch_v1
+```
+
+`--output-file` must be a complete path outside the Git repository. Its parent
+directory must already exist, and the CLI refuses an existing file or symlink;
+it never overwrites a submission. Compilation validates the strict JSON with
+the public adapter, but it does not run ingestion or create authority.
+
+Samples `000006`–`000010` remain fail-closed `quarantine` entries. Their
+multi-boundary notes are preserved, but this exact-one-boundary compiler does
+not automatically repair them or start a multi-boundary extension.
+
 ## Verification
 
-Run the focused test and checker with the fixed interpreter:
+Verify workspace preparation with the fixed interpreter:
 
 ```bash
 "$PY310" -B -m pytest -q -p no:cacheprovider \
@@ -87,12 +112,23 @@ Run the focused test and checker with the fixed interpreter:
   scripts/check_prepare_covapie_current11_warhead_atom_set_and_attachment_boundary_human_review_workspace_v1.py
 ```
 
+Verify completed-workspace compilation separately:
+
+```bash
+"$PY310" -B -m pytest -q -p no:cacheprovider \
+  tests/test_covapie_current11_real_human_review_submission_bundle_compiler_v1.py
+
+"$PY310" -B \
+  scripts/check_covapie_current11_real_human_review_submission_bundle_compiler_v1.py
+```
+
 ## Handoff boundary
 
-This workspace is not a formal submission bundle. After actual review,
-`compile_covapie_current11_real_human_review_submission_bundle_v1` will compile
-the completed worklist into strict JSON. The next action is
-`perform_covapie_current11_real_human_review_v1`.
+This workspace is not itself a formal submission bundle. After actual review,
+the implemented compiler can produce strict adapter-accepted JSON at the
+explicit external output path. That compilation is still neither ingestion
+nor authority creation; any later `perform_covapie_current11_real_human_review_v1`
+action remains a separate gated step.
 
 The canonical mask set remains exactly `warhead_only`,
 `linker_plus_warhead`, `scaffold_plus_warhead`, `scaffold_only`, and
