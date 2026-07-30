@@ -100,6 +100,29 @@ Samples `000006`–`000010` remain fail-closed `quarantine` entries. Their
 multi-boundary notes are preserved, but this exact-one-boundary compiler does
 not automatically repair them or start a multi-boundary extension.
 
+## Build the ingestion execution bundle
+
+After submission compilation, the production function
+`build_covapie_current11_real_human_review_ingestion_execution_bundle_v1`
+runs the public adapter, fresh public authority-context builder, and public
+ingestion evaluator entirely in memory. Its CLI has three required arguments:
+
+```bash
+"$PY310" -B \
+  scripts/execute_covapie_current11_real_human_review_ingestion_v1.py \
+  --repo-root /path/to/DiffSBDD-base \
+  --submission-file /external/submission.json \
+  --output-file /external/existing-directory/ingestion-execution.json
+```
+
+`--output-file` must be outside the Git repository, its parent must already
+exist, and an existing file or symlink is never overwritten. The resulting
+execution bundle contains the validated ingestion result records and new
+authority records; creating this external bundle is the durable authority
+handoff. Samples `000006`–`000010` are persisted as explicit quarantined
+authority state, not as training gold. The multi-boundary extension remains
+the immediately following phase and is not started here.
+
 ## Verification
 
 Verify workspace preparation with the fixed interpreter:
@@ -122,13 +145,23 @@ Verify completed-workspace compilation separately:
   scripts/check_covapie_current11_real_human_review_submission_bundle_compiler_v1.py
 ```
 
+Verify ingestion execution separately:
+
+```bash
+"$PY310" -B -m pytest -q -p no:cacheprovider \
+  tests/test_covapie_current11_real_human_review_ingestion_execution_bundle_v1.py
+
+"$PY310" -B \
+  scripts/check_covapie_current11_real_human_review_ingestion_execution_bundle_v1.py
+```
+
 ## Handoff boundary
 
 This workspace is not itself a formal submission bundle. After actual review,
 the implemented compiler can produce strict adapter-accepted JSON at the
-explicit external output path. That compilation is still neither ingestion
-nor authority creation; any later `perform_covapie_current11_real_human_review_v1`
-action remains a separate gated step.
+explicit external output path. Compilation alone is still neither ingestion
+nor durable authority creation; the separate ingestion execution step above
+produces the durable result-and-authority handoff.
 
 The canonical mask set remains exactly `warhead_only`,
 `linker_plus_warhead`, `scaffold_plus_warhead`, `scaffold_only`, and
