@@ -689,15 +689,33 @@ def test_builder_is_deterministic_preserves_inputs_and_writes_no_files(
     assert (submission, execution) == snapshots
 
 
-def test_readme_states_compatibility_and_training_boundaries(
+def test_readme_states_decisions_compatibility_and_training_boundaries(
     synthetic_sources: tuple[bytes, bytes],
 ) -> None:
     readme = _build(synthetic_sources)["README.md"].decode("utf-8")
+    allowed_decisions = (
+        "accept_verified_two_boundary_proposal",
+        "revise_two_boundary_atom_set_and_boundaries",
+        "quarantine",
+    )
+    expected_decision_block = (
+        "The only allowed completed review decisions are:\n\n"
+        "- `accept_verified_two_boundary_proposal`\n"
+        "- `revise_two_boundary_atom_set_and_boundaries`\n"
+        "- `quarantine`\n\n"
+        "`not_reviewed` means the review is incomplete and is not a "
+        "completed decision."
+    )
+    assert expected_decision_block in readme
+    for decision in allowed_decisions:
+        assert readme.count(decision) >= 1
     for text in (
         "exactly five samples",
         "not a human decision",
         "do not edit that file",
         "must not be edited",
+        "Proposed fields are not automatically copied into reviewed fields.",
+        "`not_reviewed` means the review is incomplete",
         "exactly two reviewed boundary records",
         "000009 and 000010",
         "V1 quarantine authority remains valid",

@@ -263,6 +263,37 @@ def main() -> int:
             setattr(Path, name, method)
     _, evidence = _csv_rows(first["verified_multi_boundary_evidence.csv"])
     _, worklist = _csv_rows(first["multi_boundary_review_worklist.csv"])
+    readme = first["README.md"].decode("utf-8")
+    expected_decision_block = (
+        "The only allowed completed review decisions are:\n\n"
+        "- `accept_verified_two_boundary_proposal`\n"
+        "- `revise_two_boundary_atom_set_and_boundaries`\n"
+        "- `quarantine`\n\n"
+        "`not_reviewed` means the review is incomplete and is not a "
+        "completed decision."
+    )
+    readme_contract_valid = (
+        "Proposed fields are not automatically copied into reviewed fields."
+        in readme
+        and expected_decision_block in readme
+        and all(
+            readme.count(decision) >= 1
+            for decision in (
+                "accept_verified_two_boundary_proposal",
+                "revise_two_boundary_atom_set_and_boundaries",
+                "quarantine",
+            )
+        )
+        and "Samples 000009 and 000010 require an independent human core "
+        "determination." in readme
+        and "V1 quarantine authority remains valid" in readme
+        and "Formal training still requires a feature-semantics audit."
+        in readme
+        and "Step12D remains only a smoke legality check, not a final "
+        "training-feature contract." in readme
+    )
+    if not readme_contract_valid:
+        raise AssertionError("README contract invalid")
     if calls != {"adapter": 2, "context": 2, "evaluator": 0}:
         raise AssertionError(f"public call counts invalid: {calls}")
     if len(evidence) != 5 or len(worklist) != 5:
@@ -324,6 +355,7 @@ def main() -> int:
         "multi_boundary_authority_created": False,
         "deterministic": first == second,
         "files_written": False,
+        "readme_contract_valid": readme_contract_valid,
         "evidence_sha256": hashlib.sha256(
             first["verified_multi_boundary_evidence.csv"]
         ).hexdigest(),
@@ -344,6 +376,7 @@ def main() -> int:
         "multi_boundary_authority_created": False,
         "deterministic": True,
         "files_written": False,
+        "readme_contract_valid": True,
     }
     if any(summary[key] != value for key, value in expected_summary.items()):
         raise AssertionError("checker summary invariant invalid")
