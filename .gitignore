@@ -12,3 +12,7 @@ data/processed/*.pt
 data/processed/*.pkl
 # CovaPIE SHA-audited local CCD cache; commit only derived authority
 /data/raw/covalent_sources/ccd/independence_evidence_batch_000001/
+# CovaPIE SHA-audited local raw structure caches; commit only derived authority
+/data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/*.cif
+/data/raw/covalent_sources/covpdb/independent_group_expansion_batch_000001/*.cif
+/data/raw/covalent_sources/pdb_mmcif_direct/structures/*.cif.gz
