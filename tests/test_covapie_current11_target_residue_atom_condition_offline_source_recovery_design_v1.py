@@ -11,7 +11,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 import pytest
 
@@ -88,6 +88,33 @@ def _rebind(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> bytes:
     inventory = CHECKER._synthetic_inventory(sample, locator, table_payloads)
     _accept(monkeypatch, inventory, sample, locator)
     return inventory
+
+
+def _set_first_insertion(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, token: str, *,
+    scenario: str = "recoverable",
+    locator_overrides: Mapping[str, str] | None = None,
+) -> bytes:
+    values = CHECKER._raw_values(0)
+    values["pdbx_PDB_ins_code"] = token
+    compressed = gzip.compress(
+        CHECKER._mmcif("T001", values, scenario), mtime=0
+    )
+    (tmp_path / "raw/t001.cif.gz").write_bytes(compressed)
+    digest = hashlib.sha256(compressed).hexdigest()
+
+    def update_locator(rows: list[dict[str, str]]) -> None:
+        rows[0].update({
+            "expected_raw_sha256": digest,
+            "observed_raw_sha256": digest,
+            "struct_conn_insertion_raw_value": token,
+            "atom_site_insertion_raw_value": token,
+            **CHECKER._legacy_insertion_fields(token),
+            **(locator_overrides or {}),
+        })
+
+    _rewrite_csv(tmp_path / "inputs/locator.csv", update_locator)
+    return _rebind(tmp_path, monkeypatch)
 
 
 def _resign_inventory(value: dict[str, Any]) -> bytes:
@@ -385,6 +412,170 @@ def test_insertion_and_altloc_raw_provenance_and_model_are_explicit(
     assert "protein_label_alt_id" in record["recovered_source_inventory_fields"]
 
 
+def test_question_token_exact_source_chain_recovers_and_normalises_without_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _setup(tmp_path, monkeypatch)
+    inventory = _set_first_insertion(tmp_path, monkeypatch, "?")
+    record = _first(_evaluate(inventory, tmp_path))
+    evidence = record["proposed_condition_evidence_record"]
+    locator = _csv(tmp_path / "inputs/locator.csv")[1][0]
+    raw_payload = (tmp_path / "raw/t001.cif.gz").read_bytes()
+    _, atom_fields, atom_rows = subject._parse_atom_site(
+        subject._decode_raw(raw_payload, "raw/t001.cif.gz")
+    )
+    selected = tuple(
+        row for row in atom_rows
+        if row["_atom_site.id"] == locator["matched_atom_site_id"]
+    )
+
+    assert record["recovery_status"] == "recoverable_offline_unique"
+    assert record["ready_for_offline_source_evidence_compiler"] is True
+    assert "_atom_site.pdbx_PDB_ins_code" in atom_fields
+    assert len(selected) == 1
+    assert selected[0]["_atom_site.pdbx_PDB_ins_code"] == "?"
+    assert locator["struct_conn_insertion_raw_value"] == "?"
+    assert locator["atom_site_insertion_raw_value"] == "?"
+    assert subject._resolve_insertion_provenance(
+        locator=locator, raw_insertion_token="?"
+    ) == (True, "explicit_unknown_token_with_exact_source_provenance")
+    assert evidence["protein_pdbx_PDB_ins_code"] == ""
+    assert evidence["condition_evidence_record_sha256"] == subject._record_sha256(
+        evidence, contract_design._CONDITION_EVIDENCE_RECORD_FIELDS,
+        "condition_evidence_record_sha256",
+    )
+
+
+def test_question_token_missing_raw_source_column_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _setup(tmp_path, monkeypatch)
+    inventory = _set_first_insertion(
+        tmp_path, monkeypatch, "?", scenario="insertion_schema"
+    )
+    record = _first(_evaluate(inventory, tmp_path))
+    assert record["recovery_status"] == "blocked_mmcif_schema_incomplete"
+    assert record["proposed_condition_evidence_record"] == {}
+
+
+def test_question_token_requires_exact_legacy_admission_provenance(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mutations = (
+        ("struct_conn_token_class", "dot_not_applicable"),
+        ("atom_site_token_class", "dot_not_applicable"),
+        ("resolved_insertion_state", "absent"),
+        ("resolved_insertion_value", "A"),
+        ("insertion_evidence_agreement", "true"),
+        ("insertion_blocks_admit_004", "false"),
+        ("insertion_blocking_reason", ""),
+        ("provider_export_status", "exported_pass"),
+        ("provider_export_blocking_reason", ""),
+        ("struct_conn_insertion_source_tag", "_struct_conn.bad_tag"),
+        ("atom_site_insertion_source_tag", "_atom_site.bad_tag"),
+    )
+    for index, (field, value) in enumerate(mutations):
+        root = tmp_path / f"case_{index:02d}"
+        _setup(root, monkeypatch)
+        inventory = _set_first_insertion(
+            root, monkeypatch, "?", locator_overrides={field: value}
+        )
+        record = _first(_evaluate(inventory, root))
+        assert record["recovery_status"] == "blocked_insertion_provenance"
+        assert record["blocking_reasons"] == (
+            "raw_struct_conn_atom_site_insertion_provenance_not_agreed",
+        )
+        assert record["proposed_condition_evidence_record"] == {}
+
+
+def test_struct_conn_and_atom_site_token_conflicts_and_unproven_empty_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    for name, overrides in (
+        ("struct", {"struct_conn_insertion_raw_value": "?"}),
+        ("atom", {"atom_site_insertion_raw_value": "?"}),
+    ):
+        root = tmp_path / name
+        _setup(root, monkeypatch)
+        inventory = _set_first_insertion(
+            root, monkeypatch, ".", locator_overrides=overrides
+        )
+        assert _first(_evaluate(inventory, root))["recovery_status"] == (
+            "blocked_insertion_provenance"
+        )
+
+    empty_locator = {
+        "struct_conn_insertion_source_tag": "_struct_conn.pdbx_ptnr1_PDB_ins_code",
+        "struct_conn_insertion_raw_value": "",
+        "atom_site_insertion_source_tag": "_atom_site.pdbx_PDB_ins_code",
+        "atom_site_insertion_raw_value": "",
+        **CHECKER._legacy_insertion_fields(""),
+    }
+    assert subject._resolve_insertion_provenance(
+        locator=empty_locator, raw_insertion_token=""
+    )[0] is False
+
+
+def test_dot_and_concrete_tokens_recover_with_exact_normalisation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    expected = (
+        (".", "", "explicit_dot_token_with_exact_source_provenance"),
+        ("A", "A", "explicit_insertion_token_with_exact_source_provenance"),
+    )
+    for index, (token, normalised, resolution) in enumerate(expected):
+        root = tmp_path / f"case_{index}"
+        _setup(root, monkeypatch)
+        inventory = _set_first_insertion(root, monkeypatch, token)
+        record = _first(_evaluate(inventory, root))
+        locator = _csv(root / "inputs/locator.csv")[1][0]
+        assert record["recovery_status"] == "recoverable_offline_unique"
+        assert record["proposed_condition_evidence_record"][
+            "protein_pdbx_PDB_ins_code"
+        ] == normalised
+        assert subject._resolve_insertion_provenance(
+            locator=locator, raw_insertion_token=token
+        ) == (True, resolution)
+
+
+@pytest.mark.parametrize(
+    ("field", "drifted_value"),
+    (
+        (
+            "insertion_blocking_reason",
+            "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN",
+        ),
+        ("provider_export_status", "exported_blocking"),
+        (
+            "provider_export_blocking_reason",
+            "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN",
+        ),
+    ),
+)
+@pytest.mark.parametrize("token", (".", "A"))
+def test_non_question_tokens_reject_provider_projection_drift(
+    field: str, drifted_value: str, token: str, tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _setup(tmp_path, monkeypatch)
+    inventory = _set_first_insertion(
+        tmp_path, monkeypatch, token,
+        locator_overrides={field: drifted_value},
+    )
+    record = _first(_evaluate(inventory, tmp_path))
+    assert record["recovery_status"] == "blocked_insertion_provenance"
+    assert record["blocking_reasons"] == (
+        "raw_struct_conn_atom_site_insertion_provenance_not_agreed",
+    )
+    assert record["proposed_condition_evidence_record"] == {}
+
+
+def test_insertion_blocker_has_dedicated_recommended_step() -> None:
+    assert subject._recommended((
+        {"recovery_status": "blocked_insertion_provenance"},
+    )) == "resolve_covapie_current11_insertion_provenance_v1"
+
+
 def test_proposed_evidence_uses_committed_contract_and_is_not_authority(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -448,6 +639,16 @@ def test_checker_executes_and_reports_required_safety_flags() -> None:
         "protein_atom_table_artifact_roles_unique=true",
         "protein_atom_table_snapshot_drift_rejected=true",
         "formal_inventory_to_table_snapshot_chain_verified=true",
+        "explicit_question_mark_insertion_recoverable=true",
+        "explicit_question_mark_normalised_empty=true",
+        "explicit_question_mark_not_defaulted=true",
+        "dot_insertion_recoverable=true", "concrete_insertion_recoverable=true",
+        "struct_conn_atom_site_token_conflict_rejected=true",
+        "unknown_token_bad_legacy_provenance_rejected=true",
+        "blocked_insertion_recommended_step_specific=true",
+        "dot_token_bad_provider_projection_rejected=true",
+        "concrete_token_bad_provider_projection_rejected=true",
+        "non_question_blocking_reason_drift_rejected=true",
         "files_written=false", "model_modified=false", "data_loader_modified=false",
         "forward_modified=false", "loss_modified=false", "training_label_created=false",
     ):

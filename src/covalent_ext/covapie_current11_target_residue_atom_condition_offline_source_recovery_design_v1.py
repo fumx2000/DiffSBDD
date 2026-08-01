@@ -185,9 +185,12 @@ _LOCATOR_REQUIRED = (
     "struct_conn_residue_label_asym_id", "struct_conn_residue_label_seq_id",
     "selected_chain_id", "selected_residue_index",
     "struct_conn_insertion_source_tag", "struct_conn_insertion_raw_value",
-    "atom_site_insertion_source_tag", "atom_site_insertion_raw_value",
+    "struct_conn_token_class", "atom_site_insertion_source_tag",
+    "atom_site_insertion_raw_value", "atom_site_token_class",
     "resolved_insertion_state", "resolved_insertion_value",
-    "insertion_evidence_agreement",
+    "insertion_evidence_agreement", "insertion_blocks_admit_004",
+    "insertion_blocking_reason", "provider_export_status",
+    "provider_export_blocking_reason",
 )
 _TABLE_REQUIRED = (
     "sample_preparation_input_id", "pdb_id", "source_raw_file", "atom_site_id",
@@ -599,6 +602,77 @@ def _normalise_optional(value: str) -> str:
     return "" if value in {".", "?"} else value
 
 
+def _resolve_insertion_provenance(
+    *, locator: Mapping[str, str], raw_insertion_token: str,
+) -> tuple[bool, str]:
+    """Validate exact insertion-token provenance without changing legacy fields."""
+
+    if (
+        type(raw_insertion_token) is not str
+        or locator.get("struct_conn_insertion_source_tag")
+        != "_struct_conn.pdbx_ptnr1_PDB_ins_code"
+        or locator.get("atom_site_insertion_source_tag")
+        != "_atom_site.pdbx_PDB_ins_code"
+        or locator.get("struct_conn_insertion_raw_value") != raw_insertion_token
+        or locator.get("atom_site_insertion_raw_value") != raw_insertion_token
+    ):
+        return False, "raw_struct_conn_atom_site_insertion_provenance_not_agreed"
+
+    if raw_insertion_token == "?":
+        expected = {
+            "struct_conn_token_class": "question_unknown",
+            "atom_site_token_class": "question_unknown",
+            "resolved_insertion_state": "unknown",
+            "resolved_insertion_value": "",
+            "insertion_evidence_agreement": "false",
+            "insertion_blocks_admit_004": "true",
+            "insertion_blocking_reason": (
+                "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN"
+            ),
+            "provider_export_status": "exported_blocking",
+            "provider_export_blocking_reason": (
+                "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN"
+            ),
+        }
+        resolution = "explicit_unknown_token_with_exact_source_provenance"
+    elif raw_insertion_token == ".":
+        expected = {
+            "struct_conn_token_class": "dot_not_applicable",
+            "atom_site_token_class": "dot_not_applicable",
+            "resolved_insertion_state": "absent",
+            "resolved_insertion_value": "",
+            "insertion_evidence_agreement": "true",
+            "insertion_blocks_admit_004": "false",
+            "insertion_blocking_reason": "",
+            "provider_export_status": "exported_pass",
+            "provider_export_blocking_reason": "",
+        }
+        resolution = "explicit_dot_token_with_exact_source_provenance"
+    else:
+        if (
+            not raw_insertion_token
+            or not raw_insertion_token.isascii()
+            or raw_insertion_token != raw_insertion_token.strip()
+        ):
+            return False, "raw_struct_conn_atom_site_insertion_provenance_not_agreed"
+        expected = {
+            "struct_conn_token_class": "explicit_token",
+            "atom_site_token_class": "explicit_token",
+            "resolved_insertion_state": "present",
+            "resolved_insertion_value": raw_insertion_token,
+            "insertion_evidence_agreement": "true",
+            "insertion_blocks_admit_004": "false",
+            "insertion_blocking_reason": "",
+            "provider_export_status": "exported_pass",
+            "provider_export_blocking_reason": "",
+        }
+        resolution = "explicit_insertion_token_with_exact_source_provenance"
+
+    if any(locator.get(field) != value for field, value in expected.items()):
+        return False, "raw_struct_conn_atom_site_insertion_provenance_not_agreed"
+    return True, resolution
+
+
 def _decimal_equal(left: str, right: str) -> bool:
     try:
         return Decimal(left) == Decimal(right)
@@ -643,6 +717,8 @@ def _recommended(records: Sequence[Mapping[str, Any]]) -> str:
          "resolve_covapie_current11_raw_locator_conflicts_v1"),
         (("blocked_raw_decode_invalid", "blocked_mmcif_schema_incomplete"),
          "resolve_covapie_current11_raw_mmcif_schema_v1"),
+        (("blocked_insertion_provenance",),
+         "resolve_covapie_current11_insertion_provenance_v1"),
     )
     for statuses, step in groups:
         if any(counts[status] for status in statuses):
@@ -892,21 +968,15 @@ def _recovery_record(
                                         details.append("raw_cys_sg_s_identity_not_observed")
                                     raw_insertion = raw["_atom_site.pdbx_PDB_ins_code"]
                                     raw_altloc = raw["_atom_site.label_alt_id"]
-                                    insertion_ok = (
-                                        locator.get("struct_conn_insertion_source_tag")
-                                        == "_struct_conn.pdbx_ptnr1_PDB_ins_code"
-                                        and locator.get("atom_site_insertion_source_tag")
-                                        == "_atom_site.pdbx_PDB_ins_code"
-                                        and locator.get("atom_site_insertion_raw_value") == raw_insertion
-                                        and locator.get("struct_conn_insertion_raw_value") == raw_insertion
-                                        and locator.get("insertion_evidence_agreement") == "true"
-                                        and locator.get("resolved_insertion_value") == _normalise_optional(raw_insertion)
-                                        and locator.get("resolved_insertion_state")
-                                        == ("present" if raw_insertion not in {".", "?"} else ("absent" if raw_insertion == "." else "unknown"))
+                                    insertion_ok, insertion_reason = (
+                                        _resolve_insertion_provenance(
+                                            locator=locator,
+                                            raw_insertion_token=raw_insertion,
+                                        )
                                     )
                                     if not insertion_ok:
                                         blockers.append("blocked_insertion_provenance")
-                                        details.append("raw_struct_conn_atom_site_insertion_provenance_not_agreed")
+                                        details.append(insertion_reason)
                                     else:
                                         recovered.append("protein_pdbx_PDB_ins_code")
                                     recovered.append("protein_label_alt_id")

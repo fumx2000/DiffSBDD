@@ -26,7 +26,11 @@ raw 文件是所选 `_atom_site` 行的最接近源证据。设计只接受 loca
 
 mmCIF auth namespace 保留作者使用的 chain、residue sequence 和 atom identity；label namespace 是 mmCIF 的标准化 crosswalk。两者不能互相代替。本设计分别恢复并核对 auth/label chain、component、sequence 和 atom 字段。
 
-`pdbx_PDB_ins_code` 与 `label_alt_id` 的 raw `.` 和 `?` 含义不同，必须保留它们来自哪个列、原始 token 是什么，再按 committed contract 规范化为空字符串。真实 altloc（例如历史样本中的 `B`）必须原样保留。缺列时不能默认空；model 也不能默认成 1。locator sidecar 的 struct_conn insertion 与 raw atom_site insertion 必须明确一致，否则状态为 `blocked_insertion_provenance`。
+`pdbx_PDB_ins_code` 与 `label_alt_id` 的 raw `.` 和 `?` 含义不同，必须保留它们来自哪个列、原始 token 是什么，再按 committed contract 规范化为空字符串。真实 altloc（例如历史样本中的 `B`）必须原样保留。缺列时不能默认空；空字符串本身也不能证明 source token；model 同样不能默认成 1。locator sidecar 的 struct_conn insertion、sidecar atom_site insertion 与 exact raw atom-site 行必须具有正确 source tag，并逐字节同值，否则状态为 `blocked_insertion_provenance`。
+
+旧 ADMIT_004 的 `insertion_evidence_agreement`、`insertion_blocks_admit_004` 和 provider export 状态仍是只读的历史 admission 输出，不是 target-condition authority。对于 concrete token，offline recovery 要求两侧分类为 `explicit_token`、resolved state/value 精确保留 token，并且旧 admission 不阻断；对于 `.`，要求 `dot_not_applicable`、`absent` 和空 resolved value，并按 contract 规范化为空字符串。`.` 和 concrete token 还必须具有完整一致的非阻断 provider projection：`provider_export_status=exported_pass`，且 `insertion_blocking_reason` 与 `provider_export_blocking_reason` 都为空；任何非空 reason 或 blocking provider status 都表示 sidecar 内部自相矛盾，必须 fail closed。
+
+对于 `?`，offline recovery 不把旧 `agreement=false` 或 `blocks=true` 当成永久 blocker。只有 struct_conn raw token、sidecar atom-site raw token 和 exact raw `_atom_site.pdbx_PDB_ins_code` 都是同一个显式 `?`，且旧 sidecar 完整保持 `question_unknown`、`unknown`、空 resolved value、`agreement=false`、`blocks=true`、`COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN` 与 `exported_blocking` 时，才解释为 `explicit_unknown_token_with_exact_source_provenance`。因此 `?` 路径保留历史 `exported_blocking`，`.` 和 concrete 路径要求 `exported_pass`；三条路径都完整核验 provider projection，但不修改旧 sidecar 内容。evidence 中的空字符串来自 SHA 绑定的真实 `?` source token 和 `source_atom_site_id` 绑定的唯一 raw 行，不是默认填充。任何 class、state、value、reason、provider status、source tag 或 token 链漂移都 fail closed。
 
 ## 输出边界
 
@@ -34,7 +38,7 @@ reference evaluator 返回纯内存 Exact14 response，每个样本含一个 Exa
 
 proposed evidence 不是 authority。它只是证明未来 compiler 有足够、可重复验证的输入。本步不会创建 enriched source inventory、evidence 文件、condition authority、adapter、label、tensor 或训练输入；不会修改 sample index、locator sidecar、protein table 或 raw structure，也不会进行网络访问。
 
-只有 11/11 都为 `recoverable_offline_unique` 时，下一步才是实现 `implement_covapie_current11_target_residue_atom_condition_source_evidence_compiler_v1`。否则 response 会根据实际主要 blocker 推荐一个独立的修复步骤，但本步不执行该步骤。
+只有 11/11 都为 `recoverable_offline_unique` 时，下一步才是实现 `implement_covapie_current11_target_residue_atom_condition_source_evidence_compiler_v1`。若仍有真实 insertion conflict，专门推荐 `resolve_covapie_current11_insertion_provenance_v1`；其他 blocker 仍按既有分类推荐独立修复步骤。本步不执行任何后续步骤。
 
 ## 与训练 readiness 的关系
 

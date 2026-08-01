@@ -21,6 +21,11 @@ from covalent_ext import (
 )
 
 
+_UNKNOWN_INSERTION_REASON = (
+    "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN"
+)
+
+
 def _csv_bytes(fields: tuple[str, ...], rows: list[Mapping[str, str]]) -> bytes:
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
@@ -47,6 +52,33 @@ def _raw_values(index: int) -> dict[str, str]:
     }
 
 
+def _legacy_insertion_fields(token: str) -> dict[str, str]:
+    if token == "?":
+        return {
+            "struct_conn_token_class": "question_unknown",
+            "atom_site_token_class": "question_unknown",
+            "resolved_insertion_state": "unknown",
+            "resolved_insertion_value": "",
+            "insertion_evidence_agreement": "false",
+            "insertion_blocks_admit_004": "true",
+            "insertion_blocking_reason": _UNKNOWN_INSERTION_REASON,
+            "provider_export_status": "exported_blocking",
+            "provider_export_blocking_reason": _UNKNOWN_INSERTION_REASON,
+        }
+    token_class = "dot_not_applicable" if token == "." else "explicit_token"
+    return {
+        "struct_conn_token_class": token_class,
+        "atom_site_token_class": token_class,
+        "resolved_insertion_state": "absent" if token == "." else "present",
+        "resolved_insertion_value": "" if token == "." else token,
+        "insertion_evidence_agreement": "true",
+        "insertion_blocks_admit_004": "false",
+        "insertion_blocking_reason": "",
+        "provider_export_status": "exported_pass",
+        "provider_export_blocking_reason": "",
+    }
+
+
 def _mmcif(pdb_id: str, values: Mapping[str, str], scenario: str) -> bytes:
     names = (
         "group_PDB", "id", "type_symbol", "label_atom_id", "label_alt_id",
@@ -56,6 +88,8 @@ def _mmcif(pdb_id: str, values: Mapping[str, str], scenario: str) -> bytes:
     )
     if scenario == "schema":
         names = tuple(name for name in names if name != "label_atom_id")
+    elif scenario == "insertion_schema":
+        names = tuple(name for name in names if name != "pdbx_PDB_ins_code")
     elif scenario == "recoverable":
         names = tuple(reversed(names))
     row_values = {"group_PDB": "ATOM", **values}
@@ -134,9 +168,7 @@ def _fixture_repo(root: Path) -> dict[str, bytes]:
             "struct_conn_insertion_raw_value": insertion,
             "atom_site_insertion_source_tag": "_atom_site.pdbx_PDB_ins_code",
             "atom_site_insertion_raw_value": insertion,
-            "resolved_insertion_state": "absent" if insertion == "." else "unknown",
-            "resolved_insertion_value": "",
-            "insertion_evidence_agreement": "true",
+            **_legacy_insertion_fields(insertion),
         })
         table_row = {
             "sample_preparation_input_id": prep, "pdb_id": pdb_id,
@@ -296,6 +328,72 @@ def _accept_synthetic(inventory: bytes, files: Mapping[str, bytes]) -> None:
     subject._LOCATOR_SIDECAR_SHA256 = hashlib.sha256(files["locator"]).hexdigest()
 
 
+def _fixture_inventory(root: Path) -> tuple[bytes, dict[str, bytes]]:
+    sample_payload = (root / "inputs/sample.csv").read_bytes()
+    locator_payload = (root / "inputs/locator.csv").read_bytes()
+    sample_rows = csv.DictReader(
+        io.StringIO(sample_payload.decode("utf-8"), newline=""), strict=True
+    )
+    table_payloads = {
+        row["protein_atom_table_path"]:
+        (root / row["protein_atom_table_path"]).read_bytes()
+        for row in sample_rows
+    }
+    files = {
+        "sample": sample_payload, "locator": locator_payload, **table_payloads,
+    }
+    inventory = _synthetic_inventory(sample_payload, locator_payload, files)
+    _accept_synthetic(inventory, files)
+    return inventory, files
+
+
+def _configure_first_insertion(root: Path, token: str) -> tuple[bytes, dict[str, str]]:
+    values = _raw_values(0)
+    values["pdbx_PDB_ins_code"] = token
+    compressed = gzip.compress(_mmcif("T001", values, "recoverable"), mtime=0)
+    _write(root / "raw/t001.cif.gz", compressed)
+    locator_path = root / "inputs/locator.csv"
+    with locator_path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        fields = tuple(reader.fieldnames or ())
+        rows = [dict(row) for row in reader]
+    digest = hashlib.sha256(compressed).hexdigest()
+    rows[0].update({
+        "expected_raw_sha256": digest,
+        "observed_raw_sha256": digest,
+        "struct_conn_insertion_raw_value": token,
+        "atom_site_insertion_raw_value": token,
+        **_legacy_insertion_fields(token),
+    })
+    _write(locator_path, _csv_bytes(fields, rows))
+    inventory, _ = _fixture_inventory(root)
+    return inventory, rows[0]
+
+
+def _provider_projection_drift_rejections(
+    locator: Mapping[str, str], token: str,
+) -> tuple[bool, bool, bool]:
+    mutations = (
+        (
+            "insertion_blocking_reason",
+            "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN",
+        ),
+        ("provider_export_status", "exported_blocking"),
+        (
+            "provider_export_blocking_reason",
+            "COVALENT_RESIDUE_INSERTION_CODE_PROVENANCE_UNKNOWN",
+        ),
+    )
+    rejected: list[bool] = []
+    for field, value in mutations:
+        drifted = dict(locator)
+        drifted[field] = value
+        rejected.append(not subject._resolve_insertion_provenance(
+            locator=drifted, raw_insertion_token=token
+        )[0])
+    return rejected[0], rejected[1], rejected[2]
+
+
 def _tree_snapshot(root: Path) -> dict[str, str]:
     return {
         path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -346,6 +444,63 @@ def main() -> None:
         assert recovered["proposed_condition_evidence_record"]
         assert recovered["proposed_condition_evidence_record"]["condition_evidence_record_sha256"]
         assert recovered["recovered_source_inventory_fields"] == contract_design._FUTURE_SOURCE_INVENTORY_REQUIRED_FIELDS
+
+        question_root = root / "question_probe"
+        _fixture_repo(question_root)
+        question_inventory, question_locator = _configure_first_insertion(
+            question_root, "?"
+        )
+        question_before = _tree_snapshot(question_root)
+        question_response = subject._reference_design_covapie_current11_target_residue_atom_condition_offline_source_recovery_v1(
+            source_formal_inventory=question_inventory, repo_root=question_root
+        )
+        question_after = _tree_snapshot(question_root)
+        question_record = question_response["offline_source_recovery_records"][0]
+        question_evidence = question_record["proposed_condition_evidence_record"]
+        question_resolution = subject._resolve_insertion_provenance(
+            locator=question_locator, raw_insertion_token="?"
+        )
+
+        concrete_root = root / "concrete_probe"
+        _fixture_repo(concrete_root)
+        concrete_inventory, concrete_locator = _configure_first_insertion(
+            concrete_root, "A"
+        )
+        concrete_before = _tree_snapshot(concrete_root)
+        concrete_response = subject._reference_design_covapie_current11_target_residue_atom_condition_offline_source_recovery_v1(
+            source_formal_inventory=concrete_inventory, repo_root=concrete_root
+        )
+        concrete_after = _tree_snapshot(concrete_root)
+        concrete_record = concrete_response["offline_source_recovery_records"][0]
+        dot_locator = next(csv.DictReader(io.StringIO(
+            files["locator"].decode("utf-8"), newline=""
+        )))
+        dot_provider_drift_rejections = _provider_projection_drift_rejections(
+            dot_locator, "."
+        )
+        concrete_provider_drift_rejections = (
+            _provider_projection_drift_rejections(concrete_locator, "A")
+        )
+
+        struct_conflict = dict(question_locator)
+        struct_conflict["struct_conn_insertion_raw_value"] = "."
+        atom_conflict = dict(question_locator)
+        atom_conflict["atom_site_insertion_raw_value"] = "."
+        bad_legacy = dict(question_locator)
+        bad_legacy["insertion_blocking_reason"] = ""
+        conflict_rejected = all(
+            not subject._resolve_insertion_provenance(
+                locator=locator, raw_insertion_token="?"
+            )[0]
+            for locator in (struct_conflict, atom_conflict)
+        )
+        bad_legacy_rejected = not subject._resolve_insertion_provenance(
+            locator=bad_legacy, raw_insertion_token="?"
+        )[0]
+        insertion_recommendation = subject._recommended(tuple(
+            {"recovery_status": "blocked_insertion_provenance"}
+            for _ in range(11)
+        ))
         summary = {
             "formal_inventory_field_count": 24,
             "formal_inventory_sample_count": 11,
@@ -370,11 +525,51 @@ def main() -> None:
             "protein_atom_table_snapshot_drift_rejected": snapshot_drift_rejected,
             "formal_inventory_to_table_snapshot_chain_verified": True,
             "proposed_condition_evidence_constructed": True,
+            "explicit_question_mark_insertion_recoverable": (
+                question_record["recovery_status"] == "recoverable_offline_unique"
+            ),
+            "explicit_question_mark_normalised_empty": (
+                question_evidence["protein_pdbx_PDB_ins_code"] == ""
+            ),
+            "explicit_question_mark_not_defaulted": (
+                question_locator["atom_site_insertion_raw_value"] == "?"
+                and question_resolution
+                == (True, "explicit_unknown_token_with_exact_source_provenance")
+            ),
+            "dot_insertion_recoverable": (
+                recovered["recovery_status"] == "recoverable_offline_unique"
+                and recovered["proposed_condition_evidence_record"]
+                ["protein_pdbx_PDB_ins_code"] == ""
+            ),
+            "concrete_insertion_recoverable": (
+                concrete_record["recovery_status"] == "recoverable_offline_unique"
+                and concrete_record["proposed_condition_evidence_record"]
+                ["protein_pdbx_PDB_ins_code"] == "A"
+            ),
+            "struct_conn_atom_site_token_conflict_rejected": conflict_rejected,
+            "unknown_token_bad_legacy_provenance_rejected": bad_legacy_rejected,
+            "blocked_insertion_recommended_step_specific": (
+                insertion_recommendation
+                == "resolve_covapie_current11_insertion_provenance_v1"
+            ),
+            "dot_token_bad_provider_projection_rejected": all(
+                dot_provider_drift_rejections
+            ),
+            "concrete_token_bad_provider_projection_rejected": all(
+                concrete_provider_drift_rejections
+            ),
+            "non_question_blocking_reason_drift_rejected": (
+                dot_provider_drift_rejections[0]
+                and concrete_provider_drift_rejections[0]
+            ),
             "condition_evidence_file_written": False,
             "ready_for_offline_source_evidence_compiler": first["ready_for_offline_source_evidence_compiler"],
             "recommended_next_step": first["recommended_next_step"],
             "deterministic": first == second,
-            "inputs_unchanged": before == after,
+            "inputs_unchanged": (
+                before == after and question_before == question_after
+                and concrete_before == concrete_after
+            ),
             "files_written": before != after,
             "model_modified": False, "data_loader_modified": False,
             "forward_modified": False, "loss_modified": False,
