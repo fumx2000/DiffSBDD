@@ -65,6 +65,135 @@ class EnVariationalDiffusion(nn.Module):
         if noise_schedule != 'learned':
             self.check_issues_norm_values()
 
+    def _validate_covapie_target_residue_atom_condition_indicator_v1(
+            self, pocket,
+            pocket_target_residue_atom_condition_indicator):
+        error_message = (
+            "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_MODEL_CONSUMPTION_INVALID"
+        )
+        try:
+            indicator = pocket_target_residue_atom_condition_indicator
+            if (
+                getattr(
+                    self.dynamics,
+                    "target_residue_atom_conditioning",
+                    False,
+                ) is not True
+                or not isinstance(indicator, torch.Tensor)
+                or indicator.dtype != torch.bool
+                or indicator.ndim != 1
+                or not isinstance(pocket, dict)
+                or not isinstance(pocket.get('x'), torch.Tensor)
+                or not isinstance(pocket.get('one_hot'), torch.Tensor)
+                or not isinstance(pocket.get('mask'), torch.Tensor)
+                or not isinstance(pocket.get('size'), torch.Tensor)
+                or pocket['mask'].ndim != 1
+                or pocket['size'].ndim != 1
+                or pocket['mask'].dtype != torch.long
+                or pocket['size'].dtype != torch.long
+                or len(pocket['size']) == 0
+            ):
+                raise ValueError(error_message)
+
+            node_count = len(pocket['x'])
+            if (
+                len(pocket['one_hot']) != node_count
+                or len(pocket['mask']) != node_count
+                or len(indicator) != node_count
+            ):
+                raise ValueError(error_message)
+
+            if (
+                not torch.all(pocket['size'] > 0).item()
+                or pocket['size'].sum().item() != node_count
+            ):
+                raise ValueError(error_message)
+            expected_mask = torch.repeat_interleave(
+                torch.arange(
+                    len(pocket['size']),
+                    device=pocket['mask'].device,
+                    dtype=torch.long,
+                ),
+                pocket['size'].to(device=pocket['mask'].device),
+            )
+            if not torch.equal(pocket['mask'], expected_mask):
+                raise ValueError(error_message)
+
+            sample_sizes = pocket['size'].detach().cpu().tolist()
+            indicator_for_validation = indicator.to(
+                device=pocket['mask'].device
+            )
+            offset = 0
+            for sample_size in sample_sizes:
+                next_offset = offset + sample_size
+                if (
+                    int(indicator_for_validation[
+                        offset:next_offset
+                    ].sum().item()) != 1
+                ):
+                    raise ValueError(error_message)
+                offset = next_offset
+            return indicator
+        except Exception as error:
+            if type(error) is ValueError and str(error) == error_message:
+                raise
+            raise ValueError(error_message) from error
+
+    def _resolve_covapie_target_residue_atom_condition_indicator_v1(
+            self, pocket,
+            pocket_target_residue_atom_condition_indicator=None):
+        error_message = (
+            "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_MODEL_CONSUMPTION_INVALID"
+        )
+        try:
+            field_name = (
+                "pocket_target_residue_atom_condition_indicator"
+            )
+            dictionary_present = (
+                isinstance(pocket, dict) and field_name in pocket
+            )
+            dictionary_indicator = (
+                pocket[field_name] if dictionary_present else None
+            )
+            explicit_indicator = (
+                pocket_target_residue_atom_condition_indicator
+            )
+            if dictionary_present and dictionary_indicator is None:
+                raise ValueError(error_message)
+            if dictionary_indicator is None and explicit_indicator is None:
+                return None
+            if (
+                dictionary_indicator is not None
+                and explicit_indicator is not None
+                and (
+                    not isinstance(dictionary_indicator, torch.Tensor)
+                    or not isinstance(explicit_indicator, torch.Tensor)
+                    or dictionary_indicator.dtype != torch.bool
+                    or explicit_indicator.dtype != torch.bool
+                    or dictionary_indicator.ndim != 1
+                    or explicit_indicator.ndim != 1
+                    or dictionary_indicator.shape != explicit_indicator.shape
+                    or not torch.equal(
+                        dictionary_indicator,
+                        explicit_indicator,
+                    )
+                )
+            ):
+                raise ValueError(error_message)
+            indicator = (
+                dictionary_indicator
+                if dictionary_indicator is not None
+                else explicit_indicator
+            )
+            return self._validate_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                indicator,
+            )
+        except Exception as error:
+            if type(error) is ValueError and str(error) == error_message:
+                raise
+            raise ValueError(error_message) from error
+
     def check_issues_norm_values(self, num_stdevs=8):
         zeros = torch.zeros((1, 1))
         gamma_0 = self.gamma(zeros)
@@ -260,15 +389,20 @@ class EnVariationalDiffusion(nn.Module):
         return log_p_x_given_z0_without_constants_ligand, \
                log_p_x_given_z0_without_constants_pocket, log_ph_given_z0
 
-    def sample_p_xh_given_z0(self, z0_lig, z0_pocket, lig_mask, pocket_mask,
-                             batch_size, fix_noise=False):
+    def sample_p_xh_given_z0(
+            self, z0_lig, z0_pocket, lig_mask, pocket_mask, batch_size,
+            fix_noise=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """Samples x ~ p(x|z0)."""
         t_zeros = torch.zeros(size=(batch_size, 1), device=z0_lig.device)
         gamma_0 = self.gamma(t_zeros)
         # Computes sqrt(sigma_0^2 / alpha_0^2)
         sigma_x = self.SNR(-0.5 * gamma_0)
         net_out_lig, net_out_pocket = self.dynamics(
-            z0_lig, z0_pocket, t_zeros, lig_mask, pocket_mask)
+            z0_lig, z0_pocket, t_zeros, lig_mask, pocket_mask,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # Compute mu for p(zs | zt).
         mu_x_lig = self.compute_x_pred(net_out_lig, z0_lig, gamma_0, lig_mask)
@@ -333,10 +467,18 @@ class EnVariationalDiffusion(nn.Module):
         return -self.subspace_dimensionality(num_nodes) * \
                np.log(self.norm_values[0])
 
-    def forward(self, ligand, pocket, return_info=False):
+    def forward(
+            self, ligand, pocket, return_info=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Computes the loss and NLL terms
         """
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
+
         # Normalize data, take into account volume change in x.
         ligand, pocket = self.normalize(ligand, pocket)
 
@@ -376,7 +518,10 @@ class EnVariationalDiffusion(nn.Module):
 
         # Neural net prediction.
         net_out_lig, net_out_pocket = self.dynamics(
-            z_t_lig, z_t_pocket, t, ligand['mask'], pocket['mask'])
+            z_t_lig, z_t_pocket, t, ligand['mask'], pocket['mask'],
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # For LJ loss term
         xh_lig_hat = self.xh_given_zt_and_epsilon(z_t_lig, net_out_lig, gamma_t,
@@ -434,7 +579,10 @@ class EnVariationalDiffusion(nn.Module):
                                            pocket['mask'], gamma_0)
 
             net_out_0_lig, net_out_0_pocket = self.dynamics(
-                z_0_lig, z_0_pocket, t_zeros, ligand['mask'], pocket['mask'])
+                z_0_lig, z_0_pocket, t_zeros, ligand['mask'], pocket['mask'],
+                pocket_target_residue_atom_condition_indicator=(
+                    pocket_target_residue_atom_condition_indicator
+                ))
 
             log_p_x_given_z0_without_constants_ligand, \
             log_p_x_given_z0_without_constants_pocket, log_ph_given_z0 = \
@@ -500,8 +648,10 @@ class EnVariationalDiffusion(nn.Module):
 
         return zt_lig, zt_pocket
 
-    def sample_p_zs_given_zt(self, s, t, zt_lig, zt_pocket, ligand_mask,
-                             pocket_mask, fix_noise=False):
+    def sample_p_zs_given_zt(
+            self, s, t, zt_lig, zt_pocket, ligand_mask, pocket_mask,
+            fix_noise=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """Samples from zs ~ p(zs | zt). Only used during sampling."""
         gamma_s = self.gamma(s)
         gamma_t = self.gamma(t)
@@ -514,7 +664,10 @@ class EnVariationalDiffusion(nn.Module):
 
         # Neural net prediction.
         eps_t_lig, eps_t_pocket = self.dynamics(
-            zt_lig, zt_pocket, t, ligand_mask, pocket_mask)
+            zt_lig, zt_pocket, t, ligand_mask, pocket_mask,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # Compute mu for p(zs | zt).
         combined_mask = torch.cat((ligand_mask, pocket_mask))
@@ -674,8 +827,10 @@ class EnVariationalDiffusion(nn.Module):
         return list(reversed(repaint_schedule))
 
     @torch.no_grad()
-    def inpaint(self, ligand, pocket, lig_fixed, pocket_fixed, resamplings=1,
-                jump_length=1, return_frames=1, timesteps=None):
+    def inpaint(
+            self, ligand, pocket, lig_fixed, pocket_fixed, resamplings=1,
+            jump_length=1, return_frames=1, timesteps=None,
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Draw samples from the generative model while fixing parts of the input.
         Optionally, return intermediate states for visualization purposes.
@@ -695,6 +850,12 @@ class EnVariationalDiffusion(nn.Module):
             lig_fixed = lig_fixed.unsqueeze(1)
         if len(pocket_fixed.size()) == 1:
             pocket_fixed = pocket_fixed.unsqueeze(1)
+
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
 
         ligand, pocket = self.normalize(ligand, pocket)
 
@@ -747,7 +908,10 @@ class EnVariationalDiffusion(nn.Module):
                 # sample inpainted part
                 z_lig_unknown, z_pocket_unknown = self.sample_p_zs_given_zt(
                     s_array, t_array, z_lig, z_pocket, ligand['mask'],
-                    pocket['mask'])
+                    pocket['mask'],
+                    pocket_target_residue_atom_condition_indicator=(
+                        pocket_target_residue_atom_condition_indicator
+                    ))
 
                 # move center of mass of the noised part to the center of mass
                 # of the corresponding denoised part before combining them
@@ -812,7 +976,10 @@ class EnVariationalDiffusion(nn.Module):
 
         # Finally sample p(x, h | z_0).
         x_lig, h_lig, x_pocket, h_pocket = self.sample_p_xh_given_z0(
-            z_lig, z_pocket, ligand['mask'], pocket['mask'], n_samples)
+            z_lig, z_pocket, ligand['mask'], pocket['mask'], n_samples,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         self.assert_mean_zero_with_mask(
             torch.cat((x_lig, x_pocket), dim=0), combined_mask

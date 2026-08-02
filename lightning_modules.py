@@ -307,10 +307,17 @@ class LigandPocketDDPM(pl.LightningModule):
             mode,
             node_histogram,
             pocket_representation='CA',
-            virtual_nodes=False
+            virtual_nodes=False,
+            target_residue_atom_conditioning=False
     ):
         super(LigandPocketDDPM, self).__init__()
+        if type(target_residue_atom_conditioning) is not bool:
+            raise ValueError(
+                "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_MODEL_CONSUMPTION_INVALID"
+            )
         self.save_hyperparameters()
+        self.target_residue_atom_conditioning = \
+            target_residue_atom_conditioning
 
         ddpm_models = {'joint': EnVariationalDiffusion,
                        'pocket_conditioning': ConditionalDDPM,
@@ -412,6 +419,9 @@ class LigandPocketDDPM(pl.LightningModule):
             update_pocket_coords=(self.mode == 'joint'),
             reflection_equivariant=egnn_params.reflection_equivariant,
             edge_embedding_dim=egnn_params.__dict__.get('edge_embedding_dim'),
+            target_residue_atom_conditioning=(
+                target_residue_atom_conditioning
+            ),
         )
 
         self.ddpm = ddpm_models[self.mode](

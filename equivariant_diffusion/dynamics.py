@@ -16,8 +16,24 @@ class EGNNDynamics(nn.Module):
                  normalization_factor=100, aggregation_method='sum',
                  update_pocket_coords=True, edge_cutoff_ligand=None,
                  edge_cutoff_pocket=None, edge_cutoff_interaction=None,
-                 reflection_equivariant=True, edge_embedding_dim=None):
+                 reflection_equivariant=True, edge_embedding_dim=None,
+                 target_residue_atom_conditioning=False):
         super().__init__()
+        if type(target_residue_atom_conditioning) is not bool:
+            raise ValueError(
+                "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_MODEL_CONSUMPTION_INVALID"
+            )
+        self.target_residue_atom_conditioning = \
+            target_residue_atom_conditioning
+        if target_residue_atom_conditioning:
+            self.target_residue_atom_condition_embedding = nn.Parameter(
+                torch.zeros(joint_nf)
+            )
+        else:
+            self.register_parameter(
+                "target_residue_atom_condition_embedding",
+                None,
+            )
         self.mode = mode
         self.edge_cutoff_l = edge_cutoff_ligand
         self.edge_cutoff_p = edge_cutoff_pocket
@@ -84,7 +100,26 @@ class EGNNDynamics(nn.Module):
         self.n_dims = n_dims
         self.condition_time = condition_time
 
-    def forward(self, xh_atoms, xh_residues, t, mask_atoms, mask_residues):
+    def forward(
+            self, xh_atoms, xh_residues, t, mask_atoms, mask_residues,
+            pocket_target_residue_atom_condition_indicator=None):
+
+        if pocket_target_residue_atom_condition_indicator is not None:
+            if (
+                self.target_residue_atom_conditioning is not True
+                or not isinstance(
+                    pocket_target_residue_atom_condition_indicator,
+                    torch.Tensor,
+                )
+                or pocket_target_residue_atom_condition_indicator.dtype
+                != torch.bool
+                or pocket_target_residue_atom_condition_indicator.ndim != 1
+                or len(pocket_target_residue_atom_condition_indicator)
+                != len(xh_residues)
+            ):
+                raise ValueError(
+                    "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_MODEL_CONSUMPTION_INVALID"
+                )
 
         x_atoms = xh_atoms[:, :self.n_dims].clone()
         h_atoms = xh_atoms[:, self.n_dims:].clone()
@@ -95,6 +130,14 @@ class EGNNDynamics(nn.Module):
         # embed atom features and residue features in a shared space
         h_atoms = self.atom_encoder(h_atoms)
         h_residues = self.residue_encoder(h_residues)
+        if pocket_target_residue_atom_condition_indicator is not None:
+            h_residues = h_residues + (
+                pocket_target_residue_atom_condition_indicator.to(
+                    device=h_residues.device,
+                    dtype=h_residues.dtype,
+                ).unsqueeze(1)
+                * self.target_residue_atom_condition_embedding.unsqueeze(0)
+            )
 
         # combine the two node types
         x = torch.cat((x_atoms, x_residues), dim=0)

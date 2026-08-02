@@ -109,15 +109,20 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         return log_p_x_given_z0_without_constants_ligand, log_ph_given_z0_ligand
 
-    def sample_p_xh_given_z0(self, z0_lig, xh0_pocket, lig_mask, pocket_mask,
-                             batch_size, fix_noise=False):
+    def sample_p_xh_given_z0(
+            self, z0_lig, xh0_pocket, lig_mask, pocket_mask, batch_size,
+            fix_noise=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """Samples x ~ p(x|z0)."""
         t_zeros = torch.zeros(size=(batch_size, 1), device=z0_lig.device)
         gamma_0 = self.gamma(t_zeros)
         # Computes sqrt(sigma_0^2 / alpha_0^2)
         sigma_x = self.SNR(-0.5 * gamma_0)
         net_out_lig, _ = self.dynamics(
-            z0_lig, xh0_pocket, t_zeros, lig_mask, pocket_mask)
+            z0_lig, xh0_pocket, t_zeros, lig_mask, pocket_mask,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # Compute mu for p(zs | zt).
         mu_x_lig = self.compute_x_pred(net_out_lig, z0_lig, gamma_0, lig_mask)
@@ -199,10 +204,18 @@ class ConditionalDDPM(EnVariationalDiffusion):
         return -self.subspace_dimensionality(num_nodes) * \
                np.log(self.norm_values[0])
 
-    def forward(self, ligand, pocket, return_info=False):
+    def forward(
+            self, ligand, pocket, return_info=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Computes the loss and NLL terms
         """
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
+
         # Normalize data, take into account volume change in x.
         ligand, pocket = self.normalize(ligand, pocket)
 
@@ -251,7 +264,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         # Neural net prediction.
         net_out_lig, _ = self.dynamics(
-            z_t_lig, xh_pocket, t, ligand['mask'], pocket['mask'])
+            z_t_lig, xh_pocket, t, ligand['mask'], pocket['mask'],
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # For LJ loss term
         # xh_lig_hat does not need to be zero-centered as it is only used for
@@ -304,7 +320,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
                                            pocket['mask'], gamma_0)
 
             net_out_0_lig, _ = self.dynamics(
-                z_0_lig, xh_pocket, t_zeros, ligand['mask'], pocket['mask'])
+                z_0_lig, xh_pocket, t_zeros, ligand['mask'], pocket['mask'],
+                pocket_target_residue_atom_condition_indicator=(
+                    pocket_target_residue_atom_condition_indicator
+                ))
 
             log_p_x_given_z0_without_constants_ligand, log_ph_given_z0 = \
                 self.log_pxh_given_z0_without_constants(
@@ -361,10 +380,18 @@ class ConditionalDDPM(EnVariationalDiffusion):
             
         return z_t_lig, xh_pocket, eps_t_lig
 
-    def diversify(self, ligand, pocket, noising_steps):
+    def diversify(
+            self, ligand, pocket, noising_steps,
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Diversifies a set of ligands via noise-denoising
         """
+
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
 
         # Normalize data, take into account volume change in x.
         ligand, pocket = self.normalize(ligand, pocket)
@@ -393,11 +420,18 @@ class ConditionalDDPM(EnVariationalDiffusion):
             t_array = t_array / timesteps
 
             z_lig, xh_pocket = self.sample_p_zs_given_zt(
-                s_array, t_array, z_lig.detach(), xh_pocket.detach(), lig_mask, pocket['mask'])
+                s_array, t_array, z_lig.detach(), xh_pocket.detach(),
+                lig_mask, pocket['mask'],
+                pocket_target_residue_atom_condition_indicator=(
+                    pocket_target_residue_atom_condition_indicator
+                ))
 
         # Finally sample p(x, h | z_0).
         x_lig, h_lig, x_pocket, h_pocket = self.sample_p_xh_given_z0(
-            z_lig, xh_pocket, lig_mask, pocket['mask'], n_samples)
+            z_lig, xh_pocket, lig_mask, pocket['mask'], n_samples,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         self.assert_mean_zero_with_mask(x_lig, lig_mask)
 
@@ -429,8 +463,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         return zt_lig, xh0_pocket
 
-    def sample_p_zs_given_zt(self, s, t, zt_lig, xh0_pocket, ligand_mask,
-                             pocket_mask, fix_noise=False):
+    def sample_p_zs_given_zt(
+            self, s, t, zt_lig, xh0_pocket, ligand_mask, pocket_mask,
+            fix_noise=False,
+            pocket_target_residue_atom_condition_indicator=None):
         """Samples from zs ~ p(zs | zt). Only used during sampling."""
         gamma_s = self.gamma(s)
         gamma_t = self.gamma(t)
@@ -443,7 +479,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         # Neural net prediction.
         eps_t_lig, _ = self.dynamics(
-            zt_lig, xh0_pocket, t, ligand_mask, pocket_mask)
+            zt_lig, xh0_pocket, t, ligand_mask, pocket_mask,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # Compute mu for p(zs | zt).
         # Note: mu_{t->s} = 1 / alpha_{t|s} z_t - sigma_{t|s}^2 / sigma_t / alpha_{t|s} epsilon
@@ -476,8 +515,9 @@ class ConditionalDDPM(EnVariationalDiffusion):
                                   "without given pocket.")
 
     @torch.no_grad()
-    def sample_given_pocket(self, pocket, num_nodes_lig, return_frames=1,
-                            timesteps=None):
+    def sample_given_pocket(
+            self, pocket, num_nodes_lig, return_frames=1, timesteps=None,
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Draw samples from the generative model. Optionally, return intermediate
         states for visualization purposes.
@@ -488,6 +528,12 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         n_samples = len(pocket['size'])
         device = pocket['x'].device
+
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
 
         _, pocket = self.normalize(pocket=pocket)
 
@@ -523,7 +569,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
             t_array = t_array / timesteps
 
             z_lig, xh_pocket = self.sample_p_zs_given_zt(
-                s_array, t_array, z_lig, xh_pocket, lig_mask, pocket['mask'])
+                s_array, t_array, z_lig, xh_pocket, lig_mask, pocket['mask'],
+                pocket_target_residue_atom_condition_indicator=(
+                    pocket_target_residue_atom_condition_indicator
+                ))
 
             # save frame
             if (s * return_frames) % timesteps == 0:
@@ -533,7 +582,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         # Finally sample p(x, h | z_0).
         x_lig, h_lig, x_pocket, h_pocket = self.sample_p_xh_given_z0(
-            z_lig, xh_pocket, lig_mask, pocket['mask'], n_samples)
+            z_lig, xh_pocket, lig_mask, pocket['mask'], n_samples,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         self.assert_mean_zero_with_mask(x_lig, lig_mask)
 
@@ -555,8 +607,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
                pocket['mask']
 
     @torch.no_grad()
-    def inpaint(self, ligand, pocket, lig_fixed, resamplings=1, return_frames=1,
-                timesteps=None, center='ligand'):
+    def inpaint(
+            self, ligand, pocket, lig_fixed, resamplings=1, return_frames=1,
+            timesteps=None, center='ligand',
+            pocket_target_residue_atom_condition_indicator=None):
         """
         Draw samples from the generative model while fixing parts of the input.
         Optionally, return intermediate states for visualization purposes.
@@ -575,6 +629,12 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         n_samples = len(ligand['size'])
         device = pocket['x'].device
+
+        pocket_target_residue_atom_condition_indicator = \
+            self._resolve_covapie_target_residue_atom_condition_indicator_v1(
+                pocket,
+                pocket_target_residue_atom_condition_indicator,
+            )
 
         # Normalize
         ligand, pocket = self.normalize(ligand, pocket)
@@ -631,7 +691,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
                 # sample inpainted part
                 z_lig_unknown, xh_pocket = self.sample_p_zs_given_zt(
                     s_array, t_array, z_lig, xh_pocket, ligand['mask'],
-                    pocket['mask'])
+                    pocket['mask'],
+                    pocket_target_residue_atom_condition_indicator=(
+                        pocket_target_residue_atom_condition_indicator
+                    ))
 
                 # sample known nodes from the input
                 com_pocket = scatter_mean(xh_pocket[:, :self.n_dims],
@@ -675,7 +738,10 @@ class ConditionalDDPM(EnVariationalDiffusion):
 
         # Finally sample p(x, h | z_0).
         x_lig, h_lig, x_pocket, h_pocket = self.sample_p_xh_given_z0(
-            z_lig, xh_pocket, ligand['mask'], pocket['mask'], n_samples)
+            z_lig, xh_pocket, ligand['mask'], pocket['mask'], n_samples,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
         # Overwrite last frame with the resulting x and h.
         out_lig[0] = torch.cat([x_lig, h_lig], dim=1)
@@ -724,7 +790,9 @@ class SimpleConditionalDDPM(ConditionalDDPM):
     def assert_mean_zero_with_mask(x, node_mask, eps=1e-10):
         return
 
-    def forward(self, ligand, pocket, return_info=False):
+    def forward(
+            self, ligand, pocket, return_info=False,
+            pocket_target_residue_atom_condition_indicator=None):
 
         # Subtract pocket center of mass
         pocket_com = scatter_mean(pocket['x'], pocket['mask'], dim=0)
@@ -732,15 +800,22 @@ class SimpleConditionalDDPM(ConditionalDDPM):
         pocket['x'] = pocket['x'] - pocket_com[pocket['mask']]
 
         return super(SimpleConditionalDDPM, self).forward(
-            ligand, pocket, return_info)
+            ligand, pocket, return_info,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
 
     @torch.no_grad()
-    def sample_given_pocket(self, pocket, num_nodes_lig, return_frames=1,
-                            timesteps=None):
+    def sample_given_pocket(
+            self, pocket, num_nodes_lig, return_frames=1, timesteps=None,
+            pocket_target_residue_atom_condition_indicator=None):
 
         # Subtract pocket center of mass
         pocket_com = scatter_mean(pocket['x'], pocket['mask'], dim=0)
         pocket['x'] = pocket['x'] - pocket_com[pocket['mask']]
 
         return super(SimpleConditionalDDPM, self).sample_given_pocket(
-            pocket, num_nodes_lig, return_frames, timesteps)
+            pocket, num_nodes_lig, return_frames, timesteps,
+            pocket_target_residue_atom_condition_indicator=(
+                pocket_target_residue_atom_condition_indicator
+            ))
