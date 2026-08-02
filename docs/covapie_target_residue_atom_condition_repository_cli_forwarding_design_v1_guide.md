@@ -99,6 +99,36 @@ references are assigned according to the runtime surface they validate. That
 complete scope makes the design ready to begin retirement implementation, but
 does not make CLI forwarding ready.
 
+## Design-file Git lifecycle
+
+The first design run occurs before the four design files have been committed,
+so all four are ordinary-untracked files. After the design commit, those same
+paths are tracked and the ordinary-untracked count normally changes from four
+to zero. A later successor revision keeps the paths tracked while modifying
+their working-tree contents. None of these normal transitions changes which
+repository evidence the inventory must scan.
+
+The lifecycle check therefore accepts exactly two mutually exclusive profiles:
+
+- `precommit_untracked`: all four design paths are untracked, none are tracked,
+  and they are the complete ordinary-untracked set;
+- `committed_or_successor`: all four design paths are tracked, none are
+  untracked, and the ordinary-untracked set is empty.
+
+Binding the design permanently to the first profile would make a valid commit
+impossible to revalidate. The lifecycle helper instead reads both Git path sets
+and fails closed for partial tracked/untracked mixtures, a missing design path,
+the same design path appearing in both sets, or any unrelated ordinary-untracked
+path. Candidate discovery always includes the four explicit design paths, so
+the transition does not hide their evidence or alter the 45-record inventory.
+
+This lifecycle repair does not change Exact43, its digest, the five canonical
+mask semantics, or any retirement and forwarding readiness value. Local commit
+`510b67d5882ef18c95251e93490bf4482b7682ee` remains intact; a separate
+successor fix commit may be created only after both lifecycle profiles and all
+other validation gates pass. The two commits must be independently verified
+before an ordinary push.
+
 ## Historical evidence boundary
 
 Historical Git commits, formal predecessor bundles, derived historical reports,

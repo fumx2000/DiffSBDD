@@ -42,6 +42,7 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
     inpaint = response["selected_covalent_inpaint_forwarding_contract"]
     masks = response["selected_mask_semantic_normalization_contract"]
     inventory = masks["legacy_reference_inventory"]
+    lifecycle = design._design_path_lifecycle_evidence(ROOT)
     ordered_steps = {
         item["step"]: item
         for item in masks["future_retirement_implementation_scope"][
@@ -211,6 +212,31 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "legacy_reference_inventory_complete": inventory[
             "inventory_complete"
         ],
+        "design_lifecycle_profile": lifecycle["design_lifecycle_profile"],
+        "design_paths_all_tracked": lifecycle["design_paths_all_tracked"],
+        "design_paths_all_untracked": lifecycle[
+            "design_paths_all_untracked"
+        ],
+        "ordinary_untracked_count": lifecycle["ordinary_untracked_count"],
+        "unrelated_ordinary_untracked_count": lifecycle[
+            "unrelated_ordinary_untracked_count"
+        ],
+        "post_commit_inventory_supported": (
+            lifecycle["design_lifecycle_profile"]
+            == "committed_or_successor"
+            and lifecycle["design_paths_all_tracked"] is True
+            and lifecycle["ordinary_untracked_count"] == 0
+            and inventory["reference_count"] == 45
+            and inventory["active_legacy_reference_count"] == 14
+            and inventory["unresolved_active_reference_count"] == 0
+        ),
+        "inventory_reference_count": inventory["reference_count"],
+        "inventory_active_reference_count": inventory[
+            "active_legacy_reference_count"
+        ],
+        "inventory_unresolved_active_reference_count": inventory[
+            "unresolved_active_reference_count"
+        ],
         "active_legacy_reference_count": inventory[
             "active_legacy_reference_count"
         ],
@@ -289,6 +315,8 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "canonical_B2_is_scaffold_plus_warhead",
         "canonical_B3_is_scaffold_only",
         "legacy_reference_inventory_complete",
+        "design_paths_all_tracked",
+        "post_commit_inventory_supported",
         "all_active_legacy_references_in_future_scope",
         "retirement_R1_scope_complete",
         "retirement_R2_scope_complete",
@@ -314,6 +342,11 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "current_active_legacy_reference_path_count": 5,
         "target_active_legacy_reference_count": 0,
         "target_active_legacy_reference_path_count": 0,
+        "ordinary_untracked_count": 0,
+        "unrelated_ordinary_untracked_count": 0,
+        "inventory_reference_count": 45,
+        "inventory_active_reference_count": 14,
+        "inventory_unresolved_active_reference_count": 0,
     }
     if any(facts[name] != expected for name, expected in expected_counts.items()):
         raise ValueError(design._ERROR)
@@ -327,6 +360,7 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "target_short_alias_input_supported",
         "ambiguous_legacy_B2_reinterpretation_allowed",
         "sixth_mask_added",
+        "design_paths_all_untracked",
         "repository_cli_selector_forwarding_implemented",
         "ready_for_repository_cli_forwarding_implementation",
         "training_or_parameter_update",
@@ -336,6 +370,8 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
     if facts["recommended_next_step"] != (
         "implement_covapie_legacy_four_level_mask_retirement_v1"
     ):
+        raise ValueError(design._ERROR)
+    if facts["design_lifecycle_profile"] != "committed_or_successor":
         raise ValueError(design._ERROR)
     if (
         facts["canonical_mask_input_flag"] != "--mask_semantic"

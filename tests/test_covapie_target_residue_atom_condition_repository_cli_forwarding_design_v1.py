@@ -33,6 +33,22 @@ def _assert_canonical_error(action) -> None:
         action()
 
 
+def _patch_lifecycle_git(
+    monkeypatch,
+    *,
+    tracked_paths: set[str],
+    ordinary_untracked_paths: set[str],
+) -> None:
+    def fake_git(_repo_root, *args):
+        if args == ("ls-files",):
+            return "\n".join(sorted(tracked_paths))
+        if args == ("ls-files", "--others", "--exclude-standard"):
+            return "\n".join(sorted(ordinary_untracked_paths))
+        raise AssertionError(args)
+
+    monkeypatch.setattr(design, "_git", fake_git)
+
+
 @pytest.fixture(scope="session")
 def bundle_bytes() -> bytes:
     return BUNDLE_PATH.read_bytes()
@@ -107,6 +123,88 @@ def test_import_is_silent_and_has_no_output_side_effect(tmp_path):
     assert completed.returncode == 0
     assert completed.stdout == ""
     assert completed.stderr == ""
+
+
+def test_design_lifecycle_accepts_current_committed_profile():
+    evidence = design._design_path_lifecycle_evidence(ROOT)
+    assert evidence["design_lifecycle_profile"] == "committed_or_successor"
+    assert evidence["tracked_design_paths"] == sorted(design._DESIGN_PATHS)
+    assert evidence["untracked_design_paths"] == []
+    assert evidence["design_paths_all_tracked"] is True
+    assert evidence["design_paths_all_untracked"] is False
+    assert evidence["ordinary_untracked_count"] == 0
+    assert evidence["unrelated_ordinary_untracked_count"] == 0
+    assert evidence["lifecycle_valid"] is True
+    assert all(
+        not isinstance(item, Path)
+        for value in evidence.values()
+        for item in (value if isinstance(value, list) else [value])
+    )
+
+
+def test_design_lifecycle_accepts_exact_precommit_untracked_profile(monkeypatch):
+    design_paths = set(design._DESIGN_PATHS)
+    tracked_paths = set(design._git(ROOT, "ls-files").splitlines()) - design_paths
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=tracked_paths,
+        ordinary_untracked_paths=design_paths,
+    )
+    evidence = design._design_path_lifecycle_evidence(ROOT)
+    assert evidence["design_lifecycle_profile"] == "precommit_untracked"
+    assert evidence["tracked_design_paths"] == []
+    assert evidence["untracked_design_paths"] == sorted(design_paths)
+    assert evidence["design_paths_all_tracked"] is False
+    assert evidence["design_paths_all_untracked"] is True
+    assert evidence["ordinary_untracked_count"] == 4
+    assert evidence["unrelated_ordinary_untracked_count"] == 0
+    assert evidence["lifecycle_valid"] is True
+
+
+def test_design_lifecycle_rejects_mixed_tracked_and_untracked_design_paths(
+    monkeypatch,
+):
+    design_paths = set(design._DESIGN_PATHS)
+    tracked_paths = set(design._git(ROOT, "ls-files").splitlines()) - design_paths
+    tracked_design_paths = set(design._DESIGN_PATHS[:3])
+    untracked_design_paths = {design._DESIGN_PATHS[3]}
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=tracked_paths | tracked_design_paths,
+        ordinary_untracked_paths=untracked_design_paths,
+    )
+    _assert_canonical_error(lambda: design._design_path_lifecycle_evidence(ROOT))
+
+
+def test_design_lifecycle_rejects_unrelated_ordinary_untracked_path(monkeypatch):
+    tracked_paths = set(design._git(ROOT, "ls-files").splitlines())
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=tracked_paths,
+        ordinary_untracked_paths={"scratch.txt"},
+    )
+    _assert_canonical_error(lambda: design._design_path_lifecycle_evidence(ROOT))
+
+
+def test_design_lifecycle_rejects_missing_design_path(monkeypatch):
+    tracked_paths = set(design._git(ROOT, "ls-files").splitlines())
+    tracked_paths.remove(design._DESIGN_PATHS[-1])
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=tracked_paths,
+        ordinary_untracked_paths=set(),
+    )
+    _assert_canonical_error(lambda: design._design_path_lifecycle_evidence(ROOT))
+
+
+def test_design_lifecycle_rejects_design_path_in_both_git_sets(monkeypatch):
+    tracked_paths = set(design._git(ROOT, "ls-files").splitlines())
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=tracked_paths,
+        ordinary_untracked_paths={design._DESIGN_PATHS[0]},
+    )
+    _assert_canonical_error(lambda: design._design_path_lifecycle_evidence(ROOT))
 
 
 def test_exact43_field_order(response):
@@ -600,6 +698,63 @@ def test_repository_legacy_reference_inventory_is_complete(response):
         "historical_freeze_only",
         "design_evidence_only",
     ))
+
+
+def test_post_commit_inventory_retains_exact_45_records():
+    inventory = design._legacy_mask_reference_inventory(ROOT)
+    assert inventory["reference_count"] == 45
+    assert inventory["classification_counts"] == {
+        "active_runtime": 14,
+        "test_only": 7,
+        "documentation_only": 8,
+        "historical_freeze_only": 8,
+        "design_evidence_only": 8,
+    }
+    assert inventory["active_legacy_reference_count"] == 14
+    assert inventory["active_legacy_reference_path_count"] == 5
+    assert inventory["active_legacy_reference_paths"] == [
+        "scripts/check_covalent_masking.py",
+        "scripts/covalent_inpaint_demo.py",
+        "src/covalent_ext/dataset.py",
+        "src/covalent_ext/masking.py",
+        "src/covalent_ext/schema.py",
+    ]
+    assert inventory["unresolved_active_reference_count"] == 0
+
+
+def test_precommit_inventory_retains_exact_45_records(monkeypatch):
+    design_paths = set(design._DESIGN_PATHS)
+    original_git = design._git
+    tracked_paths = set(original_git(ROOT, "ls-files").splitlines()) - design_paths
+
+    def fake_git(repo_root, *args):
+        if args == ("ls-files",):
+            return "\n".join(sorted(tracked_paths))
+        if args == ("ls-files", "--others", "--exclude-standard"):
+            return "\n".join(sorted(design_paths))
+        return original_git(repo_root, *args)
+
+    monkeypatch.setattr(design, "_git", fake_git)
+    inventory = design._legacy_mask_reference_inventory(ROOT)
+    assert inventory["reference_count"] == 45
+    assert inventory["classification_counts"] == {
+        "active_runtime": 14,
+        "test_only": 7,
+        "documentation_only": 8,
+        "historical_freeze_only": 8,
+        "design_evidence_only": 8,
+    }
+    assert inventory["active_legacy_reference_count"] == 14
+    assert inventory["active_legacy_reference_path_count"] == 5
+    assert inventory["unresolved_active_reference_count"] == 0
+
+
+def test_commit_lifecycle_fix_preserves_exact43_digest(response):
+    assert len(response) == 43
+    assert tuple(response) == design.REPOSITORY_CLI_FORWARDING_DESIGN_RESPONSE_FIELDS
+    assert response["repository_cli_forwarding_design_response_sha256"] == (
+        "bf78147e803c032aea363bdc46325a3c1c7a657c07a1d767231d9d8913a0caa6"
+    )
 
 
 def test_every_active_legacy_reference_has_a_future_action_and_scope(response):

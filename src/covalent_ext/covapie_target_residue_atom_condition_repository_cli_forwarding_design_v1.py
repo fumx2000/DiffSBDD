@@ -295,6 +295,71 @@ def _git(repo_root: Path, *args: str) -> str:
     return completed.stdout.rstrip("\n")
 
 
+def _design_path_lifecycle_evidence(repo_root: Path) -> dict[str, Any]:
+    tracked_paths = set(_git(repo_root, "ls-files").splitlines())
+    ordinary_untracked_paths = set(
+        _git(
+            repo_root,
+            "ls-files",
+            "--others",
+            "--exclude-standard",
+        ).splitlines()
+    )
+    design_paths = set(_DESIGN_PATHS)
+    tracked_design_paths = tracked_paths & design_paths
+    untracked_design_paths = ordinary_untracked_paths & design_paths
+    unrelated_ordinary_untracked_paths = ordinary_untracked_paths - design_paths
+    design_paths_overlap = tracked_design_paths & untracked_design_paths
+
+    for relative_path in _DESIGN_PATHS:
+        try:
+            metadata = (repo_root / relative_path).lstat()
+        except OSError as error:
+            raise ValueError(_ERROR) from error
+        if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISREG(metadata.st_mode):
+            raise ValueError(_ERROR)
+
+    precommit_untracked = (
+        not tracked_design_paths
+        and untracked_design_paths == design_paths
+        and ordinary_untracked_paths == design_paths
+        and not unrelated_ordinary_untracked_paths
+        and not design_paths_overlap
+    )
+    committed_or_successor = (
+        tracked_design_paths == design_paths
+        and not untracked_design_paths
+        and not ordinary_untracked_paths
+        and not unrelated_ordinary_untracked_paths
+        and not design_paths_overlap
+    )
+    if precommit_untracked == committed_or_successor:
+        raise ValueError(_ERROR)
+
+    profile = (
+        "precommit_untracked"
+        if precommit_untracked
+        else "committed_or_successor"
+    )
+    return {
+        "design_lifecycle_profile": profile,
+        "tracked_paths": sorted(tracked_paths),
+        "ordinary_untracked_paths": sorted(ordinary_untracked_paths),
+        "tracked_design_paths": sorted(tracked_design_paths),
+        "untracked_design_paths": sorted(untracked_design_paths),
+        "unrelated_ordinary_untracked_paths": sorted(
+            unrelated_ordinary_untracked_paths
+        ),
+        "design_paths_all_tracked": tracked_design_paths == design_paths,
+        "design_paths_all_untracked": untracked_design_paths == design_paths,
+        "ordinary_untracked_count": len(ordinary_untracked_paths),
+        "unrelated_ordinary_untracked_count": len(
+            unrelated_ordinary_untracked_paths
+        ),
+        "lifecycle_valid": True,
+    }
+
+
 def _is_ancestor(repo_root: Path, ancestor: str, descendant: str) -> bool:
     completed = subprocess.run(
         ["git", "merge-base", "--is-ancestor", ancestor, descendant],
@@ -745,13 +810,10 @@ def _future_retirement_implementation_scope() -> dict[str, Any]:
 
 
 def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
-    tracked = set(_git(repo_root, "ls-files").splitlines())
-    ordinary_untracked = set(
-        _git(repo_root, "ls-files", "--others", "--exclude-standard").splitlines()
-    )
-    if ordinary_untracked != set(_DESIGN_PATHS):
-        raise ValueError(_ERROR)
-    repository_paths = sorted(tracked | ordinary_untracked)
+    lifecycle = _design_path_lifecycle_evidence(repo_root)
+    tracked_paths = set(lifecycle["tracked_paths"])
+    ordinary_untracked_paths = set(lifecycle["ordinary_untracked_paths"])
+    repository_paths = sorted(tracked_paths | ordinary_untracked_paths)
     grep_pattern = (
         "build_four_level_mask|MASK_BUILDERS|MaskType|mask_warhead|"
         "mask_linker_and_warhead|mask_scaffold|mask_whole_ligand|"
@@ -760,7 +822,7 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
     tracked_candidates = set(
         _git(repo_root, "grep", "-l", "-I", "-E", grep_pattern, "--").splitlines()
     )
-    candidate_paths = sorted(tracked_candidates | ordinary_untracked)
+    candidate_paths = sorted(tracked_candidates | set(_DESIGN_PATHS))
     inventory: list[dict[str, Any]] = []
     scanned_text_file_count = 0
     notebook_count = 0
