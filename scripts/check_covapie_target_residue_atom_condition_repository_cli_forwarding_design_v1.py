@@ -42,6 +42,8 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
     inpaint = response["selected_covalent_inpaint_forwarding_contract"]
     masks = response["selected_mask_semantic_normalization_contract"]
     inventory = masks["legacy_reference_inventory"]
+    dependency = masks["retirement_dependency_order_evidence"]
+    baseline = masks["runtime_design_baseline_source_evidence"]
     lifecycle = design._design_path_lifecycle_evidence(ROOT)
     ordered_steps = {
         item["step"]: item
@@ -167,11 +169,60 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "legacy_four_level_retirement_implemented": masks[
             "legacy_four_level_retirement_implemented"
         ],
-        "current_active_legacy_reference_count": masks[
-            "current_active_legacy_reference_count"
+        "design_evidence_mode": masks["design_evidence_mode"],
+        "runtime_design_baseline_commit": masks[
+            "runtime_design_baseline_commit"
         ],
-        "current_active_legacy_reference_path_count": masks[
-            "current_active_legacy_reference_path_count"
+        "runtime_design_baseline_commit_is_head_ancestor": baseline[
+            "runtime_design_baseline_commit_is_head_ancestor"
+        ],
+        "runtime_design_baseline_commit_is_origin_main_ancestor": baseline[
+            "runtime_design_baseline_commit_is_origin_main_ancestor"
+        ],
+        "design_checker_claims_live_runtime_state": masks[
+            "design_checker_claims_live_runtime_state"
+        ],
+        "implementation_phase_live_state_requires_phase_specific_gate": masks[
+            "implementation_phase_live_state_requires_phase_specific_gate"
+        ],
+        "recommended_next_step_is_design_baseline_recommendation": masks[
+            "recommended_next_step_is_design_baseline_recommendation"
+        ],
+        "R1_candidate_will_not_invalidate_design_tests": masks[
+            "R1_candidate_will_not_invalidate_design_tests"
+        ],
+        "baseline_legacy_provider_has_active_consumers": dependency[
+            "legacy_provider_has_active_consumers"
+        ],
+        "baseline_legacy_demo_imports_four_level_builder": dependency[
+            "legacy_demo_imports_four_level_builder"
+        ],
+        "baseline_legacy_demo_calls_four_level_builder": dependency[
+            "legacy_demo_calls_four_level_builder"
+        ],
+        "baseline_legacy_demo_mask_level_flag_present": dependency[
+            "legacy_demo_mask_level_flag_present"
+        ],
+        "consumer_migration_step": dependency["consumer_migration_step"],
+        "provider_removal_step": dependency["provider_removal_step"],
+        "consumer_migration_precedes_provider_removal": dependency[
+            "consumer_migration_precedes_provider_removal"
+        ],
+        "provider_removal_precedes_consumer_migration": dependency[
+            "provider_removal_precedes_consumer_migration"
+        ],
+        "no_intermediate_missing_import_state": dependency[
+            "no_intermediate_missing_import_state"
+        ],
+        "retirement_dependency_order_valid": masks[
+            "retirement_dependency_order_valid"
+        ],
+        "baseline_reference_count": masks["baseline_reference_count"],
+        "baseline_active_legacy_reference_count": masks[
+            "baseline_active_legacy_reference_count"
+        ],
+        "baseline_active_legacy_reference_path_count": masks[
+            "baseline_active_legacy_reference_path_count"
         ],
         "target_active_legacy_reference_count": masks[
             "target_active_legacy_reference_count"
@@ -218,49 +269,75 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
             "design_paths_all_untracked"
         ],
         "ordinary_untracked_count": lifecycle["ordinary_untracked_count"],
-        "unrelated_ordinary_untracked_count": lifecycle[
-            "unrelated_ordinary_untracked_count"
+        "known_future_task_untracked_count": lifecycle[
+            "known_future_task_untracked_count"
+        ],
+        "unknown_ordinary_untracked_count": lifecycle[
+            "unknown_ordinary_untracked_count"
+        ],
+        "known_future_task_untracked_paths_supported": lifecycle[
+            "known_future_task_untracked_paths_supported"
+        ],
+        "unknown_untracked_paths_rejected": lifecycle[
+            "unknown_untracked_paths_rejected"
         ],
         "post_commit_inventory_supported": (
             lifecycle["design_lifecycle_profile"]
-            == "committed_or_successor"
+            in {
+                "design_successor_worktree",
+                "published_design_with_known_future_task",
+            }
             and lifecycle["design_paths_all_tracked"] is True
-            and lifecycle["ordinary_untracked_count"] == 0
-            and inventory["reference_count"] == 45
-            and inventory["active_legacy_reference_count"] == 14
-            and inventory["unresolved_active_reference_count"] == 0
+            and lifecycle["ordinary_untracked_paths"]
+            == lifecycle["known_future_task_untracked_paths"]
+            and lifecycle["unknown_ordinary_untracked_count"] == 0
+            and inventory["baseline_reference_count"] == 45
+            and inventory["baseline_active_legacy_reference_count"] == 14
+            and inventory["baseline_unresolved_active_reference_count"] == 0
         ),
-        "inventory_reference_count": inventory["reference_count"],
-        "inventory_active_reference_count": inventory[
-            "active_legacy_reference_count"
+        "inventory_baseline_reference_count": inventory[
+            "baseline_reference_count"
         ],
-        "inventory_unresolved_active_reference_count": inventory[
-            "unresolved_active_reference_count"
+        "inventory_baseline_active_reference_count": inventory[
+            "baseline_active_legacy_reference_count"
         ],
-        "active_legacy_reference_count": inventory[
-            "active_legacy_reference_count"
+        "inventory_baseline_unresolved_active_reference_count": inventory[
+            "baseline_unresolved_active_reference_count"
         ],
         "all_active_legacy_references_in_future_scope": inventory[
             "all_active_legacy_references_in_future_scope"
         ],
         "retirement_R1_scope_complete": {
-            "src/covalent_ext/masking.py",
-            "src/covalent_ext/schema.py",
-            "src/covalent_ext/dataset.py",
-            "scripts/check_covalent_masking.py",
-        }.issubset(set(ordered_steps["R1"]["paths"])),
+            "scripts/covalent_inpaint_demo.py",
+            "tests/test_covalent_inpaint_demo_mask_semantic_v1.py",
+        } == set(ordered_steps["R1"]["paths"])
+        and ordered_steps["R1"]["completion_contract"][
+            "legacy_four_level_core_provider_still_present"
+        ]
+        is True,
         "retirement_R2_scope_complete": (
-            "scripts/covalent_inpaint_demo.py" in ordered_steps["R2"]["paths"]
+            {
+                "src/covalent_ext/masking.py",
+                "src/covalent_ext/schema.py",
+                "src/covalent_ext/dataset.py",
+                "scripts/check_covalent_masking.py",
+                "tests/test_covalent_masking.py",
+                "tests/test_b3_scaffold_only_mask_implementation_v0.py",
+            }
+            == set(ordered_steps["R2"]["paths"])
             and ordered_steps["R2"]["completion_contract"][
-                "candidate_full_runtime_retirement_requires_R3_gate"
+                "R3_independent_gate_required"
             ]
             is True
         ),
         "retirement_R3_gate_required": masks[
             "zero_active_legacy_reference_retirement_gate_contract"
         ]["gate_must_pass_and_be_committed_before_C1"],
-        "ready_for_legacy_four_level_mask_retirement_implementation": masks[
-            "ready_for_legacy_four_level_mask_retirement_implementation"
+        "ready_for_covalent_demo_canonical_mask_migration_R1": masks[
+            "ready_for_covalent_demo_canonical_mask_migration_R1"
+        ],
+        "ready_for_legacy_core_api_retirement_R2": masks[
+            "ready_for_legacy_core_api_retirement_R2"
         ],
         "target_enable_flag_exact_bool_required": response[
             "selected_conditioned_mode_contract"
@@ -308,6 +385,18 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "covalent_inpaint_forwarding_contract_defined",
         "canonical_five_level_target_selected",
         "legacy_four_level_retirement_selected",
+        "runtime_design_baseline_commit_is_head_ancestor",
+        "runtime_design_baseline_commit_is_origin_main_ancestor",
+        "implementation_phase_live_state_requires_phase_specific_gate",
+        "recommended_next_step_is_design_baseline_recommendation",
+        "R1_candidate_will_not_invalidate_design_tests",
+        "baseline_legacy_provider_has_active_consumers",
+        "baseline_legacy_demo_imports_four_level_builder",
+        "baseline_legacy_demo_calls_four_level_builder",
+        "baseline_legacy_demo_mask_level_flag_present",
+        "consumer_migration_precedes_provider_removal",
+        "no_intermediate_missing_import_state",
+        "retirement_dependency_order_valid",
         "historical_read_only_legacy_evidence_retained",
         "short_alias_report_only",
         "scaffold_plus_warhead_present",
@@ -316,12 +405,14 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "canonical_B3_is_scaffold_only",
         "legacy_reference_inventory_complete",
         "design_paths_all_tracked",
+        "known_future_task_untracked_paths_supported",
+        "unknown_untracked_paths_rejected",
         "post_commit_inventory_supported",
         "all_active_legacy_references_in_future_scope",
         "retirement_R1_scope_complete",
         "retirement_R2_scope_complete",
         "retirement_R3_gate_required",
-        "ready_for_legacy_four_level_mask_retirement_implementation",
+        "ready_for_covalent_demo_canonical_mask_migration_R1",
         "target_enable_flag_exact_bool_required",
         "feature_semantics_audit_required_before_training",
     }
@@ -337,16 +428,15 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "selected_v1_supported_caller_count": 2,
         "deferred_caller_count": 4,
         "canonical_mask_count": 5,
-        "active_legacy_reference_count": 14,
-        "current_active_legacy_reference_count": 14,
-        "current_active_legacy_reference_path_count": 5,
+        "baseline_reference_count": 45,
+        "baseline_active_legacy_reference_count": 14,
+        "baseline_active_legacy_reference_path_count": 5,
         "target_active_legacy_reference_count": 0,
         "target_active_legacy_reference_path_count": 0,
-        "ordinary_untracked_count": 0,
-        "unrelated_ordinary_untracked_count": 0,
-        "inventory_reference_count": 45,
-        "inventory_active_reference_count": 14,
-        "inventory_unresolved_active_reference_count": 0,
+        "unknown_ordinary_untracked_count": 0,
+        "inventory_baseline_reference_count": 45,
+        "inventory_baseline_active_reference_count": 14,
+        "inventory_baseline_unresolved_active_reference_count": 0,
     }
     if any(facts[name] != expected for name, expected in expected_counts.items()):
         raise ValueError(design._ERROR)
@@ -355,6 +445,9 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
         "checkpoint_file_modified",
         "duplicate_loader_logic_allowed",
         "legacy_four_level_retirement_implemented",
+        "design_checker_claims_live_runtime_state",
+        "provider_removal_precedes_consumer_migration",
+        "ready_for_legacy_core_api_retirement_R2",
         "target_legacy_four_level_cli_input_supported",
         "target_legacy_automatic_translation_allowed",
         "target_short_alias_input_supported",
@@ -368,10 +461,28 @@ def evaluate() -> tuple[dict[str, object], dict[str, object]]:
     if not all(facts[name] is False for name in required_false):
         raise ValueError(design._ERROR)
     if facts["recommended_next_step"] != (
-        "implement_covapie_legacy_four_level_mask_retirement_v1"
+        "implement_covapie_covalent_demo_canonical_five_level_mask_migration_r1_v1"
     ):
         raise ValueError(design._ERROR)
-    if facts["design_lifecycle_profile"] != "committed_or_successor":
+    if (
+        facts["consumer_migration_step"] != "R1"
+        or facts["provider_removal_step"] != "R2"
+    ):
+        raise ValueError(design._ERROR)
+    if facts["design_evidence_mode"] != "frozen_runtime_baseline_snapshot":
+        raise ValueError(design._ERROR)
+    if facts["runtime_design_baseline_commit"] != (
+        design._RUNTIME_DESIGN_BASELINE_COMMIT
+    ):
+        raise ValueError(design._ERROR)
+    if facts["design_lifecycle_profile"] not in {
+        "design_successor_worktree",
+        "published_design_with_known_future_task",
+    }:
+        raise ValueError(design._ERROR)
+    if facts["ordinary_untracked_count"] != facts[
+        "known_future_task_untracked_count"
+    ]:
         raise ValueError(design._ERROR)
     if (
         facts["canonical_mask_input_flag"] != "--mask_semantic"

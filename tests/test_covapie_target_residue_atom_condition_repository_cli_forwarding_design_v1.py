@@ -127,13 +127,13 @@ def test_import_is_silent_and_has_no_output_side_effect(tmp_path):
 
 def test_design_lifecycle_accepts_current_committed_profile():
     evidence = design._design_path_lifecycle_evidence(ROOT)
-    assert evidence["design_lifecycle_profile"] == "committed_or_successor"
+    assert evidence["design_lifecycle_profile"] == "design_successor_worktree"
     assert evidence["tracked_design_paths"] == sorted(design._DESIGN_PATHS)
     assert evidence["untracked_design_paths"] == []
     assert evidence["design_paths_all_tracked"] is True
     assert evidence["design_paths_all_untracked"] is False
     assert evidence["ordinary_untracked_count"] == 0
-    assert evidence["unrelated_ordinary_untracked_count"] == 0
+    assert evidence["unknown_ordinary_untracked_count"] == 0
     assert evidence["lifecycle_valid"] is True
     assert all(
         not isinstance(item, Path)
@@ -151,13 +151,13 @@ def test_design_lifecycle_accepts_exact_precommit_untracked_profile(monkeypatch)
         ordinary_untracked_paths=design_paths,
     )
     evidence = design._design_path_lifecycle_evidence(ROOT)
-    assert evidence["design_lifecycle_profile"] == "precommit_untracked"
+    assert evidence["design_lifecycle_profile"] == "initial_design_precommit"
     assert evidence["tracked_design_paths"] == []
     assert evidence["untracked_design_paths"] == sorted(design_paths)
     assert evidence["design_paths_all_tracked"] is False
     assert evidence["design_paths_all_untracked"] is True
     assert evidence["ordinary_untracked_count"] == 4
-    assert evidence["unrelated_ordinary_untracked_count"] == 0
+    assert evidence["unknown_ordinary_untracked_count"] == 0
     assert evidence["lifecycle_valid"] is True
 
 
@@ -184,6 +184,50 @@ def test_design_lifecycle_rejects_unrelated_ordinary_untracked_path(monkeypatch)
         ordinary_untracked_paths={"scratch.txt"},
     )
     _assert_canonical_error(lambda: design._design_path_lifecycle_evidence(ROOT))
+
+
+def test_design_lifecycle_accepts_known_r1_future_test(tmp_path, monkeypatch):
+    for relative_path in design._DESIGN_PATHS:
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("design\n")
+    future_path = design._KNOWN_FUTURE_TASK_NEW_PATHS[0]
+    path = tmp_path / future_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("future test\n")
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=set(design._DESIGN_PATHS),
+        ordinary_untracked_paths={future_path},
+    )
+    evidence = design._design_path_lifecycle_evidence(tmp_path)
+    assert evidence["design_lifecycle_profile"] == (
+        "published_design_with_known_future_task"
+    )
+    assert evidence["known_future_task_untracked_paths"] == [future_path]
+    assert evidence["known_future_task_untracked_paths_supported"] is True
+    assert evidence["unknown_untracked_paths_rejected"] is True
+
+
+def test_design_lifecycle_rejects_nonregular_known_future_path(
+    tmp_path, monkeypatch
+):
+    for relative_path in design._DESIGN_PATHS:
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("design\n")
+    future_path = design._KNOWN_FUTURE_TASK_NEW_PATHS[0]
+    path = tmp_path / future_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.symlink_to(tmp_path / design._DESIGN_PATHS[0])
+    _patch_lifecycle_git(
+        monkeypatch,
+        tracked_paths=set(design._DESIGN_PATHS),
+        ordinary_untracked_paths={future_path},
+    )
+    _assert_canonical_error(
+        lambda: design._design_path_lifecycle_evidence(tmp_path)
+    )
 
 
 def test_design_lifecycle_rejects_missing_design_path(monkeypatch):
@@ -282,9 +326,64 @@ def test_gate_design_uses_ancestor_semantics_not_head_equality():
     assert "HEAD == _GATE_COMMIT" not in source
 
 
+def test_runtime_design_baseline_commit_metadata_and_ancestry_are_bound():
+    evidence = design._runtime_design_baseline_source_evidence(ROOT)
+    assert evidence["runtime_design_baseline_commit"] == (
+        design._RUNTIME_DESIGN_BASELINE_COMMIT
+    )
+    assert evidence["runtime_design_baseline_commit_single_parent"] is True
+    assert evidence["runtime_design_baseline_commit_is_head_ancestor"] is True
+    assert evidence[
+        "runtime_design_baseline_commit_is_origin_main_ancestor"
+    ] is True
+    assert evidence["snapshot_network_access"] is False
+    assert evidence["snapshot_working_tree_independent"] is True
+    assert evidence["snapshot_index_independent"] is True
+    assert evidence["snapshot_regular_blob_required"] is True
+    assert evidence["snapshot_nonempty_required"] is True
+    assert evidence["snapshot_size_bounded"] is True
+    assert evidence["snapshot_sha256_bound"] is True
+
+
+def test_git_snapshot_reader_is_sha_bound_and_fails_closed():
+    payload = design._git_snapshot_file_bytes(
+        ROOT,
+        commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+        relative_path="scripts/covalent_inpaint_demo.py",
+        expected_sha256=design._CALLER_SHA256S[
+            "scripts/covalent_inpaint_demo.py"
+        ],
+    )
+    assert hashlib.sha256(payload).hexdigest() == design._CALLER_SHA256S[
+        "scripts/covalent_inpaint_demo.py"
+    ]
+    _assert_canonical_error(
+        lambda: design._git_snapshot_file_bytes(
+            ROOT,
+            commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path="scripts/covalent_inpaint_demo.py",
+            expected_sha256="0" * 64,
+        )
+    )
+    _assert_canonical_error(
+        lambda: design._git_snapshot_file_bytes(
+            ROOT,
+            commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path="../outside",
+            expected_sha256="0" * 64,
+        )
+    )
+
+
 @pytest.mark.parametrize("relative_path,expected", list(design._CALLER_SHA256S.items()))
 def test_all_six_caller_sha256s_are_frozen(relative_path, expected):
-    assert hashlib.sha256((ROOT / relative_path).read_bytes()).hexdigest() == expected
+    payload = design._git_snapshot_file_bytes(
+        ROOT,
+        commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+        relative_path=relative_path,
+        expected_sha256=expected,
+    )
+    assert hashlib.sha256(payload).hexdigest() == expected
 
 
 def test_audited_caller_count_is_six(response):
@@ -315,6 +414,98 @@ def test_notebook_is_audited_from_json_code_cell_sources():
     assert audit["by_caller"]["colab/DiffSBDD.ipynb"][
         "LigandPocketDDPM.load_from_checkpoint"
     ] == 1
+
+
+def test_baseline_audits_do_not_use_live_mutable_runtime_files(
+    bundle_bytes, response, monkeypatch
+):
+    mutable_baseline_paths = {
+        *design._CALLER_SHA256S,
+        "lightning_modules.py",
+        "src/covalent_ext/covapie_target_residue_atom_condition_checkpoint_migration_v1.py",
+        "src/covalent_ext/masking.py",
+        "src/covalent_ext/dataset.py",
+        "scripts/check_covalent_masking.py",
+        "src/covalent_ext/b3_scaffold_only_mask_implementation.py",
+        "scripts/check_b3_scaffold_only_mask_implementation_v0.py",
+        "tests/test_b3_scaffold_only_mask_implementation_v0.py",
+        "tests/test_real_covalent_feature_mapping_loader_gate_v0.py",
+    }
+    original = design._regular_file_bytes
+
+    def guarded(repo_root, relative_path, **kwargs):
+        if relative_path in mutable_baseline_paths:
+            raise AssertionError(f"live read forbidden: {relative_path}")
+        return original(repo_root, relative_path, **kwargs)
+
+    monkeypatch.setattr(design, "_regular_file_bytes", guarded)
+    actual = design.design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
+        source_model_consumption_gate_bundle=bundle_bytes,
+        repo_root=ROOT,
+    )
+    assert actual == response
+
+
+def test_virtual_live_demo_migration_does_not_change_baseline_response(
+    bundle_bytes, response, monkeypatch
+):
+    demo_path = ROOT / "scripts/covalent_inpaint_demo.py"
+    original = Path.read_bytes
+
+    def virtual_live_bytes(path):
+        if path == demo_path:
+            return b"from covalent_ext.masking import build_long_form_mask\n"
+        return original(path)
+
+    monkeypatch.setattr(Path, "read_bytes", virtual_live_bytes)
+    actual = design.design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
+        source_model_consumption_gate_bundle=bundle_bytes,
+        repo_root=ROOT,
+    )
+    assert actual == response
+
+
+def test_known_r1_untracked_profile_does_not_change_baseline_response(
+    bundle_bytes, response, monkeypatch
+):
+    evidence = dict(design._design_path_lifecycle_evidence(ROOT))
+    future_path = design._KNOWN_FUTURE_TASK_NEW_PATHS[0]
+    evidence.update(
+        {
+            "design_lifecycle_profile": (
+                "published_design_with_known_future_task"
+            ),
+            "ordinary_untracked_paths": [future_path],
+            "ordinary_untracked_count": 1,
+            "known_future_task_untracked_paths": [future_path],
+            "known_future_task_untracked_count": 1,
+        }
+    )
+    monkeypatch.setattr(
+        design,
+        "_design_path_lifecycle_evidence",
+        lambda _root: evidence,
+    )
+    actual = design.design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
+        source_model_consumption_gate_bundle=bundle_bytes,
+        repo_root=ROOT,
+    )
+    assert actual == response
+
+
+def test_inventory_uses_baseline_tree_not_live_text(monkeypatch):
+    def reject_live_text(_path, *args, **kwargs):
+        raise AssertionError("inventory attempted a live text read")
+
+    monkeypatch.setattr(Path, "read_text", reject_live_text)
+    inventory = design._legacy_mask_reference_inventory(ROOT)
+    assert inventory["evidence_mode"] == "frozen_runtime_baseline_snapshot"
+    assert inventory["runtime_design_baseline_commit"] == (
+        design._RUNTIME_DESIGN_BASELINE_COMMIT
+    )
+    assert inventory["inventory_claims_live_runtime_state"] is False
+    assert inventory["baseline_reference_count"] == 45
+    assert inventory["baseline_active_legacy_reference_count"] == 14
 
 
 def test_selected_v1_callers_are_exactly_two(response):
@@ -543,6 +734,13 @@ def test_generate_ligands_future_forwarding_point_is_unique(response):
 def test_demo_future_prepare_pocket_forwarding_point_is_unique(response):
     contract = response["selected_covalent_inpaint_forwarding_contract"]
     assert contract["caller"] == "scripts/covalent_inpaint_demo.py"
+    assert contract["baseline_covalent_demo_sha256"] == (
+        design._CALLER_SHA256S["scripts/covalent_inpaint_demo.py"]
+    )
+    assert contract["baseline_source_commit"] == (
+        design._RUNTIME_DESIGN_BASELINE_COMMIT
+    )
+    assert contract["contract_claims_live_demo_sha256"] is False
     assert contract["forward_path"][-1] == "model.prepare_pocket"
     assert contract["prepare_pocket_selector_forwarding_site_count"] == 1
     assert contract["manual_indicator_creation_allowed"] is False
@@ -556,23 +754,84 @@ def test_existing_model_entry_points_already_consume_selector():
     assert evidence["prepare_pocket_builds_indicator"] is True
 
 
-def test_current_runtime_is_not_retired_but_retirement_target_is_selected(response):
+def test_baseline_runtime_is_not_retired_but_retirement_target_is_selected(response):
     contract = response["selected_mask_semantic_normalization_contract"]
     assert contract["canonical_five_level_target_selected"] is True
     assert contract["canonical_five_level_contract_complete"] is True
     assert contract["legacy_four_level_retirement_selected"] is True
     assert contract["legacy_four_level_retirement_implemented"] is False
-    assert contract["current_legacy_four_level_runtime_present"] is True
-    assert contract["current_legacy_four_level_cli_input_present"] is True
-    assert contract["current_legacy_four_level_schema_present"] is True
+    assert contract["baseline_legacy_four_level_runtime_present"] is True
+    assert contract["baseline_legacy_four_level_cli_input_present"] is True
+    assert contract["baseline_legacy_four_level_schema_present"] is True
+    assert contract["design_checker_claims_live_runtime_state"] is False
 
 
-def test_current_and_target_active_residual_counts_are_distinct(response):
+def test_baseline_and_target_active_residual_counts_are_distinct(response):
     contract = response["selected_mask_semantic_normalization_contract"]
-    assert contract["current_active_legacy_reference_count"] == 14
-    assert contract["current_active_legacy_reference_path_count"] == 5
+    assert contract["baseline_reference_count"] == 45
+    assert contract["baseline_active_legacy_reference_count"] == 14
+    assert contract["baseline_active_legacy_reference_path_count"] == 5
     assert contract["target_active_legacy_reference_count"] == 0
     assert contract["target_active_legacy_reference_path_count"] == 0
+    assert contract["live_active_legacy_reference_count_claimed"] is False
+
+
+def test_baseline_provider_and_consumers_are_proven_from_ast(response):
+    evidence = response["selected_mask_semantic_normalization_contract"][
+        "retirement_dependency_order_evidence"
+    ]
+    assert evidence["legacy_provider_path"] == "src/covalent_ext/masking.py"
+    assert evidence["provider_symbol"] == design._LEGACY_MASK_SYMBOLS[0]
+    assert evidence["provider_symbols_present"] is True
+    assert evidence["active_consumer_paths"] == [
+        "scripts/check_covalent_masking.py",
+        "scripts/covalent_inpaint_demo.py",
+        "src/covalent_ext/dataset.py",
+    ]
+    assert evidence["consumer_import_count"] == 2
+    assert evidence["consumer_call_count"] == 2
+    assert evidence["legacy_provider_has_active_consumers"] is True
+    assert evidence["provider_removal_before_consumer_migration_safe"] is False
+    assert evidence["evidence_mode"] == "frozen_runtime_baseline_snapshot"
+    assert evidence["runtime_design_baseline_commit"] == (
+        design._RUNTIME_DESIGN_BASELINE_COMMIT
+    )
+
+
+def test_current_demo_legacy_import_call_flag_and_choices_are_ast_evidence(response):
+    evidence = response["selected_mask_semantic_normalization_contract"][
+        "retirement_dependency_order_evidence"
+    ]
+    assert evidence["legacy_demo_imports_four_level_builder"] is True
+    assert evidence["legacy_demo_calls_four_level_builder"] is True
+    assert evidence["legacy_demo_mask_level_flag_present"] is True
+    assert evidence["legacy_demo_exact_A_B_B2_C_choices_present"] is True
+
+
+def test_other_core_consumers_are_ast_evidence(response):
+    evidence = response["selected_mask_semantic_normalization_contract"][
+        "retirement_dependency_order_evidence"
+    ]
+    assert evidence["dataset_imports_four_level_builder"] is True
+    assert evidence["dataset_imports_MaskType"] is True
+    assert evidence["dataset_build_all_masks_uses_A_B_B2_C"] is True
+    assert evidence["checker_imports_MASK_BUILDERS"] is True
+    assert evidence["checker_iterates_A_B_B2_C"] is True
+
+
+def test_dependency_order_has_no_intermediate_missing_import_state(response):
+    evidence = response["selected_mask_semantic_normalization_contract"][
+        "retirement_dependency_order_evidence"
+    ]
+    assert evidence["consumer_migration_step"] == "R1"
+    assert evidence["provider_removal_step"] == "R2"
+    assert evidence["consumer_migration_precedes_provider_removal"] is True
+    assert evidence["provider_removal_precedes_consumer_migration"] is False
+    assert evidence["R1_migrates_demo_and_keeps_provider"] is True
+    assert evidence[
+        "R2_removes_provider_and_migrates_remaining_consumers"
+    ] is True
+    assert evidence["no_intermediate_missing_import_state"] is True
 
 
 @pytest.mark.parametrize(
@@ -672,8 +931,8 @@ def test_repository_legacy_reference_inventory_is_complete(response):
     ]
     assert inventory["inventory_complete"] is True
     assert inventory["notebook_json_cell_source_audited"] is True
-    assert inventory["reference_count"] == len(inventory["records"])
-    assert inventory["reference_count"] == 45
+    assert inventory["baseline_reference_count"] == len(inventory["records"])
+    assert inventory["baseline_reference_count"] == 45
     assert inventory["classification_counts"] == {
         "active_runtime": 14,
         "test_only": 7,
@@ -681,10 +940,10 @@ def test_repository_legacy_reference_inventory_is_complete(response):
         "historical_freeze_only": 8,
         "design_evidence_only": 8,
     }
-    assert inventory["active_legacy_reference_count"] == 14
-    assert inventory["active_legacy_reference_path_count"] == 5
-    assert inventory["unresolved_active_reference_count"] == 0
-    assert inventory["active_legacy_reference_paths"] == [
+    assert inventory["baseline_active_legacy_reference_count"] == 14
+    assert inventory["baseline_active_legacy_reference_path_count"] == 5
+    assert inventory["baseline_unresolved_active_reference_count"] == 0
+    assert inventory["baseline_active_legacy_reference_paths"] == [
         "scripts/check_covalent_masking.py",
         "scripts/covalent_inpaint_demo.py",
         "src/covalent_ext/dataset.py",
@@ -702,7 +961,7 @@ def test_repository_legacy_reference_inventory_is_complete(response):
 
 def test_post_commit_inventory_retains_exact_45_records():
     inventory = design._legacy_mask_reference_inventory(ROOT)
-    assert inventory["reference_count"] == 45
+    assert inventory["baseline_reference_count"] == 45
     assert inventory["classification_counts"] == {
         "active_runtime": 14,
         "test_only": 7,
@@ -710,16 +969,16 @@ def test_post_commit_inventory_retains_exact_45_records():
         "historical_freeze_only": 8,
         "design_evidence_only": 8,
     }
-    assert inventory["active_legacy_reference_count"] == 14
-    assert inventory["active_legacy_reference_path_count"] == 5
-    assert inventory["active_legacy_reference_paths"] == [
+    assert inventory["baseline_active_legacy_reference_count"] == 14
+    assert inventory["baseline_active_legacy_reference_path_count"] == 5
+    assert inventory["baseline_active_legacy_reference_paths"] == [
         "scripts/check_covalent_masking.py",
         "scripts/covalent_inpaint_demo.py",
         "src/covalent_ext/dataset.py",
         "src/covalent_ext/masking.py",
         "src/covalent_ext/schema.py",
     ]
-    assert inventory["unresolved_active_reference_count"] == 0
+    assert inventory["baseline_unresolved_active_reference_count"] == 0
 
 
 def test_precommit_inventory_retains_exact_45_records(monkeypatch):
@@ -736,7 +995,7 @@ def test_precommit_inventory_retains_exact_45_records(monkeypatch):
 
     monkeypatch.setattr(design, "_git", fake_git)
     inventory = design._legacy_mask_reference_inventory(ROOT)
-    assert inventory["reference_count"] == 45
+    assert inventory["baseline_reference_count"] == 45
     assert inventory["classification_counts"] == {
         "active_runtime": 14,
         "test_only": 7,
@@ -744,16 +1003,16 @@ def test_precommit_inventory_retains_exact_45_records(monkeypatch):
         "historical_freeze_only": 8,
         "design_evidence_only": 8,
     }
-    assert inventory["active_legacy_reference_count"] == 14
-    assert inventory["active_legacy_reference_path_count"] == 5
-    assert inventory["unresolved_active_reference_count"] == 0
+    assert inventory["baseline_active_legacy_reference_count"] == 14
+    assert inventory["baseline_active_legacy_reference_path_count"] == 5
+    assert inventory["baseline_unresolved_active_reference_count"] == 0
 
 
-def test_commit_lifecycle_fix_preserves_exact43_digest(response):
+def test_snapshot_stability_fix_preserves_exact43_and_recomputes_digest(response):
     assert len(response) == 43
     assert tuple(response) == design.REPOSITORY_CLI_FORWARDING_DESIGN_RESPONSE_FIELDS
     assert response["repository_cli_forwarding_design_response_sha256"] == (
-        "bf78147e803c032aea363bdc46325a3c1c7a657c07a1d767231d9d8913a0caa6"
+        "c20cd01a1c6c5e4e6e7bc36883d2c131b56f622451100eee68be181971e6a875"
     )
 
 
@@ -781,7 +1040,7 @@ def test_every_active_legacy_reference_has_a_future_action_and_scope(response):
     assert inventory["unresolved_legacy_mask_references"] == []
     assert all(
         item["retirement_increment"]
-        == ("R2" if item["path"] == "scripts/covalent_inpaint_demo.py" else "R1")
+        == ("R1" if item["path"] == "scripts/covalent_inpaint_demo.py" else "R2")
         for item in active
     )
 
@@ -792,7 +1051,19 @@ def test_test_only_references_are_assigned_by_validation_object(response):
     ]
     test_records = [item for item in inventory["records"] if item["test_only"]]
     assert len(test_records) == 7
-    assert all(item["retirement_increment"] == "R1" for item in test_records)
+    negative = [
+        item
+        for item in test_records
+        if item["required_future_action"]
+        == "retain_negative_legacy_token_evidence"
+    ]
+    positive = [item for item in test_records if item not in negative]
+    assert len(negative) == 1
+    assert negative[0]["retirement_increment"] is None
+    assert negative[0]["active_runtime"] is False
+    assert negative[0]["positive_legacy_behavior_required"] is False
+    assert all(item["retirement_increment"] == "R2" for item in positive)
+    assert all(item["positive_legacy_behavior_required"] is True for item in positive)
     assert all(item["post_increment_expected_status"] for item in test_records)
 
 
@@ -806,9 +1077,11 @@ def test_uncovered_active_legacy_reference_forces_readiness_false(response):
     inventory["unresolved_legacy_mask_references"] = [
         {"path": "unknown.py", "required_future_action": "UNRESOLVED"}
     ]
-    inventory["unresolved_active_reference_count"] = 1
-    assert design._ready_for_legacy_four_level_mask_retirement_implementation(
+    inventory["baseline_unresolved_active_reference_count"] = 1
+    dependency = design._retirement_dependency_order_evidence(ROOT)
+    assert design._ready_for_covalent_demo_canonical_mask_migration_R1(
         inventory,
+        dependency,
         canonical_five_level_contract_complete=True,
     ) is False
 
@@ -820,44 +1093,80 @@ def test_future_order_is_exactly_r1_r2_r3_then_c1_through_c4(response):
     assert scope["incremental_commits_required"] is True
     assert scope["single_commit_for_all_increments_allowed"] is False
     assert scope["cli_forwarding_may_begin_before_R3"] is False
+    assert scope["C1_before_committed_R3_allowed"] is False
+    assert scope["consumer_migration_precedes_provider_removal"] is True
+    assert scope["provider_removal_precedes_consumer_migration"] is False
     assert [item["step"] for item in scope["ordered_steps"]] == [
         "R1", "R2", "R3", "C1", "C2", "C3", "C4"
     ]
 
 
-def test_r1_scope_retires_core_but_not_full_runtime(response):
+def test_r1_scope_migrates_only_demo_mask_surface(response):
     steps = response["selected_mask_semantic_normalization_contract"][
         "future_retirement_implementation_scope"
     ]["ordered_steps"]
     r1 = steps[0]
-    assert r1["objective"] == "remove_legacy_four_level_core_runtime_interfaces"
-    assert {
+    assert r1["task_name"] == (
+        "implement_covapie_covalent_demo_canonical_five_level_mask_migration_r1_v1"
+    )
+    assert r1["paths"] == [
+        "scripts/covalent_inpaint_demo.py",
+        "tests/test_covalent_inpaint_demo_mask_semantic_v1.py",
+    ]
+    assert set(r1["forbidden_paths"]) == {
+        "src/covalent_ext/masking.py",
+        "src/covalent_ext/schema.py",
+        "src/covalent_ext/dataset.py",
+        "scripts/check_covalent_masking.py",
+    }
+    assert r1["completion_contract"][
+        "legacy_four_level_demo_consumer_removed"
+    ] is True
+    assert r1["completion_contract"][
+        "legacy_four_level_core_provider_still_present"
+    ] is True
+    assert r1["completion_contract"]["legacy_four_level_core_api_retired"] is False
+    assert r1["completion_contract"]["legacy_four_level_full_runtime_retired"] is False
+    assert r1["completion_contract"]["R2_still_required"] is True
+    assert r1["completion_contract"]["R3_gate_still_required"] is True
+    assert r1["mask_surface_contract"]["target_residue_cli_arguments_added"] is False
+    assert r1["mask_surface_contract"]["checkpoint_loader_modified"] is False
+    assert r1["mask_surface_contract"]["model_forward_executed"] is False
+
+
+def test_r2_scope_removes_core_provider_and_migrates_remaining_consumers(response):
+    steps = response["selected_mask_semantic_normalization_contract"][
+        "future_retirement_implementation_scope"
+    ]["ordered_steps"]
+    r2 = steps[1]
+    assert r2["task_name"] == (
+        "implement_covapie_legacy_four_level_core_api_retirement_r2_v1"
+    )
+    assert set(r2["paths"]) == {
         "src/covalent_ext/masking.py",
         "src/covalent_ext/schema.py",
         "src/covalent_ext/dataset.py",
         "scripts/check_covalent_masking.py",
         "tests/test_covalent_masking.py",
-    }.issubset(set(r1["paths"]))
-    assert r1["completion_contract"]["legacy_four_level_core_api_retired"] is True
-    assert r1["completion_contract"]["legacy_four_level_full_runtime_retired"] is False
-
-
-def test_r2_scope_removes_final_demo_dependency_but_still_requires_r3(response):
-    steps = response["selected_mask_semantic_normalization_contract"][
-        "future_retirement_implementation_scope"
-    ]["ordered_steps"]
-    r2 = steps[1]
-    assert r2["objective"] == (
-        "remove_final_active_cli_caller_dependency_on_legacy_four_level_masks"
-    )
-    assert "scripts/covalent_inpaint_demo.py" in r2["paths"]
-    assert r2["completion_contract"]["legacy_mask_flag_removed"] == (
-        design._LEGACY_MASK_SYMBOLS[-1]
-    )
-    assert r2["completion_contract"]["only_canonical_mask_flag_added"] == "--mask_semantic"
+        "tests/test_b3_scaffold_only_mask_implementation_v0.py",
+    }
+    assert r2["completion_contract"]["legacy_core_provider_removed"] is True
+    assert r2["completion_contract"]["remaining_core_consumers_migrated"] is True
+    assert r2["completion_contract"]["candidate_active_legacy_reference_count"] == 0
     assert r2["completion_contract"][
-        "candidate_full_runtime_retirement_requires_R3_gate"
+        "legacy_four_level_full_runtime_retirement_candidate"
     ] is True
+    assert r2["completion_contract"]["legacy_four_level_full_runtime_retired"] is False
+    assert r2["completion_contract"]["R3_independent_gate_required"] is True
+    canonical = r2["canonical_core_migration_contract"]
+    assert canonical["schema_accepts_legacy_short_tokens"] is False
+    assert canonical["dataset_API_uses_canonical_long_semantic_names"] is True
+    assert canonical["dataset_build_all_masks_exactly_five"] is True
+    assert canonical["dataset_build_all_masks_semantics"] == list(
+        design.CANONICAL_MASK_SEMANTIC_NAMES
+    )
+    assert canonical["checker_validates_canonical_five_level_contract"] is True
+    assert canonical["current_tests_require_positive_legacy_behavior"] is False
 
 
 def test_r3_zero_residual_gate_contract_is_complete(response):
@@ -924,6 +1233,52 @@ def test_historical_legacy_artifacts_remain_read_only(response):
     assert whitelist_contract["training_admissible"] is False
 
 
+def test_r2_historical_b3_test_becomes_read_only_evidence(response):
+    r2 = response["selected_mask_semantic_normalization_contract"][
+        "future_retirement_implementation_scope"
+    ]["ordered_steps"][1]
+    boundary = r2["historical_B3_boundary"]
+    assert boundary["source_modified"] is False
+    assert hashlib.sha256((ROOT / boundary["source_path"]).read_bytes()).hexdigest() == boundary[
+        "source_sha256"
+    ]
+    assert boundary["source_read_only"] is True
+    assert boundary["source_active_runtime"] is False
+    assert boundary["source_current_runtime_importable_required"] is False
+    assert boundary["historical_checker_modified_or_run"] is False
+    assert boundary["historical_checker_sha256"] == design._HISTORICAL_B3_CHECKER_SHA256
+    assert boundary["test_imports_historical_module_after_R2"] is False
+    assert boundary["test_runs_historical_checker_after_R2"] is False
+    assert boundary["test_requires_positive_legacy_behavior_after_R2"] is False
+    assert boundary["test_preserves_history_by_read_only_bytes_or_sha"] is True
+    assert boundary["test_independently_checks_canonical_B2_and_B3"] is True
+    assert boundary["current_test_sha256"] == design._CURRENT_B3_TEST_SHA256
+
+
+def test_negative_legacy_token_evidence_is_retained_without_modification(response):
+    masks = response["selected_mask_semantic_normalization_contract"]
+    r2 = masks["future_retirement_implementation_scope"]["ordered_steps"][1]
+    boundary = r2["negative_legacy_token_evidence_boundary"]
+    assert hashlib.sha256((ROOT / boundary["path"]).read_bytes()).hexdigest() == boundary[
+        "current_sha256"
+    ]
+    assert boundary["modified_in_R1"] is False
+    assert boundary["modified_in_R2"] is False
+    assert boundary["retirement_increment"] is None
+    assert boundary["required_future_action"] == (
+        "retain_negative_legacy_token_evidence"
+    )
+    assert boundary["active_runtime"] is False
+    assert boundary["positive_legacy_behavior_required"] is False
+    assert boundary["negative_legacy_token_rejection_evidence_retained"] is True
+    assert masks[
+        "test_real_covalent_feature_mapping_loader_gate_v0_modified_in_R1"
+    ] is False
+    assert masks[
+        "test_real_covalent_feature_mapping_loader_gate_v0_modified_in_R2"
+    ] is False
+
+
 def test_source_drift_fails_closed():
     _assert_canonical_error(
         lambda: design._regular_file_bytes(
@@ -964,41 +1319,29 @@ def test_public_api_rejects_positional_arguments(bundle_bytes):
         )
 
 
-def test_real_callers_and_model_sources_have_not_been_modified(response):
+def test_baseline_callers_and_model_sources_are_snapshot_bound(response):
     for relative_path, expected in design._CALLER_SHA256S.items():
-        assert hashlib.sha256((ROOT / relative_path).read_bytes()).hexdigest() == expected
-    assert hashlib.sha256((ROOT / "lightning_modules.py").read_bytes()).hexdigest() == response[
-        "source_lightning_module_sha256"
-    ]
-    assert hashlib.sha256(
+        payload = design._git_snapshot_file_bytes(
+            ROOT,
+            commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected,
+        )
+        assert hashlib.sha256(payload).hexdigest() == expected
+    for relative_path, expected in (
+        ("lightning_modules.py", response["source_lightning_module_sha256"]),
         (
-            ROOT
-            / "src/covalent_ext/covapie_target_residue_atom_condition_checkpoint_migration_v1.py"
-        ).read_bytes()
-    ).hexdigest() == response["source_checkpoint_migration_sha256"]
-    protected = subprocess.run(
-        [
-            "git",
-            "diff",
-            "--name-only",
-            "--",
-            "generate_ligands.py",
-            "test.py",
-            "optimize.py",
-            "inpaint.py",
-            "scripts/covalent_inpaint_demo.py",
-            "colab/DiffSBDD.ipynb",
-            "src/covalent_ext/masking.py",
-            "src/covalent_ext/schema.py",
-            "lightning_modules.py",
-            "equivariant_diffusion",
-        ],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    assert protected.stdout == ""
+            "src/covalent_ext/covapie_target_residue_atom_condition_checkpoint_migration_v1.py",
+            response["source_checkpoint_migration_sha256"],
+        ),
+    ):
+        payload = design._git_snapshot_file_bytes(
+            ROOT,
+            commit=design._RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected,
+        )
+        assert hashlib.sha256(payload).hexdigest() == expected
 
 
 def test_no_forward_training_or_parameter_update_was_executed(response):
@@ -1010,15 +1353,29 @@ def test_no_forward_training_or_parameter_update_was_executed(response):
 
 def test_readiness_is_derived_from_complete_evidence(response):
     mask_contract = response["selected_mask_semantic_normalization_contract"]
+    assert mask_contract["design_evidence_mode"] == (
+        "frozen_runtime_baseline_snapshot"
+    )
+    assert mask_contract["design_baseline_snapshot_immutable"] is True
+    assert mask_contract["design_checker_claims_live_runtime_state"] is False
     assert mask_contract[
-        "ready_for_legacy_four_level_mask_retirement_implementation"
+        "implementation_phase_live_state_requires_phase_specific_gate"
     ] is True
+    assert mask_contract[
+        "recommended_next_step_is_design_baseline_recommendation"
+    ] is True
+    assert mask_contract["R1_candidate_will_not_invalidate_design_tests"] is True
+    assert mask_contract["retirement_dependency_order_valid"] is True
+    assert mask_contract[
+        "ready_for_covalent_demo_canonical_mask_migration_R1"
+    ] is True
+    assert mask_contract["ready_for_legacy_core_api_retirement_R2"] is False
     assert mask_contract["legacy_four_level_retirement_implemented"] is False
     assert mask_contract["retirement_R3_gate_passed"] is False
     assert mask_contract["retirement_R3_gate_committed"] is False
     assert response["ready_for_repository_cli_forwarding_implementation"] is False
     assert response["recommended_next_step"] == (
-        "implement_covapie_legacy_four_level_mask_retirement_v1"
+        "implement_covapie_covalent_demo_canonical_five_level_mask_migration_r1_v1"
     )
     assert response["feature_semantics_audit_required_before_training"] is True
     assert response["selected_failure_contract"]["fail_closed"] is True
@@ -1026,3 +1383,17 @@ def test_readiness_is_derived_from_complete_evidence(response):
     assert response["selected_conditioned_mode_contract"][
         "target_enable_flag_exact_bool_required"
     ] is True
+
+
+def test_r2_readiness_fails_closed_until_r1_is_committed(response):
+    evidence = response["selected_mask_semantic_normalization_contract"][
+        "retirement_dependency_order_evidence"
+    ]
+    assert design._ready_for_legacy_core_api_retirement_R2(
+        evidence,
+        R1_committed=False,
+    ) is False
+    assert design._ready_for_legacy_core_api_retirement_R2(
+        evidence,
+        R1_committed=True,
+    ) is False

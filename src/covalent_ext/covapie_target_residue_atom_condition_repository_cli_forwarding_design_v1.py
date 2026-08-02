@@ -35,6 +35,13 @@ _GATE_TREE = "b03de4940ca6fdce838bebc3b1e2a6f0f390f181"
 _GATE_SUBJECT = "add CovaPIE target residue atom condition model consumption gate v1"
 _IMPLEMENTATION_COMMIT = "2c504ff2eac0864c146129f4011d902fae5bef69"
 _RUNTIME_BRIDGE_GATE_COMMIT = "148689cc0716a56f3eb991f762af0010c5849f3a"
+_RUNTIME_DESIGN_BASELINE_COMMIT = (
+    "f24d4bb1007986701d644c9ff3c94786b3872c21"
+)
+_RUNTIME_DESIGN_BASELINE_PARENT = "510b67d5882ef18c95251e93490bf4482b7682ee"
+_RUNTIME_DESIGN_BASELINE_SUBJECT = (
+    "fix CovaPIE repository CLI forwarding design commit lifecycle v1"
+)
 _BUNDLE_SIZE = 6449
 _BUNDLE_TRANSPORT_SHA256 = "18edfbc312128315fd9c880e750aeccc41132b34c20c8e34d78a974e39a2c9aa"
 _BUNDLE_INTERNAL_SHA256 = "0ef97cdafe946fefd240c95a94efc8b12be977c899db3b1df4a56a580b53d842"
@@ -62,6 +69,12 @@ _CALLER_SHA256S = {
 _LIGHTNING_SHA256 = "7431b5cf24d4f918df961eb97c75f2e296c8b3c523fb627063f3a6c2f08fc983"
 _MIGRATION_SHA256 = "0c47bdc136e41d16e62d87210333bb84e7295a57abd8ba9a377cf41d33ab76c8"
 _MASKING_SHA256 = "48bfba93c95222da4d889a9e9e788826ca3577b9126aa9260e26e0e948bb59c5"
+_COVALENT_DATASET_SHA256 = "2b2098f7fd2aeba20d20240f5bd7777a2c9ff210120f68aa3a61a7cf92bd992a"
+_COVALENT_MASKING_CHECKER_SHA256 = "ff825f177469b94d54ac0c2524c1562ecf3fe1d24ff55847a267eb858af01142"
+_HISTORICAL_B3_SOURCE_SHA256 = "e142d6aa7f64722f4e07391f80d7106c9a3b7cd4a7dcfed77b69231e209575d5"
+_HISTORICAL_B3_CHECKER_SHA256 = "16fe45ec778ab4e50181eeaa03b1a0e1a79bea9cc4ce693f5d423c08f122548b"
+_CURRENT_B3_TEST_SHA256 = "8becf069acbefcbb22889bb41435777fcb342e293ef9e94e95ed3a106d767501"
+_NEGATIVE_LEGACY_TOKEN_TEST_SHA256 = "b6542c898dddf73f3fe4c307d373a46c47294d857dffb42f58abdc3e00c80309"
 
 _SUPPORTED_CALLERS = (
     "generate_ligands.py",
@@ -111,6 +124,19 @@ _DESIGN_PATHS = (
     "tests/test_covapie_target_residue_atom_condition_repository_cli_forwarding_design_v1.py",
     "scripts/check_covapie_target_residue_atom_condition_repository_cli_forwarding_design_v1.py",
     "docs/covapie_target_residue_atom_condition_repository_cli_forwarding_design_v1_guide.md",
+)
+_KNOWN_FUTURE_TASK_NEW_PATHS = (
+    "tests/test_covalent_inpaint_demo_mask_semantic_v1.py",
+    "src/covalent_ext/covapie_legacy_four_level_mask_retirement_gate_v1.py",
+    "tests/test_covapie_legacy_four_level_mask_retirement_gate_v1.py",
+    "scripts/check_covapie_legacy_four_level_mask_retirement_gate_v1.py",
+    "docs/covapie_legacy_four_level_mask_retirement_gate_v1_guide.md",
+    "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_v1.py",
+    "tests/test_covapie_target_residue_atom_condition_repository_cli_v1.py",
+    "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+    "tests/test_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+    "scripts/check_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+    "docs/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1_guide.md",
 )
 _ACTIVE_LEGACY_MASK_PATHS = {
     "src/covalent_ext/masking.py",
@@ -278,6 +304,82 @@ def _regular_file_bytes(
     return payload
 
 
+def _git_snapshot_blob_bytes(
+    repo_root: Path,
+    *,
+    commit: str,
+    relative_path: str,
+    max_size: int = _MAX_SOURCE_BYTES,
+) -> bytes:
+    if (
+        type(commit) is not str
+        or re.fullmatch(r"[0-9a-f]{40}", commit) is None
+        or type(relative_path) is not str
+        or not relative_path
+        or "\x00" in relative_path
+        or Path(relative_path).is_absolute()
+        or ".." in Path(relative_path).parts
+        or type(max_size) is not int
+        or type(max_size) is bool
+        or max_size <= 1
+    ):
+        raise ValueError(_ERROR)
+    object_spec = f"{commit}:{relative_path}"
+    environment = {**os.environ, "LC_ALL": "C", "LANG": "C"}
+
+    def run(*arguments: str) -> bytes:
+        completed = subprocess.run(
+            ["git", *arguments],
+            cwd=repo_root,
+            env=environment,
+            check=False,
+            capture_output=True,
+            timeout=30,
+        )
+        if completed.returncode != 0 or completed.stderr:
+            raise ValueError(_ERROR)
+        return completed.stdout
+
+    object_type = run("cat-file", "-t", object_spec)
+    if object_type != b"blob\n":
+        raise ValueError(_ERROR)
+    size_payload = run("cat-file", "-s", object_spec)
+    try:
+        size = int(size_payload.decode("ascii").strip())
+    except (UnicodeDecodeError, ValueError) as error:
+        raise ValueError(_ERROR) from error
+    if size <= 0 or size >= max_size:
+        raise ValueError(_ERROR)
+    payload = run("show", object_spec)
+    if len(payload) != size:
+        raise ValueError(_ERROR)
+    return payload
+
+
+def _git_snapshot_file_bytes(
+    repo_root: Path,
+    *,
+    commit: str,
+    relative_path: str,
+    expected_sha256: str,
+    max_size: int = _MAX_SOURCE_BYTES,
+) -> bytes:
+    if (
+        type(expected_sha256) is not str
+        or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+    ):
+        raise ValueError(_ERROR)
+    payload = _git_snapshot_blob_bytes(
+        repo_root,
+        commit=commit,
+        relative_path=relative_path,
+        max_size=max_size,
+    )
+    if _sha256(payload) != expected_sha256:
+        raise ValueError(_ERROR)
+    return payload
+
+
 def _git(repo_root: Path, *args: str) -> str:
     environment = dict(os.environ)
     environment.update({"LC_ALL": "C", "LANG": "C"})
@@ -308,10 +410,14 @@ def _design_path_lifecycle_evidence(repo_root: Path) -> dict[str, Any]:
     design_paths = set(_DESIGN_PATHS)
     tracked_design_paths = tracked_paths & design_paths
     untracked_design_paths = ordinary_untracked_paths & design_paths
-    unrelated_ordinary_untracked_paths = ordinary_untracked_paths - design_paths
+    known_future_paths = set(_KNOWN_FUTURE_TASK_NEW_PATHS)
+    known_future_untracked_paths = ordinary_untracked_paths & known_future_paths
+    unknown_ordinary_untracked_paths = ordinary_untracked_paths - (
+        design_paths | known_future_paths
+    )
     design_paths_overlap = tracked_design_paths & untracked_design_paths
 
-    for relative_path in _DESIGN_PATHS:
+    for relative_path in sorted(design_paths | ordinary_untracked_paths):
         try:
             metadata = (repo_root / relative_path).lstat()
         except OSError as error:
@@ -323,39 +429,58 @@ def _design_path_lifecycle_evidence(repo_root: Path) -> dict[str, Any]:
         not tracked_design_paths
         and untracked_design_paths == design_paths
         and ordinary_untracked_paths == design_paths
-        and not unrelated_ordinary_untracked_paths
+        and not unknown_ordinary_untracked_paths
         and not design_paths_overlap
     )
-    committed_or_successor = (
+    design_successor_worktree = (
         tracked_design_paths == design_paths
         and not untracked_design_paths
         and not ordinary_untracked_paths
-        and not unrelated_ordinary_untracked_paths
+        and not unknown_ordinary_untracked_paths
         and not design_paths_overlap
     )
-    if precommit_untracked == committed_or_successor:
-        raise ValueError(_ERROR)
-
-    profile = (
-        "precommit_untracked"
-        if precommit_untracked
-        else "committed_or_successor"
+    published_with_known_future_task = (
+        tracked_design_paths == design_paths
+        and not untracked_design_paths
+        and bool(ordinary_untracked_paths)
+        and ordinary_untracked_paths == known_future_untracked_paths
+        and not unknown_ordinary_untracked_paths
+        and not design_paths_overlap
     )
+    profiles = {
+        "initial_design_precommit": precommit_untracked,
+        "design_successor_worktree": design_successor_worktree,
+        "published_design_with_known_future_task": (
+            published_with_known_future_task
+        ),
+    }
+    if sum(profiles.values()) != 1:
+        raise ValueError(_ERROR)
+    profile = next(name for name, selected in profiles.items() if selected)
     return {
         "design_lifecycle_profile": profile,
         "tracked_paths": sorted(tracked_paths),
         "ordinary_untracked_paths": sorted(ordinary_untracked_paths),
         "tracked_design_paths": sorted(tracked_design_paths),
         "untracked_design_paths": sorted(untracked_design_paths),
-        "unrelated_ordinary_untracked_paths": sorted(
-            unrelated_ordinary_untracked_paths
+        "known_future_task_new_paths": sorted(known_future_paths),
+        "known_future_task_untracked_paths": sorted(
+            known_future_untracked_paths
+        ),
+        "unknown_ordinary_untracked_paths": sorted(
+            unknown_ordinary_untracked_paths
         ),
         "design_paths_all_tracked": tracked_design_paths == design_paths,
         "design_paths_all_untracked": untracked_design_paths == design_paths,
         "ordinary_untracked_count": len(ordinary_untracked_paths),
-        "unrelated_ordinary_untracked_count": len(
-            unrelated_ordinary_untracked_paths
+        "known_future_task_untracked_count": len(
+            known_future_untracked_paths
         ),
+        "unknown_ordinary_untracked_count": len(
+            unknown_ordinary_untracked_paths
+        ),
+        "known_future_task_untracked_paths_supported": True,
+        "unknown_untracked_paths_rejected": True,
         "lifecycle_valid": True,
     }
 
@@ -373,6 +498,61 @@ def _is_ancestor(repo_root: Path, ancestor: str, descendant: str) -> bool:
     if completed.stdout or completed.stderr or completed.returncode not in (0, 1):
         raise ValueError(_ERROR)
     return completed.returncode == 0
+
+
+def _runtime_design_baseline_source_evidence(
+    repo_root: Path,
+) -> dict[str, Any]:
+    commit_lines = _git(
+        repo_root,
+        "show",
+        "-s",
+        "--format=%H%n%P%n%s",
+        _RUNTIME_DESIGN_BASELINE_COMMIT,
+    ).splitlines()
+    if commit_lines != [
+        _RUNTIME_DESIGN_BASELINE_COMMIT,
+        _RUNTIME_DESIGN_BASELINE_PARENT,
+        _RUNTIME_DESIGN_BASELINE_SUBJECT,
+    ]:
+        raise ValueError(_ERROR)
+    evidence = {
+        "runtime_design_baseline_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
+        "runtime_design_baseline_parent": _RUNTIME_DESIGN_BASELINE_PARENT,
+        "runtime_design_baseline_subject": _RUNTIME_DESIGN_BASELINE_SUBJECT,
+        "runtime_design_baseline_commit_exists": True,
+        "runtime_design_baseline_commit_single_parent": True,
+        "runtime_design_baseline_commit_is_head_ancestor": _is_ancestor(
+            repo_root, _RUNTIME_DESIGN_BASELINE_COMMIT, "HEAD"
+        ),
+        "runtime_design_baseline_commit_is_origin_main_ancestor": _is_ancestor(
+            repo_root, _RUNTIME_DESIGN_BASELINE_COMMIT, "origin/main"
+        ),
+        "snapshot_network_access": False,
+        "snapshot_working_tree_independent": True,
+        "snapshot_index_independent": True,
+        "snapshot_regular_blob_required": True,
+        "snapshot_nonempty_required": True,
+        "snapshot_size_bounded": True,
+        "snapshot_sha256_bound": True,
+    }
+    if not all(
+        evidence[name] is True
+        for name in (
+            "runtime_design_baseline_commit_exists",
+            "runtime_design_baseline_commit_single_parent",
+            "runtime_design_baseline_commit_is_head_ancestor",
+            "runtime_design_baseline_commit_is_origin_main_ancestor",
+            "snapshot_working_tree_independent",
+            "snapshot_index_independent",
+            "snapshot_regular_blob_required",
+            "snapshot_nonempty_required",
+            "snapshot_size_bounded",
+            "snapshot_sha256_bound",
+        )
+    ):
+        raise ValueError(_ERROR)
+    return evidence
 
 
 def _gate_source_evidence(repo_root: Path) -> dict[str, bool]:
@@ -500,8 +680,11 @@ def _caller_audit(repo_root: Path) -> dict[str, Any]:
     by_caller: dict[str, dict[str, int]] = {}
     caller_payloads: dict[str, bytes] = {}
     for relative_path, expected_sha256 in _CALLER_SHA256S.items():
-        caller_payloads[relative_path] = _regular_file_bytes(
-            repo_root, relative_path, expected_sha256=expected_sha256
+        caller_payloads[relative_path] = _git_snapshot_file_bytes(
+            repo_root,
+            commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
         )
     for relative_path in tuple(_CALLER_SHA256S)[:-1]:
         try:
@@ -531,6 +714,8 @@ def _caller_audit(repo_root: Path) -> dict[str, Any]:
     ):
         raise ValueError(_ERROR)
     return {
+        "evidence_mode": "frozen_runtime_baseline_snapshot",
+        "runtime_design_baseline_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
         "by_caller": by_caller,
         "totals": totals,
         "notebook_code_cell_count": code_cell_count,
@@ -549,17 +734,22 @@ def _find_class_method(tree: ast.Module, class_name: str, method_name: str) -> a
 
 
 def _model_and_mask_source_audit(repo_root: Path) -> dict[str, bool]:
-    lightning_payload = _regular_file_bytes(
-        repo_root, "lightning_modules.py", expected_sha256=_LIGHTNING_SHA256
-    )
-    _regular_file_bytes(
+    lightning_payload = _git_snapshot_file_bytes(
         repo_root,
-        "src/covalent_ext/covapie_target_residue_atom_condition_checkpoint_migration_v1.py",
+        commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+        relative_path="lightning_modules.py",
+        expected_sha256=_LIGHTNING_SHA256,
+    )
+    _git_snapshot_file_bytes(
+        repo_root,
+        commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+        relative_path="src/covalent_ext/covapie_target_residue_atom_condition_checkpoint_migration_v1.py",
         expected_sha256=_MIGRATION_SHA256,
     )
-    masking_payload = _regular_file_bytes(
+    masking_payload = _git_snapshot_file_bytes(
         repo_root,
-        "src/covalent_ext/masking.py",
+        commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+        relative_path="src/covalent_ext/masking.py",
         expected_sha256=_MASKING_SHA256,
     )
     try:
@@ -590,6 +780,7 @@ def _model_and_mask_source_audit(repo_root: Path) -> dict[str, bool]:
         if isinstance(node, ast.FunctionDef)
     }
     evidence = {
+        "baseline_snapshot_bound": True,
         "generate_ligands_selector_parameter_present": (
             "target_residue_atom_condition_spec" in generate_args
         ),
@@ -657,6 +848,257 @@ def _has_exact_legacy_choice_set(tree: ast.AST) -> bool:
     return False
 
 
+def _import_count(tree: ast.AST, *, module: str, symbol: str) -> int:
+    return sum(
+        1
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom)
+        and node.module == module
+        for alias in node.names
+        if alias.name == symbol
+    )
+
+
+def _call_count(tree: ast.AST, symbol: str) -> int:
+    return sum(
+        1
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and _attribute_chain(node.func) is not None
+        and _attribute_chain(node.func).split(".")[-1] == symbol
+    )
+
+
+def _function_string_constants(tree: ast.AST, function_name: str) -> set[str]:
+    functions = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == function_name
+    ]
+    if len(functions) != 1:
+        raise ValueError(_ERROR)
+    return {
+        node.value
+        for node in ast.walk(functions[0])
+        if isinstance(node, ast.Constant) and type(node.value) is str
+    }
+
+
+def _retirement_dependency_order_evidence(repo_root: Path) -> dict[str, Any]:
+    """Prove from source and step scopes that consumers move before providers."""
+
+    paths = {
+        "provider": "src/covalent_ext/masking.py",
+        "demo": "scripts/covalent_inpaint_demo.py",
+        "dataset": "src/covalent_ext/dataset.py",
+        "checker": "scripts/check_covalent_masking.py",
+    }
+    trees: dict[str, ast.Module] = {}
+    expected_sha256s = {
+        "provider": _MASKING_SHA256,
+        "demo": _CALLER_SHA256S["scripts/covalent_inpaint_demo.py"],
+        "dataset": _COVALENT_DATASET_SHA256,
+        "checker": _COVALENT_MASKING_CHECKER_SHA256,
+    }
+    for name, relative_path in paths.items():
+        payload = _git_snapshot_file_bytes(
+            repo_root,
+            commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256s[name],
+        )
+        try:
+            trees[name] = ast.parse(payload.decode("utf-8"), filename=relative_path)
+        except (UnicodeDecodeError, SyntaxError) as error:
+            raise ValueError(_ERROR) from error
+
+    provider_symbols = {
+        node.name
+        for node in trees["provider"].body
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef))
+    }
+    provider_symbols.update(
+        target.id
+        for node in trees["provider"].body
+        if isinstance(node, (ast.Assign, ast.AnnAssign))
+        for target in (
+            node.targets if isinstance(node, ast.Assign) else [node.target]
+        )
+        if isinstance(target, ast.Name)
+    )
+    required_provider_symbols = set(_LEGACY_MASK_SYMBOLS[:-1]) - {"MaskType"}
+    provider_symbols_present = required_provider_symbols.issubset(provider_symbols)
+
+    provider_symbol = _LEGACY_MASK_SYMBOLS[0]
+    demo_import_count = _import_count(
+        trees["demo"], module="covalent_ext.masking", symbol=provider_symbol
+    )
+    demo_call_count = _call_count(trees["demo"], provider_symbol)
+    dataset_import_count = _import_count(
+        trees["dataset"], module="covalent_ext.masking", symbol=provider_symbol
+    )
+    dataset_call_count = _call_count(trees["dataset"], provider_symbol)
+    dataset_mask_type_import_count = _import_count(
+        trees["dataset"], module="covalent_ext.schema", symbol="MaskType"
+    )
+    checker_registry_import_count = _import_count(
+        trees["checker"], module="covalent_ext.masking", symbol="MASK_BUILDERS"
+    )
+    legacy_choice_set = {"A", "B", "B2", "C"}
+    demo_choices_present = _has_exact_legacy_choice_set(trees["demo"])
+    demo_mask_level_present = bool(
+        _python_reference_kinds(trees["demo"], _LEGACY_MASK_SYMBOLS[-1])
+        & {"cli_option_definition"}
+    )
+    dataset_choices = _function_string_constants(
+        trees["dataset"], "build_all_masks"
+    )
+    checker_constants = {
+        node.value
+        for node in ast.walk(trees["checker"])
+        if isinstance(node, ast.Constant) and type(node.value) is str
+    }
+    dataset_uses_legacy_choices = legacy_choice_set.issubset(dataset_choices)
+    checker_iterates_legacy_choices = legacy_choice_set.issubset(
+        checker_constants
+    )
+
+    active_consumer_paths = sorted(
+        path
+        for path, active in {
+            paths["demo"]: demo_import_count > 0 and demo_call_count > 0,
+            paths["dataset"]: (
+                dataset_import_count > 0
+                and dataset_call_count > 0
+                and dataset_mask_type_import_count > 0
+                and dataset_uses_legacy_choices
+            ),
+            paths["checker"]: (
+                checker_registry_import_count > 0
+                and checker_iterates_legacy_choices
+            ),
+        }.items()
+        if active
+    )
+    expected_active_consumers = sorted(
+        [paths["demo"], paths["dataset"], paths["checker"]]
+    )
+    legacy_provider_has_active_consumers = (
+        provider_symbols_present
+        and active_consumer_paths == expected_active_consumers
+    )
+
+    scope = _future_retirement_implementation_scope()
+    steps = scope["ordered_steps"]
+    step_positions = {step["step"]: index for index, step in enumerate(steps)}
+    r1 = steps[step_positions["R1"]]
+    r2 = steps[step_positions["R2"]]
+    r1_paths = set(r1["paths"])
+    r2_paths = set(r2["paths"])
+    consumer_migration_step = "R1"
+    provider_removal_step = "R2"
+    consumer_migration_precedes_provider_removal = (
+        step_positions[consumer_migration_step]
+        < step_positions[provider_removal_step]
+    )
+    r1_contract = r1["completion_contract"]
+    r2_contract = r2["completion_contract"]
+    r1_migrates_demo_and_keeps_provider = (
+        paths["demo"] in r1_paths
+        and paths["provider"] not in r1_paths
+        and r1_contract.get("legacy_four_level_demo_consumer_removed") is True
+        and r1_contract.get("legacy_four_level_core_provider_still_present")
+        is True
+    )
+    r2_removes_provider_and_migrates_remaining_consumers = (
+        {paths["provider"], paths["dataset"], paths["checker"]}
+        .issubset(r2_paths)
+        and r2_contract.get("legacy_core_provider_removed") is True
+        and r2_contract.get("remaining_core_consumers_migrated") is True
+    )
+    no_intermediate_missing_import_state = all(
+        (
+            consumer_migration_precedes_provider_removal,
+            r1_migrates_demo_and_keeps_provider,
+            r2_removes_provider_and_migrates_remaining_consumers,
+        )
+    )
+    historical_boundary_files = {
+        "historical_B3_source_sha256_bound": (
+            "src/covalent_ext/b3_scaffold_only_mask_implementation.py",
+            _HISTORICAL_B3_SOURCE_SHA256,
+        ),
+        "historical_B3_checker_sha256_bound": (
+            "scripts/check_b3_scaffold_only_mask_implementation_v0.py",
+            _HISTORICAL_B3_CHECKER_SHA256,
+        ),
+        "current_B3_test_sha256_bound": (
+            "tests/test_b3_scaffold_only_mask_implementation_v0.py",
+            _CURRENT_B3_TEST_SHA256,
+        ),
+        "negative_legacy_token_test_sha256_bound": (
+            "tests/test_real_covalent_feature_mapping_loader_gate_v0.py",
+            _NEGATIVE_LEGACY_TOKEN_TEST_SHA256,
+        ),
+    }
+    historical_boundary_evidence = {}
+    for evidence_name, (relative_path, expected_sha256) in (
+        historical_boundary_files.items()
+    ):
+        _git_snapshot_file_bytes(
+            repo_root,
+            commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
+        )
+        historical_boundary_evidence[evidence_name] = True
+    return {
+        "evidence_mode": "frozen_runtime_baseline_snapshot",
+        "runtime_design_baseline_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
+        "legacy_provider_path": paths["provider"],
+        "active_consumer_paths": active_consumer_paths,
+        "provider_symbol": provider_symbol,
+        "provider_symbols_present": provider_symbols_present,
+        "consumer_import_count": demo_import_count + dataset_import_count,
+        "consumer_call_count": demo_call_count + dataset_call_count,
+        "legacy_provider_has_active_consumers": (
+            legacy_provider_has_active_consumers
+        ),
+        "provider_removal_before_consumer_migration_safe": (
+            not legacy_provider_has_active_consumers
+        ),
+        "legacy_demo_imports_four_level_builder": demo_import_count == 1,
+        "legacy_demo_calls_four_level_builder": demo_call_count == 1,
+        "legacy_demo_mask_level_flag_present": demo_mask_level_present,
+        "legacy_demo_exact_A_B_B2_C_choices_present": demo_choices_present,
+        "dataset_imports_four_level_builder": dataset_import_count == 1,
+        "dataset_imports_MaskType": dataset_mask_type_import_count == 1,
+        "dataset_build_all_masks_uses_A_B_B2_C": dataset_uses_legacy_choices,
+        "checker_imports_MASK_BUILDERS": checker_registry_import_count == 1,
+        "checker_iterates_A_B_B2_C": checker_iterates_legacy_choices,
+        "consumer_migration_step": consumer_migration_step,
+        "provider_removal_step": provider_removal_step,
+        "consumer_migration_precedes_provider_removal": (
+            consumer_migration_precedes_provider_removal
+        ),
+        "provider_removal_precedes_consumer_migration": (
+            step_positions[provider_removal_step]
+            < step_positions[consumer_migration_step]
+        ),
+        "R1_migrates_demo_and_keeps_provider": (
+            r1_migrates_demo_and_keeps_provider
+        ),
+        "R2_removes_provider_and_migrates_remaining_consumers": (
+            r2_removes_provider_and_migrates_remaining_consumers
+        ),
+        "no_intermediate_missing_import_state": (
+            no_intermediate_missing_import_state
+        ),
+        **historical_boundary_evidence,
+    }
+
+
 def _text_has_symbol(text: str, symbol: str) -> bool:
     if symbol.startswith("--"):
         return symbol in text
@@ -714,115 +1156,227 @@ def _legacy_reference_classification(
 
 
 def _future_retirement_implementation_scope() -> dict[str, Any]:
+    ordered_steps = [
+        {
+            "step": "R1",
+            "task_name": (
+                "implement_covapie_covalent_demo_canonical_five_level_mask_migration_r1_v1"
+            ),
+            "phase": "legacy_four_level_mask_retirement",
+            "objective": (
+                "migrate_active_covalent_demo_mask_consumer_to_canonical_five_level_semantics"
+            ),
+            "paths": [
+                "scripts/covalent_inpaint_demo.py",
+                "tests/test_covalent_inpaint_demo_mask_semantic_v1.py",
+            ],
+            "forbidden_paths": [
+                "src/covalent_ext/masking.py",
+                "src/covalent_ext/schema.py",
+                "src/covalent_ext/dataset.py",
+                "scripts/check_covalent_masking.py",
+            ],
+            "mask_surface_contract": {
+                "legacy_builder_import_removed": _LEGACY_MASK_SYMBOLS[0],
+                "canonical_builder_import_added": "build_long_form_mask",
+                "legacy_mask_flag_removed": _LEGACY_MASK_SYMBOLS[-1],
+                "only_canonical_mask_flag_added": "--mask_semantic",
+                "accepted_runtime_mask_inputs": list(
+                    CANONICAL_MASK_SEMANTIC_NAMES
+                ),
+                "canonical_to_internal_mapping": dict(_MASK_LONG_TO_INTERNAL),
+                "short_alias_runtime_inputs_rejected": list(
+                    _LEGACY_SHORT_TOKENS
+                ),
+                "legacy_internal_long_form_inputs_rejected": list(
+                    _LEGACY_INTERNAL_LONG_FORM_NAMES
+                ),
+                "unknown_empty_or_non_string_mask_rejected": True,
+                "target_residue_cli_arguments_added": False,
+                "checkpoint_loader_modified": False,
+                "model_forward_executed": False,
+            },
+            "completion_contract": {
+                "covalent_demo_canonical_mask_surface_migrated": True,
+                "legacy_four_level_demo_consumer_removed": True,
+                "legacy_four_level_core_provider_still_present": True,
+                "legacy_four_level_core_api_retired": False,
+                "legacy_four_level_full_runtime_retired": False,
+                "R2_still_required": True,
+                "R3_gate_still_required": True,
+            },
+        },
+        {
+            "step": "R2",
+            "task_name": (
+                "implement_covapie_legacy_four_level_core_api_retirement_r2_v1"
+            ),
+            "phase": "legacy_four_level_mask_retirement",
+            "objective": (
+                "remove_legacy_core_provider_schema_dataset_checker_interfaces_and_migrate_positive_tests"
+            ),
+            "paths": [
+                "src/covalent_ext/masking.py",
+                "src/covalent_ext/schema.py",
+                "src/covalent_ext/dataset.py",
+                "scripts/check_covalent_masking.py",
+                "tests/test_covalent_masking.py",
+                "tests/test_b3_scaffold_only_mask_implementation_v0.py",
+            ],
+            "legacy_core_symbols_removed": list(_LEGACY_MASK_SYMBOLS[:-1]),
+            "canonical_core_symbols_retained": [
+                "LongFormMaskLevel",
+                "LONG_FORM_MASK_COMPONENTS",
+                "build_long_form_mask",
+            ],
+            "canonical_core_migration_contract": {
+                "schema_accepts_legacy_short_tokens": False,
+                "dataset_API_uses_canonical_long_semantic_names": True,
+                "dataset_build_all_masks_exactly_five": True,
+                "dataset_build_all_masks_semantics": list(
+                    CANONICAL_MASK_SEMANTIC_NAMES
+                ),
+                "checker_validates_canonical_five_level_contract": True,
+                "current_tests_require_positive_legacy_behavior": False,
+            },
+            "historical_B3_boundary": {
+                "source_path": (
+                    "src/covalent_ext/b3_scaffold_only_mask_implementation.py"
+                ),
+                "source_modified": False,
+                "source_sha256": _HISTORICAL_B3_SOURCE_SHA256,
+                "source_read_only": True,
+                "source_active_runtime": False,
+                "source_current_runtime_importable_required": False,
+                "historical_checker_modified_or_run": False,
+                "historical_checker_sha256": _HISTORICAL_B3_CHECKER_SHA256,
+                "test_path": (
+                    "tests/test_b3_scaffold_only_mask_implementation_v0.py"
+                ),
+                "current_test_sha256": _CURRENT_B3_TEST_SHA256,
+                "test_imports_historical_module_after_R2": False,
+                "test_runs_historical_checker_after_R2": False,
+                "test_requires_positive_legacy_behavior_after_R2": False,
+                "test_preserves_history_by_read_only_bytes_or_sha": True,
+                "test_independently_checks_canonical_B2_and_B3": True,
+            },
+            "negative_legacy_token_evidence_boundary": {
+                "path": (
+                    "tests/test_real_covalent_feature_mapping_loader_gate_v0.py"
+                ),
+                "current_sha256": _NEGATIVE_LEGACY_TOKEN_TEST_SHA256,
+                "modified_in_R1": False,
+                "modified_in_R2": False,
+                "retirement_increment": None,
+                "required_future_action": (
+                    "retain_negative_legacy_token_evidence"
+                ),
+                "active_runtime": False,
+                "positive_legacy_behavior_required": False,
+                "negative_legacy_token_rejection_evidence_retained": True,
+            },
+            "completion_contract": {
+                "legacy_core_provider_removed": True,
+                "remaining_core_consumers_migrated": True,
+                "candidate_active_legacy_reference_count": 0,
+                "legacy_four_level_full_runtime_retirement_candidate": True,
+                "legacy_four_level_full_runtime_retired": False,
+                "R3_independent_gate_required": True,
+            },
+        },
+        {
+            "step": "R3",
+            "phase": "legacy_four_level_mask_retirement",
+            "objective": "formal_zero_active_legacy_reference_retirement_gate",
+            "paths": [
+                "src/covalent_ext/covapie_legacy_four_level_mask_retirement_gate_v1.py",
+                "tests/test_covapie_legacy_four_level_mask_retirement_gate_v1.py",
+                "scripts/check_covapie_legacy_four_level_mask_retirement_gate_v1.py",
+                "docs/covapie_legacy_four_level_mask_retirement_gate_v1_guide.md",
+            ],
+        },
+        {
+            "step": "C1",
+            "phase": "repository_cli_forwarding",
+            "objective": "implement_central_target_residue_cli_helper",
+            "paths": [
+                "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_v1.py",
+                "tests/test_covapie_target_residue_atom_condition_repository_cli_v1.py",
+            ],
+        },
+        {
+            "step": "C2",
+            "phase": "repository_cli_forwarding",
+            "objective": "forward_generate_ligands_cli",
+            "paths": ["generate_ligands.py"],
+        },
+        {
+            "step": "C3",
+            "phase": "repository_cli_forwarding",
+            "objective": "forward_target_selector_through_covalent_demo",
+            "paths": ["scripts/covalent_inpaint_demo.py"],
+        },
+        {
+            "step": "C4",
+            "phase": "repository_cli_forwarding",
+            "objective": "formal_repository_cli_forwarding_gate",
+            "paths": [
+                "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+                "tests/test_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+                "scripts/check_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
+                "docs/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1_guide.md",
+            ],
+        },
+    ]
+    positions = {
+        step["step"]: index for index, step in enumerate(ordered_steps)
+    }
     return {
         "incremental_commits_required": True,
-        "ordered_steps": [
-            {
-                "step": "R1",
-                "phase": "legacy_four_level_mask_retirement",
-                "objective": "remove_legacy_four_level_core_runtime_interfaces",
-                "paths": [
-                    "src/covalent_ext/masking.py",
-                    "src/covalent_ext/schema.py",
-                    "src/covalent_ext/dataset.py",
-                    "scripts/check_covalent_masking.py",
-                    "tests/test_covalent_masking.py",
-                    "tests/test_b3_scaffold_only_mask_implementation_v0.py",
-                ],
-                "completion_contract": {
-                    "legacy_four_level_core_api_retired": True,
-                    "legacy_four_level_full_runtime_retired": False,
-                    "reason_full_runtime_not_retired": (
-                        "covalent_inpaint_demo_remains_for_R2"
-                    ),
-                },
-            },
-            {
-                "step": "R2",
-                "phase": "legacy_four_level_mask_retirement",
-                "objective": (
-                    "remove_final_active_cli_caller_dependency_on_legacy_four_level_masks"
-                ),
-                "paths": [
-                    "scripts/covalent_inpaint_demo.py",
-                    "tests/test_covalent_inpaint_demo_mask_semantic_v1.py",
-                ],
-                "completion_contract": {
-                    "legacy_mask_flag_removed": "--mask_level",
-                    "only_canonical_mask_flag_added": "--mask_semantic",
-                    "accepted_runtime_mask_inputs": list(
-                        CANONICAL_MASK_SEMANTIC_NAMES
-                    ),
-                    "short_alias_runtime_inputs_rejected": list(
-                        _LEGACY_SHORT_TOKENS
-                    ),
-                    "runtime_builder": "build_long_form_mask",
-                    "candidate_full_runtime_retirement_requires_R3_gate": True,
-                },
-            },
-            {
-                "step": "R3",
-                "phase": "legacy_four_level_mask_retirement",
-                "objective": "formal_zero_active_legacy_reference_retirement_gate",
-                "paths": [
-                    "src/covalent_ext/covapie_legacy_four_level_mask_retirement_gate_v1.py",
-                    "tests/test_covapie_legacy_four_level_mask_retirement_gate_v1.py",
-                    "scripts/check_covapie_legacy_four_level_mask_retirement_gate_v1.py",
-                    "docs/covapie_legacy_four_level_mask_retirement_gate_v1_guide.md",
-                ],
-            },
-            {
-                "step": "C1",
-                "phase": "repository_cli_forwarding",
-                "objective": "implement_central_target_residue_cli_helper",
-                "paths": [
-                    "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_v1.py",
-                    "tests/test_covapie_target_residue_atom_condition_repository_cli_v1.py",
-                ],
-            },
-            {
-                "step": "C2",
-                "phase": "repository_cli_forwarding",
-                "objective": "forward_generate_ligands_cli",
-                "paths": ["generate_ligands.py"],
-            },
-            {
-                "step": "C3",
-                "phase": "repository_cli_forwarding",
-                "objective": "forward_target_selector_through_covalent_demo",
-                "paths": ["scripts/covalent_inpaint_demo.py"],
-            },
-            {
-                "step": "C4",
-                "phase": "repository_cli_forwarding",
-                "objective": "formal_repository_cli_forwarding_gate",
-                "paths": [
-                    "src/covalent_ext/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
-                    "tests/test_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
-                    "scripts/check_covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1.py",
-                    "docs/covapie_target_residue_atom_condition_repository_cli_forwarding_gate_v1_guide.md",
-                ],
-            },
-        ],
+        "ordered_steps": ordered_steps,
+        "consumer_migration_precedes_provider_removal": (
+            positions["R1"] < positions["R2"]
+        ),
+        "provider_removal_precedes_consumer_migration": (
+            positions["R2"] < positions["R1"]
+        ),
         "single_commit_for_all_increments_allowed": False,
         "cli_forwarding_may_begin_before_R3": False,
+        "C1_before_committed_R3_allowed": False,
     }
 
 
 def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
-    lifecycle = _design_path_lifecycle_evidence(repo_root)
-    tracked_paths = set(lifecycle["tracked_paths"])
-    ordinary_untracked_paths = set(lifecycle["ordinary_untracked_paths"])
-    repository_paths = sorted(tracked_paths | ordinary_untracked_paths)
+    _design_path_lifecycle_evidence(repo_root)
+    repository_paths = _git(
+        repo_root,
+        "ls-tree",
+        "-r",
+        "--name-only",
+        _RUNTIME_DESIGN_BASELINE_COMMIT,
+    ).splitlines()
     grep_pattern = (
         "build_four_level_mask|MASK_BUILDERS|MaskType|mask_warhead|"
         "mask_linker_and_warhead|mask_scaffold|mask_whole_ligand|"
         "--mask_level|choices"
     )
-    tracked_candidates = set(
-        _git(repo_root, "grep", "-l", "-I", "-E", grep_pattern, "--").splitlines()
-    )
-    candidate_paths = sorted(tracked_candidates | set(_DESIGN_PATHS))
+    grep_output = _git(
+        repo_root,
+        "grep",
+        "-l",
+        "-I",
+        "-E",
+        grep_pattern,
+        _RUNTIME_DESIGN_BASELINE_COMMIT,
+        "--",
+    ).splitlines()
+    snapshot_prefix = f"{_RUNTIME_DESIGN_BASELINE_COMMIT}:"
+    if any(not item.startswith(snapshot_prefix) for item in grep_output):
+        raise ValueError(_ERROR)
+    snapshot_candidates = {
+        item.removeprefix(snapshot_prefix) for item in grep_output
+    }
+    candidate_paths = sorted(snapshot_candidates | set(_DESIGN_PATHS))
     inventory: list[dict[str, Any]] = []
     scanned_text_file_count = 0
     notebook_count = 0
@@ -839,18 +1393,16 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
         ".yml",
     }
     for relative_path in candidate_paths:
-        path = repo_root / relative_path
+        path = Path(relative_path)
         if path.suffix.lower() not in allowed_suffixes:
             continue
-        metadata = path.lstat()
-        if (
-            stat.S_ISLNK(metadata.st_mode)
-            or not stat.S_ISREG(metadata.st_mode)
-            or metadata.st_size >= _MAX_SOURCE_BYTES
-        ):
-            raise ValueError(_ERROR)
+        payload = _git_snapshot_blob_bytes(
+            repo_root,
+            commit=_RUNTIME_DESIGN_BASELINE_COMMIT,
+            relative_path=relative_path,
+        )
         try:
-            text = path.read_text(encoding="utf-8")
+            text = payload.decode("utf-8")
         except UnicodeDecodeError:
             continue
         scanned_text_file_count += 1
@@ -914,21 +1466,28 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
             active, test_only, documentation_only, historical, action = (
                 _legacy_reference_classification(relative_path)
             )
-            if active or test_only:
+            if active:
                 retirement_increment = (
-                    "R2"
+                    "R1"
                     if relative_path == "scripts/covalent_inpaint_demo.py"
-                    else "R1"
+                    else "R2"
                 )
                 post_increment_expected_status = (
-                    "final_active_cli_dependency_removed_pending_R3_gate"
-                    if retirement_increment == "R2"
-                    else "core_legacy_dependency_removed_full_retirement_still_false"
+                    "demo_consumer_removed_core_provider_still_present"
+                    if retirement_increment == "R1"
+                    else "candidate_active_legacy_zero_pending_R3_gate"
+                )
+            elif test_only and relative_path != (
+                "tests/test_real_covalent_feature_mapping_loader_gate_v0.py"
+            ):
+                retirement_increment = "R2"
+                post_increment_expected_status = (
+                    "positive_legacy_behavior_replaced_by_canonical_or_read_only_evidence"
                 )
             else:
                 retirement_increment = None
                 post_increment_expected_status = (
-                    "retained_read_only_non_active_legacy_evidence"
+                    "retained_negative_or_read_only_non_active_legacy_evidence"
                 )
             inventory.append(
                 {
@@ -941,6 +1500,11 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
                     "historical_freeze_only": historical,
                     "required_future_action": action,
                     "retirement_increment": retirement_increment,
+                    "positive_legacy_behavior_required": (
+                        test_only
+                        and relative_path
+                        != "tests/test_real_covalent_feature_mapping_loader_gate_v0.py"
+                    ),
                     "post_increment_expected_status": (
                         post_increment_expected_status
                     ),
@@ -1002,7 +1566,10 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
     ):
         raise ValueError(_ERROR)
     return {
-        "inventory_version": "covapie_legacy_four_level_mask_reference_inventory_v1",
+        "inventory_version": "covapie_legacy_four_level_mask_reference_baseline_inventory_v1",
+        "evidence_mode": "frozen_runtime_baseline_snapshot",
+        "runtime_design_baseline_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
+        "inventory_claims_live_runtime_state": False,
         "scanned_repository_file_count": len(repository_paths),
         "scanned_text_file_count": scanned_text_file_count,
         "notebook_json_file_count": notebook_count,
@@ -1011,24 +1578,21 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
             *_LEGACY_MASK_SYMBOLS,
             "choices_A_B_B2_C",
         ],
-        "reference_count": len(inventory),
+        "baseline_reference_count": len(inventory),
         "classification_counts": classifications,
-        "active_legacy_reference_count": len(active_records),
-        "active_legacy_reference_paths": sorted(
+        "baseline_active_legacy_reference_count": len(active_records),
+        "baseline_active_legacy_reference_paths": sorted(
             {item["path"] for item in active_records}
         ),
-        "active_legacy_reference_path_count": len(
-            {item["path"] for item in active_records}
-        ),
-        "current_active_reference_count": len(active_records),
-        "current_active_reference_path_count": len(
+        "baseline_active_legacy_reference_path_count": len(
             {item["path"] for item in active_records}
         ),
         "target_active_reference_count": 0,
         "target_active_reference_path_count": 0,
+        "live_active_legacy_reference_count_claimed": False,
         "records": inventory,
         "unresolved_legacy_mask_references": unresolved,
-        "unresolved_active_reference_count": len(unresolved),
+        "baseline_unresolved_active_reference_count": len(unresolved),
         "inventory_complete": True,
         "all_active_legacy_references_in_future_scope": not unresolved,
         "all_active_references_have_future_actions": all(
@@ -1043,8 +1607,9 @@ def _legacy_mask_reference_inventory(repo_root: Path) -> dict[str, Any]:
     }
 
 
-def _ready_for_legacy_four_level_mask_retirement_implementation(
+def _ready_for_covalent_demo_canonical_mask_migration_R1(
     inventory: Mapping[str, Any],
+    dependency_evidence: Mapping[str, Any],
     *,
     canonical_five_level_contract_complete: bool,
 ) -> bool:
@@ -1061,9 +1626,9 @@ def _ready_for_legacy_four_level_mask_retirement_implementation(
         and inventory.get("all_active_legacy_references_in_future_scope") is True
         and inventory.get("all_active_references_have_future_actions") is True
         and inventory.get("unresolved_legacy_mask_references") == []
-        and inventory.get("unresolved_active_reference_count") == 0
-        and inventory.get("current_active_reference_count") == 14
-        and inventory.get("current_active_reference_path_count") == 5
+        and inventory.get("baseline_unresolved_active_reference_count") == 0
+        and inventory.get("baseline_active_legacy_reference_count") == 14
+        and inventory.get("baseline_active_legacy_reference_path_count") == 5
         and len(active_records) == 14
         and all(
             item.get("retirement_increment") in {"R1", "R2"}
@@ -1071,7 +1636,43 @@ def _ready_for_legacy_four_level_mask_retirement_implementation(
             != "UNRESOLVED_ACTIVE_LEGACY_REFERENCE"
             for item in active_records
         )
+        and all(
+            item.get("retirement_increment") == "R1"
+            for item in active_records
+            if item.get("path") == "scripts/covalent_inpaint_demo.py"
+        )
+        and isinstance(dependency_evidence, Mapping)
+        and dependency_evidence.get("legacy_provider_has_active_consumers")
+        is True
+        and dependency_evidence.get(
+            "consumer_migration_precedes_provider_removal"
+        )
+        is True
+        and dependency_evidence.get("no_intermediate_missing_import_state")
+        is True
         and canonical_five_level_contract_complete is True
+    )
+
+
+def _ready_for_legacy_core_api_retirement_R2(
+    dependency_evidence: Mapping[str, Any],
+    *,
+    R1_committed: bool,
+) -> bool:
+    return (
+        isinstance(dependency_evidence, Mapping)
+        and R1_committed is True
+        and dependency_evidence.get(
+            "consumer_migration_precedes_provider_removal"
+        )
+        is True
+        and dependency_evidence.get("provider_symbols_present") is True
+        and dependency_evidence.get("legacy_demo_imports_four_level_builder")
+        is False
+        and dependency_evidence.get("legacy_demo_calls_four_level_builder")
+        is False
+        and dependency_evidence.get("legacy_demo_mask_level_flag_present")
+        is False
     )
 
 
@@ -1418,9 +2019,15 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
         source_snapshot = bytes(source_model_consumption_gate_bundle)
         bundle = _validate_gate_bundle(source_model_consumption_gate_bundle)
         gate_evidence = _gate_source_evidence(repo_root)
+        baseline_source_evidence = _runtime_design_baseline_source_evidence(
+            repo_root
+        )
         caller_audit = _caller_audit(repo_root)
         model_source_evidence = _model_and_mask_source_audit(repo_root)
         legacy_mask_inventory = _legacy_mask_reference_inventory(repo_root)
+        retirement_dependency_evidence = (
+            _retirement_dependency_order_evidence(repo_root)
+        )
         checkpoint = _checkpoint_evidence(repo_root)
         if source_model_consumption_gate_bundle != source_snapshot:
             raise ValueError(_ERROR)
@@ -1561,7 +2168,18 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
         }
         inpaint_contract = {
             "caller": "scripts/covalent_inpaint_demo.py",
+            "baseline_covalent_demo_sha256": _CALLER_SHA256S[
+                "scripts/covalent_inpaint_demo.py"
+            ],
+            "baseline_source_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
+            "contract_claims_live_demo_sha256": False,
             "task": "protein_known_ligand_and_cys_sg_local_generation",
+            "mask_surface_migration_step": "R1",
+            "target_residue_forwarding_step": "C3",
+            "R1_scope_is_mask_surface_only": True,
+            "R1_adds_target_residue_cli_arguments": False,
+            "R1_modifies_checkpoint_loader": False,
+            "R1_executes_model_forward": False,
             "forward_path": [
                 "run_covalent_inpaint",
                 "prepare_single_pocket",
@@ -1579,6 +2197,28 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
             "legacy_four_level_fallback_allowed": False,
         }
         mask_contract = {
+            "design_evidence_mode": "frozen_runtime_baseline_snapshot",
+            "runtime_design_baseline_commit": _RUNTIME_DESIGN_BASELINE_COMMIT,
+            "runtime_design_baseline_source_evidence": (
+                baseline_source_evidence
+            ),
+            "design_baseline_snapshot_immutable": True,
+            "design_checker_claims_live_runtime_state": False,
+            "implementation_phase_live_state_requires_phase_specific_gate": True,
+            "recommended_next_step_is_design_baseline_recommendation": True,
+            "R1_candidate_will_not_invalidate_design_tests": True,
+            "phase_gate_responsibilities": {
+                "repository_CLI_design": (
+                    "prove_R1_R2_R3_need_order_and_contracts_from_frozen_baseline"
+                ),
+                "R1_tests_and_checker": (
+                    "prove_demo_canonical_five_level_migration_complete"
+                ),
+                "R2_tests_and_checker": (
+                    "prove_core_legacy_API_removed_and_remaining_consumers_migrated"
+                ),
+                "R3_gate": "prove_live_active_legacy_reference_count_zero",
+            },
             "canonical_input_flag": "--mask_semantic",
             "legacy_input_flag": None,
             "canonical_five_level_target_selected": True,
@@ -1587,17 +2227,42 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
             "legacy_four_level_retirement_implemented": False,
             "retirement_R3_gate_passed": False,
             "retirement_R3_gate_committed": False,
-            "current_legacy_four_level_runtime_present": True,
-            "current_legacy_four_level_cli_input_present": True,
-            "current_legacy_four_level_schema_present": True,
-            "current_active_legacy_reference_count": legacy_mask_inventory[
-                "current_active_reference_count"
+            "baseline_legacy_four_level_runtime_present": True,
+            "baseline_legacy_four_level_cli_input_present": True,
+            "baseline_legacy_four_level_schema_present": True,
+            "baseline_legacy_provider_has_active_consumers": (
+                retirement_dependency_evidence[
+                    "legacy_provider_has_active_consumers"
+                ]
+            ),
+            "baseline_provider_removal_before_consumer_migration_safe": (
+                retirement_dependency_evidence[
+                    "provider_removal_before_consumer_migration_safe"
+                ]
+            ),
+            "retirement_dependency_order_valid": (
+                retirement_dependency_evidence[
+                    "consumer_migration_precedes_provider_removal"
+                ]
+                and retirement_dependency_evidence[
+                    "no_intermediate_missing_import_state"
+                ]
+            ),
+            "retirement_dependency_order_evidence": (
+                retirement_dependency_evidence
+            ),
+            "baseline_reference_count": legacy_mask_inventory[
+                "baseline_reference_count"
             ],
-            "current_active_legacy_reference_path_count": legacy_mask_inventory[
-                "current_active_reference_path_count"
+            "baseline_active_legacy_reference_count": legacy_mask_inventory[
+                "baseline_active_legacy_reference_count"
+            ],
+            "baseline_active_legacy_reference_path_count": legacy_mask_inventory[
+                "baseline_active_legacy_reference_path_count"
             ],
             "target_active_legacy_reference_count": 0,
             "target_active_legacy_reference_path_count": 0,
+            "live_active_legacy_reference_count_claimed": False,
             "target_legacy_four_level_runtime_supported": False,
             "target_legacy_four_level_cli_input_supported": False,
             "target_legacy_short_alias_input_supported": False,
@@ -1618,6 +2283,10 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
             "scaffold_plus_warhead_present": True,
             "scaffold_only_present": True,
             "sixth_mask_added": False,
+            "test_real_covalent_feature_mapping_loader_gate_v0_modified_in_R1": False,
+            "test_real_covalent_feature_mapping_loader_gate_v0_modified_in_R2": False,
+            "negative_legacy_token_rejection_evidence_retained": True,
+            "historical_B3_source_modified_in_R2": False,
             "legacy_reference_inventory": legacy_mask_inventory,
             "unresolved_legacy_mask_references": legacy_mask_inventory[
                 "unresolved_legacy_mask_references"
@@ -1641,17 +2310,29 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
                 "current_non_historical_positive_legacy_runtime_tests",
             ],
         }
-        retirement_implementation_ready = (
-            _ready_for_legacy_four_level_mask_retirement_implementation(
-                legacy_mask_inventory,
-                canonical_five_level_contract_complete=mask_contract[
-                    "canonical_five_level_contract_complete"
-                ],
+        R1_ready = _ready_for_covalent_demo_canonical_mask_migration_R1(
+            legacy_mask_inventory,
+            retirement_dependency_evidence,
+            canonical_five_level_contract_complete=mask_contract[
+                "canonical_five_level_contract_complete"
+            ],
+        )
+        R1_committed = all(
+            retirement_dependency_evidence[name] is False
+            for name in (
+                "legacy_demo_imports_four_level_builder",
+                "legacy_demo_calls_four_level_builder",
+                "legacy_demo_mask_level_flag_present",
             )
         )
-        mask_contract[
-            "ready_for_legacy_four_level_mask_retirement_implementation"
-        ] = retirement_implementation_ready
+        R2_ready = _ready_for_legacy_core_api_retirement_R2(
+            retirement_dependency_evidence,
+            R1_committed=R1_committed,
+        )
+        mask_contract["ready_for_covalent_demo_canonical_mask_migration_R1"] = (
+            R1_ready
+        )
+        mask_contract["ready_for_legacy_core_api_retirement_R2"] = R2_ready
         failure_contract = {
             "error": "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_REPOSITORY_CLI_INVALID",
             "fail_closed": True,
@@ -1708,8 +2389,23 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
                 mask_contract["legacy_four_level_retirement_selected"] is True,
                 mask_contract["legacy_four_level_retirement_implemented"]
                 is False,
-                mask_contract["current_active_legacy_reference_count"] == 14,
-                mask_contract["current_active_legacy_reference_path_count"] == 5,
+                all(
+                    baseline_source_evidence[name] is True
+                    for name in (
+                        "runtime_design_baseline_commit_exists",
+                        "runtime_design_baseline_commit_single_parent",
+                        "runtime_design_baseline_commit_is_head_ancestor",
+                        "runtime_design_baseline_commit_is_origin_main_ancestor",
+                    )
+                ),
+                mask_contract["design_checker_claims_live_runtime_state"]
+                is False,
+                mask_contract["baseline_reference_count"] == 45,
+                mask_contract["baseline_active_legacy_reference_count"] == 14,
+                mask_contract[
+                    "baseline_active_legacy_reference_path_count"
+                ]
+                == 5,
                 mask_contract["target_active_legacy_reference_count"] == 0,
                 mask_contract["target_active_legacy_reference_path_count"] == 0,
                 mask_contract["target_legacy_four_level_runtime_supported"]
@@ -1727,7 +2423,9 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
                     "all_active_legacy_references_in_future_scope"
                 ]
                 is True,
-                retirement_implementation_ready,
+                mask_contract["retirement_dependency_order_valid"] is True,
+                R1_ready,
+                R2_ready is False,
                 mask_contract["canonical_B2_semantic"]
                 == "scaffold_plus_warhead",
                 mask_contract["canonical_B3_semantic"] == "scaffold_only",
@@ -1737,9 +2435,7 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
             )
         )
         retirement_implemented = (
-            legacy_mask_inventory["current_active_reference_count"] == 0
-            and legacy_mask_inventory["current_active_reference_path_count"] == 0
-            and legacy_mask_inventory["unresolved_active_reference_count"] == 0
+            mask_contract["design_checker_claims_live_runtime_state"] is False
             and mask_contract["retirement_R3_gate_passed"] is True
             and mask_contract["retirement_R3_gate_committed"] is True
         )
@@ -1802,7 +2498,9 @@ def design_covapie_target_residue_atom_condition_repository_cli_forwarding_v1(
             "ready_for_repository_cli_forwarding_implementation": (
                 repository_cli_forwarding_ready
             ),
-            "recommended_next_step": "implement_covapie_legacy_four_level_mask_retirement_v1",
+            "recommended_next_step": (
+                "implement_covapie_covalent_demo_canonical_five_level_mask_migration_r1_v1"
+            ),
             "training_or_parameter_update": False,
             "feature_semantics_audit_required_before_training": True,
         }
