@@ -28,6 +28,262 @@ from analysis.molecule_builder import build_molecule, process_molecule
 from analysis.docking import smina_score
 
 
+_COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_SPEC_FIELDS = (
+    "chain_id",
+    "residue_sequence_number",
+    "residue_insertion_code",
+    "residue_name",
+    "atom_name",
+    "element",
+)
+
+_COVAPIE_POCKET_TARGET_RESIDUE_ATOM_CONDITION_INDICATOR_FIELD = (
+    "pocket_target_residue_atom_condition_indicator"
+)
+
+_COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR = (
+    "COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_INVALID"
+)
+
+
+def _validate_covapie_target_residue_atom_condition_spec_v1(spec):
+    """Validate and copy the exact CYS-SG-S selector used by the bridge."""
+
+    try:
+        if (
+            type(spec) is not dict
+            or len(spec) != len(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_SPEC_FIELDS
+            )
+            or set(spec) != set(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_SPEC_FIELDS
+            )
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        if (
+            type(spec["chain_id"]) is not str
+            or spec["chain_id"] == ""
+            or type(spec["residue_sequence_number"]) is not int
+            or type(spec["residue_sequence_number"]) is bool
+            or type(spec["residue_insertion_code"]) is not str
+            or len(spec["residue_insertion_code"]) != 1
+            or spec["residue_insertion_code"] != " "
+            or type(spec["residue_name"]) is not str
+            or spec["residue_name"] != "CYS"
+            or type(spec["atom_name"]) is not str
+            or spec["atom_name"] != "SG"
+            or type(spec["element"]) is not str
+            or spec["element"] != "S"
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        return {
+            field: spec[field]
+            for field in _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_SPEC_FIELDS
+        }
+    except Exception as error:
+        if (
+            type(error) is ValueError
+            and str(error)
+            == _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ):
+            raise
+        raise ValueError(
+            _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ) from error
+
+
+def _locate_covapie_target_residue_atom_in_pocket_atoms_v1(
+        pocket_atoms, target_residue_atom_condition_spec,
+        pocket_type_encoder):
+    """Locate the Exact6 target in the existing full-atom pocket order."""
+
+    try:
+        spec = _validate_covapie_target_residue_atom_condition_spec_v1(
+            target_residue_atom_condition_spec
+        )
+        if type(pocket_atoms) is not list or not pocket_atoms:
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        if "S" not in pocket_type_encoder:
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+
+        matching_indices = []
+        for index, atom in enumerate(pocket_atoms):
+            residue = atom.get_parent()
+            chain = residue.get_parent()
+            residue_id = residue.id
+            if type(residue_id) is not tuple or len(residue_id) != 3:
+                raise ValueError(
+                    _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+                )
+            identity_matches = (
+                chain.id == spec["chain_id"]
+                and residue_id[0] == " "
+                and residue_id[1] == spec["residue_sequence_number"]
+                and residue_id[2] == spec["residue_insertion_code"]
+                and residue.get_resname() == spec["residue_name"]
+                and atom.get_name() == spec["atom_name"]
+                and atom.element == spec["element"]
+            )
+            if identity_matches:
+                residue_is_disordered = getattr(
+                    residue, "is_disordered", None
+                )
+                atom_is_disordered = getattr(atom, "is_disordered", None)
+                atom_get_altloc = getattr(atom, "get_altloc", None)
+                if (
+                    not callable(residue_is_disordered)
+                    or not callable(atom_is_disordered)
+                    or not callable(atom_get_altloc)
+                    or bool(residue_is_disordered())
+                    or bool(atom_is_disordered())
+                    or atom_get_altloc() != " "
+                ):
+                    raise ValueError(
+                        _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+                    )
+                matching_indices.append(index)
+
+        if len(matching_indices) != 1:
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        return matching_indices[0]
+    except Exception as error:
+        if (
+            type(error) is ValueError
+            and str(error)
+            == _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ):
+            raise
+        raise ValueError(
+            _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ) from error
+
+
+def _build_covapie_repeated_target_residue_atom_condition_indicator_v1(
+        pocket_atom_count, target_local_index, repeats, device):
+    """Build one target bit per complete repeated pocket sample block."""
+
+    try:
+        if (
+            type(pocket_atom_count) is not int
+            or type(pocket_atom_count) is bool
+            or pocket_atom_count <= 0
+            or type(target_local_index) is not int
+            or type(target_local_index) is bool
+            or not 0 <= target_local_index < pocket_atom_count
+            or type(repeats) is not int
+            or type(repeats) is bool
+            or repeats <= 0
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        base_indicator = torch.zeros(
+            pocket_atom_count, dtype=torch.bool, device=device
+        )
+        base_indicator[target_local_index] = True
+        repeated_indicator = base_indicator.repeat(repeats)
+        if (
+            repeated_indicator.dtype != torch.bool
+            or repeated_indicator.ndim != 1
+            or len(repeated_indicator) != repeats * pocket_atom_count
+            or int(repeated_indicator.sum().item()) != repeats
+            or any(
+                int(block.sum().item()) != 1
+                for block in repeated_indicator.view(repeats, pocket_atom_count)
+            )
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        return repeated_indicator
+    except Exception as error:
+        if (
+            type(error) is ValueError
+            and str(error)
+            == _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ):
+            raise
+        raise ValueError(
+            _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ) from error
+
+
+def _validate_covapie_collated_target_residue_atom_condition_indicator_v1(
+        indicator, pocket):
+    """Validate the collated boolean sidecar against pocket nodes and samples."""
+
+    try:
+        if (
+            not isinstance(indicator, torch.Tensor)
+            or indicator.dtype != torch.bool
+            or indicator.ndim != 1
+            or not isinstance(pocket["x"], torch.Tensor)
+            or not isinstance(pocket["one_hot"], torch.Tensor)
+            or not isinstance(pocket["size"], torch.Tensor)
+            or not isinstance(pocket["mask"], torch.Tensor)
+            or pocket["size"].ndim != 1
+            or pocket["mask"].ndim != 1
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        node_count = len(pocket["x"])
+        if (
+            node_count <= 0
+            or len(pocket["size"]) <= 0
+            or len(indicator) != node_count
+            or len(pocket["one_hot"]) != node_count
+            or len(pocket["mask"]) != node_count
+            or bool(torch.any(pocket["size"] <= 0).item())
+            or int(pocket["size"].sum().item()) != node_count
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        expected_mask = torch.repeat_interleave(
+            torch.arange(
+                len(pocket["size"]),
+                device=pocket["mask"].device,
+                dtype=pocket["mask"].dtype,
+            ),
+            pocket["size"].to(device=pocket["mask"].device),
+        )
+        if not torch.equal(pocket["mask"], expected_mask):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        indicator_for_validation = indicator.to(device=pocket["mask"].device)
+        if any(
+            int(indicator_for_validation[pocket["mask"] == sample].sum().item())
+            != 1
+            for sample in range(len(pocket["size"]))
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
+        return indicator
+    except Exception as error:
+        if (
+            type(error) is ValueError
+            and str(error)
+            == _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ):
+            raise
+        raise ValueError(
+            _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+        ) from error
+
+
 class LigandPocketDDPM(pl.LightningModule):
     def __init__(
             self,
@@ -231,6 +487,17 @@ class LigandPocketDDPM(pl.LightningModule):
             'size': data['num_pocket_nodes'].to(self.device, INT_TYPE),
             'mask': data['pocket_mask'].to(self.device, INT_TYPE)
         }
+        indicator_field = (
+            _COVAPIE_POCKET_TARGET_RESIDUE_ATOM_CONDITION_INDICATOR_FIELD
+        )
+        if indicator_field in data:
+            indicator = data[indicator_field]
+            _validate_covapie_collated_target_residue_atom_condition_indicator_v1(
+                indicator, pocket
+            )
+            pocket[indicator_field] = indicator.to(
+                device=pocket['x'].device, dtype=torch.bool
+            )
         return ligand, pocket
 
     def forward(self, data):
@@ -711,9 +978,27 @@ class LigandPocketDDPM(pl.LightningModule):
                       name='/chain', batch_mask=mask_flat)
         visualize_chain(str(outdir), self.dataset_info, wandb=wandb)
 
-    def prepare_pocket(self, biopython_residues, repeats=1):
+    def prepare_pocket(
+            self, biopython_residues, repeats=1,
+            target_residue_atom_condition_spec=None):
+
+        if (
+            target_residue_atom_condition_spec is not None
+            and (
+                type(repeats) is not int
+                or type(repeats) is bool
+                or repeats <= 0
+            )
+        ):
+            raise ValueError(
+                _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+            )
 
         if self.pocket_representation == 'CA':
+            if target_residue_atom_condition_spec is not None:
+                raise ValueError(
+                    _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+                )
             pocket_coord = torch.tensor(np.array(
                 [res['CA'].get_coord() for res in biopython_residues]),
                 device=self.device, dtype=FLOAT_TYPE)
@@ -724,6 +1009,14 @@ class LigandPocketDDPM(pl.LightningModule):
             pocket_atoms = [a for res in biopython_residues
                             for a in res.get_atoms()
                             if (a.element.capitalize() in self.pocket_type_encoder or a.element != 'H')]
+            if target_residue_atom_condition_spec is not None:
+                target_local_index = (
+                    _locate_covapie_target_residue_atom_in_pocket_atoms_v1(
+                        pocket_atoms,
+                        target_residue_atom_condition_spec,
+                        self.pocket_type_encoder,
+                    )
+                )
             pocket_coord = torch.tensor(np.array(
                 [a.get_coord() for a in pocket_atoms]),
                 device=self.device, dtype=FLOAT_TYPE)
@@ -749,12 +1042,37 @@ class LigandPocketDDPM(pl.LightningModule):
             'mask': pocket_mask
         }
 
+        if target_residue_atom_condition_spec is not None:
+            repeated_indicator = (
+                _build_covapie_repeated_target_residue_atom_condition_indicator_v1(
+                    len(pocket_atoms), target_local_index, repeats, self.device
+                )
+            )
+            if (
+                repeated_indicator.device != pocket['x'].device
+                or not torch.equal(
+                    pocket['mask'][repeated_indicator],
+                    torch.arange(
+                        repeats,
+                        device=pocket['mask'].device,
+                        dtype=pocket['mask'].dtype,
+                    ),
+                )
+            ):
+                raise ValueError(
+                    _COVAPIE_TARGET_RESIDUE_ATOM_CONDITION_RUNTIME_BRIDGE_ERROR
+                )
+            pocket[
+                _COVAPIE_POCKET_TARGET_RESIDUE_ATOM_CONDITION_INDICATOR_FIELD
+            ] = repeated_indicator
+
         return pocket
 
     def generate_ligands(self, pdb_file, n_samples, pocket_ids=None,
                          ref_ligand=None, num_nodes_lig=None, sanitize=False,
                          largest_frag=False, relax_iter=0, timesteps=None,
-                         n_nodes_bias=0, n_nodes_min=0, **kwargs):
+                         n_nodes_bias=0, n_nodes_min=0,
+                         target_residue_atom_condition_spec=None, **kwargs):
         """
         Generate ligands given a pocket
         Args:
@@ -773,6 +1091,8 @@ class LigandPocketDDPM(pl.LightningModule):
             timesteps: number of denoising steps, use training value if None
             n_nodes_bias: added to the sampled (or provided) number of nodes
             n_nodes_min: lower bound on the number of sampled nodes
+            target_residue_atom_condition_spec: Exact6 selector for the
+                full-atom target CYS-SG-S sidecar
             kwargs: additional inpainting parameters
         Returns:
             list of molecules
@@ -794,7 +1114,13 @@ class LigandPocketDDPM(pl.LightningModule):
             # define pocket with reference ligand
             residues = utils.get_pocket_from_ligand(pdb_struct, ref_ligand)
 
-        pocket = self.prepare_pocket(residues, repeats=n_samples)
+        pocket = self.prepare_pocket(
+            residues,
+            repeats=n_samples,
+            target_residue_atom_condition_spec=(
+                target_residue_atom_condition_spec
+            ),
+        )
 
         # Pocket's center of mass
         pocket_com_before = scatter_mean(pocket['x'], pocket['mask'], dim=0)
