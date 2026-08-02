@@ -20,9 +20,57 @@ if str(SRC_DIR) not in sys.path:
 
 from analysis.molecule_builder import build_molecule, process_molecule
 from constants import FLOAT_TYPE, INT_TYPE
-from covalent_ext.masking import build_four_level_mask
+from covalent_ext.masking import build_long_form_mask
 from lightning_modules import LigandPocketDDPM
 import utils
+
+
+CANONICAL_MASK_SEMANTICS = (
+    "warhead_only",
+    "linker_plus_warhead",
+    "scaffold_plus_warhead",
+    "scaffold_only",
+    "scaffold_plus_linker_plus_warhead",
+)
+
+MASK_SEMANTIC_TO_INTERNAL = {
+    "warhead_only": "A_warhead_only",
+    "linker_plus_warhead": "B_linker_warhead",
+    "scaffold_plus_warhead": "B2_scaffold_warhead",
+    "scaffold_only": "B3_scaffold_only",
+    "scaffold_plus_linker_plus_warhead": "C_scaffold_linker_warhead",
+}
+
+_MASK_SEMANTIC_ERROR = "COVAPIE_COVALENT_DEMO_MASK_SEMANTIC_INVALID"
+
+
+def resolve_mask_semantic(mask_semantic: object) -> str:
+    if type(mask_semantic) is not str or mask_semantic not in MASK_SEMANTIC_TO_INTERNAL:
+        raise ValueError(_MASK_SEMANTIC_ERROR)
+    return MASK_SEMANTIC_TO_INTERNAL[mask_semantic]
+
+
+def build_canonical_mask(
+    *,
+    mask_semantic: object,
+    scaffold_atoms: list[int],
+    linker_atoms: list[int],
+    warhead_atoms: list[int],
+    num_ligand_atoms: int,
+):
+    internal_level = resolve_mask_semantic(mask_semantic)
+    return build_long_form_mask(
+        internal_level,
+        scaffold_atoms=scaffold_atoms,
+        linker_atoms=linker_atoms,
+        warhead_atoms=warhead_atoms,
+        num_ligand_atoms=num_ligand_atoms,
+    )
+
+
+def is_whole_ligand_generation_semantic(mask_semantic: object) -> bool:
+    resolve_mask_semantic(mask_semantic)
+    return mask_semantic == "scaffold_plus_linker_plus_warhead"
 
 
 def parse_atom_indices(value: str) -> list[int]:
@@ -76,7 +124,7 @@ def run_covalent_inpaint(
     scaffold_atoms: list[int],
     linker_atoms: list[int],
     warhead_atoms: list[int],
-    mask_level: str,
+    mask_semantic: str,
     timesteps: int,
 ) -> tuple[list[Chem.Mol], object]:
     model.eval()
@@ -84,8 +132,8 @@ def run_covalent_inpaint(
     pocket = prepare_single_pocket(model, protein_pdb, ligand_sdf)
 
     num_ligand_atoms = int(ligand["size"][0].item())
-    mask_result = build_four_level_mask(
-        mask_level,
+    mask_result = build_canonical_mask(
+        mask_semantic=mask_semantic,
         scaffold_atoms=scaffold_atoms,
         linker_atoms=linker_atoms,
         warhead_atoms=warhead_atoms,
@@ -96,7 +144,10 @@ def run_covalent_inpaint(
     pocket_com_before = scatter_mean(pocket["x"], pocket["mask"], dim=0)
 
     with torch.no_grad():
-        if mask_level == "C" and type(model.ddpm).__name__ in {"ConditionalDDPM", "SimpleConditionalDDPM"}:
+        if is_whole_ligand_generation_semantic(mask_semantic) and type(model.ddpm).__name__ in {
+            "ConditionalDDPM",
+            "SimpleConditionalDDPM",
+        }:
             xh_lig, xh_pocket, lig_mask, pocket_mask = model.ddpm.sample_given_pocket(
                 pocket, ligand["size"], timesteps=timesteps
             )
@@ -147,13 +198,15 @@ def run_covalent_inpaint(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run covalent four-level mask inpainting with DiffSBDD.")
+    parser = argparse.ArgumentParser(
+        description="Run canonical five-level covalent mask inpainting with DiffSBDD."
+    )
     parser.add_argument("--protein_pdb", type=Path, required=True)
     parser.add_argument("--ligand_sdf", type=Path, required=True)
     parser.add_argument("--scaffold_atoms", type=parse_atom_indices, required=True)
     parser.add_argument("--linker_atoms", type=parse_atom_indices, required=True)
     parser.add_argument("--warhead_atoms", type=parse_atom_indices, required=True)
-    parser.add_argument("--mask_level", choices=["A", "B", "B2", "C"], required=True)
+    parser.add_argument("--mask_semantic", choices=CANONICAL_MASK_SEMANTICS, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timesteps", type=int, default=1)
@@ -178,14 +231,15 @@ def main() -> int:
         scaffold_atoms=args.scaffold_atoms,
         linker_atoms=args.linker_atoms,
         warhead_atoms=args.warhead_atoms,
-        mask_level=args.mask_level,
+        mask_semantic=args.mask_semantic,
         timesteps=args.timesteps,
     )
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     utils.write_sdf_file(args.output, molecules)
 
-    print(f"mask_level: {mask_result.mask_type}")
+    print(f"mask_semantic: {args.mask_semantic}")
+    print(f"mask_internal_level: {mask_result.mask_type}")
     print(f"visible_atoms: {list(mask_result.visible_atoms)}")
     print(f"masked_atoms: {list(mask_result.masked_atoms)}")
     print(f"lig_fixed: {mask_result.lig_fixed.tolist()}")
