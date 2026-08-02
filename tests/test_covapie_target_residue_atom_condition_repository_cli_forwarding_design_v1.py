@@ -125,16 +125,37 @@ def test_import_is_silent_and_has_no_output_side_effect(tmp_path):
     assert completed.stderr == ""
 
 
-def test_design_lifecycle_accepts_current_committed_profile():
+def test_design_lifecycle_accepts_current_published_design_profile():
     evidence = design._design_path_lifecycle_evidence(ROOT)
-    assert evidence["design_lifecycle_profile"] == "design_successor_worktree"
+    profile = evidence["design_lifecycle_profile"]
+    assert profile in {
+        "design_successor_worktree",
+        "published_design_with_known_future_task",
+    }
     assert evidence["tracked_design_paths"] == sorted(design._DESIGN_PATHS)
     assert evidence["untracked_design_paths"] == []
     assert evidence["design_paths_all_tracked"] is True
     assert evidence["design_paths_all_untracked"] is False
-    assert evidence["ordinary_untracked_count"] == 0
     assert evidence["unknown_ordinary_untracked_count"] == 0
+    assert evidence["known_future_task_untracked_paths_supported"] is True
+    assert evidence["unknown_untracked_paths_rejected"] is True
     assert evidence["lifecycle_valid"] is True
+    if profile == "design_successor_worktree":
+        assert evidence["ordinary_untracked_count"] == 0
+        assert evidence["known_future_task_untracked_count"] == 0
+        assert evidence["ordinary_untracked_paths"] == []
+        assert evidence["known_future_task_untracked_paths"] == []
+    else:
+        assert evidence["ordinary_untracked_count"] > 0
+        assert evidence["ordinary_untracked_count"] == evidence[
+            "known_future_task_untracked_count"
+        ]
+        assert evidence["ordinary_untracked_paths"] == evidence[
+            "known_future_task_untracked_paths"
+        ]
+        assert set(evidence["ordinary_untracked_paths"]).issubset(
+            design._KNOWN_FUTURE_TASK_NEW_PATHS
+        )
     assert all(
         not isinstance(item, Path)
         for value in evidence.values()
