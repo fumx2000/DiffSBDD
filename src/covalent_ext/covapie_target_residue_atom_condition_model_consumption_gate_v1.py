@@ -13,10 +13,11 @@ import hashlib
 import io
 import json
 import os
+import re
 import secrets
 import stat
 import subprocess
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Mapping, Sequence
 
 import torch
@@ -62,6 +63,9 @@ _IMPLEMENTATION_TREE = "01a72bd9c3e313c2833cd22edae351a56abaec84"
 _IMPLEMENTATION_SUBJECT = (
     "add CovaPIE target residue atom condition model consumption v1"
 )
+_GATE_EVIDENCE_MODE = "frozen_predecessor_commit_snapshot"
+_GATE_CLAIMS_LIVE_SUCCESSOR_REPOSITORY_CALLERS = False
+_SUCCESSOR_RUNTIME_STATE_REQUIRES_PHASE_SPECIFIC_GATE = True
 _RUNTIME_TRANSPORT_SHA256 = (
     "835032d1b0a9d9af9abe0839e9be798f0d4f178bcd9d4af3323592c5e59aa597"
 )
@@ -104,6 +108,12 @@ _IMPLEMENTATION_FILES = {
     "docs/covapie_target_residue_atom_condition_model_consumption_v1_guide.md": (
         "c208d982fedb88e555d9c6c2d4375735f618b9dd46b3425308342cbbd394cc0b"
     ),
+}
+_DESIGN_MODEL_SHA256S = {
+    "lightning_modules.py": "8d111f8c45d90cbdf6d0dcf7f4e4796bc7ebe0f1b0065e750eab0a16b4c01d5a",
+    "equivariant_diffusion/dynamics.py": "16b008598de7c61c0b5575e3af02f9b1a9e6697559864df1591314e4b4ec6b9f",
+    "equivariant_diffusion/conditional_model.py": "260bb941e05a3beaa0f1aef7aebba86aa2474d5f5db75637ec1498e3ad0e47b4",
+    "equivariant_diffusion/en_diffusion.py": "841f95e8d47fd1bc27f50b76f605bf6d0369308c68c7a65b199e51b00b30d8ef",
 }
 _CALLER_SHA256S = {
     "generate_ligands.py": "8884e63ddb7f0fa84bd89bfd956fbefa10db687fa0cfc3380b85d06837be4474",
@@ -285,6 +295,72 @@ def _read_regular(path: Path, *, maximum: int = _MAX_FILE_BYTES) -> bytes:
             raise ValueError(_ERROR)
         payload = path.read_bytes()
         if len(payload) != metadata.st_size:
+            raise ValueError(_ERROR)
+        return payload
+    except Exception as error:
+        if type(error) is ValueError and str(error) == _ERROR:
+            raise
+        raise ValueError(_ERROR) from error
+
+
+def _git_snapshot_file_bytes(
+    repo_root: Path,
+    *,
+    commit: str,
+    relative_path: str,
+    expected_sha256: str,
+    maximum: int = _MAX_FILE_BYTES,
+) -> bytes:
+    """Return one immutable SHA-bound Git blob without repository mutation."""
+
+    try:
+        parsed = PurePosixPath(relative_path)
+        if (
+            not isinstance(repo_root, Path)
+            or not repo_root.is_dir()
+            or repo_root.is_symlink()
+            or type(commit) is not str
+            or re.fullmatch(r"[0-9a-f]{40}", commit) is None
+            or type(relative_path) is not str
+            or not relative_path
+            or "\x00" in relative_path
+            or parsed.is_absolute()
+            or ".." in parsed.parts
+            or parsed.as_posix() != relative_path
+            or type(expected_sha256) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+            or type(maximum) is not int
+            or type(maximum) is bool
+            or maximum <= 1
+        ):
+            raise ValueError(_ERROR)
+        object_spec = f"{commit}:{relative_path}"
+        environment = {**os.environ, "LC_ALL": "C", "LANG": "C"}
+
+        def run(*arguments: str) -> bytes:
+            completed = subprocess.run(
+                ["git", *arguments],
+                cwd=repo_root,
+                env=environment,
+                check=False,
+                capture_output=True,
+                timeout=30,
+            )
+            if completed.returncode != 0 or completed.stderr != b"":
+                raise ValueError(_ERROR)
+            return completed.stdout
+
+        if run("cat-file", "-t", object_spec) != b"blob\n":
+            raise ValueError(_ERROR)
+        size_payload = run("cat-file", "-s", object_spec)
+        try:
+            size = int(size_payload.decode("ascii").strip())
+        except (UnicodeDecodeError, ValueError) as error:
+            raise ValueError(_ERROR) from error
+        if size <= 0 or size >= maximum:
+            raise ValueError(_ERROR)
+        payload = run("show", object_spec)
+        if len(payload) != size or _sha256(payload) != expected_sha256:
             raise ValueError(_ERROR)
         return payload
     except Exception as error:
@@ -872,42 +948,46 @@ def _source_evidence(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
 
     sources: dict[str, str] = {}
     for relative_path, expected_sha256 in _IMPLEMENTATION_FILES.items():
-        working = _read_regular(repo_root / relative_path)
-        committed = _git(
-            repo_root, ["show", f"{_IMPLEMENTATION_COMMIT}:{relative_path}"]
+        committed = _git_snapshot_file_bytes(
+            repo_root,
+            commit=_IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
         )
-        if (
-            working != committed
-            or _sha256(working) != expected_sha256
-            or _sha256(committed) != expected_sha256
-        ):
-            raise ValueError(_ERROR)
         if relative_path.endswith(".py"):
-            sources[relative_path] = working.decode("utf-8", errors="strict")
+            sources[relative_path] = committed.decode("utf-8", errors="strict")
 
-    for relative_path, expected_sha256 in {
-        **_PROTECTED_SHA256S,
-        **_CALLER_SHA256S,
-    }.items():
-        if _sha256(_read_regular(repo_root / relative_path)) != expected_sha256:
-            raise ValueError(_ERROR)
     for relative_path, expected_sha256 in _PROTECTED_SHA256S.items():
-        if (
-            _git(repo_root, ["show", f"{_DESIGN_COMMIT}:{relative_path}"])
-            != _read_regular(repo_root / relative_path)
-        ):
+        design_blob = _git_snapshot_file_bytes(
+            repo_root,
+            commit=_DESIGN_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
+        )
+        implementation_blob = _git_snapshot_file_bytes(
+            repo_root,
+            commit=_IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
+        )
+        if design_blob != implementation_blob:
             raise ValueError(_ERROR)
+    for relative_path, expected_sha256 in _CALLER_SHA256S.items():
+        _git_snapshot_file_bytes(
+            repo_root,
+            commit=_IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected_sha256,
+        )
 
     before = {
-        path: _git(repo_root, ["show", f"{_DESIGN_COMMIT}:{path}"]).decode(
-            "utf-8", errors="strict"
-        )
-        for path in (
-            "lightning_modules.py",
-            "equivariant_diffusion/dynamics.py",
-            "equivariant_diffusion/conditional_model.py",
-            "equivariant_diffusion/en_diffusion.py",
-        )
+        path: _git_snapshot_file_bytes(
+            repo_root,
+            commit=_DESIGN_COMMIT,
+            relative_path=path,
+            expected_sha256=expected_sha256,
+        ).decode("utf-8", errors="strict")
+        for path, expected_sha256 in _DESIGN_MODEL_SHA256S.items()
     }
     boundaries = {
         "lightning_only_authorized_change": _method_boundary(
@@ -1039,7 +1119,7 @@ def _source_evidence(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         "implementation_commit_is_origin_main_ancestor": True,
         "implementation_eight_file_scope_bound": True,
         "implementation_stat_bound": True,
-        "working_tree_bytes_equal_committed_bytes": True,
+        "implementation_commit_snapshot_bytes_bound": True,
     }
     return dynamics_contract, implementation_contract
 

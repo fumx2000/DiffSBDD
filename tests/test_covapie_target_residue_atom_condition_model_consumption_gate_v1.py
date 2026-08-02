@@ -222,15 +222,94 @@ def test_implementation_commit_identity_and_ancestry(response):
 def test_exact_implementation_scope_and_frozen_bytes(response):
     assert response["implementation_source_scope"] == list(gate._IMPLEMENTATION_FILES)
     for path, expected in gate._IMPLEMENTATION_FILES.items():
-        working = (ROOT / path).read_bytes()
-        committed = subprocess.run(
-            ["git", "show", f"{gate._IMPLEMENTATION_COMMIT}:{path}"],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-        ).stdout
-        assert working == committed
-        assert hashlib.sha256(working).hexdigest() == expected
+        committed = gate._git_snapshot_file_bytes(
+            ROOT,
+            commit=gate._IMPLEMENTATION_COMMIT,
+            relative_path=path,
+            expected_sha256=expected,
+        )
+        assert hashlib.sha256(committed).hexdigest() == expected
+
+
+def test_predecessor_snapshot_does_not_bind_live_successor_demo():
+    source = inspect.getsource(gate._source_evidence)
+    assert "_git_snapshot_file_bytes(" in source
+    assert "commit=_IMPLEMENTATION_COMMIT" in source
+    assert "_read_regular(repo_root / relative_path)" not in source
+    assert gate._GATE_EVIDENCE_MODE == "frozen_predecessor_commit_snapshot"
+    assert gate._GATE_CLAIMS_LIVE_SUCCESSOR_REPOSITORY_CALLERS is False
+    assert gate._SUCCESSOR_RUNTIME_STATE_REQUIRES_PHASE_SPECIFIC_GATE is True
+
+
+def test_live_demo_read_failure_does_not_change_formal_response(monkeypatch):
+    original = gate._read_regular
+    demo = ROOT / "scripts/covalent_inpaint_demo.py"
+
+    def reject_live_demo(path, **kwargs):
+        if path == demo:
+            raise AssertionError("formal predecessor gate read live successor demo")
+        return original(path, **kwargs)
+
+    monkeypatch.setattr(gate, "_read_regular", reject_live_demo)
+    response = _evaluate()
+    assert response == json.loads(FORMAL_BUNDLE.read_bytes())
+    assert response["model_consumption_gate_response_sha256"] == (
+        "0ef97cdafe946fefd240c95a94efc8b12be977c899db3b1df4a56a580b53d842"
+    )
+
+
+@pytest.mark.parametrize(
+    "relative_path",
+    ["/absolute", "../outside", "nested/../outside", "nul\x00path"],
+)
+def test_git_snapshot_reader_rejects_invalid_paths(relative_path):
+    _assert_error(
+        lambda: gate._git_snapshot_file_bytes(
+            ROOT,
+            commit=gate._IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )
+
+
+@pytest.mark.parametrize("relative_path", ["missing-snapshot-blob", "."])
+def test_git_snapshot_reader_rejects_missing_and_non_blob(relative_path):
+    _assert_error(
+        lambda: gate._git_snapshot_file_bytes(
+            ROOT,
+            commit=gate._IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )
+
+
+def test_git_snapshot_reader_rejects_oversize_and_sha_drift():
+    relative_path = "scripts/covalent_inpaint_demo.py"
+    expected = gate._CALLER_SHA256S[relative_path]
+    source = inspect.getsource(gate._git_snapshot_file_bytes)
+    assert 'run("cat-file", "-t", object_spec)' in source
+    assert 'run("cat-file", "-s", object_spec)' in source
+    assert 'run("show", object_spec)' in source
+    assert all(token not in source for token in ("fetch", "checkout", "worktree"))
+    _assert_error(
+        lambda: gate._git_snapshot_file_bytes(
+            ROOT,
+            commit=gate._IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected,
+            maximum=2,
+        )
+    )
+    _assert_error(
+        lambda: gate._git_snapshot_file_bytes(
+            ROOT,
+            commit=gate._IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )
 
 
 def test_successor_head_is_legal_not_exact_implementation_head():
@@ -491,15 +570,7 @@ def test_final_readiness_and_next_step(response):
 
 
 def test_source_drift_fails_closed(monkeypatch):
-    original = gate._read_regular
-
-    def drift(path, **kwargs):
-        payload = original(path, **kwargs)
-        if path == ROOT / "lightning_modules.py":
-            return payload + b" "
-        return payload
-
-    monkeypatch.setattr(gate, "_read_regular", drift)
+    monkeypatch.setitem(gate._IMPLEMENTATION_FILES, "lightning_modules.py", "0" * 64)
     _assert_error(_evaluate)
 
 

@@ -39,7 +39,8 @@ Gate 不执行当前 workspace 中旧的 implementation checker。它独立完�
 1. 严格解析正式 runtime-bridge gate bundle，绑定 transport SHA、internal SHA、
    canonical JSON、11 条 Current11 lineage 和 11/2202/11 汇总。
 2. 绑定 implementation commit 的单父、空 body、tree、subject、精确 8 文件
-   scope/stat，以及 working-tree、commit blob、冻结 SHA 三方字节一致性。
+   scope/stat，并从该 commit 读取非空、限长、SHA-bound 的 Git blob；不再把
+   successor working-tree bytes 当作历史 implementation 证据。
 3. 相对 design commit 比较 AST，只允许 Lightning 一个方法、dynamics 两个
    方法、conditional 指定八个方法、en-diffusion 指定四个方法加两个 helper
    发生变化。
@@ -51,11 +52,25 @@ Gate 不执行当前 workspace 中旧的 implementation checker。它独立完�
 6. 用 tiny 真实 dynamics 和 capture EGNN 重建 zero-init 与 direct-expected-hidden
    注入 oracle，不执行 backward 或 optimizer step。
 
-旧 implementation checker 冻结的是相对 design commit 的精确 8 路径。新增本
-gate 的四个授权文件后，候选范围自然变成 12 路径，所以旧 checker 应按原合同
-fail closed。为了让它在 successor workspace 继续绿色而隐藏、删除 gate 文件，
-或修改旧 checker，都会破坏历史证据。本 gate 只绑定旧 checker 的冻结文件 SHA
-及其 gate 文件出现前的成功 stdout SHA，不把旧 checker 的当前成功作为条件。
+旧 implementation checker 冻结的是 implementation commit 相对 design commit
+的精确 8 路径。本 snapshot-stability successor 只改变取证方式：checker 从固定
+implementation commit 重建该路径集合和六个 caller blob，而不是把之后出现的
+gate、design 或 R1 文件误算进历史候选。Formal gate 同样从 implementation
+commit 读取 `_IMPLEMENTATION_FILES` 与 `_CALLER_SHA256S`，并从 design 与
+implementation commit 双重读取 `_PROTECTED_SHA256S` 以证明当时未漂移。它仍
+绑定旧 checker 的冻结文件 SHA 及其历史成功 stdout SHA，不把当前 checker 的
+live bytes 写入 Exact43。
+
+只读 snapshot helper 使用 `git cat-file -t`、`git cat-file -s` 和 `git show`，
+要求对象为非空、限长 blob 且 SHA256 精确匹配；absolute path、`..`、NUL、
+missing/non-blob、oversize 和 SHA drift 均以 canonical error fail closed。它不联网、
+不 checkout、不创建 worktree、不写 index 或 repository files。
+
+```text
+gate_evidence_mode=frozen_predecessor_commit_snapshot
+gate_claims_live_successor_repository_callers=false
+successor_runtime_state_requires_phase_specific_gate=true
+```
 
 ## 为什么 Current11 不跑完整 EGNN
 
@@ -125,7 +140,8 @@ Exact43 字段、字段顺序、结果值、正式 bundle bytes、模型、check
 
 ## CLI、mask 和下一步边界
 
-六个 repository CLI/notebook caller 仍按冻结 SHA 保持不变，所以：
+六个 repository CLI/notebook caller 在 implementation commit 的冻结 snapshot 中
+按原 SHA 保持不变，所以：
 
 ```text
 repository_cli_selector_forwarding_implemented=false

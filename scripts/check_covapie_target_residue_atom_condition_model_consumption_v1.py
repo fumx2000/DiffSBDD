@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import os
+import re
 import subprocess
 import sys
 from pathlib import Path, PurePosixPath
@@ -32,6 +34,10 @@ BASE_COMMIT_SUBJECT = (
     "add CovaPIE target residue atom condition model consumption design v1"
 )
 BASE_COMMIT_PARENT = "148689cc0716a56f3eb991f762af0010c5849f3a"
+IMPLEMENTATION_COMMIT = "2c504ff2eac0864c146129f4011d902fae5bef69"
+IMPLEMENTATION_COMMIT_PARENT = BASE_COMMIT
+IMPLEMENTATION_CHECKER_CLAIMS_LIVE_SUCCESSOR_CALLER_BYTES = False
+SUCCESSOR_CALLER_CHANGES_REQUIRE_PHASE_SPECIFIC_TESTS = True
 DESIGN_SOURCE_SHA256 = "875e2095702526671d3ef032dca375ffd3bf5cd82038a34295c19cccc0d51817"
 DESIGN_RESPONSE_SHA256 = "958252bc355b5103c721a433c62341321ff8414d4e3407bdc35f70abbc638358"
 FULL_RESPONSE_SHA256 = "9baf96ae5cd74d1e9ccb05d8044f75414d29ae737e252b2dfb554642468a643f"
@@ -76,6 +82,7 @@ GATE_BUNDLE = (
     / "covapie-state/manual-review/"
     "covapie_current11_target_residue_atom_condition_runtime_bridge_gate_bundle_v1.json"
 )
+MAX_SNAPSHOT_BYTES = 32 * 1024 * 1024
 
 
 def _git(*arguments: str) -> bytes:
@@ -173,6 +180,131 @@ def _candidate_paths_since_base(
         raise ValueError(ERROR) from error
 
 
+def _git_snapshot_file_bytes(
+    *,
+    repo_root: Path,
+    commit: str,
+    relative_path: str,
+    expected_sha256: str,
+    maximum: int = MAX_SNAPSHOT_BYTES,
+) -> bytes:
+    """Read one SHA-bound, nonempty regular blob without touching repository state."""
+
+    try:
+        parsed = PurePosixPath(relative_path)
+        if (
+            not isinstance(repo_root, Path)
+            or not repo_root.is_dir()
+            or repo_root.is_symlink()
+            or type(commit) is not str
+            or re.fullmatch(r"[0-9a-f]{40}", commit) is None
+            or type(relative_path) is not str
+            or not relative_path
+            or "\x00" in relative_path
+            or parsed.is_absolute()
+            or ".." in parsed.parts
+            or parsed.as_posix() != relative_path
+            or type(expected_sha256) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+            or type(maximum) is not int
+            or type(maximum) is bool
+            or maximum <= 1
+        ):
+            raise ValueError(ERROR)
+        object_spec = f"{commit}:{relative_path}"
+        environment = {**os.environ, "LC_ALL": "C", "LANG": "C"}
+
+        def run(*arguments: str) -> bytes:
+            completed = subprocess.run(
+                ["git", *arguments],
+                cwd=repo_root,
+                env=environment,
+                check=False,
+                capture_output=True,
+                timeout=30,
+            )
+            if completed.returncode != 0 or completed.stderr != b"":
+                raise ValueError(ERROR)
+            return completed.stdout
+
+        if run("cat-file", "-t", object_spec) != b"blob\n":
+            raise ValueError(ERROR)
+        size_payload = run("cat-file", "-s", object_spec)
+        try:
+            size = int(size_payload.decode("ascii").strip())
+        except (UnicodeDecodeError, ValueError) as error:
+            raise ValueError(ERROR) from error
+        if size <= 0 or size >= maximum:
+            raise ValueError(ERROR)
+        payload = run("show", object_spec)
+        if len(payload) != size or hashlib.sha256(payload).hexdigest() != expected_sha256:
+            raise ValueError(ERROR)
+        return payload
+    except Exception as error:
+        if type(error) is ValueError and str(error) == ERROR:
+            raise
+        raise ValueError(ERROR) from error
+
+
+def _implementation_commit_paths(*, repo_root: Path) -> set[str]:
+    try:
+        if _git_commit_is_ancestor(
+            repo_root=repo_root,
+            base_commit=IMPLEMENTATION_COMMIT,
+            head_ref="HEAD",
+        ) is not True:
+            raise ValueError(ERROR)
+        parent = subprocess.run(
+            ["git", "show", "-s", "--format=%P", IMPLEMENTATION_COMMIT],
+            cwd=repo_root,
+            env={**os.environ, "LC_ALL": "C", "LANG": "C"},
+            check=False,
+            capture_output=True,
+            timeout=30,
+        )
+        if (
+            parent.returncode != 0
+            or parent.stderr != b""
+            or parent.stdout != f"{IMPLEMENTATION_COMMIT_PARENT}\n".encode()
+        ):
+            raise ValueError(ERROR)
+        completed = subprocess.run(
+            [
+                "git",
+                "diff-tree",
+                "--no-commit-id",
+                "--name-only",
+                "-r",
+                IMPLEMENTATION_COMMIT,
+            ],
+            cwd=repo_root,
+            env={**os.environ, "LC_ALL": "C", "LANG": "C"},
+            check=False,
+            capture_output=True,
+            timeout=30,
+        )
+        if completed.returncode != 0 or completed.stderr != b"":
+            raise ValueError(ERROR)
+        paths = completed.stdout.decode("utf-8", errors="strict").splitlines()
+        if len(paths) != len(set(paths)):
+            raise ValueError(ERROR)
+        for path in paths:
+            parsed = PurePosixPath(path)
+            if (
+                not path
+                or "\x00" in path
+                or parsed.is_absolute()
+                or ".." in parsed.parts
+                or parsed.as_posix() != path
+            ):
+                raise ValueError(ERROR)
+        return set(paths)
+    except Exception as error:
+        if type(error) is ValueError and str(error) == ERROR:
+            raise
+        raise ValueError(ERROR) from error
+
+
 def _repository_cli_path_evidence(
     *,
     repo_root: Path,
@@ -190,11 +322,14 @@ def _repository_cli_path_evidence(
         changed_repository_callers = (
             candidate_paths & set(REPOSITORY_CALLER_SHA256)
         )
-        caller_bytes_bound = all(
-            hashlib.sha256((repo_root / path).read_bytes()).hexdigest()
-            == expected
-            for path, expected in REPOSITORY_CALLER_SHA256.items()
-        )
+        for path, expected in REPOSITORY_CALLER_SHA256.items():
+            _git_snapshot_file_bytes(
+                repo_root=repo_root,
+                commit=IMPLEMENTATION_COMMIT,
+                relative_path=path,
+                expected_sha256=expected,
+            )
+        caller_bytes_bound = True
         return changed_repository_callers, caller_bytes_bound
     except Exception as error:
         if type(error) is ValueError and str(error) == ERROR:
@@ -240,6 +375,13 @@ def _baseline_design_response() -> dict[str, object]:
             relative = ""
         if relative in design._SOURCE_SHA256:
             return _git("show", f"{BASE_COMMIT}:{relative}")
+        if relative in REPOSITORY_CALLER_SHA256:
+            return _git_snapshot_file_bytes(
+                repo_root=ROOT,
+                commit=IMPLEMENTATION_COMMIT,
+                relative_path=relative,
+                expected_sha256=REPOSITORY_CALLER_SHA256[relative],
+            )
         return original_read(path, **kwargs)
 
     design._read_regular = baseline_read
@@ -628,9 +770,8 @@ def evaluate() -> dict[str, object]:
         for node in ast.walk(migration_tree)
     )
 
-    candidate_paths = _candidate_paths_since_base(
+    candidate_paths = _implementation_commit_paths(
         repo_root=ROOT,
-        base_commit=BASE_COMMIT,
     )
     authorized_repository_path_scope_exact = (
         candidate_paths == EXPECTED_AUTHORIZED_PATHS

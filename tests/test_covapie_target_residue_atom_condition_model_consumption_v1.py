@@ -1108,3 +1108,102 @@ def test_support_files_do_not_imply_repository_cli_forwarding():
     assert changed_callers == {"test.py"}
     assert caller_bytes_bound is True
     assert not (not changed_callers and caller_bytes_bound)
+
+
+def test_repository_caller_evidence_is_implementation_commit_snapshot(monkeypatch):
+    demo_path = ROOT / "scripts/covalent_inpaint_demo.py"
+    relative_path = "scripts/covalent_inpaint_demo.py"
+    expected_sha256 = checker.REPOSITORY_CALLER_SHA256[relative_path]
+    historical_demo = checker._git_snapshot_file_bytes(
+        repo_root=ROOT,
+        commit=checker.IMPLEMENTATION_COMMIT,
+        relative_path=relative_path,
+        expected_sha256=expected_sha256,
+    )
+    assert hashlib.sha256(historical_demo).hexdigest() == (
+        "1866dde2a7909fb431617dfa9f7de5a297b895de7930313655685823944f72a9"
+    )
+
+    original_read_bytes = Path.read_bytes
+
+    def reject_live_demo(path):
+        if path == demo_path:
+            raise AssertionError("historical caller evidence read the live successor demo")
+        return original_read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", reject_live_demo)
+    changed, bound = checker._repository_cli_path_evidence(
+        repo_root=ROOT,
+        candidate_paths=set(checker.EXPECTED_AUTHORIZED_PATHS),
+    )
+    assert changed == set()
+    assert bound is True
+    assert checker.IMPLEMENTATION_CHECKER_CLAIMS_LIVE_SUCCESSOR_CALLER_BYTES is False
+    assert checker.SUCCESSOR_CALLER_CHANGES_REQUIRE_PHASE_SPECIFIC_TESTS is True
+
+
+def test_live_r1_demo_does_not_change_historical_design_response():
+    response = checker._baseline_design_response()
+    assert response["model_consumption_design_response_sha256"] == (
+        checker.DESIGN_RESPONSE_SHA256
+    )
+
+
+def test_implementation_commit_scope_not_live_successor_scope():
+    paths = checker._implementation_commit_paths(repo_root=ROOT)
+    assert paths == checker.EXPECTED_AUTHORIZED_PATHS
+    assert "scripts/covalent_inpaint_demo.py" not in paths
+
+
+@pytest.mark.parametrize(
+    "relative_path",
+    ["/absolute", "../outside", "nested/../outside", "nul\x00path"],
+)
+def test_git_snapshot_reader_rejects_invalid_paths(relative_path):
+    _assert_canonical_error(
+        lambda: checker._git_snapshot_file_bytes(
+            repo_root=ROOT,
+            commit=checker.IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )
+
+
+@pytest.mark.parametrize("relative_path", ["missing-snapshot-blob", "."])
+def test_git_snapshot_reader_rejects_missing_and_non_blob(relative_path):
+    _assert_canonical_error(
+        lambda: checker._git_snapshot_file_bytes(
+            repo_root=ROOT,
+            commit=checker.IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )
+
+
+def test_git_snapshot_reader_rejects_oversize_and_sha_drift():
+    relative_path = "scripts/covalent_inpaint_demo.py"
+    expected = checker.REPOSITORY_CALLER_SHA256[relative_path]
+    source = inspect.getsource(checker._git_snapshot_file_bytes)
+    assert 'run("cat-file", "-t", object_spec)' in source
+    assert 'run("cat-file", "-s", object_spec)' in source
+    assert 'run("show", object_spec)' in source
+    assert all(token not in source for token in ("fetch", "checkout", "worktree"))
+    _assert_canonical_error(
+        lambda: checker._git_snapshot_file_bytes(
+            repo_root=ROOT,
+            commit=checker.IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256=expected,
+            maximum=2,
+        )
+    )
+    _assert_canonical_error(
+        lambda: checker._git_snapshot_file_bytes(
+            repo_root=ROOT,
+            commit=checker.IMPLEMENTATION_COMMIT,
+            relative_path=relative_path,
+            expected_sha256="0" * 64,
+        )
+    )

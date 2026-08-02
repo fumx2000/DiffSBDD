@@ -334,10 +334,25 @@ def test_gate_bundle_readiness_and_cli_state_are_bound(bundle_bytes):
     assert decoded["feature_semantics_audit_required_before_training"] is True
 
 
-def test_gate_commit_ancestry_and_four_files_are_bound(response):
+def test_gate_commit_ancestry_and_four_files_are_bound(response, monkeypatch):
+    original = design._regular_file_bytes
+
+    def reject_live_gate(repo_root, relative_path, **kwargs):
+        if relative_path in design._GATE_FILES:
+            raise AssertionError("repository CLI design read live gate successor")
+        return original(repo_root, relative_path, **kwargs)
+
+    monkeypatch.setattr(design, "_regular_file_bytes", reject_live_gate)
     evidence = design._gate_source_evidence(ROOT)
     assert all(evidence.values())
     assert response["source_model_consumption_gate_commit"] == design._GATE_COMMIT
+    source = inspect.getsource(design._gate_source_evidence)
+    assert "_git_snapshot_file_bytes(" in source
+    assert "_regular_file_bytes(" not in source
+    assert any(
+        hashlib.sha256((ROOT / path).read_bytes()).hexdigest() != expected
+        for path, expected in design._GATE_FILES.items()
+    )
 
 
 def test_gate_design_uses_ancestor_semantics_not_head_equality():

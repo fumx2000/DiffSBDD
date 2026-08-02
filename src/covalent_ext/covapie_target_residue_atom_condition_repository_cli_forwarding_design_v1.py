@@ -566,9 +566,10 @@ def _gate_source_evidence(repo_root: Path) -> dict[str, bool]:
     if commit_lines != [_GATE_COMMIT, _GATE_PARENT, _GATE_TREE, _GATE_SUBJECT]:
         raise ValueError(_ERROR)
     for relative_path, expected_sha256 in _GATE_FILES.items():
-        _regular_file_bytes(
+        _git_snapshot_file_bytes(
             repo_root,
-            relative_path,
+            commit=_GATE_COMMIT,
+            relative_path=relative_path,
             expected_sha256=expected_sha256,
         )
     evidence = {

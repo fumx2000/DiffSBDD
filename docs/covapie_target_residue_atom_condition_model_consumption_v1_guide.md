@@ -30,25 +30,51 @@ design-production bytes, and production SHA256. It separately verifies with
 `HEAD`. This remains valid before the implementation commit, after a local
 implementation commit, and after that commit is pushed.
 
-The candidate repository scope is the union of two read-only Git views:
+During the original implementation lifecycle, the candidate repository scope
+was the union of two read-only Git views:
 
 ```text
 git diff --name-only <design-base-commit>
 git ls-files --others --exclude-standard
 ```
 
-Before commit, the first command reports the four modified model sources and
-the second reports the four untracked support files. After commit, the first
-command reports all eight implementation paths and the second is empty. Their
-validated union is therefore the same exact eight-path scope in both states.
+Before commit, the first command reported the four modified model sources and
+the second reported the four untracked support files. After commit, the first
+command reported all eight implementation paths and the second was empty. Their
+validated union was therefore the same exact eight-path scope in both states.
+Once successors exist, the checker reconstructs that same scope directly with
+`git diff-tree` on the fixed implementation commit. Later gate, design, or R1
+paths cannot be mistaken for changes made by the implementation commit.
 
 The checkpoint migration helper, targeted tests, implementation checker, and
 guide are implementation support files; their presence does not mean repository
-CLI forwarding was implemented. CLI forwarding is derived only from intersection
-with the six frozen repository caller paths, together with direct SHA256 checks
-of all six caller files. Any changed caller or caller-byte drift fails closed.
-Likewise, the model-consumption gate fact is derived only from the four genuine
-gate production/test/checker/guide path identities.
+CLI forwarding was implemented. CLI forwarding is derived only from the exact
+path scope of implementation commit
+`2c504ff2eac0864c146129f4011d902fae5bef69` and its intersection with the six
+frozen repository caller paths. The six SHA256 values are
+`implementation_baseline_caller_sha256` values: each is checked against a
+nonempty, size-bounded Git blob from that implementation commit, not against a
+live successor working-tree file. The reader uses read-only `git cat-file -t`,
+`git cat-file -s`, and `git show`; it rejects absolute or parent-traversing paths,
+NUL, missing/non-blob objects, oversize blobs, and SHA drift with the canonical
+error. A caller in the implementation commit's changed-path set still fails
+closed.
+
+Consequently:
+
+```text
+implementation_checker_claims_live_successor_caller_bytes=false
+successor_caller_changes_require_phase_specific_tests=true
+```
+
+A successor R1, R2, or later CLI demo may differ from the historical
+implementation snapshot. Such successor runtime state is outside this
+historical conclusion and must be validated by its phase-specific tests. The
+compatibility commit itself does not require R1 to be implemented or committed:
+the implementation snapshot remains reproducible with either the old demo or
+the R1 demo in the live working tree. Likewise, the model-consumption gate fact
+is derived only from the four genuine gate production/test/checker/guide path
+identities.
 
 This checker lifecycle revision changes no model-consumption behavior,
 parameter, checkpoint profile, migration behavior, or readiness result.

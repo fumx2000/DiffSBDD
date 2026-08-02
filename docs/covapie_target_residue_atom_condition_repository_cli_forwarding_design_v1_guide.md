@@ -14,6 +14,12 @@ worktree, or write to the repository. This freezes the six callers, model and
 mask sources, dataset/checker, historical B3 boundary, negative-token test, and
 legacy inventory as they existed before R1.
 
+The four formal model-consumption gate files follow the same immutable rule.
+Their frozen SHA256 values are read from gate commit
+`dd085332c7e2cf58a6ca2e7d71cf022da010d4b4`, never from live successor bytes.
+Snapshot-stability revisions to the gate source, tests, checker, or guide
+therefore do not invalidate this historical repository CLI design evidence.
+
 The baseline contains 14 active legacy-mask reference records across five
 paths. Those values explain why R1/R2/R3 are required; they are not claims about
 the live runtime after an implementation phase:
