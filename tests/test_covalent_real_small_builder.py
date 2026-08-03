@@ -11,6 +11,10 @@ for path in (SRC_DIR, SCRIPTS_DIR):
 from build_covalent_real_small import build_from_manifest
 from check_covalent_real_small import check_dataset
 from covalent_ext.dataset import CovalentJsonlDataset
+from covalent_ext.masking import (
+    CANONICAL_MASK_SEMANTICS,
+    CANONICAL_MASK_SEMANTIC_TO_LEVEL,
+)
 
 
 MANIFEST = REPO_ROOT / "data/raw/covalent_small/manifest_example.csv"
@@ -38,5 +42,23 @@ def test_builder_checker_dataset_and_masks(tmp_path):
     assert sample["ligand_reactive_atom_id"] in sample["warhead_atoms"]
 
     masks = dataset.build_all_masks(sample)
-    assert set(masks) == {"A", "B", "B2", "C"}
+    assert tuple(masks) == CANONICAL_MASK_SEMANTICS
+    assert len(masks) == 5
+    assert [
+        masks[semantic].mask_type
+        for semantic in CANONICAL_MASK_SEMANTICS
+    ] == [
+        CANONICAL_MASK_SEMANTIC_TO_LEVEL[semantic]
+        for semantic in CANONICAL_MASK_SEMANTICS
+    ]
     assert all(len(result.lig_fixed) == dataset.num_ligand_atoms(sample) for result in masks.values())
+    assert "scaffold_plus_warhead" in masks
+    assert "scaffold_only" in masks
+    assert (
+        masks["scaffold_plus_warhead"].visible_atoms
+        != masks["scaffold_only"].visible_atoms
+    )
+    assert (
+        masks["scaffold_plus_warhead"].masked_atoms
+        != masks["scaffold_only"].masked_atoms
+    )

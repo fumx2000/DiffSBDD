@@ -9,6 +9,10 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from covalent_ext.dataset import CovalentJsonlDataset
+from covalent_ext.masking import (
+    CANONICAL_MASK_SEMANTICS,
+    CANONICAL_MASK_SEMANTIC_TO_LEVEL,
+)
 
 
 DATASET_PATH = REPO_ROOT / "data/processed/covalent_debug.jsonl"
@@ -42,10 +46,28 @@ def test_atom_groups_are_disjoint(dataset):
         assert groups[1].isdisjoint(groups[2])
 
 
-def test_four_level_masks_generate(dataset):
+def test_canonical_five_level_masks_generate(dataset):
     for sample in dataset:
         masks = dataset.build_all_masks(sample)
-        assert set(masks) == {"A", "B", "B2", "C"}
+        assert tuple(masks) == CANONICAL_MASK_SEMANTICS
+        assert len(masks) == 5
+        assert [
+            masks[semantic].mask_type
+            for semantic in CANONICAL_MASK_SEMANTICS
+        ] == [
+            CANONICAL_MASK_SEMANTIC_TO_LEVEL[semantic]
+            for semantic in CANONICAL_MASK_SEMANTICS
+        ]
+        assert "scaffold_plus_warhead" in masks
+        assert "scaffold_only" in masks
+        assert (
+            masks["scaffold_plus_warhead"].visible_atoms
+            != masks["scaffold_only"].visible_atoms
+        )
+        assert (
+            masks["scaffold_plus_warhead"].masked_atoms
+            != masks["scaffold_only"].masked_atoms
+        )
 
 
 def test_lig_fixed_length_equals_ligand_atom_count(dataset):
@@ -63,18 +85,31 @@ def test_mask_counts_match_expected_semantics(dataset):
         n_warhead = len(sample["warhead_atoms"])
         masks = dataset.build_all_masks(sample)
 
-        assert len(masks["A"].visible_atoms) == n_scaffold + n_linker
-        assert len(masks["A"].masked_atoms) == n_warhead
+        warhead_only = masks["warhead_only"]
+        assert len(warhead_only.visible_atoms) == n_scaffold + n_linker
+        assert len(warhead_only.masked_atoms) == n_warhead
+        assert warhead_only.mask_type == "A_warhead_only"
 
-        assert len(masks["B"].visible_atoms) == n_scaffold
-        assert len(masks["B"].masked_atoms) == n_linker + n_warhead
+        linker_plus_warhead = masks["linker_plus_warhead"]
+        assert len(linker_plus_warhead.visible_atoms) == n_scaffold
+        assert len(linker_plus_warhead.masked_atoms) == n_linker + n_warhead
+        assert linker_plus_warhead.mask_type == "B_linker_warhead"
 
-        assert len(masks["B2"].visible_atoms) == n_linker + n_warhead
-        assert len(masks["B2"].masked_atoms) == n_scaffold
+        scaffold_plus_warhead = masks["scaffold_plus_warhead"]
+        assert len(scaffold_plus_warhead.visible_atoms) == n_linker
+        assert len(scaffold_plus_warhead.masked_atoms) == n_scaffold + n_warhead
+        assert scaffold_plus_warhead.mask_type == "B2_scaffold_warhead"
 
-        assert len(masks["C"].visible_atoms) == 0
-        assert len(masks["C"].masked_atoms) == num_atoms
+        scaffold_only = masks["scaffold_only"]
+        assert len(scaffold_only.visible_atoms) == n_linker + n_warhead
+        assert len(scaffold_only.masked_atoms) == n_scaffold
+        assert scaffold_only.mask_type == "B3_scaffold_only"
+
+        whole_ligand = masks["scaffold_plus_linker_plus_warhead"]
+        assert len(whole_ligand.visible_atoms) == 0
+        assert len(whole_ligand.masked_atoms) == num_atoms
+        assert whole_ligand.mask_type == "C_scaffold_linker_warhead"
 
         for result in masks.values():
             assert len(result.visible_atoms) + len(result.masked_atoms) == num_atoms
-
+            assert len(result.lig_fixed) == num_atoms

@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from covalent_ext.masking import build_four_level_mask
-from covalent_ext.schema import MaskResult, MaskType
+from covalent_ext.masking import CANONICAL_MASK_SEMANTICS, build_canonical_mask
+from covalent_ext.schema import CanonicalMaskSemantic, MaskResult
 
 
 class CovalentJsonlDataset:
@@ -33,19 +33,25 @@ class CovalentJsonlDataset:
     def num_ligand_atoms(self, sample: dict[str, Any]) -> int:
         return len(sample["pre_reaction_ligand_graph"]["atom_symbols"])
 
-    def build_mask(self, sample: dict[str, Any], mask_type: MaskType) -> MaskResult:
-        return build_four_level_mask(
-            mask_type=mask_type,
+    def build_mask(
+        self,
+        sample: dict[str, Any],
+        mask_semantic: CanonicalMaskSemantic,
+    ) -> MaskResult:
+        return build_canonical_mask(
+            mask_semantic=mask_semantic,
             scaffold_atoms=sample["scaffold_atoms"],
             linker_atoms=sample["linker_atoms"],
             warhead_atoms=sample["warhead_atoms"],
             num_ligand_atoms=self.num_ligand_atoms(sample),
         )
 
-    def build_all_masks(self, sample: dict[str, Any]) -> dict[MaskType, MaskResult]:
+    def build_all_masks(
+        self, sample: dict[str, Any]
+    ) -> dict[CanonicalMaskSemantic, MaskResult]:
         return {
-            mask_type: self.build_mask(sample, mask_type)
-            for mask_type in ("A", "B", "B2", "C")
+            mask_semantic: self.build_mask(sample, mask_semantic)
+            for mask_semantic in CANONICAL_MASK_SEMANTICS
         }
 
     @staticmethod
@@ -79,4 +85,3 @@ class CovalentJsonlDataset:
             raise ValueError(
                 f"Line {line_number} coordinate count does not match ligand atom count"
             )
-

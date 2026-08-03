@@ -5,7 +5,13 @@ from typing import Literal, Sequence, TypedDict
 
 import torch
 
-MaskType = Literal["A", "B", "B2", "C"]
+CanonicalMaskSemantic = Literal[
+    "warhead_only",
+    "linker_plus_warhead",
+    "scaffold_plus_warhead",
+    "scaffold_only",
+    "scaffold_plus_linker_plus_warhead",
+]
 LongFormMaskLevel = Literal[
     "A_warhead_only",
     "B_linker_warhead",
@@ -51,12 +57,12 @@ class CovalentSample:
     scaffold_atoms: Sequence[int]
     linker_atoms: Sequence[int]
     warhead_atoms: Sequence[int]
-    mask_type: MaskType
+    mask_semantic: CanonicalMaskSemantic
 
 
 @dataclass(frozen=True)
 class MaskResult:
     visible_atoms: tuple[int, ...]
     masked_atoms: tuple[int, ...]
-    mask_type: str
+    mask_type: LongFormMaskLevel
     lig_fixed: torch.Tensor

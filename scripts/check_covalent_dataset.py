@@ -10,6 +10,10 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from covalent_ext.dataset import CovalentJsonlDataset
+from covalent_ext.masking import (
+    CANONICAL_MASK_SEMANTICS,
+    CANONICAL_MASK_SEMANTIC_TO_LEVEL,
+)
 
 
 DATASET_PATH = Path("data/processed/covalent_debug.jsonl")
@@ -23,6 +27,14 @@ def main() -> int:
     for sample in dataset:
         num_atoms = dataset.num_ligand_atoms(sample)
         masks = dataset.build_all_masks(sample)
+        if tuple(masks) != CANONICAL_MASK_SEMANTICS or len(masks) != 5:
+            raise ValueError("COVAPIE_CANONICAL_MASK_CONSUMER_INVALID")
+        if any(
+            masks[semantic].mask_type
+            != CANONICAL_MASK_SEMANTIC_TO_LEVEL[semantic]
+            for semantic in CANONICAL_MASK_SEMANTICS
+        ):
+            raise ValueError("COVAPIE_CANONICAL_MASK_CONSUMER_INVALID")
         print()
         print(f"sample_id: {sample['sample_id']}")
         print(f"  ligand_atoms: {num_atoms}")
@@ -40,10 +52,11 @@ def main() -> int:
         print(f"  warhead_type: {sample['warhead_type']}")
         print(f"  ligand_reactive_atom: {sample['ligand_reactive_atom_id']}")
         print(f"  covalent_bond_atom_pair: {sample['covalent_bond_atom_pair']}")
-        for mask_type in ("A", "B", "B2", "C"):
-            result = masks[mask_type]
+        for mask_semantic in CANONICAL_MASK_SEMANTICS:
+            result = masks[mask_semantic]
             print(
-                f"  mask {mask_type}: "
+                f"  mask {mask_semantic}: "
+                f"internal={result.mask_type}, "
                 f"visible={len(result.visible_atoms)}, "
                 f"masked={len(result.masked_atoms)}"
             )

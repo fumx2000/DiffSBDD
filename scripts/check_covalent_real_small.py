@@ -11,6 +11,10 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from covalent_ext.dataset import CovalentJsonlDataset
+from covalent_ext.masking import (
+    CANONICAL_MASK_SEMANTICS,
+    CANONICAL_MASK_SEMANTIC_TO_LEVEL,
+)
 
 
 def check_dataset(input_path: str | Path, verbose: bool = True) -> bool:
@@ -51,6 +55,30 @@ def check_dataset(input_path: str | Path, verbose: bool = True) -> bool:
         except Exception as exc:
             failures.append(f"{sample_id}: mask generation failed: {exc}")
             masks = {}
+        else:
+            if tuple(masks) != CANONICAL_MASK_SEMANTICS or len(masks) != 5:
+                failures.append(
+                    f"{sample_id}: canonical mask keys or order are invalid"
+                )
+            for mask_semantic in CANONICAL_MASK_SEMANTICS:
+                result = masks.get(mask_semantic)
+                if (
+                    result is None
+                    or result.mask_type
+                    != CANONICAL_MASK_SEMANTIC_TO_LEVEL[mask_semantic]
+                ):
+                    failures.append(
+                        f"{sample_id}: invalid internal level for {mask_semantic}"
+                    )
+            b2 = masks.get("scaffold_plus_warhead")
+            b3 = masks.get("scaffold_only")
+            if (
+                b2 is None
+                or b3 is None
+                or b2.visible_atoms == b3.visible_atoms
+                or b2.masked_atoms == b3.masked_atoms
+            ):
+                failures.append(f"{sample_id}: canonical B2 and B3 masks are not distinct")
 
         if verbose:
             print()
@@ -66,11 +94,12 @@ def check_dataset(input_path: str | Path, verbose: bool = True) -> bool:
                 f"{sample['reactive_atom_name']} -> ligand {sample['ligand_reactive_atom_id']}"
             )
             print(f"  covalent_bond_atom_pair: {sample['covalent_bond_atom_pair']}")
-            for mask_type in ("A", "B", "B2", "C"):
-                if mask_type in masks:
-                    result = masks[mask_type]
+            for mask_semantic in CANONICAL_MASK_SEMANTICS:
+                if mask_semantic in masks:
+                    result = masks[mask_semantic]
                     print(
-                        f"  mask {mask_type}: "
+                        f"  mask {mask_semantic}: "
+                        f"internal={result.mask_type}, "
                         f"visible={len(result.visible_atoms)}, masked={len(result.masked_atoms)}"
                     )
 

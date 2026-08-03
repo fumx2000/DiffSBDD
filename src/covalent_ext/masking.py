@@ -4,7 +4,28 @@ from collections.abc import Callable, Sequence
 
 import torch
 
-from covalent_ext.schema import LongFormMaskLevel, MaskResult, MaskType
+from covalent_ext.schema import CanonicalMaskSemantic, LongFormMaskLevel, MaskResult
+
+
+CANONICAL_MASK_SEMANTICS: tuple[CanonicalMaskSemantic, ...] = (
+    "warhead_only",
+    "linker_plus_warhead",
+    "scaffold_plus_warhead",
+    "scaffold_only",
+    "scaffold_plus_linker_plus_warhead",
+)
+
+CANONICAL_MASK_SEMANTIC_TO_LEVEL: dict[
+    CanonicalMaskSemantic, LongFormMaskLevel
+] = {
+    "warhead_only": "A_warhead_only",
+    "linker_plus_warhead": "B_linker_warhead",
+    "scaffold_plus_warhead": "B2_scaffold_warhead",
+    "scaffold_only": "B3_scaffold_only",
+    "scaffold_plus_linker_plus_warhead": "C_scaffold_linker_warhead",
+}
+
+_CANONICAL_MASK_SEMANTIC_ERROR = "COVAPIE_CANONICAL_MASK_SEMANTIC_INVALID"
 
 
 LONG_FORM_MASK_COMPONENTS: dict[LongFormMaskLevel, dict[str, tuple[str, ...]]] = {
@@ -71,7 +92,11 @@ def _validate_partition(
     return scaffold, linker, warhead
 
 
-def make_mask_result(mask_type: str, visible_atoms: Sequence[int], num_ligand_atoms: int) -> MaskResult:
+def make_mask_result(
+    mask_type: LongFormMaskLevel,
+    visible_atoms: Sequence[int],
+    num_ligand_atoms: int,
+) -> MaskResult:
     visible = tuple(sorted(int(atom) for atom in visible_atoms))
     all_atoms = set(range(num_ligand_atoms))
     visible_set = set(visible)
@@ -94,29 +119,15 @@ def make_mask_result(mask_type: str, visible_atoms: Sequence[int], num_ligand_at
     )
 
 
-def build_four_level_mask(
-    mask_type: MaskType,
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
-    num_ligand_atoms: int,
-) -> MaskResult:
-    scaffold, linker, warhead = _validate_partition(
-        scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms
-    )
-
-    if mask_type == "A":
-        visible_atoms = scaffold + linker
-    elif mask_type == "B":
-        visible_atoms = scaffold
-    elif mask_type == "B2":
-        visible_atoms = linker + warhead
-    elif mask_type == "C":
-        visible_atoms = ()
-    else:
-        raise ValueError(f"unsupported mask_type: {mask_type}")
-
-    return make_mask_result(mask_type, visible_atoms, num_ligand_atoms)
+def resolve_canonical_mask_semantic(
+    mask_semantic: object,
+) -> LongFormMaskLevel:
+    if (
+        type(mask_semantic) is not str
+        or mask_semantic not in CANONICAL_MASK_SEMANTIC_TO_LEVEL
+    ):
+        raise ValueError(_CANONICAL_MASK_SEMANTIC_ERROR)
+    return CANONICAL_MASK_SEMANTIC_TO_LEVEL[mask_semantic]
 
 
 def _atoms_for_components(
@@ -155,6 +166,24 @@ def build_long_form_mask(
     context_components = LONG_FORM_MASK_COMPONENTS[mask_level]["context"]
     visible_atoms = _atoms_for_components(context_components, scaffold, linker, warhead)
     return make_mask_result(mask_level, visible_atoms, num_ligand_atoms)
+
+
+def build_canonical_mask(
+    *,
+    mask_semantic: object,
+    scaffold_atoms: Sequence[int] | None,
+    linker_atoms: Sequence[int] | None,
+    warhead_atoms: Sequence[int] | None,
+    num_ligand_atoms: int,
+) -> MaskResult:
+    level = resolve_canonical_mask_semantic(mask_semantic)
+    return build_long_form_mask(
+        level,
+        scaffold_atoms,
+        linker_atoms,
+        warhead_atoms,
+        num_ligand_atoms,
+    )
 
 
 def mask_warhead_long_form(
@@ -201,49 +230,6 @@ def mask_whole_ligand_long_form(
 ) -> MaskResult:
     return build_long_form_mask("C_scaffold_linker_warhead", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
 
-
-def mask_warhead(
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
-    num_ligand_atoms: int,
-) -> MaskResult:
-    return build_four_level_mask("A", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
-
-
-def mask_linker_and_warhead(
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
-    num_ligand_atoms: int,
-) -> MaskResult:
-    return build_four_level_mask("B", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
-
-
-def mask_scaffold(
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
-    num_ligand_atoms: int,
-) -> MaskResult:
-    return build_four_level_mask("B2", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
-
-
-def mask_whole_ligand(
-    scaffold_atoms: Sequence[int],
-    linker_atoms: Sequence[int],
-    warhead_atoms: Sequence[int],
-    num_ligand_atoms: int,
-) -> MaskResult:
-    return build_four_level_mask("C", scaffold_atoms, linker_atoms, warhead_atoms, num_ligand_atoms)
-
-
-MASK_BUILDERS = {
-    "A": mask_warhead,
-    "B": mask_linker_and_warhead,
-    "B2": mask_scaffold,
-    "C": mask_whole_ligand,
-}
 
 LONG_FORM_MASK_BUILDERS: dict[LongFormMaskLevel, Callable[[Sequence[int], Sequence[int], Sequence[int], int], MaskResult]] = {
     "A_warhead_only": mask_warhead_long_form,
