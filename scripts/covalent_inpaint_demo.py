@@ -20,6 +20,11 @@ if str(SRC_DIR) not in sys.path:
 
 from analysis.molecule_builder import build_molecule, process_molecule
 from constants import FLOAT_TYPE, INT_TYPE
+from covalent_ext.covapie_target_residue_atom_condition_repository_cli_v1 import (
+    add_covapie_target_residue_atom_condition_cli_arguments_v1,
+    load_covapie_target_residue_conditioned_model_from_checkpoint_v1,
+    resolve_covapie_target_residue_atom_condition_cli_args_v1,
+)
 from covalent_ext.masking import build_long_form_mask
 from lightning_modules import LigandPocketDDPM
 import utils
@@ -111,10 +116,21 @@ def prepare_single_ligand(model: LigandPocketDDPM, ligand_sdf: Path) -> dict[str
     }
 
 
-def prepare_single_pocket(model: LigandPocketDDPM, protein_pdb: Path, ligand_sdf: Path) -> dict[str, torch.Tensor]:
+def prepare_single_pocket(
+    model: LigandPocketDDPM,
+    protein_pdb: Path,
+    ligand_sdf: Path,
+    target_residue_atom_condition_spec: dict[str, object] | None = None,
+) -> dict[str, torch.Tensor]:
     pdb_model = PDBParser(QUIET=True).get_structure("", protein_pdb)[0]
     residues = utils.get_pocket_from_ligand(pdb_model, str(ligand_sdf))
-    return model.prepare_pocket(residues, repeats=1)
+    return model.prepare_pocket(
+        residues,
+        repeats=1,
+        target_residue_atom_condition_spec=(
+            target_residue_atom_condition_spec
+        ),
+    )
 
 
 def run_covalent_inpaint(
@@ -126,10 +142,18 @@ def run_covalent_inpaint(
     warhead_atoms: list[int],
     mask_semantic: str,
     timesteps: int,
+    target_residue_atom_condition_spec: dict[str, object] | None = None,
 ) -> tuple[list[Chem.Mol], object]:
     model.eval()
     ligand = prepare_single_ligand(model, ligand_sdf)
-    pocket = prepare_single_pocket(model, protein_pdb, ligand_sdf)
+    pocket = prepare_single_pocket(
+        model,
+        protein_pdb,
+        ligand_sdf,
+        target_residue_atom_condition_spec=(
+            target_residue_atom_condition_spec
+        ),
+    )
 
     num_ligand_atoms = int(ligand["size"][0].item())
     mask_result = build_canonical_mask(
@@ -215,13 +239,33 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    add_covapie_target_residue_atom_condition_cli_arguments_v1(
+        parser=parser,
+    )
+    args = parser.parse_args()
+    target_residue_atom_condition_spec = (
+        resolve_covapie_target_residue_atom_condition_cli_args_v1(
+            arguments=args,
+        )
+    )
 
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA was requested with --device cuda, but torch.cuda.is_available() is false")
 
     device = torch.device(args.device)
-    model = LigandPocketDDPM.load_from_checkpoint(args.checkpoint, map_location=device)
+    if target_residue_atom_condition_spec is None:
+        model = LigandPocketDDPM.load_from_checkpoint(
+            args.checkpoint,
+            map_location=device,
+        )
+    else:
+        model = (
+            load_covapie_target_residue_conditioned_model_from_checkpoint_v1(
+                checkpoint_path=args.checkpoint,
+                map_location=device,
+            )
+        )
     model = model.to(device)
 
     molecules, mask_result = run_covalent_inpaint(
@@ -233,6 +277,9 @@ def main() -> int:
         warhead_atoms=args.warhead_atoms,
         mask_semantic=args.mask_semantic,
         timesteps=args.timesteps,
+        target_residue_atom_condition_spec=(
+            target_residue_atom_condition_spec
+        ),
     )
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
