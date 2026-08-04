@@ -1,0 +1,68 @@
+{
+  "contract_version": "covapie_canonical_five_level_role_and_task_mask_materialization_contract_v1",
+  "base_commit": "540be2e4162b2b6a7f1090d41f852e5ac87be459",
+  "canonical_role_count": 3,
+  "canonical_task_count": 5,
+  "source_inventory_row_count": 20,
+  "field_contract_row_count": 14,
+  "failure_matrix_row_count": 34,
+  "authority_coverages": {
+    "warhead_atom_set": "11/11",
+    "ligand_internal_warhead_boundary": "11/11",
+    "complete_primary_role_assignment": "0/11",
+    "minimal_seed_or_anchor": "0/11"
+  },
+  "readiness": {
+    "role_task_mask_contract_resolved": true,
+    "primary_role_authority_complete": false,
+    "minimal_seed_anchor_authority_complete": false,
+    "canonical_mask_tensors_materialized": false,
+    "ready_for_tensor_materialization_smoke": false,
+    "ready_for_model_integration": false,
+    "ready_for_training": false
+  },
+  "semantic_resolutions": {
+    "primary_role_vocabulary": "0=scaffold|1=linker|2=warhead",
+    "base_task_mask_contract": "byte_semantic_equivalent_to_current_canonical_runtime",
+    "task_c_base_generation": "scaffold|linker|warhead",
+    "task_c_base_fixed": "empty",
+    "minimal_seed_or_anchor": "orthogonal_conditioning_sidecar",
+    "seed_changes_base_generation_or_fixed": false,
+    "active_diffusion_loss": "base_generation AND role_valid AND canonical_task_valid AND sample_training_admitted",
+    "anchor_distance_reference": "target_residue_reactive_atom",
+    "primary_role_regions_nonempty": true,
+    "role_id_validity_rule": "valid=true iff role_id in 0|1|2; valid=false iff role_id=-1"
+  },
+  "checkpoint_compatibility": {
+    "atom_feature_width": 10,
+    "channel_order": "C:0|N:1|O:2|S:3|B:4|Br:5|Cl:6|P:7|I:8|F:9",
+    "new_tensors_are_sidecars": true,
+    "sidecar_concatenation_allowed": false,
+    "model_state_dict_changed": false,
+    "checkpoint_migration_required": false,
+    "final_training_feature_semantics_revalidation_required": true
+  },
+  "execution_boundary": {
+    "runtime_mask_changed": false,
+    "dataloader_changed": false,
+    "model_changed": false,
+    "forward_changed": false,
+    "loss_changed": false,
+    "tensor_materialization_performed": false,
+    "checkpoint_access_performed": false,
+    "runtime_smoke_performed": false,
+    "training_performed": false,
+    "fine_tuning_performed": false,
+    "parameter_update_performed": false,
+    "reward_or_rl_performed": false,
+    "commit_created": false,
+    "push_performed": false
+  },
+  "evidence_sha256": {
+    "covapie_role_task_mask_source_inventory.csv": "6fe54909ca2e93a063d7082c6b96fa3850a9e22f0a5a082f7c203480649ebf5c",
+    "covapie_canonical_task_truth_table.csv": "586d483f67b9108af1af820b892b477329a1b6de24b0ad0b9ee46cebbaba20e5",
+    "covapie_role_task_mask_field_contract_registry.csv": "729b383d05d82ca3c97f0c11e74f3e2097aa415d90653f9333c99b295ccdd489",
+    "covapie_role_task_mask_failure_matrix.csv": "fbe61e103147c7b8eca88bf1289d0246ca0e5001a4e7a2d057b49ee3e5762d97"
+  },
+  "recommended_next_increment": "resolve_covapie_role_annotation_input_authority_gaps_v1"
+}

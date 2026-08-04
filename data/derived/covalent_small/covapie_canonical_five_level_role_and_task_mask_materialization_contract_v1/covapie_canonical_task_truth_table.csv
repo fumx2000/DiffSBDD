@@ -1,0 +1,6 @@
+task_id,semantic_name,display_alias,generated_primary_roles,fixed_primary_roles,base_generation_equals_target,base_fixed_equals_context,seed_condition_changes_base_masks,verified
+0,warhead_only,A,warhead,scaffold;linker,true,true,false,true
+1,linker_plus_warhead,B,linker;warhead,scaffold,true,true,false,true
+2,scaffold_plus_warhead,B2,scaffold;warhead,linker,true,true,false,true
+3,scaffold_only,B3,scaffold,linker;warhead,true,true,false,true
+4,scaffold_plus_linker_plus_warhead,C,scaffold;linker;warhead,,true,true,false,true
