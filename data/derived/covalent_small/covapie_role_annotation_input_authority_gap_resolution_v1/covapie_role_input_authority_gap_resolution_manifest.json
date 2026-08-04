@@ -1,0 +1,58 @@
+{
+  "resolution_version": "covapie_role_annotation_input_authority_gap_resolution_v1",
+  "base_commit": "e206a732d1a72ac1a45002a3bf9c5ae8d659f692",
+  "source_inventory_row_count": 17,
+  "current11_matrix_row_count": 11,
+  "semantics_registry_row_count": 10,
+  "failure_matrix_row_count": 36,
+  "authority_coverage": {
+    "retained_heavy_atom_mapping": "11/11 authoritative_resolved",
+    "ligand_reactive_atom": "11/11 authoritative_resolved",
+    "residue_reactive_atom": "11/11 authoritative_resolved",
+    "pre_reaction_connectivity": "11/11 authoritative_resolved",
+    "pre_reaction_bond_orders": "11/11 authoritative_resolved",
+    "reaction_family_label": "0/11 authoritative_resolved;11/11 candidate_only",
+    "approved_warhead_rule": "0/11 authoritative_resolved;11/11 candidate_only",
+    "murcko_input": "11/11 authoritative_resolved",
+    "brics_input": "11/11 authoritative_resolved"
+  },
+  "warhead_boundary_human_review_completed_count": 11,
+  "role_seed_human_gold_review_completed_count": 0,
+  "current11_role_proposal_input_ready_count": 0,
+  "current11_minimal_seed_input_ready_count": 0,
+  "murcko_proposal_method_ready_count": 11,
+  "brics_support_method_ready_count": 11,
+  "authority_gap_resolution_completed": false,
+  "ready_for_current11_role_annotation_proposal_generation": false,
+  "ready_for_current11_minimal_seed_proposal_generation": false,
+  "unresolved_dimensions": [
+    "reaction_family_label",
+    "approved_warhead_rule"
+  ],
+  "role_proposal_generated": false,
+  "minimal_seed_proposal_generated": false,
+  "role_annotation_materialized": false,
+  "minimal_seed_materialized": false,
+  "ready_for_training": false,
+  "execution_boundary": {
+    "raw_structure_read": false,
+    "network_accessed": false,
+    "rdkit_imported": false,
+    "topology_restoration_executed": false,
+    "murcko_executed": false,
+    "brics_executed": false,
+    "checkpoint_accessed": false,
+    "forward_executed": false,
+    "training_executed": false,
+    "reward_or_rl_executed": false,
+    "commit_created": false,
+    "push_performed": false
+  },
+  "evidence_sha256": {
+    "covapie_role_input_authority_source_inventory.csv": "13f3a95f6b520a305d091f4d5eb5f57546a90507ee62d81995fc43f44ed8f062",
+    "covapie_current11_role_input_authority_matrix.csv": "fc7897121bf216488c239ecd2ad678bc23501f72db1fea85212b083c5af7b06b",
+    "covapie_role_input_authority_semantics_registry.csv": "6e08352146376bc3a4635b9c2a3155246e4a69dbc1a560c580573548a2479adb",
+    "covapie_role_input_authority_failure_matrix.csv": "eeaf16091813bd16186c5d215f412148e4cc1aa288c6619de7a1f27c43e3e123"
+  },
+  "recommended_next_increment": "bind_covapie_current11_reaction_family_and_approved_warhead_rule_authority_v1"
+}

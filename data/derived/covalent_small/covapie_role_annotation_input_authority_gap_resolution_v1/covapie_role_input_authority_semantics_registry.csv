@@ -1,0 +1,11 @@
+dimension_id,semantic_name,authoritative_resolved_definition,candidate_only_boundary,current11_status,current11_coverage,proposal_input,verified
+D01,retained_heavy_atom_mapping,committed exact atom rows map source full-atom identity to contiguous retained_heavy_local_index_0based,schema or unprojected source index,authoritative_resolved,11/11,true,true
+D02,ligand_reactive_atom,sample-level exact-one atom-pair row maps to a retained-heavy local index and atom name,project-level or unmapped name,authoritative_resolved,11/11,true,true
+D03,residue_reactive_atom,sample-level resolved_authoritative target atom has exact atom_site identity,residue class without sample atom identity,authoritative_resolved,11/11,true,true
+D04,pre_reaction_connectivity,connected pre-covalent ligand internal edge table is projected to retained_heavy_local_index_0based,schema post-covalent distance-inferred or unvalidated topology,authoritative_resolved,11/11,true,true
+D05,pre_reaction_bond_orders,every projected ligand-internal edge carries committed normalized single double triple or aromatic authority,missing distance-inferred post-reaction or silent-single values,authoritative_resolved,11/11,true,true
+D06,reaction_family_label,approved sample-level family identity with frozen namespace version and lineage,machine-derived unreviewed sample candidate or project scope,candidate_only,11/11 candidate,true,true
+D07,approved_warhead_rule,approved family-matched versioned rule binds target and ligand reactive atoms warhead set expected bonds match count and priority,unreviewed rule without approved SMARTS,candidate_only,11/11 candidate,true,true
+D08,murcko_input,authoritative atom-indexed pre-reaction graph bond orders exact retained mapping and legal connected component,unmapped CCD SMILES or proposal output,authoritative_resolved,11/11,true,true
+D09,brics_input,authoritative atom-indexed pre-reaction graph bond orders exact retained mapping and legal connected component,unmapped CCD SMILES or BRICS-derived role authority,authoritative_resolved,11/11,true,true
+D10,role_seed_human_gold_review_completed,future role and minimal-seed gold review completed for the exact sample,warhead-boundary review is a distinct predecessor authority,missing,0/11,false,true
