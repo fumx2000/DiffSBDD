@@ -1,0 +1,48 @@
+{
+  "approved_smarts_materialized": false,
+  "authority_bundle_generated": false,
+  "base_commit": "2e07b7b094e2dccc69eaf29b5f51db0f9af2e81b",
+  "binding_commit": "2e07b7b094e2dccc69eaf29b5f51db0f9af2e81b",
+  "candidate_paths": [
+    "data/derived/covalent_small/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1/covapie_family_rule_review_unit_matrix.csv",
+    "data/derived/covalent_small/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1/covapie_review_package_failure_matrix.csv",
+    "data/derived/covalent_small/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1/covapie_review_package_field_contract.csv",
+    "data/derived/covalent_small/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1/covapie_review_package_manifest.json",
+    "data/derived/covalent_small/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1/covapie_review_package_source_inventory.csv",
+    "docs/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1_guide.md",
+    "scripts/materialize_covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1.py",
+    "src/covalent_ext/covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1.py",
+    "tests/test_covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1.py"
+  ],
+  "canonical_workspace_entry_type": "symlink",
+  "evidence_sha256": {
+    "covapie_family_rule_review_unit_matrix.csv": "1d1a61aecd983b156ac97059a087237fb36fc630b5df77fc8a03b1d2ab881d2b",
+    "covapie_review_package_failure_matrix.csv": "d8706c5f82f6d9e3c4c9d6d8617d7034f2175d76eb31f4f84ffa6eb4de6733bb",
+    "covapie_review_package_field_contract.csv": "9b277e2cdc6bfd066d067c6ff9af16c5b8b5ffe51cfcb5080ab83966d0538989",
+    "covapie_review_package_source_inventory.csv": "70ee45efbbe2b9076ce27ef39aaab934f2456ab1c6c8df5b0b68ceb0e8949304"
+  },
+  "failure_matrix_case_count": 49,
+  "field_contract_row_count": 52,
+  "formal_commit_subject": "add CovaPIE Current11 family and rule approval review package v1",
+  "formal_equivalent_structural_contract_materialized": false,
+  "human_fields_initially_blank": true,
+  "lifecycle_profiles": [
+    "review_package_precommit_candidate",
+    "review_package_committed_unpushed",
+    "review_package_published_successor"
+  ],
+  "minimal_seed_generated": false,
+  "publication_scheme": "relative_symlink_to_immutable_sibling_v1",
+  "ready_for_training": false,
+  "repository_candidate_file_count": 9,
+  "review_ingested": false,
+  "review_package_version": "covapie_current11_reaction_family_and_warhead_rule_approval_review_package_v1",
+  "review_submission_compiled": false,
+  "review_unit_count": 7,
+  "role_proposal_generated": false,
+  "sample_support_count": 11,
+  "source_inventory_row_count": 12,
+  "workspace_file_count": 5,
+  "workspace_internal_symlink_count": 0,
+  "workspace_object_directory_mode": "0755"
+}
