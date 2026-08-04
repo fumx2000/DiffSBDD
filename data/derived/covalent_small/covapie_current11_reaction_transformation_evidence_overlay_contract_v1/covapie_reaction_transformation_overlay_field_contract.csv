@@ -1,0 +1,42 @@
+field_order_0based,field_name,field_scope,value_type,cardinality,frozen,human_or_authority_fillable,initial_value,prefilled,allowed_values,required_for_approval,current_coverage,semantic_note,verified
+0,transformation_review_unit_id,frozen_identity,string,exactly_one,true,false,CURRENT11_REACTION_TRANSFORMATION_REVIEW_UNIT_000001,false,,false,complete,overlay unit identity,true
+1,parent_review_unit_id,frozen_identity,string,exactly_one,true,false,CURRENT11_FAMILY_RULE_APPROVAL_REVIEW_UNIT_000001,false,,false,complete,formal parent review unit,true
+2,reaction_family_id,frozen_identity,string,exactly_one,true,false,COVAPIE_CYS_SG_REACTION_FAMILY_11AA213C661B48E3,false,,false,complete,candidate family identity,true
+3,warhead_rule_id,frozen_identity,string,exactly_one,true,false,COVAPIE_CYS_SG_WARHEAD_RULE_106441A31FA4F951,false,,false,complete,candidate rule identity,true
+4,sample_index_row_ids_json,frozen_identity,canonical_json,exactly_two_samples,true,false,"[""CYS_SG_SAMPLE_INDEX_000008"",""CYS_SG_SAMPLE_INDEX_000010""]",false,,false,complete,ordered Exact2 sample scope,true
+5,sample_count,frozen_identity,positive_integer,exactly_one,true,false,2,false,2,false,complete,Exact2 cardinality,true
+6,target_residue_types_json,frozen_candidate_evidence,canonical_json,nonempty_list,true,false,"[""CYS""]",false,,false,complete,formal target residue type,true
+7,target_residue_reactive_atom_name,frozen_candidate_evidence,string,exactly_one,true,false,SG,false,SG,false,complete,formal target residue atom,true
+8,ligand_reactive_atom_ids_by_sample_json,frozen_candidate_evidence,canonical_json,one_per_sample,true,false,"{""samples"":{""CYS_SG_SAMPLE_INDEX_000008"":""C21"",""CYS_SG_SAMPLE_INDEX_000010"":""C21""}}",false,,false,complete,formal ligand reactive atom identity,true
+9,effective_attachment_boundaries_by_sample_json,frozen_candidate_evidence,canonical_json,per_sample_exact_two_boundaries,true,false,"{""samples"":{""CYS_SG_SAMPLE_INDEX_000008"":[{""boundary_bond_id"":""C11|C16|single"",""boundary_bond_order"":""single"",""nonwarhead_boundary_atom_id"":""C11"",""warhead_attachment_atom_id"":""C16""},{""boundary_bond_id"":""C33|C38|single"",""boundary_bond_order"":""single"",""nonwarhead_boundary_atom_id"":""C33"",""warhead_attachment_atom_id"":""C38""}],""CYS_SG_SAMPLE_INDEX_000010"":[{""boundary_bond_id"":""C11|C17|single"",""boundary_bond_order"":""single"",""nonwarhead_boundary_atom_id"":""C11"",""warhead_attachment_atom_id"":""C17""},{""boundary_bond_id"":""CB'|CH'|single"",""boundary_bond_order"":""single"",""nonwarhead_boundary_atom_id"":""CB'"",""warhead_attachment_atom_id"":""CH'""}]}}",false,,false,complete,formal boundary partition; not transformation,true
+10,candidate_local_graph_rule_sha256,frozen_candidate_evidence,sha256,exactly_one,true,false,106441a31fa4f9516c174c5a0fa89709e820ebeeff419ba30883ea34a1c26bb6,false,,false,complete,candidate graph digest; not approved pattern,true
+11,candidate_formed_bond_order,frozen_candidate_evidence,normalized_bond_order,exactly_one,true,false,single,false,single,false,complete,candidate SG-C formed bond order,true
+12,pre_reaction_center_bond_order_sum,frozen_gap_fact,nonnegative_integer,exactly_one,true,false,4,false,4,false,complete,pre-state C-N single plus C-N single plus C-O double,true
+13,conditional_post_bond_order_sum_if_internal_bonds_unchanged,frozen_gap_fact,nonnegative_integer,exactly_one,true,false,5,false,5,false,complete,conditional ledger only; no post-state claim,true
+14,post_reaction_authority_status,frozen_gap_fact,enum,exactly_one,true,false,absent,false,absent,false,complete,formal post-reaction authority is absent,true
+15,schema_gap_detected,frozen_gap_fact,boolean_string,exactly_one,true,false,true,false,true,false,complete,formal review schema is insufficient,true
+16,reviewed_transformation_version,future_transformation_structure,string,exactly_one,false,true,,false,,true,missing,future reviewed contract version,true
+17,reviewed_transformation_class,future_transformation_structure,enum,exactly_one,false,true,,false,formed_bond_only;formed_bond_plus_internal_bond_order_change;formed_bond_plus_broken_bond;formed_bond_plus_broken_and_bond_order_change;other_explicit_graph_delta,true,missing,class must agree with explicit graph delta,true
+18,reviewed_transformation_scope,future_transformation_structure,enum,exactly_one,false,true,,false,shared_exact2_sample_transformation;sample_specific_transformations,true,missing,shared or sample-specific transformation scope,true
+19,reviewed_atom_map_contract_json,future_transformation_structure,canonical_json,all_samples,false,true,,false,,true,missing,schema=atom_map_contract_v1; positive unique map numbers,true
+20,reviewed_attachment_boundary_map_numbers_by_sample_json,future_transformation_structure,canonical_json,per_sample_exact_two_boundaries,false,true,,false,,true,missing,schema=plural_attachment_boundary_map_v1; singular mapping is insufficient,true
+21,reviewed_pre_atom_state_contract_json,future_transformation_state,canonical_json,all_mapped_atoms,false,true,,false,,true,missing,schema=atom_state_contract_v1; pre state,true
+22,reviewed_post_atom_state_contract_json,future_transformation_state,canonical_json,all_mapped_atoms,false,true,,false,,true,missing,schema=atom_state_contract_v1; post state,true
+23,reviewed_formed_edges_json,future_transformation_state,canonical_json,per_sample_explicit_list,false,true,,false,,true,missing,map-number endpoints; formed SG-C edge required,true
+24,reviewed_broken_edges_json,future_transformation_state,canonical_json,per_sample_explicit_list,false,true,,false,,true,missing,explicit empty list differs from unreviewed empty string,true
+25,reviewed_bond_order_changes_json,future_transformation_state,canonical_json,per_sample_explicit_list,false,true,,false,,true,missing,map endpoints plus pre and post bond order,true
+26,reviewed_formal_charge_changes_json,future_transformation_state,canonical_json,per_sample_explicit_list,false,true,,false,,true,missing,map number plus pre and post formal charge,true
+27,reviewed_protonation_transfer_contract_json,future_transformation_state,canonical_json,all_samples,false,true,,false,explicitly_attested;not_claimed,true,missing,missing data must not become not_claimed,true
+28,reviewed_leaving_group_contract_json,future_transformation_state,canonical_json,all_samples,false,true,,false,explicitly_attested;not_claimed,true,missing,explicit reviewed leaving-group semantics,true
+29,reviewed_reversibility_semantics,future_transformation_state,enum,exactly_one,false,true,,false,reversible;irreversible;not_claimed,true,missing,no mechanism default,true
+30,reviewed_post_state_evidence_type,future_evidence_authority,enum,exactly_one,false,true,,false,curated_post_graph;curated_graph_delta;formally_attested_equivalent_contract,true,missing,formal post-state evidence type,true
+31,reviewed_post_state_evidence_source,future_evidence_authority,string,exactly_one,false,true,,false,,true,missing,independent curated or formally attested source,true
+32,reviewed_post_state_evidence_sha256,future_evidence_authority,sha256,exactly_one,false,true,,false,,true,missing,SHA-bound post-state evidence,true
+33,transformation_identity_explicitly_attested,future_attestation,boolean_string,exactly_one,false,true,,false,true;false,true,missing,must equal true for approval,true
+34,transformation_full_semantics_explicitly_attested,future_attestation,boolean_string,exactly_one,false,true,,false,true;false,true,missing,must equal true for approval,true
+35,transformation_review_decision,future_decision,enum,exactly_one,false,true,,false,approve_reaction_transformation_contract;revise_reaction_transformation_contract;quarantine_reaction_transformation_contract,true,missing,decision cannot be prefilled,true
+36,review_rationale,future_provenance,string,exactly_one,false,true,,false,,true,missing,required human rationale,true
+37,review_notes,future_provenance,string,zero_or_one,false,true,,false,,false,missing,optional notes,true
+38,reviewer_id,future_provenance,string,exactly_one,false,true,,false,,true,missing,reviewer provenance,true
+39,attestor_id,future_provenance,string,exactly_one,false,true,,false,,true,missing,attestor provenance,true
+40,review_completed,future_provenance,boolean_string,exactly_one,false,true,,false,true;false,true,missing,must equal true for approval,true
