@@ -66,6 +66,67 @@ def candidate() -> dict[str, bytes]:
     )
 
 
+def _real_carrier_snapshot(candidate: dict[str, bytes]) -> tuple[object, ...]:
+    assert tuple(candidate) == materializer._ARTIFACT_NAMES
+    assert len(candidate[materializer._NPZ]) == 196172
+    assert hashlib.sha256(candidate[materializer._NPZ]).hexdigest() == EXPECTED_NPZ_SHA256
+
+    canonical = REAL_STATE / materializer._CANONICAL_RELATIVE
+    canonical_stat = canonical.lstat()
+    assert stat.S_ISLNK(canonical_stat.st_mode)
+    target = os.readlink(canonical)
+    assert not os.path.isabs(target)
+    assert "/" not in target
+    aggregate, nonce = materializer._parse_object_name(target)
+    assert aggregate == EXPECTED_AGGREGATE
+    assert len(nonce) == 32
+
+    object_path = canonical.parent / target
+    object_stat = object_path.lstat()
+    assert stat.S_ISDIR(object_stat.st_mode)
+    assert not object_path.is_symlink()
+    assert stat.S_IMODE(object_stat.st_mode) == 0o755
+    inventory = tuple(sorted(path.name for path in object_path.iterdir()))
+    assert inventory == tuple(sorted(materializer._ARTIFACT_NAMES))
+
+    leaves: list[tuple[object, ...]] = []
+    for name in materializer._ARTIFACT_NAMES:
+        leaf = object_path / name
+        leaf_stat = leaf.lstat()
+        assert stat.S_ISREG(leaf_stat.st_mode)
+        assert not leaf.is_symlink()
+        assert stat.S_IMODE(leaf_stat.st_mode) == 0o644
+        payload = leaf.read_bytes()
+        assert payload == candidate[name]
+        digest = hashlib.sha256(payload).hexdigest()
+        assert digest == hashlib.sha256(candidate[name]).hexdigest()
+        leaves.append(
+            (
+                name,
+                leaf_stat.st_dev,
+                leaf_stat.st_ino,
+                leaf_stat.st_mode,
+                leaf_stat.st_size,
+                leaf_stat.st_mtime_ns,
+                digest,
+            )
+        )
+
+    return (
+        canonical_stat.st_dev,
+        canonical_stat.st_ino,
+        canonical_stat.st_mode,
+        canonical_stat.st_mtime_ns,
+        target,
+        object_stat.st_dev,
+        object_stat.st_ino,
+        object_stat.st_mode,
+        object_stat.st_mtime_ns,
+        inventory,
+        tuple(leaves),
+    )
+
+
 def _candidate_arrays(candidate: dict[str, bytes]) -> dict[str, np.ndarray]:
     with np.load(io.BytesIO(candidate[materializer._NPZ]), allow_pickle=False) as archive:
         return {name: archive[name].copy() for name in archive.files}
@@ -508,11 +569,9 @@ def test_temp_publication_verify_duplicate_and_relative_alias(
 
 
 def test_public_materialize_and_fresh_verify_without_candidate_monkeypatch(
-    tmp_path: Path,
+    candidate: dict[str, bytes], tmp_path: Path,
 ) -> None:
-    real_canonical = REAL_STATE / materializer._CANONICAL_RELATIVE
-    with pytest.raises(FileNotFoundError):
-        real_canonical.lstat()
+    real_before = _real_carrier_snapshot(candidate)
     materializer._validate_routing_object(REAL_STATE)
     state = _state_mirror(tmp_path)
 
@@ -551,8 +610,8 @@ def test_public_materialize_and_fresh_verify_without_candidate_monkeypatch(
     )
     assert all(stat.S_IMODE(path.stat().st_mode) == 0o644 for path in object_path.iterdir())
     materializer._validate_routing_object(REAL_STATE)
-    with pytest.raises(FileNotFoundError):
-        real_canonical.lstat()
+    real_after = _real_carrier_snapshot(candidate)
+    assert real_after == real_before
 
 
 def test_tamper_fails_closed(
@@ -807,7 +866,10 @@ def test_checker_absent_state_and_rejections(
         assert failed.err == checker._ERROR + "\n"
 
 
-def test_real_state_carrier_remains_absent() -> None:
-    canonical = REAL_STATE / materializer._CANONICAL_RELATIVE
-    with pytest.raises(FileNotFoundError):
-        canonical.lstat()
+def test_real_state_carrier_is_formally_materialized_and_matches_candidate(
+    candidate: dict[str, bytes],
+) -> None:
+    before = _real_carrier_snapshot(candidate)
+    materializer._validate_routing_object(REAL_STATE)
+    after = _real_carrier_snapshot(candidate)
+    assert after == before
