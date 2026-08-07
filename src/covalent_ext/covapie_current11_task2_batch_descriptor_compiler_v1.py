@@ -505,12 +505,16 @@ def _output(
     return result
 
 
-def _compile(
-    *, repo_root: Path, state_root: Path, observation: dict[str, object],
+def _compile_with_verified_authority_v1(
+    *,
+    authority: tuple[
+        dict[str, object],
+        list[dict[str, object]],
+        dict[str, bool],
+    ],
+    observation: object,
 ) -> dict[str, object]:
-    repo = _require_root(repo_root)
-    state = _require_root(state_root)
-    source, provider, readiness = _authority(repo, state)
+    source, provider, readiness = authority
 
     def rejected(
         status: str, outcomes: list[dict[str, object]] | None = None,
@@ -656,6 +660,18 @@ def _compile(
         "COMPILED_EXACT", exact18=exact18, outcomes=outcomes,
         joint_status="COMPILED_EXACT" if joint == _JOINT_LAYOUT else "JOINT_LAYOUT_UNAVAILABLE",
         readiness=readiness,
+    )
+
+
+def _compile(
+    *, repo_root: Path, state_root: Path, observation: dict[str, object],
+) -> dict[str, object]:
+    repo = _require_root(repo_root)
+    state = _require_root(state_root)
+    authority = _authority(repo, state)
+    return _compile_with_verified_authority_v1(
+        authority=authority,
+        observation=observation,
     )
 
 
