@@ -11,6 +11,31 @@ import numpy as np
 from lightning_modules import LigandPocketDDPM
 
 
+_COVAPIE_CURRENT11_TASK2_INTEGRATION_FIELDS = (
+    "covapie_current11_task2_runtime_enabled",
+    "covapie_repository_root",
+    "covapie_state_root",
+)
+
+
+def _covapie_current11_task2_integration_requested(args):
+    return any(
+        field in vars(args)
+        for field in _COVAPIE_CURRENT11_TASK2_INTEGRATION_FIELDS
+    )
+
+
+def _select_lightning_module_class(args):
+    if not _covapie_current11_task2_integration_requested(args):
+        return LigandPocketDDPM
+
+    from covalent_ext.covapie_current11_task2_lightning_module_v1 import (
+        CovapieCurrent11Task2LigandPocketDDPM,
+    )
+
+    return CovapieCurrent11Task2LigandPocketDDPM
+
+
 def merge_args_and_yaml(args, config_dict):
     arg_dict = args.__dict__
     for key, value in config_dict.items():
@@ -65,7 +90,28 @@ if __name__ == "__main__":
     out_dir = Path(args.logdir, args.run_name)
     histogram_file = Path(args.datadir, 'size_distribution.npy')
     histogram = np.load(histogram_file).tolist()
-    pl_module = LigandPocketDDPM(
+    covapie_requested = _covapie_current11_task2_integration_requested(args)
+    pl_module_class = _select_lightning_module_class(args)
+    covapie_kwargs = {}
+    if covapie_requested:
+        covapie_kwargs = {
+            "covapie_current11_task2_runtime_enabled": getattr(
+                args,
+                "covapie_current11_task2_runtime_enabled",
+                False,
+            ),
+            "covapie_repository_root": getattr(
+                args,
+                "covapie_repository_root",
+                None,
+            ),
+            "covapie_state_root": getattr(
+                args,
+                "covapie_state_root",
+                None,
+            ),
+        }
+    pl_module = pl_module_class(
         outdir=out_dir,
         dataset=args.dataset,
         datadir=args.datadir,
@@ -86,7 +132,8 @@ if __name__ == "__main__":
         mode=args.mode,
         node_histogram=histogram,
         pocket_representation=args.pocket_representation,
-        virtual_nodes=args.virtual_nodes
+        virtual_nodes=args.virtual_nodes,
+        **covapie_kwargs,
     )
 
     logger = pl.loggers.WandbLogger(
