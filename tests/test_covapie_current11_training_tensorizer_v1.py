@@ -15,10 +15,27 @@ from covalent_ext.covapie_current11_training_tensorizer_v1 import (
 )
 
 
+TARGET_INDICATOR_FIELD = "pocket_target_residue_atom_condition_indicator"
+
+
 def _fixture() -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
     sample_keys = [
         "CYS_SG_SAMPLE_INDEX_000001",
         "CYS_SG_SAMPLE_INDEX_000002",
+    ]
+    sample_identities = [
+        {
+            "sample_index_row_id": sample_keys[0],
+            "sample_preparation_input_id": "SYNTHETIC_PREP_000001",
+            "pdb_id": "1AAA",
+            "ligand_comp_id": "L01",
+        },
+        {
+            "sample_index_row_id": sample_keys[1],
+            "sample_preparation_input_id": "SYNTHETIC_PREP_000002",
+            "pdb_id": "2BBB",
+            "ligand_comp_id": "L02",
+        },
     ]
     ligand_offsets = [0, 3, 6]
     pocket_offsets = [0, 2, 4]
@@ -42,14 +59,11 @@ def _fixture() -> tuple[dict[str, object], dict[str, object], dict[str, object]]
         "pocket_one_hot": torch.eye(10)[torch.tensor([3, 0, 3, 0])],
         "num_lig_atoms": torch.tensor([3, 3], dtype=torch.long),
         "num_pocket_nodes": torch.tensor([2, 2], dtype=torch.long),
-        "lig_mask": torch.tensor([0, 0, 0, 1, 1, 1], dtype=torch.long),
-        "pocket_mask": torch.tensor([0, 0, 1, 1], dtype=torch.long),
-        "pocket_target_residue_atom_condition_indicator": torch.tensor(
-            [True, False, True, False], dtype=torch.bool
-        ),
+        "lig_mask": torch.tensor([0, 0, 0, 1, 1, 1], dtype=torch.float32),
+        "pocket_mask": torch.tensor([0, 0, 1, 1], dtype=torch.float32),
     }
     output17: dict[str, object] = {
-        "batch_sample_order": sample_keys[:],
+        "batch_sample_order": sample_identities,
         "pair_values_parser_local_indices": [[0, 2], [0, 2]],
         # Published Output17 columns are pocket separate-flat, ligand
         # separate-flat.  The tensorizer emits explicitly named reverse order.
@@ -95,6 +109,21 @@ def _fixture() -> tuple[dict[str, object], dict[str, object], dict[str, object]]
         ],
     }
     return batch, runtime, authority
+
+
+def _derived_target_evidence(
+    runtime: dict[str, object], *, pocket_total: int
+) -> tuple[list[int], list[int], torch.Tensor]:
+    output17 = runtime["remap_output17_or_none"]
+    assert type(output17) is dict
+    batch_pairs = output17["pair_values_batch_indices"]
+    parser_pairs = output17["pair_values_parser_local_indices"]
+    assert type(batch_pairs) is list and type(parser_pairs) is list
+    pocket_flat = [pair[0] for pair in batch_pairs]
+    pocket_local = [pair[0] for pair in parser_pairs]
+    indicator = torch.zeros(pocket_total, dtype=torch.bool)
+    indicator[pocket_flat] = True
+    return pocket_flat, pocket_local, indicator
 
 
 def _run(
@@ -197,6 +226,11 @@ def test_schedule_exact_types_and_sample_key_validation(
 def test_tensorizer_shapes_dtypes_masks_candidates_and_joint_none_success() -> None:
     batch, runtime, authority = _fixture()
     output = _run(batch, runtime, authority)
+    pocket_coords = batch["pocket_coords"]
+    assert isinstance(pocket_coords, torch.Tensor)
+    expected_flat, _, _ = _derived_target_evidence(
+        runtime, pocket_total=len(pocket_coords)
+    )
     assert output.canonical_task_id.shape == (2,)
     assert output.canonical_task_id.dtype == torch.long
     assert output.ligand_base_generation_mask.shape == (6, 1)
@@ -236,9 +270,190 @@ def test_tensorizer_shapes_dtypes_masks_candidates_and_joint_none_success() -> N
     assert output.pair_candidate_is_positive.sum().item() == 2
     assert output.pair_candidate_is_negative.sum().item() == 10
     assert output.pair_contrastive_sample_loss_mask.tolist() == [True, True]
-    assert output.target_residue_reactive_atom_flat_index.tolist() == [0, 2]
+    assert output.target_residue_reactive_atom_flat_index.tolist() == expected_flat
     assert output.ligand_anchor_distance_valid.all()
     assert output.pre_post_geometry_component_loss_mask.sum().item() == 0
+
+
+def test_target_reactive_indicator_is_derived_from_output17_when_absent() -> None:
+    batch, runtime, authority = _fixture()
+    assert TARGET_INDICATOR_FIELD not in batch
+    pocket_coords = batch["pocket_coords"]
+    assert isinstance(pocket_coords, torch.Tensor)
+    expected_flat, expected_local, expected_indicator = _derived_target_evidence(
+        runtime, pocket_total=len(pocket_coords)
+    )
+
+    output = _run(batch, runtime, authority)
+
+    assert TARGET_INDICATOR_FIELD not in batch
+    assert output.target_residue_reactive_atom_flat_index.tolist() == expected_flat
+    assert output.target_residue_reactive_atom_local_index.tolist() == expected_local
+    assert torch.equal(
+        output.target_residue_reactive_atom_mask.squeeze(1),
+        expected_indicator,
+    )
+    assert output.target_residue_condition_valid.tolist() == [True, True]
+    offsets = authority["pocket_node_offsets"]
+    assert type(offsets) is list
+    assert [
+        int(output.target_residue_reactive_atom_mask[
+            offsets[sample]:offsets[sample + 1]
+        ].sum().item())
+        for sample in range(len(offsets) - 1)
+    ] == [1, 1]
+
+
+def test_matching_optional_target_indicator_is_parity_only_and_not_mutated() -> None:
+    batch, runtime, authority = _fixture()
+    pocket_coords = batch["pocket_coords"]
+    assert isinstance(pocket_coords, torch.Tensor)
+    _, _, indicator = _derived_target_evidence(
+        runtime, pocket_total=len(pocket_coords)
+    )
+    original = indicator.clone()
+    batch[TARGET_INDICATOR_FIELD] = indicator
+
+    output = _run(batch, runtime, authority)
+
+    assert batch[TARGET_INDICATOR_FIELD] is indicator
+    assert torch.equal(indicator, original)
+    assert torch.equal(
+        output.target_residue_reactive_atom_mask.squeeze(1), indicator
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "wrong_dtype",
+        "wrong_rank",
+        "wrong_length",
+        "zero_targets",
+        "extra_target",
+        "wrong_target_atom",
+        "target_outside_membership",
+    ),
+)
+def test_optional_target_indicator_invalid_parity_fails_closed(
+    mutation: str,
+) -> None:
+    batch, runtime, authority = _fixture()
+    pocket_coords = batch["pocket_coords"]
+    assert isinstance(pocket_coords, torch.Tensor)
+    pocket_flat, _, indicator = _derived_target_evidence(
+        runtime, pocket_total=len(pocket_coords)
+    )
+    invalid = indicator.clone()
+    if mutation == "wrong_dtype":
+        invalid = invalid.to(dtype=torch.float32)
+    elif mutation == "wrong_rank":
+        invalid = invalid.unsqueeze(0)
+    elif mutation == "wrong_length":
+        invalid = invalid[:-1]
+    elif mutation == "zero_targets":
+        invalid.zero_()
+    elif mutation == "extra_target":
+        false_index = int(torch.nonzero(~invalid, as_tuple=False)[0, 0].item())
+        invalid[false_index] = True
+    elif mutation == "wrong_target_atom":
+        offsets = authority["pocket_node_offsets"]
+        assert type(offsets) is list
+        replacement = next(
+            index for index in range(offsets[0], offsets[1])
+            if index != pocket_flat[0]
+        )
+        invalid[pocket_flat[0]] = False
+        invalid[replacement] = True
+    else:
+        membership = authority["target_residue_membership_mask"]
+        assert type(membership) is list
+        membership[pocket_flat[0]] = False
+    batch[TARGET_INDICATOR_FIELD] = invalid
+    _fails(batch, runtime, authority)
+
+
+@pytest.mark.parametrize(
+    "dtype", (torch.float32, torch.float64, torch.int64, torch.int16)
+)
+def test_runtime_membership_accepts_exact_numeric_dtypes_without_mutation(
+    dtype: torch.dtype,
+) -> None:
+    batch, runtime, authority = _fixture()
+    original: dict[str, tuple[torch.Tensor, torch.Tensor]] = {}
+    for field in ("lig_mask", "pocket_mask"):
+        value = batch[field]
+        assert isinstance(value, torch.Tensor)
+        converted = value.to(dtype=dtype)
+        batch[field] = converted
+        original[field] = (converted, converted.clone())
+
+    output = _run(batch, runtime, authority)
+
+    for field, (identity, contents) in original.items():
+        assert batch[field] is identity
+        assert identity.dtype == dtype
+        assert torch.equal(identity, contents)
+    assert output.pair_candidate_batch_index.dtype == torch.long
+
+
+@pytest.mark.parametrize("field", ("lig_mask", "pocket_mask"))
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "bool",
+        "complex",
+        "nan",
+        "positive_inf",
+        "negative_inf",
+        "fractional",
+        "negative",
+        "wrong_ordinal",
+        "wrong_length",
+        "wrong_rank",
+    ),
+)
+def test_runtime_membership_invalid_representations_fail_closed(
+    field: str, mutation: str
+) -> None:
+    batch, runtime, authority = _fixture()
+    value = batch[field]
+    assert isinstance(value, torch.Tensor)
+    if mutation == "bool":
+        invalid = value.to(dtype=torch.bool)
+    elif mutation == "complex":
+        invalid = value.to(dtype=torch.complex64)
+    elif mutation in ("nan", "positive_inf", "negative_inf"):
+        invalid = value.clone()
+        invalid[0] = {
+            "nan": float("nan"),
+            "positive_inf": float("inf"),
+            "negative_inf": -float("inf"),
+        }[mutation]
+    elif mutation == "fractional":
+        invalid = value.clone()
+        invalid[0] = 0.5
+    elif mutation == "negative":
+        invalid = value.clone()
+        invalid[0] = -1
+    elif mutation == "wrong_ordinal":
+        invalid = value.clone()
+        invalid[0] = 1
+    elif mutation == "wrong_length":
+        invalid = value[:-1]
+    else:
+        invalid = value.unsqueeze(0)
+    batch[field] = invalid
+    _fails(batch, runtime, authority)
+
+
+@pytest.mark.parametrize("field", ("num_lig_atoms", "num_pocket_nodes"))
+def test_runtime_length_tensors_remain_strict_long(field: str) -> None:
+    batch, runtime, authority = _fixture()
+    value = batch[field]
+    assert isinstance(value, torch.Tensor)
+    batch[field] = value.to(dtype=torch.float32)
+    _fails(batch, runtime, authority)
 
 
 def test_source_vs_runtime_f03_f09_ownership_and_alias_only_fail_closed() -> None:
@@ -260,6 +475,59 @@ def test_runtime_result_requires_same_object_identity() -> None:
     _fails(batch, copied, authority)
 
 
+def test_output17_formal_sample_identity_schema_and_key_triangle() -> None:
+    batch, runtime, authority = _fixture()
+    output17 = runtime["remap_output17_or_none"]
+    assert type(output17) is dict
+    identities = output17["batch_sample_order"]
+    assert type(identities) is list
+    assert [identity["sample_index_row_id"] for identity in identities] == (
+        runtime["batch_sample_keys_or_none"]
+    ) == authority["sample_keys"]
+    _run(batch, runtime, authority)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "legacy_string_list",
+        "missing_field",
+        "extra_field",
+        "blank_value",
+        "non_string_value",
+        "wrong_sample_key",
+        "output17_order_mismatch",
+        "duplicate_identity",
+        "runtime_key_mismatch",
+    ),
+)
+def test_output17_formal_sample_identity_fail_closed(mutation: str) -> None:
+    batch, runtime, authority = _fixture()
+    output17 = runtime["remap_output17_or_none"]
+    assert type(output17) is dict
+    identities = output17["batch_sample_order"]
+    assert type(identities) is list
+    if mutation == "legacy_string_list":
+        output17["batch_sample_order"] = authority["sample_keys"][:]
+    elif mutation == "missing_field":
+        del identities[0]["pdb_id"]
+    elif mutation == "extra_field":
+        identities[0]["unknown"] = "value"
+    elif mutation == "blank_value":
+        identities[0]["ligand_comp_id"] = " "
+    elif mutation == "non_string_value":
+        identities[0]["sample_preparation_input_id"] = 1
+    elif mutation == "wrong_sample_key":
+        identities[0]["sample_index_row_id"] = "CYS_SG_SAMPLE_INDEX_000011"
+    elif mutation == "output17_order_mismatch":
+        identities.reverse()
+    elif mutation == "duplicate_identity":
+        identities[1] = copy.deepcopy(identities[0])
+    elif mutation == "runtime_key_mismatch":
+        runtime["batch_sample_keys_or_none"].reverse()
+    _fails(batch, runtime, authority)
+
+
 @pytest.mark.parametrize(
     "mutation",
     (
@@ -277,6 +545,12 @@ def test_pair_target_and_offset_mutations_fail_closed(mutation: str) -> None:
     output17 = runtime["remap_output17_or_none"]
     assert isinstance(output17, dict)
     if mutation == "positive_indicator_mismatch":
+        pocket_coords = batch["pocket_coords"]
+        assert isinstance(pocket_coords, torch.Tensor)
+        _, _, indicator = _derived_target_evidence(
+            runtime, pocket_total=len(pocket_coords)
+        )
+        batch[TARGET_INDICATOR_FIELD] = indicator
         output17["pair_values_batch_indices"][0] = [1, 2]
         output17["pair_values_parser_local_indices"][0] = [1, 2]
     elif mutation == "cross_sample_pair":

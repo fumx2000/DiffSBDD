@@ -41,6 +41,15 @@ CANONICAL_TASKS_V1 = (
 )
 _SAMPLE_KEY = re.compile(r"^CYS_SG_SAMPLE_INDEX_[0-9]{6}$")
 _SIDECAR_FIELD = "covapie_current11_task2_runtime_result_v1"
+_OUTPUT17_SAMPLE_IDENTITY_FIELDS_V1 = (
+    "sample_index_row_id",
+    "sample_preparation_input_id",
+    "pdb_id",
+    "ligand_comp_id",
+)
+_TARGET_REACTIVE_INDICATOR_FIELD_V1 = (
+    "pocket_target_residue_atom_condition_indicator"
+)
 _RUNTIME_DERIVED_FORBIDDEN_INPUTS = frozenset((
     "canonical_task_id",
     "canonical_task_valid",
@@ -202,6 +211,31 @@ def _exact_floats(value: object, *, length: int | None = None) -> tuple[float, .
     return result  # type: ignore[return-value]
 
 
+def _output17_sample_keys(
+    value: object, *, batch_size: int
+) -> tuple[str, ...]:
+    if type(value) is not list or len(value) != batch_size:
+        _fail()
+    identities: list[tuple[str, ...]] = []
+    sample_keys: list[str] = []
+    expected_fields = frozenset(_OUTPUT17_SAMPLE_IDENTITY_FIELDS_V1)
+    for raw_identity in value:
+        if type(raw_identity) is not dict or set(raw_identity) != expected_fields:
+            _fail()
+        identity_values: list[str] = []
+        for field in _OUTPUT17_SAMPLE_IDENTITY_FIELDS_V1:
+            item = raw_identity[field]
+            if type(item) is not str or not item or item.strip() != item:
+                _fail()
+            identity_values.append(item)
+        identity = tuple(identity_values)
+        identities.append(identity)
+        sample_keys.append(identity[0])
+    if len(set(identities)) != len(identities):
+        _fail()
+    return tuple(sample_keys)
+
+
 def _matrix(
     value: object,
     *,
@@ -273,6 +307,122 @@ def _expected_membership_mask(
     return torch.repeat_interleave(
         torch.arange(len(lengths), device=device, dtype=torch.long), lengths
     )
+
+
+def _validate_runtime_membership_tensor_v1(
+    value: object, *, expected: torch.Tensor, length: int
+) -> None:
+    if (
+        not isinstance(value, torch.Tensor)
+        or value.ndim != 1
+        or len(value) != length
+        or value.dtype == torch.bool
+        or value.dtype.is_complex
+    ):
+        _fail()
+    try:
+        if value.dtype.is_floating_point:
+            if (
+                not bool(torch.isfinite(value).all().item())
+                or not bool((value == torch.trunc(value)).all().item())
+                or bool((value < 0).any().item())
+            ):
+                _fail()
+        elif bool((value < 0).any().item()):
+            _fail()
+        normalized = value.to(dtype=torch.long)
+        if (
+            value.dtype.is_floating_point
+            and not torch.equal(normalized.to(dtype=value.dtype), value)
+        ):
+            _fail()
+        if not torch.equal(normalized, expected):
+            _fail()
+    except _TensorizerInvariantError:
+        raise
+    except (RuntimeError, TypeError, OverflowError):
+        _fail()
+
+
+def _validated_output17_positive_pairs_v1(
+    *,
+    output17: dict[str, object],
+    batch_size: int,
+    ligand_total: int,
+    ligand_offsets: tuple[int, ...],
+    pocket_offsets: tuple[int, ...],
+    target_membership: tuple[bool, ...],
+) -> tuple[tuple[int, int], ...]:
+    pair_rows = _sequence(output17.get("pair_values_batch_indices"))
+    pairs = _matrix(
+        pair_rows,
+        rows=len(pair_rows),
+        columns=2,
+        scalar_type=int,
+    )
+    pair_samples = _exact_ints(
+        output17.get("pair_sample_indices"), length=len(pairs)
+    )
+    pair_offsets = _exact_ints(
+        output17.get("sample_pair_offsets"), length=batch_size + 1
+    )
+    entry_validity = _exact_bools(
+        output17.get("entry_validity"), length=len(pairs)
+    )
+    sample_validity = _exact_bools(
+        output17.get("sample_validity"), length=batch_size
+    )
+    parser_pairs = _matrix(
+        output17.get("pair_values_parser_local_indices"),
+        rows=len(pairs),
+        columns=2,
+        scalar_type=int,
+    )
+    joint_pairs_raw = output17.get("pair_values_joint_global_indices")
+    joint_pairs = None
+    if joint_pairs_raw is not None:
+        joint_pairs = _matrix(
+            joint_pairs_raw,
+            rows=len(pairs),
+            columns=2,
+            scalar_type=int,
+        )
+    if (
+        pair_offsets[0] != 0
+        or pair_offsets[-1] != len(pairs)
+        or any(left > right for left, right in zip(pair_offsets, pair_offsets[1:]))
+        or not all(entry_validity)
+        or not all(sample_validity)
+    ):
+        _fail()
+
+    positive_by_sample: list[tuple[int, int]] = []
+    for sample in range(batch_size):
+        start, end = pair_offsets[sample], pair_offsets[sample + 1]
+        if end - start != 1:
+            _fail()
+        ordinal = start
+        if pair_samples[ordinal] != sample:
+            _fail()
+        pocket_flat, ligand_flat = pairs[ordinal]
+        if (
+            not ligand_offsets[sample] <= ligand_flat < ligand_offsets[sample + 1]
+            or not pocket_offsets[sample] <= pocket_flat < pocket_offsets[sample + 1]
+            or parser_pairs[ordinal]
+            != (
+                pocket_flat - pocket_offsets[sample],
+                ligand_flat - ligand_offsets[sample],
+            )
+            or not target_membership[pocket_flat]
+        ):
+            _fail()
+        if joint_pairs is not None and joint_pairs[ordinal] != (
+            ligand_total + pocket_flat,
+            ligand_flat,
+        ):
+            _fail()
+        positive_by_sample.append((ligand_flat, pocket_flat))
+    return tuple(positive_by_sample)
 
 
 def _validate_numeric_authority(
@@ -355,8 +505,12 @@ def _tensorize_impl(
         or type(output17) is not dict
         or output17.get("remap_status") != "REMAPPED_EXACT"
         or output17.get("failure_reason") != "NONE"
-        or tuple(output17.get("batch_sample_order", ())) != sample_keys
     ):
+        _fail()
+    output17_sample_keys = _output17_sample_keys(
+        output17.get("batch_sample_order"), batch_size=batch_size
+    )
+    if output17_sample_keys != sample_keys:
         _fail()
 
     lig_coords = _require_batch_tensor(batch, "lig_coords", ndim=2)
@@ -409,13 +563,15 @@ def _tensorize_impl(
         dtype=pocket_sizes.dtype,
         device=pocket_sizes.device,
     )
+    _validate_runtime_membership_tensor_v1(
+        lig_mask, expected=expected_lig_mask, length=ligand_total
+    )
+    _validate_runtime_membership_tensor_v1(
+        pocket_mask, expected=expected_pocket_mask, length=pocket_total
+    )
     if (
-        lig_mask.dtype != torch.long
-        or pocket_mask.dtype != torch.long
-        or lig_sizes.dtype != torch.long
+        lig_sizes.dtype != torch.long
         or pocket_sizes.dtype != torch.long
-        or not torch.equal(lig_mask, expected_lig_mask)
-        or not torch.equal(pocket_mask, expected_pocket_mask)
         or not torch.equal(lig_sizes, expected_lig_sizes)
         or not torch.equal(pocket_sizes, expected_pocket_sizes)
     ):
@@ -474,6 +630,15 @@ def _tensorize_impl(
         ]
         if admitted[sample] and not any(pocket_slice):
             _fail()
+
+    positive_by_sample = _validated_output17_positive_pairs_v1(
+        output17=output17,
+        batch_size=batch_size,
+        ligand_total=ligand_total,
+        ligand_offsets=ligand_offsets,
+        pocket_offsets=pocket_offsets,
+        target_membership=membership,
+    )
 
     task_ids = tuple(
         canonical_task_id_for_covapie_current11_sample_v1(
@@ -542,35 +707,33 @@ def _tensorize_impl(
     target_membership = torch.tensor(
         membership, dtype=torch.bool, device=model_device
     )
-    indicator = batch.get("pocket_target_residue_atom_condition_indicator")
-    if (
-        not isinstance(indicator, torch.Tensor)
-        or indicator.dtype != torch.bool
-        or indicator.ndim != 1
-        or len(indicator) != pocket_total
-    ):
-        _fail()
-    indicator = indicator.to(device=model_device)
-    if bool((indicator & ~target_membership).any().item()):
-        _fail()
-    target_local: list[int] = []
-    target_flat: list[int] = []
-    target_valid: list[bool] = []
-    for sample in range(batch_size):
-        start, end = pocket_offsets[sample], pocket_offsets[sample + 1]
-        positions = torch.nonzero(indicator[start:end], as_tuple=False).flatten()
-        if positions.numel() != 1:
-            _fail()
-        local = int(positions[0].item())
-        target_local.append(local)
-        target_flat.append(start + local)
-        target_valid.append(True)
-    target_condition_valid = torch.tensor(
-        target_valid, dtype=torch.bool, device=model_device
+    target_flat = tuple(pair[1] for pair in positive_by_sample)
+    target_local = tuple(
+        target_flat[sample] - pocket_offsets[sample]
+        for sample in range(batch_size)
     )
     target_flat_tensor = torch.tensor(
         target_flat, dtype=torch.long, device=model_device
     )
+    indicator = torch.zeros(
+        pocket_total, dtype=torch.bool, device=model_device
+    )
+    indicator[target_flat_tensor] = True
+    target_condition_valid = torch.ones(
+        batch_size, dtype=torch.bool, device=model_device
+    )
+    if _TARGET_REACTIVE_INDICATOR_FIELD_V1 in batch:
+        raw_indicator = batch[_TARGET_REACTIVE_INDICATOR_FIELD_V1]
+        if (
+            not isinstance(raw_indicator, torch.Tensor)
+            or raw_indicator.dtype != torch.bool
+            or raw_indicator.ndim != 1
+            or len(raw_indicator) != pocket_total
+            or not torch.equal(
+                raw_indicator.to(device=model_device), indicator
+            )
+        ):
+            _fail()
 
     # F13/F14 are derived from admitted model-index-space coordinates.  Both
     # coordinate buffers are moved once to the requested model device.
@@ -593,80 +756,6 @@ def _tensorize_impl(
         anchor_distance,
         torch.full_like(anchor_distance, float("nan")),
     )
-
-    pairs = _matrix(
-        output17.get("pair_values_batch_indices"),
-        rows=len(output17.get("pair_values_batch_indices", ())),
-        columns=2,
-        scalar_type=int,
-    )
-    pair_samples = _exact_ints(output17.get("pair_sample_indices"))
-    pair_offsets_source = _exact_ints(
-        output17.get("sample_pair_offsets"), length=batch_size + 1
-    )
-    entry_validity = _exact_bools(
-        output17.get("entry_validity"), length=len(pairs)
-    )
-    sample_validity = _exact_bools(
-        output17.get("sample_validity"), length=batch_size
-    )
-    parser_pairs = _matrix(
-        output17.get("pair_values_parser_local_indices"),
-        rows=len(pairs),
-        columns=2,
-        scalar_type=int,
-    )
-    joint_pairs_raw = output17.get("pair_values_joint_global_indices")
-    joint_pairs = None
-    if joint_pairs_raw is not None:
-        joint_pairs = _matrix(
-            joint_pairs_raw,
-            rows=len(pairs),
-            columns=2,
-            scalar_type=int,
-        )
-    if (
-        len(pair_samples) != len(pairs)
-        or pair_offsets_source[0] != 0
-        or pair_offsets_source[-1] != len(pairs)
-        or any(
-            left > right
-            for left, right in zip(pair_offsets_source, pair_offsets_source[1:])
-        )
-        or not all(entry_validity)
-        or not all(sample_validity)
-    ):
-        _fail()
-    positive_by_sample: list[tuple[int, int]] = []
-    for sample in range(batch_size):
-        start, end = pair_offsets_source[sample], pair_offsets_source[sample + 1]
-        if admitted[sample] and end - start != 1:
-            _fail()
-        if end - start != 1:
-            _fail()
-        ordinal = start
-        if pair_samples[ordinal] != sample:
-            _fail()
-        pocket_flat, ligand_flat = pairs[ordinal]
-        if (
-            not ligand_offsets[sample] <= ligand_flat < ligand_offsets[sample + 1]
-            or not pocket_offsets[sample] <= pocket_flat < pocket_offsets[sample + 1]
-            or parser_pairs[ordinal]
-            != (
-                pocket_flat - pocket_offsets[sample],
-                ligand_flat - ligand_offsets[sample],
-            )
-            or pocket_flat != target_flat[sample]
-        ):
-            _fail()
-        if joint_pairs is not None and joint_pairs[ordinal] != (
-            ligand_total + pocket_flat,
-            ligand_flat,
-        ):
-            _fail()
-        if admitted[sample] and not membership[pocket_flat]:
-            _fail()
-        positive_by_sample.append((ligand_flat, pocket_flat))
 
     candidate_batches: list[torch.Tensor] = []
     candidate_lig_local: list[torch.Tensor] = []
