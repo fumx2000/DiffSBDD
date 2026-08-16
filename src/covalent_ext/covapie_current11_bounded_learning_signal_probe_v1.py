@@ -581,10 +581,6 @@ def _validate_probe_model_and_batch_v1(
         _fail()
     if any(buffer.device.type != "cpu" for buffer in model.buffers()):
         _fail()
-    # Querying this flag does not initialize CUDA.  If another caller already
-    # initialized that RNG domain, V1 refuses to make a CPU-global claim.
-    if torch.cuda.is_initialized():
-        _fail()
     batch_tensors = _iter_batch_tensors_v1(attached_batch, path="attached_batch")
     if any(tensor.device.type != "cpu" for unused, tensor in batch_tensors):
         _fail()
@@ -934,7 +930,7 @@ def run_covapie_current11_deterministic_exact5_probe_v1(
                 strict=True,
             ):
                 with torch.random.fork_rng(devices=[], enabled=True):
-                    torch.manual_seed(epoch_seed)
+                    torch.random.default_generator.manual_seed(epoch_seed)
                     with torch.no_grad():
                         output = _run_covapie_current11_probe_epoch_forward_v1(
                             model=validated_model,

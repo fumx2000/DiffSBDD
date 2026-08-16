@@ -446,6 +446,107 @@ def test_real_preprobe_repeatability_exact5_coverage_and_rng_evidence(
     assert first.global_rng_restored is True
 
 
+def test_real_cpu_probe_accepts_preinitialized_cuda_status_without_cuda_use(
+    monkeypatch: pytest.MonkeyPatch,
+    real_session_and_attached_batch,
+) -> None:
+    session, attached_batch = real_session_and_attached_batch
+    model = session.model
+    assert all(parameter.device.type == "cpu" for parameter in model.parameters())
+    assert all(buffer.device.type == "cpu" for buffer in model.buffers())
+    assert all(
+        tensor.device.type == "cpu"
+        for unused, tensor in subject._iter_batch_tensors_v1(
+            attached_batch, path="attached_batch"
+        )
+    )
+    rng_before = torch.random.get_rng_state().clone()
+
+    def forbidden_cuda_or_training_call(*unused_args, **unused_kwargs):
+        del unused_args, unused_kwargs
+        raise AssertionError("CPU-only probe crossed a forbidden boundary")
+
+    # These patches are test-only fail-closed boundaries.  The product probe
+    # must remain valid when CUDA was initialized elsewhere without touching
+    # CUDA tensors, CUDA RNG, training, backward, or optimizer ownership.
+    monkeypatch.setattr(torch.cuda, "is_initialized", lambda: True)
+    for name in (
+        "_lazy_init",
+        "init",
+        "current_device",
+        "device_count",
+        "get_device_properties",
+        "get_device_capability",
+        "set_device",
+        "synchronize",
+        "get_rng_state",
+        "get_rng_state_all",
+        "set_rng_state",
+        "set_rng_state_all",
+        "manual_seed",
+        "manual_seed_all",
+        "seed",
+        "seed_all",
+    ):
+        monkeypatch.setattr(torch.cuda, name, forbidden_cuda_or_training_call)
+    monkeypatch.setattr(torch.Tensor, "cuda", forbidden_cuda_or_training_call)
+    monkeypatch.setattr(nn.Module, "cuda", forbidden_cuda_or_training_call)
+    monkeypatch.setattr(session.trainer, "fit", forbidden_cuda_or_training_call)
+    monkeypatch.setattr(model, "configure_optimizers", forbidden_cuda_or_training_call)
+    monkeypatch.setattr(torch.Tensor, "backward", forbidden_cuda_or_training_call)
+    monkeypatch.setattr(torch.autograd, "backward", forbidden_cuda_or_training_call)
+
+    original_tensor_to = torch.Tensor.to
+
+    def cpu_only_tensor_to(tensor, *args, **kwargs):
+        targets = tuple(args[:1]) + (kwargs.get("device"),)
+        for target in targets:
+            if (
+                isinstance(target, torch.Tensor)
+                and target.device.type == "cuda"
+            ) or (
+                isinstance(target, torch.device)
+                and target.type == "cuda"
+            ) or (
+                isinstance(target, str)
+                and target.split(":", 1)[0] == "cuda"
+            ):
+                raise AssertionError("CPU-only probe requested a CUDA transfer")
+        return original_tensor_to(tensor, *args, **kwargs)
+
+    monkeypatch.setattr(torch.Tensor, "to", cpu_only_tensor_to)
+    result = subject.run_covapie_current11_deterministic_exact5_probe_v1(
+        model=model,
+        attached_batch=attached_batch,
+    )
+
+    assert len(result.epoch_results) == 5
+    assert result.sample_task_evaluation_count == 55
+    assert tuple(epoch.canonical_task_ids for epoch in result.epoch_results) == EXPECTED_TASKS
+    assert result.parameter_unchanged is True
+    assert result.buffer_unchanged is True
+    assert result.gradient_state_unchanged is True
+    assert result.mode_flags_restored is True
+    assert result.batch_unchanged is True
+    assert result.trainer_counters_unchanged is True
+    assert result.cpu_rng_state_restored is True
+    assert result.all_probe_rng_domains_restored is True
+    assert result.global_rng_restored is True
+    assert result.probe_rng_used_domains == ("torch_cpu",)
+    assert result.optimizer_created is False
+    assert result.backward_called is False
+    assert result.optimizer_step_called is False
+    assert torch.equal(torch.random.get_rng_state(), rng_before)
+    assert all(parameter.device.type == "cpu" for parameter in model.parameters())
+    assert all(buffer.device.type == "cpu" for buffer in model.buffers())
+    assert all(
+        tensor.device.type == "cpu"
+        for unused, tensor in subject._iter_batch_tensors_v1(
+            attached_batch, path="attached_batch"
+        )
+    )
+
+
 def test_real_probe_preserves_model_gradient_mode_batch_and_trainer_state(
     real_preprobe_pair,
 ) -> None:
