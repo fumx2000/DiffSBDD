@@ -838,6 +838,14 @@ class CovapieCurrent11TrainingLigandPocketDDPM(
                 epoch=int(self.current_epoch),
                 task_schedule_seed=self.covapie_current11_task_schedule_seed,
             )
+            canonical_indicator = _tensor(
+                supervision.target_residue_reactive_atom_mask,
+                dtype=torch.bool,
+                ndim=2,
+            )
+            if canonical_indicator.shape != (len(pocket["x"]), 1):
+                _fail()
+            canonical_indicator = canonical_indicator[:, 0]
             role_delta = (
                 self.covapie_current11_auxiliary_model_v1
                 .encode_role_mask_anchor_v1(
@@ -853,9 +861,7 @@ class CovapieCurrent11TrainingLigandPocketDDPM(
                     supervision=supervision,
                     role_mask_anchor_hidden_delta=role_delta,
                     pocket_target_residue_atom_condition_indicator=(
-                        pocket[
-                            "pocket_target_residue_atom_condition_indicator"
-                        ]
+                        canonical_indicator
                     ),
                 )
             )

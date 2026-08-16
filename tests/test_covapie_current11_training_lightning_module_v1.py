@@ -21,6 +21,7 @@ import lightning_modules
 from lightning_modules import LigandPocketDDPM
 from equivariant_diffusion.conditional_model import ConditionalDDPM
 from equivariant_diffusion.dynamics import EGNNDynamics
+from covalent_ext import covapie_current11_training_lightning_module_v1 as subject
 from covalent_ext.covapie_current11_auxiliary_model_and_loss_v1 import (
     CovapieCurrent11AuxiliaryModelV1,
     CovapieCurrent11LossWeightsV1,
@@ -831,6 +832,118 @@ def test_unsupported_evaluation_steps_fail_before_forward(
         "COVAPIE_CURRENT11_TRAINING_LIGHTNING_MODULE_V1_ERROR"
     )
     assert forward_call_count == 0
+
+
+def test_training_forward_uses_tensorizer_canonical_reactive_indicator(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    model = _training_model(monkeypatch)
+    ligand, pocket = _inputs()
+    pocket.pop("pocket_target_residue_atom_condition_indicator")
+    supervision = _supervision(0)
+    captured: dict[str, object] = {}
+    trace = object()
+    model_output = object()
+    loss_output = object()
+
+    monkeypatch.setattr(
+        model, "get_ligand_and_pocket", lambda unused: (ligand, pocket)
+    )
+    monkeypatch.setattr(
+        subject,
+        "tensorize_covapie_current11_training_supervision_v1",
+        lambda **unused: supervision,
+    )
+    monkeypatch.setattr(
+        model.covapie_current11_auxiliary_model_v1,
+        "encode_role_mask_anchor_v1",
+        lambda **unused: torch.zeros((3, 4)),
+    )
+
+    def bridge(**kwargs):
+        captured.update(kwargs)
+        return trace
+
+    monkeypatch.setattr(
+        subject,
+        "run_covapie_current11_five_mask_diffusion_and_hidden_readout_v1",
+        bridge,
+    )
+    monkeypatch.setattr(
+        model.covapie_current11_auxiliary_model_v1,
+        "forward",
+        lambda **unused: model_output,
+    )
+    monkeypatch.setattr(
+        subject,
+        "compute_covapie_current11_training_losses_v1",
+        lambda **unused: loss_output,
+    )
+
+    output = model.forward({
+        "covapie_current11_task2_runtime_result_v1": {},
+        model.covapie_current11_authoritative_supervision_batch_field: {},
+    })
+    assert "pocket_target_residue_atom_condition_indicator" not in pocket
+    assert torch.equal(
+        captured["pocket_target_residue_atom_condition_indicator"],
+        supervision.target_residue_reactive_atom_mask[:, 0],
+    )
+    assert output.supervision is supervision
+    assert output.diffusion_trace is trace
+    assert output.model_output is model_output
+    assert output.loss_output is loss_output
+
+
+@pytest.mark.parametrize("malformation", ("dtype", "rank", "length"))
+def test_training_forward_rejects_malformed_canonical_reactive_indicator(
+    monkeypatch: pytest.MonkeyPatch,
+    malformation: str,
+) -> None:
+    model = _training_model(monkeypatch)
+    ligand, pocket = _inputs()
+    pocket.pop("pocket_target_residue_atom_condition_indicator")
+    malformed = supervision = _supervision(0)
+    if malformation == "dtype":
+        indicator = torch.tensor([[1], [0]], dtype=torch.long)
+    elif malformation == "rank":
+        indicator = torch.tensor([True, False], dtype=torch.bool)
+    else:
+        indicator = torch.tensor([[True]], dtype=torch.bool)
+    malformed = replace(
+        supervision,
+        target_residue_reactive_atom_mask=indicator,
+    )
+    bridge_called = False
+
+    monkeypatch.setattr(
+        model, "get_ligand_and_pocket", lambda unused: (ligand, pocket)
+    )
+    monkeypatch.setattr(
+        subject,
+        "tensorize_covapie_current11_training_supervision_v1",
+        lambda **unused: malformed,
+    )
+
+    def forbidden_bridge(**unused):
+        nonlocal bridge_called
+        bridge_called = True
+        raise AssertionError("malformed supervision reached diffusion bridge")
+
+    monkeypatch.setattr(
+        subject,
+        "run_covapie_current11_five_mask_diffusion_and_hidden_readout_v1",
+        forbidden_bridge,
+    )
+    with pytest.raises(ValueError) as error:
+        model.forward({
+            "covapie_current11_task2_runtime_result_v1": {},
+            model.covapie_current11_authoritative_supervision_batch_field: {},
+        })
+    assert str(error.value) == (
+        "COVAPIE_CURRENT11_TRAINING_LIGHTNING_MODULE_V1_ERROR"
+    )
+    assert bridge_called is False
 
 
 def test_additive_class_state_keys_and_parameter_ownership(
