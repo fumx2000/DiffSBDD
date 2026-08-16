@@ -10,6 +10,7 @@ from covalent_ext import (
     covapie_current11_checkpoint_migration_and_real_one_batch_train_path_smoke_v1
     as subject,
 )
+from covalent_ext import covapie_current11_checkpoint_migration_v1 as migration
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -195,10 +196,17 @@ def test_current11_native_complete_state_uses_ordinary_strict_restore() -> None:
 
 
 def test_product_source_has_no_non_strict_migration_fallback() -> None:
-    source = Path(subject.__file__).read_text(encoding="utf-8")
+    source = Path(migration.__file__).read_text(encoding="utf-8")
+    smoke_source = Path(subject.__file__).read_text(encoding="utf-8")
     prohibited = "strict" + "=False"
     assert prohibited not in source
-    assert "load_state_dict(merged_state, strict=True)" in source
+    assert "load_state_dict(complete_target_state, strict=True)" in source
+    assert "_checkpoint_migration.load_covapie_current11_legacy_checkpoint_v1" in smoke_source
+    assert (
+        "_checkpoint_migration."
+        "migrate_covapie_current11_legacy_checkpoint_state_dict_v1"
+        in smoke_source
+    )
 
 
 @pytest.fixture(scope="module")

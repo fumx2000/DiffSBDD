@@ -24,6 +24,9 @@ import constants  # noqa: E402
 import pytorch_lightning  # noqa: E402
 from dataset import ProcessedLigandPocketDataset  # noqa: E402
 from covalent_ext import (  # noqa: E402
+    covapie_current11_checkpoint_migration_v1 as _checkpoint_migration,
+)
+from covalent_ext import (  # noqa: E402
     covapie_current11_role_seed_human_gold_ingestion_compiler_v1
     as _human_gold_compiler,
 )
@@ -59,6 +62,7 @@ from covalent_ext.diffsbdd_model_instantiation import (  # noqa: E402
 __all__ = (
     "COVAPIE_CURRENT11_CHECKPOINT_MIGRATION_AND_REAL_ONE_BATCH_TRAIN_PATH_SMOKE_V1_ERROR",
     "COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SHA256_V1",
+    "COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SIZE_BYTES_V1",
     "LEGACY_ALLOWED_NEW_EXACT_KEYS_V1",
     "LEGACY_ALLOWED_NEW_PREFIXES_V1",
     "load_covapie_current11_legacy_checkpoint_v1",
@@ -72,47 +76,16 @@ COVAPIE_CURRENT11_CHECKPOINT_MIGRATION_AND_REAL_ONE_BATCH_TRAIN_PATH_SMOKE_V1_ER
     "SMOKE_V1_ERROR"
 )
 COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SHA256_V1 = (
-    "07f86764bf569aafbc40a9c15fc02de8e2550437dd0f17f657eab3abe66c372c"
+    _checkpoint_migration.COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SHA256_V1
 )
-COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SIZE_BYTES_V1 = 17_861_341
+COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SIZE_BYTES_V1 = (
+    _checkpoint_migration.COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SIZE_BYTES_V1
+)
 LEGACY_ALLOWED_NEW_EXACT_KEYS_V1 = (
-    "ddpm.dynamics.target_residue_atom_condition_embedding",
+    _checkpoint_migration.LEGACY_ALLOWED_NEW_EXACT_KEYS_V1
 )
 LEGACY_ALLOWED_NEW_PREFIXES_V1 = (
-    "covapie_current11_auxiliary_model_v1.",
-)
-
-_EXPECTED_LEGACY_STATE_KEY_COUNT_V1 = 122
-_EXPECTED_HISTORICAL_HPARAMETER_KEYS_V1 = frozenset((
-    "outdir",
-    "dataset",
-    "datadir",
-    "batch_size",
-    "lr",
-    "egnn_params",
-    "diffusion_params",
-    "num_workers",
-    "augment_noise",
-    "augment_rotation",
-    "clip_grad",
-    "eval_epochs",
-    "eval_params",
-    "visualize_sample_epoch",
-    "visualize_chain_epoch",
-    "auxiliary_loss",
-    "loss_params",
-    "mode",
-    "node_histogram",
-    "pocket_representation",
-    "virtual_nodes",
-))
-_AUXILIARY_ZERO_DELTA_KEYS_V1 = (
-    "covapie_current11_auxiliary_model_v1.role_embedding.weight",
-    "covapie_current11_auxiliary_model_v1.task_embedding.weight",
-    "covapie_current11_auxiliary_model_v1.generation_state_embedding.weight",
-    "covapie_current11_auxiliary_model_v1.seed_indicator_embedding.weight",
-    "covapie_current11_auxiliary_model_v1.anchor_distance_encoder.2.weight",
-    "covapie_current11_auxiliary_model_v1.anchor_distance_encoder.2.bias",
+    _checkpoint_migration.LEGACY_ALLOWED_NEW_PREFIXES_V1
 )
 _FORMAL_CARRIER_RELATIVE_PATH_V1 = Path(
     "formal-sidecars/current11-runtime-sample-and-role-order-carrier-v1/"
@@ -153,23 +126,6 @@ def _safe_regular_file(path: Path) -> tuple[int, str]:
     return metadata.st_size, _sha256(path)
 
 
-def _child(value: object, key: str) -> object:
-    if type(value) is dict:
-        return value.get(key)
-    return getattr(value, key, None)
-
-
-def _is_tensor_dictionary(value: object) -> bool:
-    return isinstance(value, dict) and all(
-        type(key) is str and isinstance(item, torch.Tensor)
-        for key, item in value.items()
-    )
-
-
-def _all_zero(tensor: torch.Tensor) -> bool:
-    return bool(torch.equal(tensor, torch.zeros_like(tensor)))
-
-
 def _nonzero_finite_gradient(parameter: nn.Parameter) -> bool:
     gradient = parameter.grad
     return bool(
@@ -194,193 +150,14 @@ def _public_error(error: Exception) -> NoReturn:
 def load_covapie_current11_legacy_checkpoint_v1(
     *, checkpoint_path: Path,
 ) -> dict[str, object]:
-    """Read the one authorized legacy checkpoint after exact identity checks."""
+    """Preserve the historical smoke API while delegating product policy."""
 
     try:
-        if type(checkpoint_path) is not type(Path()):
-            _fail()
-        size, digest = _safe_regular_file(checkpoint_path)
-        if (
-            size != COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SIZE_BYTES_V1
-            or digest != COVAPIE_CURRENT11_LEGACY_CHECKPOINT_SHA256_V1
-        ):
-            _fail()
-        payload = torch.load(checkpoint_path, map_location="cpu")
-        if type(payload) is not dict:
-            _fail()
-        state_dict = payload.get("state_dict")
-        hyper_parameters = payload.get("hyper_parameters")
-        if (
-            not _is_tensor_dictionary(state_dict)
-            or len(state_dict) != _EXPECTED_LEGACY_STATE_KEY_COUNT_V1
-            or type(hyper_parameters) is not dict
-            or set(hyper_parameters) != _EXPECTED_HISTORICAL_HPARAMETER_KEYS_V1
-        ):
-            _fail()
-        egnn = hyper_parameters["egnn_params"]
-        if (
-            hyper_parameters.get("mode") != "pocket_conditioning"
-            or hyper_parameters.get("pocket_representation") != "full-atom"
-            or hyper_parameters.get("virtual_nodes") is not False
-            or hyper_parameters.get("auxiliary_loss") is not False
-            or _child(egnn, "joint_nf") != 32
-            or _child(egnn, "hidden_nf") != 128
-            or _child(egnn, "n_layers") != 5
-        ):
-            _fail()
-        if any(
-            key in LEGACY_ALLOWED_NEW_EXACT_KEYS_V1
-            or key.startswith(LEGACY_ALLOWED_NEW_PREFIXES_V1)
-            for key in state_dict
-        ):
-            _fail()
-        return {
-            "checkpoint_path": str(checkpoint_path),
-            "checkpoint_sha256": digest,
-            "checkpoint_size_bytes": size,
-            "checkpoint_payload_type": type(payload).__name__,
-            "checkpoint_top_level_keys": tuple(payload),
-            "checkpoint_state_dict_key_count": len(state_dict),
-            "checkpoint_hyper_parameter_keys": tuple(hyper_parameters),
-            "historical_pytorch_lightning_version": payload.get(
-                "pytorch-lightning_version"
-            ),
-            "state_dict": state_dict,
-        }
+        return _checkpoint_migration.load_covapie_current11_legacy_checkpoint_v1(
+            checkpoint_path=checkpoint_path
+        )
     except Exception as error:
         _public_error(error)
-
-
-def _migrate_impl(
-    *,
-    model: nn.Module,
-    checkpoint_state_dict: object,
-) -> dict[str, object]:
-    if not isinstance(model, nn.Module) or not _is_tensor_dictionary(
-        checkpoint_state_dict
-    ):
-        _fail()
-    target_state = model.state_dict()
-    if not _is_tensor_dictionary(target_state):
-        _fail()
-    target_keys = set(target_state)
-    checkpoint_keys = set(checkpoint_state_dict)
-    allowed_exact = set(LEGACY_ALLOWED_NEW_EXACT_KEYS_V1)
-    target_auxiliary_keys = {
-        key
-        for key in target_keys
-        if key.startswith(LEGACY_ALLOWED_NEW_PREFIXES_V1)
-    }
-    if (
-        not allowed_exact <= target_keys
-        or not target_auxiliary_keys
-        or any(
-            key in allowed_exact
-            or key.startswith(LEGACY_ALLOWED_NEW_PREFIXES_V1)
-            for key in checkpoint_keys
-        )
-    ):
-        _fail()
-
-    shared_keys = target_keys & checkpoint_keys
-    target_only_keys = target_keys - checkpoint_keys
-    checkpoint_only_keys = checkpoint_keys - target_keys
-    target_only_auxiliary_keys = {
-        key
-        for key in target_only_keys
-        if key.startswith(LEGACY_ALLOWED_NEW_PREFIXES_V1)
-    }
-    target_only_exact_keys = target_only_keys - target_only_auxiliary_keys
-    shape_mismatches = {
-        key
-        for key in shared_keys
-        if (
-            target_state[key].shape != checkpoint_state_dict[key].shape
-            or target_state[key].dtype != checkpoint_state_dict[key].dtype
-        )
-    }
-    if (
-        checkpoint_only_keys
-        or shape_mismatches
-        or target_only_exact_keys != allowed_exact
-        or target_only_auxiliary_keys != target_auxiliary_keys
-        or shared_keys != target_keys - allowed_exact - target_auxiliary_keys
-    ):
-        _fail()
-
-    fresh_target_only = {
-        key: target_state[key].detach().clone() for key in target_only_keys
-    }
-    if (
-        any(key not in target_state for key in _AUXILIARY_ZERO_DELTA_KEYS_V1)
-        or not _all_zero(
-            target_state[LEGACY_ALLOWED_NEW_EXACT_KEYS_V1[0]]
-        )
-        or any(
-            not _all_zero(target_state[key])
-            for key in _AUXILIARY_ZERO_DELTA_KEYS_V1
-        )
-    ):
-        _fail()
-
-    merged_state = {
-        key: (
-            checkpoint_state_dict[key]
-            if key in shared_keys
-            else target_state[key]
-        )
-        for key in target_state
-    }
-    load_result = model.load_state_dict(merged_state, strict=True)
-    missing_keys = tuple(load_result.missing_keys)
-    unexpected_keys = tuple(load_result.unexpected_keys)
-    if missing_keys or unexpected_keys:
-        _fail()
-
-    migrated_state = model.state_dict()
-    if any(
-        not torch.equal(migrated_state[key], fresh_target_only[key])
-        for key in target_only_keys
-    ):
-        _fail()
-    shared_equal = sum(
-        int(torch.equal(
-            migrated_state[key].detach().cpu(),
-            checkpoint_state_dict[key].detach().cpu(),
-        ))
-        for key in shared_keys
-    )
-    if shared_equal != len(shared_keys):
-        _fail()
-    if (
-        not _all_zero(
-            migrated_state[LEGACY_ALLOWED_NEW_EXACT_KEYS_V1[0]]
-        )
-        or any(
-            not _all_zero(migrated_state[key])
-            for key in _AUXILIARY_ZERO_DELTA_KEYS_V1
-        )
-    ):
-        _fail()
-    return {
-        "checkpoint_key_count": len(checkpoint_keys),
-        "target_model_key_count": len(target_keys),
-        "shared_key_count": len(shared_keys),
-        "target_only_key_count": len(target_only_keys),
-        "checkpoint_only_key_count": len(checkpoint_only_keys),
-        "shared_shape_mismatch_count": len(shape_mismatches),
-        "target_only_exact_keys": tuple(sorted(target_only_exact_keys)),
-        "target_only_auxiliary_keys": tuple(
-            sorted(target_only_auxiliary_keys)
-        ),
-        "legacy_migration_policy_exact": True,
-        "full_target_strict_load": True,
-        "migration_missing_keys": missing_keys,
-        "migration_unexpected_keys": unexpected_keys,
-        "shared_checkpoint_tensor_equality_count": shared_equal,
-        "target_residue_embedding_preserved_zero_after_migration": True,
-        "auxiliary_zero_delta_initialization_preserved": True,
-    }
 
 
 def migrate_covapie_current11_legacy_checkpoint_state_dict_v1(
@@ -388,10 +165,10 @@ def migrate_covapie_current11_legacy_checkpoint_state_dict_v1(
     model: nn.Module,
     checkpoint_state_dict: object,
 ) -> dict[str, object]:
-    """Strictly merge only the exact bounded legacy-to-Current11 delta."""
+    """Preserve the historical smoke API while delegating product policy."""
 
     try:
-        return _migrate_impl(
+        return _checkpoint_migration.migrate_covapie_current11_legacy_checkpoint_state_dict_v1(
             model=model,
             checkpoint_state_dict=checkpoint_state_dict,
         )
