@@ -27,6 +27,7 @@ from covalent_ext import (
 from covalent_ext import covapie_current11_task2_lightning_runtime_integration_v1 as integration
 from covalent_ext import covapie_current11_trainable_supervision_materializer_v1 as materializer
 from covalent_ext.covapie_current11_training_tensorizer_v1 import (
+    TENSORIZER_ERROR,
     tensorize_covapie_current11_training_supervision_v1,
 )
 from scripts import (
@@ -407,6 +408,28 @@ def test_actual_materializer_transition_and_authoritative_fields(
     assert all(record["sample_training_admitted"] is True for record in after["reconciliation_records"])
 
 
+def test_real_current11_raw_identity_matches_materialized_feature_binding(
+    actual_bundle: dict[str, object],
+) -> None:
+    batch = actual_bundle["batch"]
+    source = actual_bundle["after"]["authoritative_supervision"]
+    binding = source["formal_carrier_feature_binding"]
+    field_pairs = (
+        ("lig_source_row_index", "ligand_source_row_index", 323),
+        ("pocket_source_row_index", "pocket_source_row_index", 2202),
+        ("lig_parser_local_index", "ligand_parser_local_index", 323),
+        ("pocket_parser_local_index", "pocket_parser_local_index", 2202),
+    )
+    for raw_field, binding_field, expected_length in field_pairs:
+        assert raw_field in batch
+        raw = batch[raw_field]
+        assert isinstance(raw, torch.Tensor)
+        assert raw.dtype == torch.int64
+        assert raw.ndim == 1
+        assert len(raw) == expected_length
+        assert raw.tolist() == binding[binding_field]
+
+
 def test_real_current11_five_epoch_exact5_tensorizer_full_success(
     actual_bundle: dict[str, object],
 ) -> None:
@@ -447,6 +470,72 @@ def test_real_current11_five_epoch_exact5_tensorizer_full_success(
         for sample_index, task_id in enumerate(task_ids):
             coverage[sample_index].add(task_id)
     assert coverage == [set(range(5)) for _ in range(11)]
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "carbon_nitrogen_channel_permutation",
+        "wrong_supported_ligand_channel",
+        "ligand_source_row_mismatch",
+        "pocket_source_row_mismatch",
+        "within_sample_source_identity_swap",
+        "parser_local_identity_mismatch",
+    ),
+)
+def test_real_current11_feature_binding_corruptions_fail_closed(
+    actual_bundle: dict[str, object], mutation: str,
+) -> None:
+    batch = copy.deepcopy(actual_bundle["batch"])
+    runtime = batch[integration.SIDECAR_FIELD]
+    source = copy.deepcopy(
+        actual_bundle["after"]["authoritative_supervision"]
+    )
+    binding = source["formal_carrier_feature_binding"]
+    if mutation == "carbon_nitrogen_channel_permutation":
+        for field in ("lig_one_hot", "pocket_one_hot"):
+            original = batch[field]
+            permuted = original.clone()
+            permuted[:, [0, 1]] = original[:, [1, 0]]
+            assert bool((permuted.sum(dim=1) == 1).all().item())
+            batch[field] = permuted
+    elif mutation == "wrong_supported_ligand_channel":
+        channel = binding["ligand_checkpoint_channel_index"][0]
+        wrong_channel = (channel + 1) % 10
+        batch["lig_one_hot"][0].zero_()
+        batch["lig_one_hot"][0, wrong_channel] = 1.0
+        assert batch["lig_one_hot"][0].sum().item() == 1.0
+    elif mutation == "ligand_source_row_mismatch":
+        batch["lig_source_row_index"][0] += 1
+    elif mutation == "pocket_source_row_mismatch":
+        batch["pocket_source_row_index"][0] += 1
+    elif mutation == "within_sample_source_identity_swap":
+        identities = batch["lig_source_row_index"]
+        channels = binding["ligand_checkpoint_channel_index"]
+        offsets = source["ligand_node_offsets"]
+        same_channel_pair = next(
+            (left, right)
+            for start, end in zip(offsets, offsets[1:])
+            for left in range(start, end)
+            for right in range(left + 1, end)
+            if channels[left] == channels[right]
+        )
+        left, right = same_channel_pair
+        assert identities[left].item() != identities[right].item()
+        assert torch.equal(batch["lig_one_hot"][left], batch["lig_one_hot"][right])
+        identities[[left, right]] = identities[[right, left]].clone()
+    else:
+        batch["lig_parser_local_index"][1] = 0
+
+    with pytest.raises(ValueError, match=f"^{TENSORIZER_ERROR}$"):
+        tensorize_covapie_current11_training_supervision_v1(
+            batch=batch,
+            runtime_result=runtime,
+            authoritative_supervision=source,
+            device=torch.device("cpu"),
+            epoch=0,
+            task_schedule_seed=0,
+        )
 
 
 DECISION_FAILURES = (

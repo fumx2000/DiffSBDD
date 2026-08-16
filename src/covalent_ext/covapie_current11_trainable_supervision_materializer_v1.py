@@ -21,6 +21,8 @@ from typing import NoReturn
 
 from covalent_ext.covapie_current11_training_tensorizer_v1 import (
     AUTHORITATIVE_SUPERVISION_SCHEMA_V1,
+    FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1,
+    _FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1,
     _REQUIRED_AUTHORITY_FIELDS,
     _RUNTIME_DERIVED_FORBIDDEN_INPUTS,
 )
@@ -358,6 +360,47 @@ def _validate_node(
     return node
 
 
+def _validate_formal_carrier_feature_binding_v1(
+    value: object,
+    *,
+    ligand_offsets: tuple[object, ...],
+    pocket_offsets: tuple[object, ...],
+    ligand_total: int,
+    pocket_total: int,
+) -> None:
+    binding = _dict(value, fields=_FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1)
+    if (
+        binding["schema_version"]
+        != FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1
+        or binding["checkpoint_channel_order"] != CHECKPOINT_CHANNEL_ORDER
+    ):
+        _fail()
+
+    def vector(name: str, *, length: int, maximum: int | None = None) -> tuple[int, ...]:
+        result = tuple(
+            _int(item) for item in _sequence(binding[name], length=length)
+        )
+        if maximum is not None and any(item > maximum for item in result):
+            _fail()
+        return result
+
+    vector("ligand_source_row_index", length=ligand_total)
+    vector("pocket_source_row_index", length=pocket_total)
+    ligand_parser = vector("ligand_parser_local_index", length=ligand_total)
+    pocket_parser = vector("pocket_parser_local_index", length=pocket_total)
+    vector("ligand_checkpoint_channel_index", length=ligand_total, maximum=9)
+    vector("pocket_checkpoint_channel_index", length=pocket_total, maximum=9)
+    for offsets, parser in (
+        (ligand_offsets, ligand_parser),
+        (pocket_offsets, pocket_parser),
+    ):
+        for raw_left, raw_right in zip(offsets, offsets[1:]):
+            left = _int(raw_left)
+            right = _int(raw_right)
+            if parser[left:right] != tuple(range(right - left)):
+                _fail()
+
+
 def _target_membership(
     *, pocket_nodes: tuple[dict[str, object], ...], target: dict[str, object]
 ) -> tuple[bool, ...]:
@@ -567,6 +610,12 @@ def _build_impl(authority_payload: object) -> dict[str, object]:
     geometry_valid: list[list[bool]] = []
     geometry_loss: list[list[bool]] = []
     reconciliation: list[dict[str, object]] = []
+    ligand_source_row_index: list[int] = []
+    pocket_source_row_index: list[int] = []
+    ligand_parser_local_index: list[int] = []
+    pocket_parser_local_index: list[int] = []
+    ligand_checkpoint_channel_index: list[int] = []
+    pocket_checkpoint_channel_index: list[int] = []
 
     for sample_index, raw_sample in enumerate(samples):
         sample = _dict(raw_sample, fields=_SAMPLE_FIELDS)
@@ -598,6 +647,24 @@ def _build_impl(authority_payload: object) -> dict[str, object]:
         pocket_nodes = tuple(
             _validate_node(node, local_index=index, pocket=True)
             for index, node in enumerate(raw_pocket)
+        )
+        ligand_source_row_index.extend(
+            node["source_row_index"] for node in ligand_nodes
+        )
+        pocket_source_row_index.extend(
+            node["source_row_index"] for node in pocket_nodes
+        )
+        ligand_parser_local_index.extend(
+            node["parser_local_index"] for node in ligand_nodes
+        )
+        pocket_parser_local_index.extend(
+            node["parser_local_index"] for node in pocket_nodes
+        )
+        ligand_checkpoint_channel_index.extend(
+            CHECKPOINT_TOKEN_TO_INDEX[node["element"]] for node in ligand_nodes
+        )
+        pocket_checkpoint_channel_index.extend(
+            CHECKPOINT_TOKEN_TO_INDEX[node["element"]] for node in pocket_nodes
         )
         ligand_offsets.append(ligand_offsets[-1] + len(ligand_nodes))
         pocket_offsets.append(pocket_offsets[-1] + len(pocket_nodes))
@@ -750,6 +817,16 @@ def _build_impl(authority_payload: object) -> dict[str, object]:
     supervision: dict[str, object] = {
         "schema_version": AUTHORITATIVE_SUPERVISION_SCHEMA_V1,
         "sample_keys": list(sample_order),
+        "formal_carrier_feature_binding": {
+            "schema_version": FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1,
+            "checkpoint_channel_order": CHECKPOINT_CHANNEL_ORDER,
+            "ligand_source_row_index": ligand_source_row_index,
+            "pocket_source_row_index": pocket_source_row_index,
+            "ligand_parser_local_index": ligand_parser_local_index,
+            "pocket_parser_local_index": pocket_parser_local_index,
+            "ligand_checkpoint_channel_index": ligand_checkpoint_channel_index,
+            "pocket_checkpoint_channel_index": pocket_checkpoint_channel_index,
+        },
         "ligand_node_offsets": ligand_offsets,
         "pocket_node_offsets": pocket_offsets,
         "ligand_role_id": all_roles,
@@ -855,6 +932,13 @@ def validate_authoritative_current11_training_supervision_v1(
             or any(a >= b for a, b in zip(pocket_offsets, pocket_offsets[1:]))
         ):
             _fail()
+        _validate_formal_carrier_feature_binding_v1(
+            source.get("formal_carrier_feature_binding"),
+            ligand_offsets=ligand_offsets,
+            pocket_offsets=pocket_offsets,
+            ligand_total=len(ligand_roles),
+            pocket_total=len(membership),
+        )
         admitted = _sequence(source.get("sample_training_admitted"), length=11)
         seed_valid = _sequence(
             source.get("ligand_minimal_seed_or_anchor_valid"), length=11

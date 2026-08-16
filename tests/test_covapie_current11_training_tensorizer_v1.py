@@ -9,9 +9,13 @@ import torch
 from covalent_ext.covapie_current11_training_tensorizer_v1 import (
     AUTHORITATIVE_SUPERVISION_SCHEMA_V1,
     CANONICAL_TASKS_V1,
+    FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1,
     TENSORIZER_ERROR,
     canonical_task_id_for_covapie_current11_sample_v1,
     tensorize_covapie_current11_training_supervision_v1,
+)
+from covalent_ext.covapie_training_feature_semantics_and_unknown_atom_policy_resolution_v1 import (
+    CHECKPOINT_CHANNEL_ORDER,
 )
 
 
@@ -57,6 +61,18 @@ def _fixture() -> tuple[dict[str, object], dict[str, object], dict[str, object]]
         ]),
         "lig_one_hot": torch.eye(10)[torch.tensor([0, 1, 2, 0, 1, 2])],
         "pocket_one_hot": torch.eye(10)[torch.tensor([3, 0, 3, 0])],
+        "lig_source_row_index": torch.tensor(
+            [10, 11, 12, 20, 21, 22], dtype=torch.int64
+        ),
+        "pocket_source_row_index": torch.tensor(
+            [30, 31, 40, 41], dtype=torch.int64
+        ),
+        "lig_parser_local_index": torch.tensor(
+            [0, 1, 2, 0, 1, 2], dtype=torch.int64
+        ),
+        "pocket_parser_local_index": torch.tensor(
+            [0, 1, 0, 1], dtype=torch.int64
+        ),
         "num_lig_atoms": torch.tensor([3, 3], dtype=torch.long),
         "num_pocket_nodes": torch.tensor([2, 2], dtype=torch.long),
         "lig_mask": torch.tensor([0, 0, 0, 1, 1, 1], dtype=torch.float32),
@@ -85,6 +101,16 @@ def _fixture() -> tuple[dict[str, object], dict[str, object], dict[str, object]]
     authority: dict[str, object] = {
         "schema_version": AUTHORITATIVE_SUPERVISION_SCHEMA_V1,
         "sample_keys": sample_keys[:],
+        "formal_carrier_feature_binding": {
+            "schema_version": FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1,
+            "checkpoint_channel_order": CHECKPOINT_CHANNEL_ORDER,
+            "ligand_source_row_index": [10, 11, 12, 20, 21, 22],
+            "pocket_source_row_index": [30, 31, 40, 41],
+            "ligand_parser_local_index": [0, 1, 2, 0, 1, 2],
+            "pocket_parser_local_index": [0, 1, 0, 1],
+            "ligand_checkpoint_channel_index": [0, 1, 2, 0, 1, 2],
+            "pocket_checkpoint_channel_index": [3, 0, 3, 0],
+        },
         "ligand_node_offsets": ligand_offsets,
         "pocket_node_offsets": pocket_offsets,
         "ligand_role_id": [0, 1, 2, 0, 1, 2],
@@ -273,6 +299,168 @@ def test_tensorizer_shapes_dtypes_masks_candidates_and_joint_none_success() -> N
     assert output.target_residue_reactive_atom_flat_index.tolist() == expected_flat
     assert output.ligand_anchor_distance_valid.all()
     assert output.pre_post_geometry_component_loss_mask.sum().item() == 0
+
+
+def test_formal_feature_binding_success_does_not_mutate_raw_tensors() -> None:
+    batch, runtime, authority = _fixture()
+    fields = (
+        "lig_source_row_index",
+        "pocket_source_row_index",
+        "lig_parser_local_index",
+        "pocket_parser_local_index",
+        "lig_one_hot",
+        "pocket_one_hot",
+    )
+    before = {
+        field: (batch[field], batch[field].clone())
+        for field in fields
+    }
+    _run(batch, runtime, authority)
+    for field, (identity, contents) in before.items():
+        assert batch[field] is identity
+        assert torch.equal(identity, contents)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "missing_binding",
+        "wrong_schema",
+        "extra_field",
+        "channel_order_drift",
+        "wrong_vector_length",
+        "negative_channel",
+        "channel_above_nine",
+        "duplicate_binding_parser_local",
+    ),
+)
+def test_formal_carrier_feature_binding_schema_failures(mutation: str) -> None:
+    batch, runtime, authority = _fixture()
+    if mutation == "missing_binding":
+        del authority["formal_carrier_feature_binding"]
+    else:
+        binding = authority["formal_carrier_feature_binding"]
+        assert type(binding) is dict
+        if mutation == "wrong_schema":
+            binding["schema_version"] = "wrong"
+        elif mutation == "extra_field":
+            binding["unexpected"] = []
+        elif mutation == "channel_order_drift":
+            binding["checkpoint_channel_order"] = "N:0|C:1"
+        elif mutation == "wrong_vector_length":
+            binding["pocket_source_row_index"].pop()
+        elif mutation == "negative_channel":
+            binding["ligand_checkpoint_channel_index"][0] = -1
+        elif mutation == "channel_above_nine":
+            binding["pocket_checkpoint_channel_index"][0] = 10
+        else:
+            binding["ligand_parser_local_index"][1] = 0
+    _fails(batch, runtime, authority)
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "lig_source_row_index",
+        "pocket_source_row_index",
+        "lig_parser_local_index",
+        "pocket_parser_local_index",
+    ),
+)
+def test_raw_formal_identity_fields_are_required(field: str) -> None:
+    batch, runtime, authority = _fixture()
+    del batch[field]
+    _fails(batch, runtime, authority)
+
+
+@pytest.mark.parametrize(
+    ("field", "mutation"),
+    (
+        ("lig_source_row_index", "float"),
+        ("pocket_source_row_index", "bool"),
+        ("lig_parser_local_index", "complex"),
+        ("pocket_parser_local_index", "negative"),
+        ("lig_source_row_index", "wrong_length"),
+        ("pocket_parser_local_index", "wrong_rank"),
+    ),
+)
+def test_raw_formal_identity_tensor_representations_fail_closed(
+    field: str, mutation: str,
+) -> None:
+    batch, runtime, authority = _fixture()
+    value = batch[field]
+    assert isinstance(value, torch.Tensor)
+    if mutation == "float":
+        invalid = value.to(dtype=torch.float32)
+    elif mutation == "bool":
+        invalid = value.to(dtype=torch.bool)
+    elif mutation == "complex":
+        invalid = value.to(dtype=torch.complex64)
+    elif mutation == "negative":
+        invalid = value.clone()
+        invalid[0] = -1
+    elif mutation == "wrong_length":
+        invalid = value[:-1]
+    else:
+        invalid = value.unsqueeze(0)
+    batch[field] = invalid
+    _fails(batch, runtime, authority)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "raw_ligand_source_mismatch",
+        "raw_pocket_source_mismatch",
+        "raw_parser_local_mismatch",
+        "within_sample_source_identity_swap",
+        "duplicate_raw_parser_local",
+        "binding_source_disagreement",
+        "binding_channel_disagreement",
+    ),
+)
+def test_raw_identity_and_binding_disagreements_fail_closed(mutation: str) -> None:
+    batch, runtime, authority = _fixture()
+    binding = authority["formal_carrier_feature_binding"]
+    assert type(binding) is dict
+    if mutation == "raw_ligand_source_mismatch":
+        batch["lig_source_row_index"][0] += 1
+    elif mutation == "raw_pocket_source_mismatch":
+        batch["pocket_source_row_index"][0] += 1
+    elif mutation == "raw_parser_local_mismatch":
+        batch["lig_parser_local_index"][2] = 1
+    elif mutation == "within_sample_source_identity_swap":
+        value = batch["lig_source_row_index"]
+        value[[0, 1]] = value[[1, 0]].clone()
+    elif mutation == "duplicate_raw_parser_local":
+        batch["pocket_parser_local_index"][1] = 0
+    elif mutation == "binding_source_disagreement":
+        binding["ligand_source_row_index"][0] += 1
+    else:
+        binding["ligand_checkpoint_channel_index"][0] = 1
+    _fails(batch, runtime, authority)
+
+
+def test_global_carbon_nitrogen_channel_permutation_fails_semantic_binding() -> None:
+    batch, runtime, authority = _fixture()
+    for field in ("lig_one_hot", "pocket_one_hot"):
+        value = batch[field]
+        assert isinstance(value, torch.Tensor)
+        permuted = value.clone()
+        permuted[:, [0, 1]] = value[:, [1, 0]]
+        batch[field] = permuted
+        assert bool((permuted.sum(dim=1) == 1).all().item())
+    _fails(batch, runtime, authority)
+
+
+def test_wrong_supported_ligand_channel_fails_semantic_binding() -> None:
+    batch, runtime, authority = _fixture()
+    one_hot = batch["lig_one_hot"]
+    assert isinstance(one_hot, torch.Tensor)
+    one_hot[0].zero_()
+    one_hot[0, 1] = 1.0
+    assert one_hot[0].sum().item() == 1.0
+    _fails(batch, runtime, authority)
 
 
 def test_target_reactive_indicator_is_derived_from_output17_when_absent() -> None:

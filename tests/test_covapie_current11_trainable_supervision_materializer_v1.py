@@ -25,11 +25,14 @@ from covalent_ext import (
 )
 from covalent_ext.covapie_current11_training_tensorizer_v1 import (
     AUTHORITATIVE_SUPERVISION_SCHEMA_V1,
+    FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1,
+    _FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1,
     _REQUIRED_AUTHORITY_FIELDS,
     _RUNTIME_DERIVED_FORBIDDEN_INPUTS,
 )
 from covalent_ext.covapie_training_feature_semantics_and_unknown_atom_policy_resolution_v1 import (
     CHECKPOINT_CHANNEL_ORDER,
+    CHECKPOINT_TOKEN_TO_INDEX,
 )
 from scripts import (
     check_covapie_current11_task2_batch_descriptor_compiler_context_from_remap_context_v1
@@ -275,6 +278,36 @@ def test_actual_exact11_machine_truth_matrix_and_partial_admission(
     assert not set(source) & _RUNTIME_DERIVED_FORBIDDEN_INPUTS
     assert source["ligand_node_offsets"][-1] == 323
     assert source["pocket_node_offsets"][-1] == 2202
+    binding = source["formal_carrier_feature_binding"]
+    assert set(binding) == _FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1
+    assert binding["schema_version"] == FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1
+    assert binding["checkpoint_channel_order"] == CHECKPOINT_CHANNEL_ORDER
+    ligand_nodes = [
+        node for sample in samples for node in sample["ligand_nodes"]
+    ]
+    pocket_nodes = [
+        node for sample in samples for node in sample["pocket_nodes"]
+    ]
+    assert len(binding["ligand_source_row_index"]) == len(ligand_nodes) == 323
+    assert len(binding["pocket_source_row_index"]) == len(pocket_nodes) == 2202
+    assert binding["ligand_source_row_index"] == [
+        node["source_row_index"] for node in ligand_nodes
+    ]
+    assert binding["pocket_source_row_index"] == [
+        node["source_row_index"] for node in pocket_nodes
+    ]
+    assert binding["ligand_parser_local_index"] == [
+        node["parser_local_index"] for node in ligand_nodes
+    ]
+    assert binding["pocket_parser_local_index"] == [
+        node["parser_local_index"] for node in pocket_nodes
+    ]
+    assert binding["ligand_checkpoint_channel_index"] == [
+        CHECKPOINT_TOKEN_TO_INDEX[node["element"]] for node in ligand_nodes
+    ]
+    assert binding["pocket_checkpoint_channel_index"] == [
+        CHECKPOINT_TOKEN_TO_INDEX[node["element"]] for node in pocket_nodes
+    ]
     assert source["sample_training_admitted"] == [False] * 11
     assert all(record["training_admission_blockers"] == [
         "EXACT3_ROLE_HUMAN_GOLD_MISSING",
@@ -612,6 +645,51 @@ def test_output_validator_rejects_forged_runtime_source_and_admission(
     forged["sample_training_admitted"][0] = True
     _fails(lambda: materializer.validate_authoritative_current11_training_supervision_v1(
         authoritative_supervision=forged
+    ))
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "missing_binding",
+        "wrong_schema",
+        "extra_binding_field",
+        "channel_order_drift",
+        "wrong_vector_length",
+        "negative_source_index",
+        "duplicate_parser_local",
+        "channel_below_zero",
+        "channel_above_nine",
+    ),
+)
+def test_output_validator_rejects_invalid_formal_carrier_feature_binding(
+    actual_bundle: dict[str, object], mutation: str,
+) -> None:
+    result = actual_bundle["result"]
+    assert type(result) is dict
+    source = copy.deepcopy(result["authoritative_supervision"])
+    if mutation == "missing_binding":
+        del source["formal_carrier_feature_binding"]
+    else:
+        binding = source["formal_carrier_feature_binding"]
+        if mutation == "wrong_schema":
+            binding["schema_version"] = "wrong"
+        elif mutation == "extra_binding_field":
+            binding["unexpected"] = []
+        elif mutation == "channel_order_drift":
+            binding["checkpoint_channel_order"] = "N:0|C:1"
+        elif mutation == "wrong_vector_length":
+            binding["ligand_source_row_index"].pop()
+        elif mutation == "negative_source_index":
+            binding["pocket_source_row_index"][0] = -1
+        elif mutation == "duplicate_parser_local":
+            binding["ligand_parser_local_index"][1] = 0
+        elif mutation == "channel_below_zero":
+            binding["ligand_checkpoint_channel_index"][0] = -1
+        else:
+            binding["pocket_checkpoint_channel_index"][0] = 10
+    _fails(lambda: materializer.validate_authoritative_current11_training_supervision_v1(
+        authoritative_supervision=source
     ))
 
 

@@ -15,6 +15,10 @@ from typing import NoReturn
 
 import torch
 
+from covalent_ext.covapie_training_feature_semantics_and_unknown_atom_policy_resolution_v1 import (
+    CHECKPOINT_CHANNEL_ORDER,
+)
+
 
 __all__ = (
     "AUTHORITATIVE_SUPERVISION_SCHEMA_V1",
@@ -28,6 +32,9 @@ __all__ = (
 TENSORIZER_ERROR = "COVAPIE_CURRENT11_TRAINING_TENSORIZER_V1_ERROR"
 AUTHORITATIVE_SUPERVISION_SCHEMA_V1 = (
     "covapie_current11_authoritative_training_supervision_v1"
+)
+FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1 = (
+    "covapie_current11_formal_carrier_feature_binding_v1"
 )
 TASK_SCHEDULE_DOMAIN_V1 = (
     b"COVAPIE_CURRENT11_CANONICAL_TASK_SCHEDULE_V1\0"
@@ -69,6 +76,7 @@ _RUNTIME_DERIVED_FORBIDDEN_INPUTS = frozenset((
 _REQUIRED_AUTHORITY_FIELDS = frozenset((
     "schema_version",
     "sample_keys",
+    "formal_carrier_feature_binding",
     "ligand_node_offsets",
     "pocket_node_offsets",
     "ligand_role_id",
@@ -82,6 +90,23 @@ _REQUIRED_AUTHORITY_FIELDS = frozenset((
     "pre_post_geometry_target_angstrom",
     "pre_post_geometry_component_valid_mask",
     "pre_post_geometry_component_loss_mask",
+))
+_FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1 = frozenset((
+    "schema_version",
+    "checkpoint_channel_order",
+    "ligand_source_row_index",
+    "pocket_source_row_index",
+    "ligand_parser_local_index",
+    "pocket_parser_local_index",
+    "ligand_checkpoint_channel_index",
+    "pocket_checkpoint_channel_index",
+))
+_INTEGRAL_INDEX_DTYPES_V1 = frozenset((
+    torch.uint8,
+    torch.int8,
+    torch.int16,
+    torch.int32,
+    torch.int64,
 ))
 
 
@@ -293,6 +318,104 @@ def _validate_one_hot(value: torch.Tensor, *, rows: int) -> None:
         or not bool(((value == 0) | (value == 1)).all().item())
         or not bool((value.sum(dim=1) == 1).all().item())
     ):
+        _fail()
+
+
+def _validated_formal_carrier_feature_binding_v1(
+    value: object,
+    *,
+    ligand_offsets: tuple[int, ...],
+    pocket_offsets: tuple[int, ...],
+    ligand_total: int,
+    pocket_total: int,
+) -> dict[str, tuple[int, ...]]:
+    if (
+        type(value) is not dict
+        or set(value) != _FORMAL_CARRIER_FEATURE_BINDING_FIELDS_V1
+        or value.get("schema_version")
+        != FORMAL_CARRIER_FEATURE_BINDING_SCHEMA_V1
+        or value.get("checkpoint_channel_order") != CHECKPOINT_CHANNEL_ORDER
+    ):
+        _fail()
+    binding = value
+    ligand_source = _exact_ints(
+        binding["ligand_source_row_index"], length=ligand_total
+    )
+    pocket_source = _exact_ints(
+        binding["pocket_source_row_index"], length=pocket_total
+    )
+    ligand_parser = _exact_ints(
+        binding["ligand_parser_local_index"], length=ligand_total
+    )
+    pocket_parser = _exact_ints(
+        binding["pocket_parser_local_index"], length=pocket_total
+    )
+    ligand_channel = _exact_ints(
+        binding["ligand_checkpoint_channel_index"], length=ligand_total
+    )
+    pocket_channel = _exact_ints(
+        binding["pocket_checkpoint_channel_index"], length=pocket_total
+    )
+    if (
+        any(item < 0 for item in ligand_source + pocket_source)
+        or any(item < 0 for item in ligand_parser + pocket_parser)
+        or any(not 0 <= item < 10 for item in ligand_channel + pocket_channel)
+    ):
+        _fail()
+    for offsets, parser in (
+        (ligand_offsets, ligand_parser),
+        (pocket_offsets, pocket_parser),
+    ):
+        for left, right in zip(offsets, offsets[1:]):
+            if parser[left:right] != tuple(range(right - left)):
+                _fail()
+    return {
+        "ligand_source_row_index": ligand_source,
+        "pocket_source_row_index": pocket_source,
+        "ligand_parser_local_index": ligand_parser,
+        "pocket_parser_local_index": pocket_parser,
+        "ligand_checkpoint_channel_index": ligand_channel,
+        "pocket_checkpoint_channel_index": pocket_channel,
+    }
+
+
+def _validate_exact_index_tensor_v1(
+    value: object, *, expected: tuple[int, ...]
+) -> None:
+    if (
+        not isinstance(value, torch.Tensor)
+        or value.ndim != 1
+        or len(value) != len(expected)
+        or value.dtype not in _INTEGRAL_INDEX_DTYPES_V1
+    ):
+        _fail()
+    try:
+        if bool((value < 0).any().item()):
+            _fail()
+        normalized = value.to(dtype=torch.long)
+        expected_tensor = torch.tensor(
+            expected, dtype=torch.long, device=value.device
+        )
+        if not torch.equal(normalized, expected_tensor):
+            _fail()
+    except _TensorizerInvariantError:
+        raise
+    except (RuntimeError, TypeError, OverflowError):
+        _fail()
+
+
+def _validate_one_hot_channel_identity_v1(
+    value: torch.Tensor, *, expected: tuple[int, ...]
+) -> None:
+    try:
+        expected_tensor = torch.tensor(
+            expected, dtype=torch.long, device=value.device
+        )
+        if not torch.equal(torch.argmax(value, dim=1), expected_tensor):
+            _fail()
+    except _TensorizerInvariantError:
+        raise
+    except (RuntimeError, TypeError, OverflowError):
         _fail()
 
 
@@ -536,6 +659,23 @@ def _tensorize_impl(
         batch_size=batch_size,
         total=pocket_total,
     )
+    feature_binding = _validated_formal_carrier_feature_binding_v1(
+        authoritative_supervision["formal_carrier_feature_binding"],
+        ligand_offsets=ligand_offsets,
+        pocket_offsets=pocket_offsets,
+        ligand_total=ligand_total,
+        pocket_total=pocket_total,
+    )
+
+    for raw_name, binding_name in (
+        ("lig_source_row_index", "ligand_source_row_index"),
+        ("pocket_source_row_index", "pocket_source_row_index"),
+        ("lig_parser_local_index", "ligand_parser_local_index"),
+        ("pocket_parser_local_index", "pocket_parser_local_index"),
+    ):
+        _validate_exact_index_tensor_v1(
+            batch.get(raw_name), expected=feature_binding[binding_name]
+        )
 
     lig_mask = _require_batch_tensor(batch, "lig_mask", ndim=1, length=ligand_total)
     pocket_mask = _require_batch_tensor(
@@ -584,6 +724,14 @@ def _tensorize_impl(
     )
     _validate_one_hot(lig_one_hot, rows=ligand_total)
     _validate_one_hot(pocket_one_hot, rows=pocket_total)
+    _validate_one_hot_channel_identity_v1(
+        lig_one_hot,
+        expected=feature_binding["ligand_checkpoint_channel_index"],
+    )
+    _validate_one_hot_channel_identity_v1(
+        pocket_one_hot,
+        expected=feature_binding["pocket_checkpoint_channel_index"],
+    )
 
     roles = _exact_ints(
         authoritative_supervision["ligand_role_id"], length=ligand_total
