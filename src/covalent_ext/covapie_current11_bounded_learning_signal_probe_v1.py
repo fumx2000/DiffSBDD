@@ -1558,16 +1558,64 @@ def run_covapie_current11_bounded_learning_signal_experiment_v1(
             failure_stage="preprobe",
         )
 
+    fit_count += 1
+    fit_ckpt_none = True
     try:
-        fit_count += 1
-        fit_ckpt_none = True
         session.trainer.fit(model=session.model, ckpt_path=None)
+    except BaseException:
+        return CovapieCurrent11BoundedLearningSignalExperimentResultV1(
+            schema_version=BOUNDED_LEARNING_SIGNAL_PROBE_SCHEMA_V1,
+            outcome="TRAINING_FAILED",
+            pre1=pre1,
+            pre2=pre2,
+            repeatability=repeatability,
+            post=None,
+            decision=None,
+            fit_call_count=fit_count,
+            fit_ckpt_path_was_none=fit_ckpt_none,
+            training_completed=False,
+            failure_stage="trainer_fit",
+        )
+
+    try:
         _validate_formal_fit_postconditions_v1(session)
+    except BaseException:
+        return CovapieCurrent11BoundedLearningSignalExperimentResultV1(
+            schema_version=BOUNDED_LEARNING_SIGNAL_PROBE_SCHEMA_V1,
+            outcome="TRAINING_FAILED",
+            pre1=pre1,
+            pre2=pre2,
+            repeatability=repeatability,
+            post=None,
+            decision=None,
+            fit_call_count=fit_count,
+            fit_ckpt_path_was_none=fit_ckpt_none,
+            training_completed=False,
+            failure_stage="formal_fit_postconditions",
+        )
+
+    try:
         post = run_covapie_current11_deterministic_exact5_probe_v1(
             model=session.model,
             attached_batch=attached_batch,
             probe_seed=base_seed,
         )
+    except BaseException:
+        return CovapieCurrent11BoundedLearningSignalExperimentResultV1(
+            schema_version=BOUNDED_LEARNING_SIGNAL_PROBE_SCHEMA_V1,
+            outcome="TRAINING_FAILED",
+            pre1=pre1,
+            pre2=pre2,
+            repeatability=repeatability,
+            post=None,
+            decision=None,
+            fit_call_count=fit_count,
+            fit_ckpt_path_was_none=fit_ckpt_none,
+            training_completed=True,
+            failure_stage="postprobe",
+        )
+
+    try:
         decision = compare_covapie_current11_learning_signal_v1(
             before=pre1,
             repeated_before=pre2,
@@ -1593,10 +1641,10 @@ def run_covapie_current11_bounded_learning_signal_experiment_v1(
             pre1=pre1,
             pre2=pre2,
             repeatability=repeatability,
-            post=None,
+            post=post,
             decision=None,
             fit_call_count=fit_count,
             fit_ckpt_path_was_none=fit_ckpt_none,
-            training_completed=False,
-            failure_stage="training_or_postprobe",
+            training_completed=True,
+            failure_stage="comparison",
         )

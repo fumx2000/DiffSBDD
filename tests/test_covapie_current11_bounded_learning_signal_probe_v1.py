@@ -472,6 +472,51 @@ def test_real_probe_preserves_model_gradient_mode_batch_and_trainer_state(
         )
 
 
+def test_real_probe_accepts_controlled_finite_postfit_state(
+    real_session_and_attached_batch,
+) -> None:
+    session, attached_batch = real_session_and_attached_batch
+    model = session.model
+    parameter = next(model.parameters())
+    parameter_before = parameter.detach().clone()
+    gradient_before = (
+        None if parameter.grad is None else parameter.grad.detach().clone()
+    )
+    modes_before = tuple(
+        (name, module.training) for name, module in model.named_modules()
+    )
+    trainer_before = model._trainer
+    try:
+        with torch.no_grad():
+            parameter.view(-1)[0].add_(0.001)
+        assert not torch.equal(parameter, parameter_before)
+        parameter.grad = torch.full_like(parameter, 0.25)
+        model.eval()
+        model._trainer = SimpleNamespace(
+            current_epoch=5,
+            global_step=5,
+            optimizers=[object()],
+        )
+        result = subject.run_covapie_current11_deterministic_exact5_probe_v1(
+            model=model,
+            attached_batch=attached_batch,
+        )
+        assert result.parameter_unchanged is True
+        assert result.gradient_state_unchanged is True
+        assert result.mode_flags_restored is True
+        assert model.training is False
+        assert result.trainer_counters_unchanged is True
+        assert result.trainer_counter_digest_before == (
+            result.trainer_counter_digest_after
+        )
+    finally:
+        with torch.no_grad():
+            parameter.copy_(parameter_before)
+        parameter.grad = gradient_before
+        subject._restore_mode_map_v1(model, modes_before)
+        model._trainer = trainer_before
+
+
 def test_cpu_rng_and_modes_restore_when_probe_epoch_raises(
     monkeypatch: pytest.MonkeyPatch,
     real_session_and_attached_batch,
@@ -626,6 +671,66 @@ def test_tau_formula_strict_boundary_geometry_exclusion_and_outcomes() -> None:
     }
 
 
+def test_pre_to_post_fixed_evidence_excludes_legitimate_training_progress() -> None:
+    before = _make_probe()
+    after = replace(
+        _make_probe(parameter_digest="trained-parameters"),
+        gradient_digest_before="postfit-gradients",
+        gradient_digest_after="postfit-gradients",
+        mode_digest_before="postfit-modes",
+        mode_digest_after="postfit-modes",
+        trainer_counter_digest_before="epoch5-step5",
+        trainer_counter_digest_after="epoch5-step5",
+    )
+    assert subject._same_fixed_probe_evidence_v1(before, after) is True
+    assert subject._same_fixed_probe_evidence_v1(
+        before,
+        replace(after, input_configuration_fingerprint_before="changed-input"),
+    ) is False
+    assert subject._same_fixed_probe_evidence_v1(
+        before,
+        replace(after, buffer_digest_before="changed-buffer"),
+    ) is False
+
+
+def test_formal_fit_postconditions_accept_epoch5_step5_finite_parameters() -> None:
+    session = SimpleNamespace(
+        trainer=SimpleNamespace(current_epoch=5, global_step=5),
+        model=nn.Linear(2, 1),
+    )
+    subject._validate_formal_fit_postconditions_v1(session)
+
+
+@pytest.mark.parametrize(
+    "current_epoch,global_step,nonfinite",
+    (
+        (4, 5, False),
+        (6, 5, False),
+        (5, 4, False),
+        (5, 6, False),
+        (5, 5, True),
+    ),
+)
+def test_formal_fit_postconditions_reject_wrong_counters_and_nonfinite_parameters(
+    current_epoch: int,
+    global_step: int,
+    nonfinite: bool,
+) -> None:
+    model = nn.Linear(2, 1)
+    if nonfinite:
+        with torch.no_grad():
+            next(model.parameters()).view(-1)[0] = float("nan")
+    session = SimpleNamespace(
+        trainer=SimpleNamespace(
+            current_epoch=current_epoch,
+            global_step=global_step,
+        ),
+        model=model,
+    )
+    with pytest.raises(subject._ProbeInvariantError):
+        subject._validate_formal_fit_postconditions_v1(session)
+
+
 @pytest.mark.parametrize("outcome", ("LEARNING_SIGNAL_WEAK", "NO_LEARNING_SIGNAL"))
 def test_fake_experiment_calls_fit_once_without_retry_and_ckpt_none(
     monkeypatch: pytest.MonkeyPatch, outcome: str,
@@ -736,20 +841,46 @@ def test_fake_pre_nondeterminism_stops_before_fit_and_compare(
     assert result.training_completed is False
 
 
-def test_fake_fit_failure_maps_once_to_training_failed_without_retry(
+@pytest.mark.parametrize(
+    "failure_phase,expected_stage,training_completed,post_retained",
+    (
+        ("fit", "trainer_fit", False, False),
+        ("postconditions", "formal_fit_postconditions", False, False),
+        ("postprobe", "postprobe", True, False),
+        ("comparison", "comparison", True, True),
+    ),
+)
+def test_fake_postpre_failures_have_exact_stage_and_never_retry_fit(
     monkeypatch: pytest.MonkeyPatch,
+    failure_phase: str,
+    expected_stage: str,
+    training_completed: bool,
+    post_retained: bool,
 ) -> None:
-    calls = 0
+    fit_calls = 0
+    probe_calls = 0
+    post = _make_probe(parameter_digest="post")
 
     class FailingTrainer:
         def fit(self, **kwargs):
-            nonlocal calls
-            calls += 1
+            nonlocal fit_calls
+            fit_calls += 1
             assert kwargs["ckpt_path"] is None
-            raise RuntimeError("injected fit failure")
+            if failure_phase == "fit":
+                raise RuntimeError("injected fit failure")
 
     session = SimpleNamespace(model=object(), trainer=FailingTrainer())
-    probes = iter((_make_probe(), _make_probe()))
+
+    def fake_probe(**unused):
+        nonlocal probe_calls
+        del unused
+        probe_calls += 1
+        if probe_calls == 3:
+            if failure_phase == "postprobe":
+                raise RuntimeError("injected postprobe failure")
+            return post
+        return _make_probe()
+
     monkeypatch.setattr(
         subject,
         "_build_formal_probe_session_and_batch_v1",
@@ -758,22 +889,49 @@ def test_fake_fit_failure_maps_once_to_training_failed_without_retry(
     monkeypatch.setattr(
         subject,
         "run_covapie_current11_deterministic_exact5_probe_v1",
-        lambda **unused: next(probes),
+        fake_probe,
     )
     monkeypatch.setattr(
         subject,
         "validate_covapie_current11_preprobe_repeatability_v1",
         lambda **unused: _repeatability(repeatable=True),
     )
+
+    def fake_postconditions(unused):
+        del unused
+        if failure_phase == "postconditions":
+            raise RuntimeError("injected formal postcondition failure")
+
+    monkeypatch.setattr(
+        subject,
+        "_validate_formal_fit_postconditions_v1",
+        fake_postconditions,
+    )
+
+    def fake_comparison(**unused):
+        del unused
+        if failure_phase == "comparison":
+            raise RuntimeError("injected comparison failure")
+        raise AssertionError("comparison must not run")
+
+    monkeypatch.setattr(
+        subject,
+        "compare_covapie_current11_learning_signal_v1",
+        fake_comparison,
+    )
     result = subject.run_covapie_current11_bounded_learning_signal_experiment_v1(
         repository_root=ROOT,
         state_root=STATE,
         legacy_init_checkpoint=CHECKPOINT,
     )
-    assert calls == 1
+    assert fit_calls == 1
     assert result.outcome == "TRAINING_FAILED"
+    assert result.failure_stage == expected_stage
     assert result.fit_call_count == 1
-    assert result.training_completed is False
+    assert result.fit_ckpt_path_was_none is True
+    assert result.training_completed is training_completed
+    assert (result.post is post) is post_retained
+    assert result.decision is None
 
 
 def test_import_and_source_have_no_probe_side_effect_or_random_monkeypatch(
@@ -787,6 +945,16 @@ def test_import_and_source_have_no_probe_side_effect_or_random_monkeypatch(
     assert ".backward(" not in source
     assert ".zero_grad(" not in source
     assert ".configure_optimizers(" not in source
+    assert 'failure_stage="training_or_postprobe"' not in source
+    assert all(
+        f'failure_stage="{stage}"' in source
+        for stage in (
+            "trainer_fit",
+            "formal_fit_postconditions",
+            "postprobe",
+            "comparison",
+        )
+    )
     before = tuple(tmp_path.iterdir())
     completed = subprocess.run(
         (
