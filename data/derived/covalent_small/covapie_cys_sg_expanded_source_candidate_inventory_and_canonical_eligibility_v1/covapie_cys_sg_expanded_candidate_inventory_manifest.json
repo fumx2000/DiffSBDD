@@ -1,0 +1,251 @@
+{
+  "all_non_gold_candidates_disposition_complete": true,
+  "all_reject_review_have_issue_rows": true,
+  "backward": false,
+  "baseline_commit": "de6767f730e10e90af910def8a3f2d1a43eecfed",
+  "bulk_download_executed": false,
+  "candidate_scope": "EXACT5_ADDITIONS_ONLY",
+  "component_status_counts": {
+    "canonical_eligibility_status": {
+      "GOLD_PROTECTED": 11,
+      "STAGE_A_CANONICAL_ELIGIBLE": 3,
+      "STAGE_A_EVIDENCE_INCOMPLETE": 12,
+      "STAGE_A_FUNDAMENTAL_REJECT": 2
+    },
+    "coordinate_status": {
+      "COORDINATES_VALIDATED": 14,
+      "COORDINATE_COMPONENT_MISMATCH": 1,
+      "COORDINATE_EVIDENCE_MISSING": 13
+    },
+    "cys_sg_event_status": {
+      "CYS_PRESENT_SG_EVENT_EVIDENCE_MISSING": 12,
+      "CYS_SG_EVENT_COMPONENT_MISMATCH": 1,
+      "EXACT_CYS_SG_CANONICAL": 14,
+      "EXACT_PAIR_EVIDENCE_CANONICAL_INSTANCE_UNRESOLVED": 1
+    },
+    "exact10_status": {
+      "EXACT10_FORMULA_UNSUPPORTED_NODE_INCLUSION_UNRESOLVED": 1,
+      "EXACT10_MODEL_BOUND_GRAPH_VALIDATED": 14,
+      "EXACT10_MODEL_GRAPH_EVIDENCE_MISSING": 13
+    },
+    "gold_duplicate_status": {
+      "CURRENT11_GOLD_PRIMARY": 11,
+      "KNOWN_LOWER_PRIORITY_GOLD_DUPLICATE": 1,
+      "NO_KNOWN_GOLD_DUPLICATE": 16
+    },
+    "ligand_component_identity_status": {
+      "LIGAND_COMPONENT_METADATA_BOUND": 13,
+      "LIGAND_COMPONENT_MISMATCH": 1,
+      "LIGAND_COMPONENT_VALIDATED": 14
+    },
+    "parent_post_topology_status": {
+      "CURRENT11_PARENT_POST_TOPOLOGY_VALIDATED": 11,
+      "LEGACY_PARENT_POST_TOPOLOGY_VALIDATED_FOR_STAGE_A": 3,
+      "PARENT_POST_TOPOLOGY_EVIDENCE_MISSING": 14
+    },
+    "pocket_readiness_status": {
+      "POCKET_EVIDENCE_MISSING": 14,
+      "POCKET_MATERIALIZED_VALIDATED": 14
+    },
+    "reactive_pair_status": {
+      "EXACT_PAIR_EVIDENCED_PENDING_CANONICAL_INSTANCE": 1,
+      "EXACT_REACTIVE_PAIR_CANONICAL": 14,
+      "REACTIVE_PAIR_COMPONENT_MISMATCH": 1,
+      "REACTIVE_PAIR_EVIDENCE_MISSING": 12
+    },
+    "source_identity_status": {
+      "REGISTERED_SOURCE_IDENTITY_VALIDATED": 28
+    }
+  },
+  "current11_gold_count": 11,
+  "design_report_path": "state://review-scratch/cys-sg-expanded-dataset-and-pre-covalent-geometry-v1/cys_sg_expanded_dataset_and_pre_covalent_geometry_design_report.md",
+  "design_report_sha256": "1851e488426aa7d034a903c38e6eb6826aa013da8b083cfeb7ea936b291426d1",
+  "deterministic_output_hashes": {
+    "covapie_cys_sg_expanded_candidate_inventory_and_eligibility.csv": "c6ccbb6cdbfaffde501e53d03acfe11daca8bf35262e5287db5516e8952eaa28",
+    "covapie_cys_sg_expanded_candidate_issue_inventory.csv": "4448369c937da656de2a8b64b0cb32cdb5ab3faeff8ef12a18869a7787012d41"
+  },
+  "eight_pilot_identities_present": true,
+  "eight_pilot_identity_to_candidate_id": {
+    "1A54/MDC": "COVAPIE_CYS_SG_CANDIDATE_V1_COVPDB_CYS_SG_NEXT_ACQ_ANNOT_000001",
+    "1ATK/E64": "COVAPIE_CYS_SG_CANDIDATE_V1_COVPDB_CYS_SG_ACQ_ANNOT_000003",
+    "2DJF/1ZB": "COVAPIE_CYS_SG_CANDIDATE_V1_COVPDB_CYS_SG_NEXT_ACQ_ANNOT_000002",
+    "4DCD/K36": "COVAPIE_CYS_SG_CANDIDATE_V1_COVPDB_CYS_SG_NEXT_ACQ_ANNOT_000009",
+    "5F2E/5UT": "COVAPIE_CYS_SG_CANDIDATE_V1_PDB_MMCIF_DIRECT_CONFIRMED_HR_0003_5F2E_5UT",
+    "6DI9/GJJ": "COVAPIE_CYS_SG_CANDIDATE_V1_PDB_MMCIF_DIRECT_CONFIRMED_HR_0002_6DI9_GJJ",
+    "6OIM/MOV": "COVAPIE_CYS_SG_CANDIDATE_V1_PDB_MMCIF_DIRECT_CONFIRMED_HR_0004_6OIM_MOV",
+    "6VWE/JY1": "COVAPIE_CYS_SG_CANDIDATE_V1_COVPDB_CYS_SG_NEXT_ACQ_ANNOT_000007"
+  },
+  "eligible_for_stage_b_count": 3,
+  "exact10_checkpoint_channel_order": "C:0|N:1|O:2|S:3|B:4|Br:5|Cl:6|P:7|I:8|F:9",
+  "exact_pair_evidenced_gold_count": 11,
+  "exact_pair_evidenced_non_gold_count": 4,
+  "exact_pair_evidenced_total_count": 15,
+  "feature_semantics_policy_id": "covapie_training_feature_semantics_and_unknown_atom_policy_resolution_v1:C:0|N:1|O:2|S:3|B:4|Br:5|Cl:6|P:7|I:8|F:9",
+  "geometry_executed": false,
+  "geometry_loss_activation": false,
+  "geometry_weight": 0.0,
+  "gold_reference_count": 11,
+  "human_review_required_count": 12,
+  "input_evidence_identities": [
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_covalent_bond_atom_pair_encoding_contract_current_canonical_evidence_validation_v1/covapie_atom_pair_canonical_record_validation_matrix.csv",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "c756e6ce601bad1d10cfba5cac6129f9f688d00451cc1d805edff938ccee6ca0",
+      "source_role": "current11_reactive_pair_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_cys_sg_acquired_annotation_manual_review_gate_v0/covapie_cys_sg_combined_acquired_annotation_inventory.csv",
+      "row_or_relevant_identity_count": 25,
+      "sha256": "c9307724ff851fdab13a3b2f71887fb8759fbb99b444d44054af02d472ff575b",
+      "source_role": "covpdb_visible_candidate_inventory"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/covapie_final_dataset_membership.csv",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "ddf1705176c8680d90e0e216a9af3d1501c6a821764c3e7138a28269e687a977",
+      "source_role": "current11_membership_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_final_dataset_materialization_smoke_v0/final_dataset_index.csv",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "c4c31888cb0f7c148b00656ccf22ab68fab842fcdafdee049b2f420eddc1302d",
+      "source_role": "current11_coordinate_pocket_sample_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_independent_group_expansion_design_gate_v0/covapie_expansion_candidate_exclusion_audit.csv",
+      "row_or_relevant_identity_count": 17,
+      "sha256": "ffecf93fc899ec36bbc31f723cf6d3c99c5d6e4f0991561b9e804e54bb1f3621",
+      "source_role": "duplicate_and_failure_evidence"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_independent_group_expansion_design_gate_v0/covapie_expansion_candidate_source_inventory.csv",
+      "row_or_relevant_identity_count": 25,
+      "sha256": "6d387be4e12609b04972be6da5d963067c964876024707613fe8a02b03ec0dda",
+      "source_role": "covpdb_candidate_crosscheck_status"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/covapie_training_feature_semantics_and_unknown_atom_policy_resolution_v1/covapie_training_feature_semantics_and_unknown_atom_policy_resolution_manifest.json",
+      "row_or_relevant_identity_count": 1,
+      "sha256": "24cb60ca4f080a72e8c60aef63d105d82ec2f432eecc9b90f3341f52576bb6e0",
+      "source_role": "exact10_feature_semantics_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/pre_reaction_graph/pre_reaction_training_readiness_gate_report.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "a2cc8ddab41e6439e1d0b2577fdb3514aefb617881975226d6e6bd73ecad8c2d",
+      "source_role": "direct_local_legacy_parent_post_topology_qa"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_coordinate_pair_sanity_gate_v1_altloc_aware/real_covalent_confirmed_candidate_coordinate_pair_sanity_table_v1_altloc_aware.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "0293909b9a3ab96063eda3e5eed12609793cc8837ed7e2cd33d8681d0f8249c9",
+      "source_role": "direct_local_coordinate_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_observed_atom_topology_smoke_table.csv",
+      "row_or_relevant_identity_count": 104,
+      "sha256": "b47d03598a077e6201e21585c683fe46a7423d99fae231b47c303657bad89c59",
+      "source_role": "direct_local_model_bound_ligand_node_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_topology_smoke_retry_audit.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "3c81d30381e507453121ef05343f9f718e9f0df2a329fd6b7a9d14a46d63d317",
+      "source_role": "direct_local_topology_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_model_input_materialization_smoke_v0/model_input_smoke_index.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "56737d79596a50a0cc223a8736cb998ae54f45b0495173934d1199238557628c",
+      "source_role": "direct_local_model_bound_graph_path_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_model_input_qa_gate_v0/model_input_smoke_row_qa_audit.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "485a686547f649ecc1119a0ac825fea405dbd34f2a1aff8b37bfea66ce81004b",
+      "source_role": "direct_local_model_input_dependency_qa"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_pocket_extraction_smoke_v0/real_covalent_confirmed_candidate_pocket_atom_table.csv",
+      "row_or_relevant_identity_count": 741,
+      "sha256": "77dc7777d44ec48ecc985c9c7d66d603756781455b7b3d5c9151dd5800ceaee9",
+      "source_role": "direct_local_model_bound_pocket_node_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_confirmed_candidate_pocket_extraction_smoke_v0/real_covalent_confirmed_candidate_pocket_extraction_audit.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "62ad3b4ff4f79bcb41bd1ff6497701cc07c02d809522360e8c0a2a454838ded6",
+      "source_role": "direct_local_pocket_readiness_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_multi_source_dataset_ingestion_design_gate_v0/real_covalent_multi_source_dataset_ingestion_design_gate_table.csv",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "d5d4dd2637a057b1cc1defc2b160e9752d75bd42e067a24e6d1a1d5e01175777",
+      "source_role": "registered_source_identity_authority"
+    },
+    {
+      "path_or_authority_identity": "data/derived/covalent_small/real_covalent_struct_conn_candidate_manual_review_fill_validation_v0/real_covalent_struct_conn_confirmed_candidate_table.csv",
+      "row_or_relevant_identity_count": 3,
+      "sha256": "981c59f1131ae8c5f1bb17680986eccda9d85a44caf0f44d1711246283f04186",
+      "source_role": "direct_local_exact_event_authority"
+    },
+    {
+      "path_or_authority_identity": "state://manual-review/covapie_current11_target_residue_atom_condition_authority_bundle_v1.json",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "a95ae52e091a7117b241269eebd891f3ee97e3ae4a6b4e14fa441ab6a1ed2096",
+      "source_role": "current11_target_residue_atom_authority"
+    },
+    {
+      "path_or_authority_identity": "state://manual-review/covapie_current11_unified_effective_authority_view_v1.json",
+      "row_or_relevant_identity_count": 11,
+      "sha256": "f4178987f3c3eed0e248f6d3d5f22cb8bce1839d39ab08aff0bff9d2ef9f3774",
+      "source_role": "current11_effective_human_authority"
+    },
+    {
+      "path_or_authority_identity": "state://review-scratch/cys-sg-expanded-dataset-and-pre-covalent-geometry-v1/cys_sg_expanded_dataset_and_pre_covalent_geometry_design_report.md",
+      "row_or_relevant_identity_count": 1,
+      "sha256": "1851e488426aa7d034a903c38e6eb6826aa013da8b083cfeb7ea936b291426d1",
+      "source_role": "stage_a_design_authority"
+    }
+  ],
+  "inverse_reaction_templates_created": false,
+  "issue_row_count": 15,
+  "known_gold_duplicate_count": 1,
+  "manifest_self_sha256_recorded": false,
+  "model_executed": false,
+  "model_forward": false,
+  "non_gold_expansion_candidate_count": 17,
+  "optimizer_step": false,
+  "partially_operational_local_source_path_count": 3,
+  "rdkit_minimization_executed": false,
+  "ready_for_bulk_expansion": false,
+  "ready_for_formal_training": false,
+  "ready_for_geometry_loss_activation": false,
+  "ready_for_stage_a_publication": true,
+  "ready_for_stage_b_automated_label_and_geometry_pilot": true,
+  "ready_for_training": false,
+  "recommended_next_step": "review_and_publish_covapie_cys_sg_expanded_source_candidate_inventory_and_canonical_eligibility_v1",
+  "registered_source_identity_count": 5,
+  "registry_candidate_count": 28,
+  "reject_count": 2,
+  "rl": false,
+  "schema_version": "covapie_cys_sg_expanded_source_candidate_inventory_and_canonical_eligibility_v1",
+  "source_counts": {
+    "CovBinderInPDB": 0,
+    "CovPDB": 25,
+    "CovalentInDB": 0,
+    "PDB/mmCIF direct": 3,
+    "local curated": 0
+  },
+  "source_provenance_identity_counts": {
+    "CovBinderInPDB": 0,
+    "CovPDB": 25,
+    "CovalentInDB": 0,
+    "PDB/mmCIF direct": 3,
+    "local curated": 3
+  },
+  "trainer_fit": false,
+  "training_executed": false,
+  "unknown_other_channel_added": false,
+  "zero_vector_fallback_added": false
+}
