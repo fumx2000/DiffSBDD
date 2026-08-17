@@ -1,0 +1,171 @@
+{
+  "auto_recovered_downstream_label_review_count": 0,
+  "auto_recovered_stage_b_eligible_count": 0,
+  "auto_recovered_structural_count": 0,
+  "backward": false,
+  "baseline_commit": "19d07143c41026bb5a54bc1e02d81ac1d649dd76",
+  "bounded_targeted_identity_already_authorized": [
+    "1A54/MDC"
+  ],
+  "bounded_targeted_identity_not_yet_authorized": [
+    "2DJF/1ZB",
+    "6VWE/JY1",
+    "2R9F/K2Z",
+    "4DCD/K36",
+    "6WTT/K36",
+    "4F49/K36",
+    "6L70/K36",
+    "6WTJ/K36",
+    "7C8U/K36",
+    "5WKJ/K36",
+    "6WTK/UED"
+  ],
+  "bulk_acquisition_executed": false,
+  "bulk_download_authorized_now": false,
+  "candidate_scope": "EXACT_12_PUBLISHED_STAGE_A_HUMAN_REVIEW_REQUIRED_ROWS_ONLY",
+  "canonical_sample_authority_created": false,
+  "current11_modified": false,
+  "deterministic_output_hashes": {
+    "covapie_cys_sg_stage_b0_acquisition_and_review_worklist.csv": "77c8a447a5c6098b1b834837ee345e03db6ea6b00c7af8a886fa9668585d22f4",
+    "covapie_cys_sg_stage_b0_recovery_matrix.csv": "06ab2464a8e1e8da765f96b45d1fbd25224a3f76c8a420b0088763ee24ce241a"
+  },
+  "distance_only_inference_used": false,
+  "evidence_complete_nonduplicate_stage_a_pass_count": 3,
+  "evidence_complete_nonduplicate_stage_a_total_count": 3,
+  "existing_bounded_authorized_count": 1,
+  "geometry_executed": false,
+  "historical_1a54_pdb_link_conect_absent": true,
+  "historical_1a54_raw_sha256": "72027fd8250ab981a082a8081f7624ca81f2cc78dfeaba8ea124a3ead1543d11",
+  "historical_1a54_struct_conn_loop_absent": true,
+  "human_structural_review_count": 0,
+  "input_evidence_identities": [
+    {
+      "path": "data/derived/covalent_small/covapie_bulk_download_admission_admit_014_download_authorization_contract_v1/covapie_admit_014_download_authorization_contract_manifest.json",
+      "sha256": "9c54c9d6cb11776b04938d9be048699041bfc4020dca4c00425faadaaaa5d4d2"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_covpdb_raw_structure_event_annotation_smoke_v0/covapie_mmcif_atom_site_validation_audit.csv",
+      "sha256": "0985ef31a6ccf227ce69ba199b4cd66a6e6237b0aba0624056fa9078552622bf"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_covpdb_raw_structure_event_annotation_smoke_v0/covapie_mmcif_struct_conn_inventory.csv",
+      "sha256": "aede7be05b7428ba476f9d781d4fb192ac58231dbca5be1ee62a8b17b224ad17"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_covpdb_raw_structure_event_annotation_smoke_v0/covapie_pdb_link_conect_inventory.csv",
+      "sha256": "3574bd9d586425eeb42692e2e2ed93db6b19a97b4269b94c4862bce3c8b1bcf5"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_covpdb_raw_structure_event_annotation_smoke_v0/covapie_raw_structure_download_audit.csv",
+      "sha256": "d379b116e90f3f5758c7fd3af3ae0769c3d4642e7349d244121e8f6437cc3262"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_expanded_source_candidate_inventory_and_canonical_eligibility_v1/covapie_cys_sg_expanded_candidate_inventory_and_eligibility.csv",
+      "sha256": "c6ccbb6cdbfaffde501e53d03acfe11daca8bf35262e5287db5516e8952eaa28"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_expanded_source_candidate_inventory_and_canonical_eligibility_v1/covapie_cys_sg_expanded_candidate_inventory_manifest.json",
+      "sha256": "97af04623f473fbdbcdeb881bbfdb7cdab89bad0738895f65fb48a9dc7444236"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_expanded_source_candidate_inventory_and_canonical_eligibility_v1/covapie_cys_sg_expanded_candidate_issue_inventory.csv",
+      "sha256": "4448369c937da656de2a8b64b0cb32cdb5ab3faeff8ef12a18869a7787012d41"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_future_struct_conn_crosscheck_controlled_raw_acquisition_gate_v0/covapie_cys_sg_controlled_raw_acquisition_policy_contract.csv",
+      "sha256": "170ba9f59229c0529dff35d4c09414fdbcc4a16cfa2ba372d0ffa234f3104bac"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_future_struct_conn_crosscheck_controlled_raw_acquisition_gate_v0/covapie_cys_sg_controlled_raw_acquisition_request_manifest.csv",
+      "sha256": "0db05f8ef79c595aa388e0cbb88684d77c8f2881c63c9eb0da9f2be16943254a"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_future_struct_conn_crosscheck_controlled_raw_acquisition_gate_v0/covapie_cys_sg_future_struct_conn_controlled_raw_acquisition_gate_manifest.json",
+      "sha256": "4c2de6e2ef662dd0e28bf98eb36b84a9eebd4f1f95feab9b699a78dc46367f19"
+    },
+    {
+      "path": "data/derived/covalent_small/covapie_cys_sg_future_struct_conn_crosscheck_execution_gate_v0/covapie_cys_sg_raw_struct_conn_parse_audit.csv",
+      "sha256": "3a2bb143062d639600f19041e2ee830438e71069850d7583624e5b07d6e58ca6"
+    }
+  ],
+  "inverse_reaction_chemistry_executed": false,
+  "k36_ued_duplicate_sample_authority_created": false,
+  "k36_ued_recovery_reuse_possible": true,
+  "k36_ued_shared_recovery_mechanism": "BOUNDED_MMCIF_ACQUISITION_THEN_PUBLISHED_STRUCT_CONN_AND_ATOM_SITE_ADAPTER",
+  "k36_ued_shared_recovery_records": [
+    "4DCD/K36",
+    "6WTT/K36",
+    "4F49/K36",
+    "6L70/K36",
+    "6WTJ/K36",
+    "7C8U/K36",
+    "5WKJ/K36",
+    "6WTK/UED"
+  ],
+  "local_raw_structure_available_count": 0,
+  "manifest_self_sha256_recorded": false,
+  "missing_raw_structure_count": 12,
+  "model_forward": false,
+  "new_bounded_authorization_required_count": 11,
+  "new_reject_count": 0,
+  "optimizer_step": false,
+  "other_explicit_event_authority_recovered_count": 0,
+  "pre_reconstruction_executed": false,
+  "project_name": "CovaPIE",
+  "published_stage_a_commit": "19d07143c41026bb5a54bc1e02d81ac1d649dd76",
+  "published_stage_a_modified": false,
+  "raw_modified": false,
+  "rdkit_minimization_executed": false,
+  "ready_for_bulk_expansion": false,
+  "ready_for_evidence_recovery_publication": true,
+  "ready_for_geometry_loss_activation": false,
+  "ready_for_stage_b_automated_label_and_geometry_pilot": true,
+  "ready_for_training": false,
+  "recommended_next_step_exactly": "review_and_publish_covapie_cys_sg_stage_b0_open_candidate_structural_evidence_recovery_v1",
+  "recovery_candidate_count": 12,
+  "recovery_candidate_identities": [
+    "1A54/MDC",
+    "2DJF/1ZB",
+    "6VWE/JY1",
+    "2R9F/K2Z",
+    "4DCD/K36",
+    "6WTT/K36",
+    "4F49/K36",
+    "6L70/K36",
+    "6WTJ/K36",
+    "7C8U/K36",
+    "5WKJ/K36",
+    "6WTK/UED"
+  ],
+  "recovery_disposition_vocabulary": [
+    "AUTO_RECOVERED_STAGE_B_ELIGIBLE",
+    "AUTO_RECOVERED_BUT_DOWNSTREAM_LABEL_REVIEW_REQUIRED",
+    "HUMAN_STRUCTURAL_REVIEW_REQUIRED",
+    "TARGETED_EXTERNAL_ACQUISITION_REQUIRED",
+    "REJECT"
+  ],
+  "recovery_worklist_row_count": 12,
+  "remaining_true_human_structural_review_fraction": {
+    "denominator": 12,
+    "numerator": 0,
+    "value": 0.0
+  },
+  "rl": false,
+  "schema_version": "covapie_cys_sg_stage_b0_open_candidate_structural_evidence_recovery_v1",
+  "six_vwe_rh_final_status": "FORMULA_RH_PRESENT_MODEL_GRAPH_MEMBERSHIP_UNRESOLVED_NO_REJECT",
+  "struct_conn_exact_event_recovered_count": 0,
+  "structural_evidence_recovery_fraction": {
+    "denominator": 12,
+    "numerator": 0,
+    "value": 0.0
+  },
+  "targeted_acquisition_executed": false,
+  "targeted_external_acquisition_required_count": 12,
+  "torsion_sampling_executed": false,
+  "trainer_fit": false,
+  "worklist_category_vocabulary": [
+    "TARGETED_EXTERNAL_ACQUISITION_REQUIRED",
+    "HUMAN_STRUCTURAL_REVIEW_REQUIRED",
+    "DOWNSTREAM_CHEMISTRY_LABEL_REVIEW_REQUIRED"
+  ]
+}
