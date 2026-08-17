@@ -1,0 +1,27 @@
+policy_item,policy_value,policy_basis,policy_contract_passed
+authority_scope,EXACT12_PUBLISHED_B0_WORKLIST_ONLY,published B0 worklist,true
+bulk_download_authorized,false,ADMIT_014 boundary remains false,true
+network_execution_in_authority_stage,false,authority-only stage,true
+maximum_identity_count,12,exact B0 cardinality,true
+maximum_primary_acquisition_count,12,one primary request per PDB identity,true
+candidate_maximum_request_count,1,single bounded primary request,true
+source_policy_id,RCSB_FILES_HTTPS_EXACT_PDB_MMCIF_V0,published Step14S request authority,true
+source_scheme,https,published Step14S exact URL,true
+source_host,files.rcsb.org,published Step14S exact URL,true
+source_path_template,/download/{PDB_ID}.cif,published Step14S exact URL,true
+pdb_id_normalization,UPPERCASE_FOUR_CHARACTER,published Step14S URL token,true
+structure_format,MMCIF,published Step14S .cif request,true
+destination_policy_id,COVAPIE_STEP14S_IGNORED_RAW_STAGING_V0,published Step14S raw staging,true
+destination_root,data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0,published Step14S raw output root,true
+raw_git_policy,REPOSITORY_IGNORED_UNTRACKED_UNSTAGED_RAW_ONLY,published Step14S policy and .gitignore,true
+overwrite_allowed,false,invalid existing target fails closed,true
+valid_existing_file_action,VERIFY_AND_REUSE_WITHOUT_NETWORK,idempotent exact identity/integrity reuse,true
+invalid_existing_file_action,FAIL_CLOSED_NO_OVERWRITE,bounded idempotence requirement,true
+temporary_path_policy,FINAL_PATH_PLUS_DOT_PART,published Step14S safe-write suffix,true
+atomic_write_policy,VERIFY_PART_THEN_OS_REPLACE_AND_REMOVE_PART,published Step14S atomic primitive with successor pre-promotion verification,true
+integrity_verification_policy,REQUEST_SUCCEEDED_NONEMPTY_NON_HTML_MMCIF_DATA_BLOCK_ID_MATCHES_PDB_ATOM_SITE_PARSEABLE_RECORD_SHA256_SIZE_FINAL_PATH,future execution evidence contract,true
+preknown_remote_sha256_required,false,upstream remediation-safe identity validation,true
+maximum_attempts_per_identity,1,published Step14S has no retry loop,true
+request_timeout_seconds,30,published Step14S timeout,true
+pagination_discovery_crawl_or_recursive_acquisition,false,exact bounded request rows only,true
+failure_final_state,NO_CORRUPTED_FINAL_AND_NO_PART_LEFTOVER,fail-closed atomic execution contract,true
