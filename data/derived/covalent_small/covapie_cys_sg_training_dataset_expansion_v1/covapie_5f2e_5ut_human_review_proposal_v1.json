@@ -1,0 +1,1153 @@
+{
+  "ANCHOR_CANONICAL_TIE_REQUIRES_HUMAN_CHOICE": true,
+  "allowed_formal_charge_pattern": {
+    "1": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "2": 0,
+    "20": 0,
+    "21": 0,
+    "22": 0,
+    "23": 0,
+    "24": 0,
+    "25": 0,
+    "26": 0,
+    "27": 0,
+    "28": 0,
+    "29": 0,
+    "3": 0,
+    "30": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0
+  },
+  "anchor_label_options": [
+    {
+      "conditional_exact_chemistry_signature_sha256": "87f1ec548eed502a300c5ac32a6ad9aa2cfe384b5899e1422a3b49df8e145f99",
+      "direction_anchor": {
+        "atom_id": 6,
+        "atom_map_number": 7,
+        "element": "C",
+        "pdb_atom_name": "C10"
+      },
+      "label": "Option A",
+      "optional_plane_anchor": {
+        "atom_id": 21,
+        "atom_map_number": 22,
+        "element": "C",
+        "pdb_atom_name": "C17"
+      }
+    },
+    {
+      "conditional_exact_chemistry_signature_sha256": "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179",
+      "direction_anchor": {
+        "atom_id": 21,
+        "atom_map_number": 22,
+        "element": "C",
+        "pdb_atom_name": "C17"
+      },
+      "label": "Option B",
+      "optional_plane_anchor": {
+        "atom_id": 6,
+        "atom_map_number": 7,
+        "element": "C",
+        "pdb_atom_name": "C10"
+      }
+    }
+  ],
+  "approved_warhead_smarts_recommendation": "[#6:28](-[#6:9]=[#6:30])=[#8:29]",
+  "artifact_schema_version": "covapie_5f2e_5ut_human_review_proposal_v1",
+  "atom_renumbering_invariance_proven": true,
+  "authority_registry_review": {
+    "approved_existing_reaction_family_match": null,
+    "approved_existing_warhead_rule_match": null,
+    "conditional_5f2e_exact_signature_sha256_by_anchor_option": {
+      "Option A": "87f1ec548eed502a300c5ac32a6ad9aa2cfe384b5899e1422a3b49df8e145f99",
+      "Option B": "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179"
+    },
+    "current11_registry_rows_are_candidate_only": true,
+    "k36_approved_exact_signature_sha256": "83e9c7b9d43444d7e50fbfd7e6c3dafef5e0dc92cf1a7c571e3f4e3fe4e08d92",
+    "k36_cross_signature_propagation_allowed": false,
+    "recommended_5f2e_exact_signature_sha256": null
+  },
+  "candidate_identity": "5F2E/5UT",
+  "canonical_rank_C10": 4,
+  "canonical_rank_C17": 4,
+  "canonical_tie_break_rule": "NO_PUBLISHED_INPUT_INDEPENDENT_SECONDARY_TIE_BREAK; HUMAN_CHOICE_REQUIRED",
+  "canonical_tie_detected": true,
+  "chemical_rationale": {
+    "electrophile": "The authoritative PRE graph is N3-C13(=O1)-C14=C15. Cys-SG attacks beta carbon C15; the POST S-C15 bond and restored PRE C14=C15 bond establish a conjugate Michael-addition event.",
+    "family": "This is an N-substituted acrylamide (more specifically an N-acryloyl azetidine) alpha,beta-unsaturated amide Michael acceptor, so the reaction-family semantic recommendation names Cys-SG addition at the beta carbon.",
+    "independent_sample_assignment": "Recommend APPROVE because source identity/SHA, unique exact endpoints, supported model atom inventory, authoritative PRE graph and charges, raw-source POST geometry, role partition, and leakage evidence all pass; this recommendation creates no authority.",
+    "n3_role_tradeoff": "N3 is chemically the amide nitrogen and is necessary to identify the electrophile as an amide rather than a generic enone. Under the CovaPIE role-partition contract, however, the compact reaction-center warhead may end at carbonyl C13; N3 is also the azetidine linker-side ring atom. Keeping N3 in linker gives one coherent four-atom warhead and one N3-C13 linker-warhead boundary.",
+    "role_partition": "Exact4 {C13,O1,C14,C15} contains the carbonyl and conjugated alkene reaction center. The complete azetidine ring {C11,C16,N3,C12} is a coherent linker between scaffold N2 and warhead C13; every retained heavy atom is assigned exactly once.",
+    "scope": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE is limited to later candidates with the same approved full PRE graph, charges, reactive map, roles, boundary, seed, and anchors. It does not authorize all acrylamides or any cross-signature propagation.",
+    "seed_and_anchors": "The accepted seed set is {N2,C10,C17}; primary N2 is the unique scaffold-side boundary atom and C10/C17 are its two first-shell scaffold neighbors. On the authoritative PRE scaffold-induced graph, C10 and C17 have the same canonical equivalence rank (4) and are exchanged by a label-preserving graph automorphism. The published owners expose no input-numbering-independent secondary tie-break. Direction/plane labels therefore require a human convention choice between exactly two equivalent options; no linker, warhead, POST coordinate, or reactive-geometry information may break the tie.",
+    "smarts": "The SMARTS encodes C13(=O1)-C14=C15 with the published atom maps, matches exactly once, and includes reactive C15/map30. It intentionally omits N3 so its match set equals the reviewed Exact4 role; amide identity is supplied by the full exact-signature PRE graph."
+  },
+  "direction_anchor_atom_recommendation": null,
+  "direction_anchor_uses_POST_coordinates": false,
+  "direction_anchor_uses_linker_information": false,
+  "direction_anchor_uses_reactive_geometry": false,
+  "direction_anchor_uses_warhead_information": false,
+  "electrophile_class": "N_SUBSTITUTED_ACRYLAMIDE_ALPHA_BETA_UNSATURATED_AMIDE_MICHAEL_ACCEPTOR",
+  "exact_chemistry_signature_changed": false,
+  "exact_chemistry_signature_resolution": {
+    "anchor_ordering_is_signature_input": true,
+    "final_signature_selected": false,
+    "new_exact_chemistry_signature_sha256": null,
+    "old_exact_chemistry_signature_sha256": "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179",
+    "old_signature_corresponds_to_option": "Option B",
+    "option_a_exact_chemistry_signature_sha256": "87f1ec548eed502a300c5ac32a6ad9aa2cfe384b5899e1422a3b49df8e145f99",
+    "option_b_exact_chemistry_signature_sha256": "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179",
+    "resolution_semantics": "No final signature change is asserted until the human chooses Option A or Option B; Option A changes the old signature, while Option B preserves it."
+  },
+  "expected_pre_reaction_bond_orders": [
+    [
+      1,
+      2,
+      "single"
+    ],
+    [
+      1,
+      11,
+      "single"
+    ],
+    [
+      1,
+      19,
+      "single"
+    ],
+    [
+      1,
+      20,
+      "single"
+    ],
+    [
+      2,
+      3,
+      "single"
+    ],
+    [
+      2,
+      18,
+      "single"
+    ],
+    [
+      3,
+      4,
+      "single"
+    ],
+    [
+      3,
+      17,
+      "single"
+    ],
+    [
+      4,
+      5,
+      "single"
+    ],
+    [
+      5,
+      6,
+      "single"
+    ],
+    [
+      5,
+      16,
+      "single"
+    ],
+    [
+      6,
+      15,
+      "single"
+    ],
+    [
+      6,
+      18,
+      "single"
+    ],
+    [
+      7,
+      23,
+      "single"
+    ],
+    [
+      7,
+      24,
+      "single"
+    ],
+    [
+      8,
+      23,
+      "single"
+    ],
+    [
+      8,
+      25,
+      "single"
+    ],
+    [
+      8,
+      27,
+      "single"
+    ],
+    [
+      9,
+      28,
+      "single"
+    ],
+    [
+      9,
+      30,
+      "double"
+    ],
+    [
+      10,
+      21,
+      "single"
+    ],
+    [
+      10,
+      22,
+      "single"
+    ],
+    [
+      11,
+      19,
+      "single"
+    ],
+    [
+      12,
+      13,
+      "single"
+    ],
+    [
+      13,
+      14,
+      "single"
+    ],
+    [
+      13,
+      21,
+      "single"
+    ],
+    [
+      14,
+      15,
+      "single"
+    ],
+    [
+      21,
+      24,
+      "single"
+    ],
+    [
+      22,
+      23,
+      "single"
+    ],
+    [
+      25,
+      26,
+      "single"
+    ],
+    [
+      26,
+      27,
+      "single"
+    ],
+    [
+      26,
+      28,
+      "single"
+    ],
+    [
+      28,
+      29,
+      "double"
+    ]
+  ],
+  "feature_semantics_audit_completed": true,
+  "feature_semantics_known": true,
+  "human_decision_required_only_for_anchor_label_tie": true,
+  "independent_sample_assignment_recommendation": "APPROVE",
+  "ligand_reactive_atom_map_number": 30,
+  "machine_evidence_reference": {
+    "authoritative_formal_charge_pattern": {
+      "1": 0,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0,
+      "15": 0,
+      "16": 0,
+      "17": 0,
+      "18": 0,
+      "19": 0,
+      "2": 0,
+      "20": 0,
+      "21": 0,
+      "22": 0,
+      "23": 0,
+      "24": 0,
+      "25": 0,
+      "26": 0,
+      "27": 0,
+      "28": 0,
+      "29": 0,
+      "3": 0,
+      "30": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    },
+    "authoritative_pre_bond_graph": [
+      [
+        1,
+        2,
+        "single"
+      ],
+      [
+        1,
+        11,
+        "single"
+      ],
+      [
+        1,
+        19,
+        "single"
+      ],
+      [
+        1,
+        20,
+        "single"
+      ],
+      [
+        2,
+        3,
+        "single"
+      ],
+      [
+        2,
+        18,
+        "single"
+      ],
+      [
+        3,
+        4,
+        "single"
+      ],
+      [
+        3,
+        17,
+        "single"
+      ],
+      [
+        4,
+        5,
+        "single"
+      ],
+      [
+        5,
+        6,
+        "single"
+      ],
+      [
+        5,
+        16,
+        "single"
+      ],
+      [
+        6,
+        15,
+        "single"
+      ],
+      [
+        6,
+        18,
+        "single"
+      ],
+      [
+        7,
+        23,
+        "single"
+      ],
+      [
+        7,
+        24,
+        "single"
+      ],
+      [
+        8,
+        23,
+        "single"
+      ],
+      [
+        8,
+        25,
+        "single"
+      ],
+      [
+        8,
+        27,
+        "single"
+      ],
+      [
+        9,
+        28,
+        "single"
+      ],
+      [
+        9,
+        30,
+        "double"
+      ],
+      [
+        10,
+        21,
+        "single"
+      ],
+      [
+        10,
+        22,
+        "single"
+      ],
+      [
+        11,
+        19,
+        "single"
+      ],
+      [
+        12,
+        13,
+        "single"
+      ],
+      [
+        13,
+        14,
+        "single"
+      ],
+      [
+        13,
+        21,
+        "single"
+      ],
+      [
+        14,
+        15,
+        "single"
+      ],
+      [
+        21,
+        24,
+        "single"
+      ],
+      [
+        22,
+        23,
+        "single"
+      ],
+      [
+        25,
+        26,
+        "single"
+      ],
+      [
+        26,
+        27,
+        "single"
+      ],
+      [
+        26,
+        28,
+        "single"
+      ],
+      [
+        28,
+        29,
+        "double"
+      ]
+    ],
+    "bound_raw_source": {
+      "path": "data/raw/covalent_sources/pdb_mmcif_direct/structures/5F2E.cif.gz",
+      "sha256": "681eac8977ae235823a963ed859a0b76e923269361da8191c72f51b0d6411f58"
+    },
+    "canonical_ligand_atom_namespace": [
+      {
+        "atom_id": 0,
+        "atom_map_number": 1,
+        "element": "C",
+        "pdb_atom_name": "C1"
+      },
+      {
+        "atom_id": 1,
+        "atom_map_number": 2,
+        "element": "C",
+        "pdb_atom_name": "C2"
+      },
+      {
+        "atom_id": 2,
+        "atom_map_number": 3,
+        "element": "C",
+        "pdb_atom_name": "C3"
+      },
+      {
+        "atom_id": 3,
+        "atom_map_number": 4,
+        "element": "C",
+        "pdb_atom_name": "C4"
+      },
+      {
+        "atom_id": 4,
+        "atom_map_number": 5,
+        "element": "C",
+        "pdb_atom_name": "C5"
+      },
+      {
+        "atom_id": 5,
+        "atom_map_number": 6,
+        "element": "C",
+        "pdb_atom_name": "C6"
+      },
+      {
+        "atom_id": 6,
+        "atom_map_number": 7,
+        "element": "C",
+        "pdb_atom_name": "C10"
+      },
+      {
+        "atom_id": 7,
+        "atom_map_number": 8,
+        "element": "C",
+        "pdb_atom_name": "C11"
+      },
+      {
+        "atom_id": 8,
+        "atom_map_number": 9,
+        "element": "C",
+        "pdb_atom_name": "C14"
+      },
+      {
+        "atom_id": 9,
+        "atom_map_number": 10,
+        "element": "C",
+        "pdb_atom_name": "C18"
+      },
+      {
+        "atom_id": 10,
+        "atom_map_number": 11,
+        "element": "C",
+        "pdb_atom_name": "C20"
+      },
+      {
+        "atom_id": 11,
+        "atom_map_number": 12,
+        "element": "O",
+        "pdb_atom_name": "O2"
+      },
+      {
+        "atom_id": 12,
+        "atom_map_number": 13,
+        "element": "C",
+        "pdb_atom_name": "C8"
+      },
+      {
+        "atom_id": 13,
+        "atom_map_number": 14,
+        "element": "C",
+        "pdb_atom_name": "C7"
+      },
+      {
+        "atom_id": 14,
+        "atom_map_number": 15,
+        "element": "N",
+        "pdb_atom_name": "N"
+      },
+      {
+        "atom_id": 15,
+        "atom_map_number": 16,
+        "element": "O",
+        "pdb_atom_name": "O"
+      },
+      {
+        "atom_id": 16,
+        "atom_map_number": 17,
+        "element": "Cl",
+        "pdb_atom_name": "CL"
+      },
+      {
+        "atom_id": 17,
+        "atom_map_number": 18,
+        "element": "C",
+        "pdb_atom_name": "C19"
+      },
+      {
+        "atom_id": 18,
+        "atom_map_number": 19,
+        "element": "C",
+        "pdb_atom_name": "C21"
+      },
+      {
+        "atom_id": 19,
+        "atom_map_number": 20,
+        "element": "C",
+        "pdb_atom_name": "C"
+      },
+      {
+        "atom_id": 20,
+        "atom_map_number": 21,
+        "element": "N",
+        "pdb_atom_name": "N1"
+      },
+      {
+        "atom_id": 21,
+        "atom_map_number": 22,
+        "element": "C",
+        "pdb_atom_name": "C17"
+      },
+      {
+        "atom_id": 22,
+        "atom_map_number": 23,
+        "element": "N",
+        "pdb_atom_name": "N2"
+      },
+      {
+        "atom_id": 23,
+        "atom_map_number": 24,
+        "element": "C",
+        "pdb_atom_name": "C9"
+      },
+      {
+        "atom_id": 24,
+        "atom_map_number": 25,
+        "element": "C",
+        "pdb_atom_name": "C16"
+      },
+      {
+        "atom_id": 25,
+        "atom_map_number": 26,
+        "element": "N",
+        "pdb_atom_name": "N3"
+      },
+      {
+        "atom_id": 26,
+        "atom_map_number": 27,
+        "element": "C",
+        "pdb_atom_name": "C12"
+      },
+      {
+        "atom_id": 27,
+        "atom_map_number": 28,
+        "element": "C",
+        "pdb_atom_name": "C13"
+      },
+      {
+        "atom_id": 28,
+        "atom_map_number": 29,
+        "element": "O",
+        "pdb_atom_name": "O1"
+      },
+      {
+        "atom_id": 29,
+        "atom_map_number": 30,
+        "element": "C",
+        "pdb_atom_name": "C15"
+      }
+    ],
+    "exact_event_endpoints": {
+      "ligand_endpoint_atom_id": 29,
+      "ligand_endpoint_descriptor": "A:5UT:204:C15",
+      "protein_endpoint_atom_id": 105,
+      "protein_endpoint_descriptor": "A:CYS:12:SG",
+      "retained_reactive_atom_id": 29
+    },
+    "leakage_evidence": {
+      "leakage_key": "COVAPIE_REAL_EXACT4_LEAKAGE_V1:d6266afcdb1a52970a958bc6a563403a2b2a83274495a762f55a26eb14156ee7",
+      "ligand_graph_scope": "HUMAN_APPROVED_PRE_REACTION_GRAPH",
+      "ligand_graph_sha256": "b1f1fe9cc40baa2e7019d772b43386264f5f4c91cdc0e655549a4b4a328e3841",
+      "ligand_scaffold_sha256": "a7551bcebec88481a7eeba80ab96bae18830213e42802d687b484729bf5753b6",
+      "machine_derived": true,
+      "policy": "conservative_union_of_ligand_graph_scaffold_and_protein_accession_sequence_clusters_v1",
+      "protein_accession": "P01116",
+      "protein_sequence_sha256": "749e9938718b5f69dea0681376469e8b5a5f0f68b8a3b661a9d195d08cbc5fc3"
+    },
+    "local_electrophile_subgraph": [
+      {
+        "atom_id": 29,
+        "atom_map_number": 30,
+        "chemical_role": "beta carbon; Cys-SG-attacked ligand reactive atom",
+        "element": "C",
+        "pdb_atom_name": "C15",
+        "pre_neighbors": [
+          {
+            "atom_id": 8,
+            "bond_order": "double"
+          }
+        ]
+      },
+      {
+        "atom_id": 8,
+        "atom_map_number": 9,
+        "chemical_role": "alpha carbon",
+        "element": "C",
+        "pdb_atom_name": "C14",
+        "pre_neighbors": [
+          {
+            "atom_id": 27,
+            "bond_order": "single"
+          },
+          {
+            "atom_id": 29,
+            "bond_order": "double"
+          }
+        ]
+      },
+      {
+        "atom_id": 27,
+        "atom_map_number": 28,
+        "chemical_role": "carbonyl carbon",
+        "element": "C",
+        "pdb_atom_name": "C13",
+        "pre_neighbors": [
+          {
+            "atom_id": 8,
+            "bond_order": "single"
+          },
+          {
+            "atom_id": 25,
+            "bond_order": "single"
+          },
+          {
+            "atom_id": 28,
+            "bond_order": "double"
+          }
+        ]
+      },
+      {
+        "atom_id": 28,
+        "atom_map_number": 29,
+        "chemical_role": "carbonyl oxygen",
+        "element": "O",
+        "pdb_atom_name": "O1",
+        "pre_neighbors": [
+          {
+            "atom_id": 27,
+            "bond_order": "double"
+          }
+        ]
+      },
+      {
+        "atom_id": 25,
+        "atom_map_number": 26,
+        "chemical_role": "amide nitrogen and azetidine linker-side atom",
+        "element": "N",
+        "pdb_atom_name": "N3",
+        "pre_neighbors": [
+          {
+            "atom_id": 24,
+            "bond_order": "single"
+          },
+          {
+            "atom_id": 26,
+            "bond_order": "single"
+          },
+          {
+            "atom_id": 27,
+            "bond_order": "single"
+          }
+        ]
+      }
+    ],
+    "model_atom_compatibility": {
+      "checkpoint_feature_semantics_valid": true,
+      "explicit_hydrogen_handling_valid": true,
+      "retained_heavy_atom_count": 30,
+      "unsupported_nonhydrogen_count": 0
+    },
+    "post_geometry": {
+      "ligand_endpoint": {
+        "atom_id": 29,
+        "atom_map_number": 30,
+        "atom_site_id": 1498,
+        "coordinates_angstrom": [
+          7.43,
+          4.055,
+          -4.441
+        ],
+        "element": "C",
+        "pdb_atom_name": "C15"
+      },
+      "protein_endpoint": {
+        "atom_site_id": 105,
+        "coordinates_angstrom": [
+          6.874,
+          4.994,
+          -5.816
+        ],
+        "descriptor": "A:CYS:12:SG",
+        "element": "S"
+      },
+      "published_distance_angstrom": 1.7554,
+      "raw_mmcif_recomputed_distance_angstrom": 1.755415050636,
+      "raw_struct_conn_distance_angstrom": 1.755,
+      "raw_struct_conn_id": "covale1",
+      "raw_unique_endpoint_row_counts": {
+        "ligand": 1,
+        "protein": 1,
+        "struct_conn": 1
+      }
+    },
+    "pre_reaction_graph_authoritative": true,
+    "pre_reaction_sdf": {
+      "path": "data/derived/covalent_small/ligands_pre_reaction/KRAS_G12C_5F2E_pre_reaction.sdf",
+      "sha256": "4015047b42b77f1f8e785c10eb073fb01d60198245d5e76b1db7db73781eeb9b"
+    },
+    "pre_review_evidence_digest": "f487ba928f4e6cd761566623f3c3a44f95827c27a8328d5d569d3475b8e8f87b",
+    "published_decision_template": {
+      "path": "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_near_ready_human_review_decision_template_v2.json",
+      "sha256": "a56a1f3608fb85c9f84889c02e6048d7d7582032d3ff2d98a626c2f390ae2697",
+      "template_status": "BLANK_HUMAN_DECISIONS_NOT_APPROVAL"
+    },
+    "source_assignment_record_sha256": "ce5e189f4b34a106a136d41d79d23287fed8b6325b0144f82203c07c0184fc6d",
+    "source_evidence_bindings": [
+      [
+        "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_near_ready_human_review_packet_v1.md",
+        "7d35fcaf254cf23a07c9f469173871acc63bcb89f6c76794e69bc72796ca496f"
+      ],
+      [
+        "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_non_exact16_candidate_inventory.csv",
+        "182d0bcff8e1dea1f29eb4977e0908510f6b8594db83b39efed1580e9f6f2946"
+      ],
+      [
+        "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_ligand_graph_scaffold_evidence.csv",
+        "982a9f89a89d3a4ad6a3e468cfd16d2fdfd5435cbf6d593e086fbd7fadd3ec73"
+      ],
+      [
+        "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_protein_sequence_accession_evidence.csv",
+        "51f208c2582bc41c265fa35fa18e71e0e0d0634babe63b9735f084aa486a0d30"
+      ],
+      [
+        "data/derived/covalent_small/covapie_unified_independence_group_assignment_and_sample_index_merge_smoke_v0/covapie_final_leakage_group_assignment.csv",
+        "768c964f22e19a8fb6232b1fa26c531e53d023042abcd9b1bcca44df2b4f4416"
+      ],
+      [
+        "data/derived/covalent_small/ligands_pre_reaction/KRAS_G12C_5F2E_pre_reaction.sdf",
+        "4015047b42b77f1f8e785c10eb073fb01d60198245d5e76b1db7db73781eeb9b"
+      ],
+      [
+        "data/derived/covalent_small/pre_reaction_graph/pre_reaction_training_readiness_gate_report.csv",
+        "a2cc8ddab41e6439e1d0b2577fdb3514aefb617881975226d6e6bd73ecad8c2d"
+      ],
+      [
+        "data/derived/covalent_small/pre_reaction_graph/pre_reaction_transform_manual_write_back_report.csv",
+        "32e7a66e8b2c1b1f87cacdd2c57d1b1dc868e3dc83cf7c843ef1585efed54aca"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_confirmed_candidate_coordinate_pair_sanity_gate_v1_altloc_aware/real_covalent_confirmed_candidate_coordinate_pair_sanity_table_v1_altloc_aware.csv",
+        "0293909b9a3ab96063eda3e5eed12609793cc8837ed7e2cd33d8681d0f8249c9"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_confirmed_candidate_full_atom_extraction_smoke_v0/real_covalent_confirmed_candidate_ligand_full_atom_table.csv",
+        "0eeeab569545dc3e3c1ec7f12edb3a18d604bbbac9444b79f4d9e2a40c4d3b0f"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_observed_atom_topology_smoke_table.csv",
+        "b47d03598a077e6201e21585c683fe46a7423d99fae231b47c303657bad89c59"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_observed_bond_topology_smoke_table.csv",
+        "007d3b7a57b5878389e1229ceeec999442a532923e475f32cf7bcaea0e580d7f"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_confirmed_candidate_pocket_extraction_smoke_v0/real_covalent_confirmed_candidate_pocket_atom_table.csv",
+        "77dc7777d44ec48ecc985c9c7d66d603756781455b7b3d5c9151dd5800ceaee9"
+      ],
+      [
+        "data/derived/covalent_small/real_covalent_struct_conn_candidate_manual_review_fill_validation_v0/real_covalent_struct_conn_confirmed_candidate_table.csv",
+        "981c59f1131ae8c5f1bb17680986eccda9d85a44caf0f44d1711246283f04186"
+      ],
+      [
+        "data/raw/covalent_small/metadata/KRAS_G12C_5F2E_5UT_annotation_template.csv",
+        "3d81e379d086662398aebb77750e3dfacd3a4b11acbe11f23abdf0f20cbeabad"
+      ]
+    ]
+  },
+  "minimal_seed_recommendation": [
+    6,
+    21,
+    22
+  ],
+  "non_authority_guards": {
+    "cli_ingestible_as_completed_approval": false,
+    "commit_created": false,
+    "production_approval_written": false,
+    "production_reviewer_identity_present": false,
+    "push_performed": false,
+    "real_sample_materialized": false,
+    "review_status_field_present": false
+  },
+  "optional_plane_anchor_atom_recommendation": null,
+  "primary_anchor_atom_recommendation": 22,
+  "proposal_status": "PROPOSED_FOR_HUMAN_REVIEW_NOT_AUTHORITY",
+  "reaction_family_authority_action_recommendation": "NEW_AUTHORITY_REQUIRED",
+  "reaction_family_id_generation_rule_for_later_authority": "Canonicalize the approved family semantic-signature JSON, SHA256 it, and use COVAPIE_CYS_SG_REACTION_FAMILY_<FIRST_16_HEX_UPPER>; do not mint it from this proposal.",
+  "reaction_family_id_or_semantic_recommendation": "CYS_SG_MICHAEL_ADDITION_TO_N_SUBSTITUTED_ACRYLAMIDE_BETA_CARBON_V1",
+  "reaction_family_version_recommendation": "V1",
+  "ready_for_human_decision": true,
+  "recommended_exact_chemistry_signature_sha256": null,
+  "recommended_next_step_exactly": "user_approve_or_revise_covapie_5f2e_5ut_human_review_v1",
+  "remaining_human_uncertainties": [
+    "Canonical scaffold chemistry leaves C10 and C17 symmetry-equivalent. Human must choose only the direction/plane labeling convention: Option A direction=C10 and plane=C17, or Option B direction=C17 and plane=C10."
+  ],
+  "review_scope_recommendation": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE",
+  "reviewed_attachment_boundary_bond_order_recommendation": "single",
+  "reviewed_linker_atom_ids_recommendation": [
+    7,
+    24,
+    25,
+    26
+  ],
+  "reviewed_linker_warhead_boundary_bond_recommendation": [
+    25,
+    27,
+    "single"
+  ],
+  "reviewed_minimal_seed_atom_ids_recommendation": [
+    6,
+    21,
+    22
+  ],
+  "reviewed_nonwarhead_boundary_atom_id_recommendation": 25,
+  "reviewed_scaffold_atom_ids_recommendation": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "reviewed_scaffold_linker_boundary_bond_recommendation": [
+    22,
+    7,
+    "single"
+  ],
+  "reviewed_warhead_atom_ids_recommendation": [
+    8,
+    27,
+    28,
+    29
+  ],
+  "reviewed_warhead_attachment_atom_id_recommendation": 27,
+  "reviewed_warhead_role_atom_ids_recommendation": [
+    8,
+    27,
+    28,
+    29
+  ],
+  "role_boundary_evidence": {
+    "linker_warhead": {
+      "bond_order": "single",
+      "left": {
+        "atom_id": 25,
+        "atom_map_number": 26,
+        "element": "N",
+        "pdb_atom_name": "N3"
+      },
+      "right": {
+        "atom_id": 27,
+        "atom_map_number": 28,
+        "element": "C",
+        "pdb_atom_name": "C13"
+      }
+    },
+    "scaffold_linker": {
+      "bond_order": "single",
+      "left": {
+        "atom_id": 22,
+        "atom_map_number": 23,
+        "element": "N",
+        "pdb_atom_name": "N2"
+      },
+      "right": {
+        "atom_id": 7,
+        "atom_map_number": 8,
+        "element": "C",
+        "pdb_atom_name": "C11"
+      }
+    }
+  },
+  "role_partition_recommendation": "APPROVE_DRAFT",
+  "seed_anchor_contract_review": {
+    "accepted_seed_atom_set": [
+      {
+        "atom_id": 6,
+        "atom_map_number": 7,
+        "element": "C",
+        "pdb_atom_name": "C10"
+      },
+      {
+        "atom_id": 21,
+        "atom_map_number": 22,
+        "element": "C",
+        "pdb_atom_name": "C17"
+      },
+      {
+        "atom_id": 22,
+        "atom_map_number": 23,
+        "element": "N",
+        "pdb_atom_name": "N2"
+      }
+    ],
+    "anchor_label_option_count": 2,
+    "canonical_ranking_evidence": {
+      "atom_invariants": [
+        "element",
+        "formal_charge",
+        "scaffold_internal_connectivity",
+        "scaffold_internal_bond_order"
+      ],
+      "atom_map_numbers_used_for_ranking": false,
+      "automorphism_swap_support": [
+        [
+          6,
+          21
+        ],
+        [
+          9,
+          23
+        ]
+      ],
+      "automorphisms_swapping_C10_C17_count": 2,
+      "break_ties": false,
+      "break_ties_true_assignment_invariant": false,
+      "break_ties_true_observed_rank_pairs": [
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          4
+        ]
+      ],
+      "canonical_rank_C10": 4,
+      "canonical_rank_C17": 4,
+      "canonical_tie_detected": true,
+      "explicit_secondary_tie_break_in_published_owner": null,
+      "full_equivalence_rank_vector_invariant": true,
+      "input_atom_row_order_used_for_ranking": false,
+      "linker_atoms_used_for_ranking": false,
+      "permutation_cases_checked": 73,
+      "post_coordinates_used_for_ranking": false,
+      "ranking_algorithm": "RDKit CanonicalRankAtoms on reconstructed PRE scaffold-induced labeled graph with breakTies=False, atom maps excluded, chirality/isotopes excluded; audit-only computation because the published owner exposes contract semantics but no ranking implementation",
+      "ranking_scope": "AUTHORITATIVE_PRE_SCAFFOLD_INDUCED_GRAPH_ONLY",
+      "rdkit_version": "2026.03.3",
+      "reactive_geometry_used_for_ranking": false,
+      "scaffold_edge_count": 24,
+      "scaffold_node_count": 22,
+      "warhead_atoms_used_for_ranking": false
+    },
+    "contract_owners": [
+      {
+        "function": "validate_minimal_seed",
+        "owner": "src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py",
+        "semantics": [
+          "seed_subset_of_scaffold",
+          "seed_connected",
+          "seed_size_exactly_2_or_3",
+          "primary_anchor_in_seed"
+        ]
+      },
+      {
+        "function": "validate_minimal_seed_for_role_profile_v1",
+        "owner": "src/covalent_ext/covapie_direct_attachment_optional_linker_runtime_v1.py",
+        "semantics": [
+          "STRICT_LINKER_PRESENT_V1 delegation to published validate_minimal_seed"
+        ]
+      },
+      {
+        "contract_ids": [
+          "LRMSC_009",
+          "LRMSC_010",
+          "LRMSR_020"
+        ],
+        "owner": "data/derived/covalent_small/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1/covapie_ligand_role_and_seed_contract_registry.csv;covapie_ligand_role_annotation_rule_registry.csv",
+        "semantics": [
+          "canonical_rank_deterministic_selection",
+          "explicit_tie_break",
+          "input_numbering_independent",
+          "unbreakable_tie_blocked"
+        ]
+      }
+    ],
+    "primary_anchor": {
+      "atom_id": 22,
+      "atom_map_number": 23,
+      "element": "N",
+      "pdb_atom_name": "N2"
+    },
+    "seed_atom_set_contract_valid": true,
+    "seed_contract_valid_for_each_anchor_label_option": true
+  },
+  "smarts_exact_match_count": 1,
+  "smarts_includes_reactive_atom": true,
+  "smarts_matched_atom_ids": [
+    8,
+    27,
+    28,
+    29
+  ],
+  "smarts_matched_atom_maps": [
+    9,
+    28,
+    29,
+    30
+  ],
+  "unknown_atom_feature_policy_resolved": true,
+  "unknown_atom_policy_contract_resolved": true,
+  "valid_anchor_label_option_count": 2,
+  "warhead_atom_map_numbers": [
+    9,
+    28,
+    29,
+    30
+  ],
+  "warhead_rule_authority_action_recommendation": "NEW_AUTHORITY_REQUIRED",
+  "warhead_rule_id_generation_rule_for_later_authority": "Canonicalize the approved full rule semantic-signature JSON, SHA256 it, and use COVAPIE_CYS_SG_WARHEAD_RULE_<FIRST_16_HEX_UPPER>; do not mint it from this proposal.",
+  "warhead_rule_id_or_semantic_recommendation": "N_SUBSTITUTED_ACRYLAMIDE_C13_O1_C14_C15_EXACT4_MICHAEL_ACCEPTOR_RULE_V1",
+  "warhead_rule_version_recommendation": "V1",
+  "warhead_smarts_recommendation": "APPROVE"
+}
