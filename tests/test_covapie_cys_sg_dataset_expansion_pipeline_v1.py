@@ -211,6 +211,41 @@ def _completed_real_5f2e_template_fixture() -> dict[str, object]:
     return template
 
 
+_FROZEN_5F2E_OPTION_B_SIGNATURE = (
+    "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179"
+)
+
+
+def _completed_real_5f2e_option_b_fixture() -> tuple[
+    pipeline.ExpansionCandidateV1, dict[str, object],
+]:
+    template = _completed_real_5f2e_template_fixture()
+    record = next(
+        item for item in template["approval_records"]
+        if item["candidate_identity"] == "5F2E/5UT"
+    )
+    record.update({
+        "reviewed_minimal_seed_atom_ids": [6, 21, 22],
+        "primary_anchor_atom": 22,
+        "direction_anchor_atom": 21,
+        "optional_plane_anchor_atom": 6,
+        "expected_final_chemistry_signature_sha256": (
+            _FROZEN_5F2E_OPTION_B_SIGNATURE
+        ),
+        "reviewer_id": "chemist_test_fixture_5f2e_option_b",
+        "review_rationale": (
+            "TEST-ONLY Option B representation-stability regression fixture"
+        ),
+        "review_notes": "TEST ONLY; no production authority is created",
+    })
+    _redigest(record)
+    candidate = next(
+        item for item in pipeline.load_current_non_exact16_candidates_v1(ROOT)
+        if item.candidate_identity == "5F2E/5UT"
+    )
+    return candidate, record
+
+
 def _authority(candidate: pipeline.ExpansionCandidateV1) -> pipeline.ReusableChemistryAuthorityV1:
     _effective, authority = pipeline.ingest_completed_human_approval_v1(candidate, _approval(candidate))
     assert authority is not None
@@ -427,6 +462,85 @@ def test_human_record_can_establish_pre_chemistry_when_machine_authority_is_abse
     assert effective.atom_formal_charges == baseline.atom_formal_charges
     assert effective.chemistry_signature_authoritative is True
     assert authority.pre_review_evidence_digest == unresolved.pre_review_evidence_digest
+
+
+def test_machine_authoritative_pre_graph_human_review_preserves_signature_representation_v1(
+) -> None:
+    candidate, record = _completed_real_5f2e_option_b_fixture()
+    direct_option_b = replace(
+        candidate,
+        scaffold_atoms=tuple(record["reviewed_scaffold_atom_ids"]),
+        linker_atoms=tuple(record["reviewed_linker_atom_ids"]),
+        warhead_atoms=tuple(record["reviewed_warhead_role_atom_ids"]),
+        seed_atoms=tuple(record["reviewed_minimal_seed_atom_ids"]),
+        primary_anchor_atom=record["primary_anchor_atom"],
+        direction_anchor_atom=record["direction_anchor_atom"],
+        optional_plane_anchor_atom=record["optional_plane_anchor_atom"],
+        role_profile=record["role_profile"],
+        role_rule_id=record["role_rule_id"],
+        role_rule_version=record["role_rule_version"],
+        role_rule_match_count=1,
+        role_authority_published=True,
+        chemistry_signature_authoritative=False,
+    )
+    direct_signature = pipeline.build_exact_chemistry_signature_v1(direct_option_b)
+    assert direct_signature == _FROZEN_5F2E_OPTION_B_SIGNATURE
+
+    effective, authority = pipeline.ingest_completed_human_approval_v1(
+        candidate, record,
+    )
+    assert authority is not None
+    assert effective.canonical_ligand_smiles == candidate.canonical_ligand_smiles
+    assert effective.smarts_atom_ids == candidate.smarts_atom_ids
+    assert effective.explicit_graph_bonds == candidate.explicit_graph_bonds
+    assert effective.pre_reaction_bonds == candidate.pre_reaction_bonds
+    assert effective.atom_formal_charges == candidate.atom_formal_charges
+    assert effective.pre_reaction_graph_authoritative is True
+    assert effective.formal_charge_authoritative is True
+    assert effective.chemistry_signature_sha256 == direct_signature
+    assert effective.chemistry_signature_sha256 == _FROZEN_5F2E_OPTION_B_SIGNATURE
+    assert authority.chemistry_signature_sha256 == _FROZEN_5F2E_OPTION_B_SIGNATURE
+
+
+@pytest.mark.parametrize(
+    ("case", "expected_reason"),
+    (
+        ("changed_bond_order", "MACHINE_AUTHORITATIVE_PRE_GRAPH_REVIEW_MISMATCH"),
+        ("missing_bond", "MACHINE_AUTHORITATIVE_PRE_GRAPH_REVIEW_MISMATCH"),
+        ("extra_bond", "MACHINE_AUTHORITATIVE_PRE_GRAPH_REVIEW_MISMATCH"),
+        ("changed_charge", "MACHINE_AUTHORITATIVE_FORMAL_CHARGE_REVIEW_MISMATCH"),
+        ("missing_charge", "MACHINE_AUTHORITATIVE_FORMAL_CHARGE_REVIEW_MISMATCH"),
+        ("incomplete_atom_maps", "MACHINE_AUTHORITATIVE_PRE_ATOM_MAP_COVERAGE_INVALID"),
+    ),
+)
+def test_machine_authoritative_pre_graph_human_review_chemistry_mismatches_fail_closed(
+    case: str, expected_reason: str,
+) -> None:
+    candidate, record = _completed_real_5f2e_option_b_fixture()
+    if case == "changed_bond_order":
+        record["expected_pre_reaction_bond_orders"][0][2] = "double"
+    elif case == "missing_bond":
+        record["expected_pre_reaction_bond_orders"].pop()
+    elif case == "extra_bond":
+        record["expected_pre_reaction_bond_orders"].append([1, 3, "single"])
+    elif case == "changed_charge":
+        record["allowed_formal_charge_pattern"]["1"] = 1
+    elif case == "missing_charge":
+        del record["allowed_formal_charge_pattern"]["30"]
+    else:
+        candidate = replace(
+            candidate, atom_map_numbers=candidate.atom_map_numbers[:-1],
+        )
+    _redigest(record)
+
+    _effective, _authority_result, reasons = (
+        pipeline._approval_effective_candidate_and_authority_v1(
+            candidate, record, (),
+        )
+    )
+    assert expected_reason in reasons
+    with pytest.raises(ValueError, match=expected_reason):
+        pipeline.ingest_completed_human_approval_v1(candidate, record)
 
 
 def test_bind_existing_success(tmp_path: Path) -> None:

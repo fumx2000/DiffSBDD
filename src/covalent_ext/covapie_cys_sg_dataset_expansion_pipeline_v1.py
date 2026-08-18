@@ -1280,7 +1280,55 @@ def _reviewed_pre_graph_candidate_fields_v1(
     approved_pre_bonds: tuple[tuple[int, int, str], ...],
     approved_charges: tuple[tuple[int, int], ...],
 ) -> Mapping[str, Any]:
-    """Validate reviewed PRE chemistry and project map numbers back to atom IDs."""
+    """Validate reviewed PRE chemistry without replacing authoritative representation."""
+
+    if (
+        candidate.pre_reaction_graph_authoritative is True
+        and candidate.formal_charge_authoritative is True
+    ):
+        retained_atoms = tuple(candidate.retained_heavy_atoms)
+        map_by_atom = dict(candidate.atom_map_numbers)
+        if (
+            len(set(retained_atoms)) != len(retained_atoms)
+            or len(set(candidate.smarts_atom_ids)) != len(candidate.smarts_atom_ids)
+            or set(candidate.smarts_atom_ids) != set(retained_atoms)
+            or len(map_by_atom) != len(candidate.atom_map_numbers)
+            or set(map_by_atom) != set(retained_atoms)
+            or any(type(value) is not int or value <= 0 for value in map_by_atom.values())
+            or len(set(map_by_atom.values())) != len(map_by_atom)
+        ):
+            raise ValueError("MACHINE_AUTHORITATIVE_PRE_ATOM_MAP_COVERAGE_INVALID")
+        try:
+            candidate_pre_bonds = tuple(sorted(
+                _normalized_bond_v1(bond, map_by_atom)
+                for bond in candidate.pre_reaction_bonds
+            ))
+        except ValueError as error:
+            raise ValueError("MACHINE_AUTHORITATIVE_PRE_GRAPH_INVALID") from error
+        if approved_pre_bonds != candidate_pre_bonds:
+            raise ValueError("MACHINE_AUTHORITATIVE_PRE_GRAPH_REVIEW_MISMATCH")
+        charges_by_atom = dict(candidate.atom_formal_charges)
+        if (
+            len(charges_by_atom) != len(candidate.atom_formal_charges)
+            or set(charges_by_atom) != set(retained_atoms)
+            or any(type(value) is not int for value in charges_by_atom.values())
+        ):
+            raise ValueError("MACHINE_AUTHORITATIVE_FORMAL_CHARGE_COVERAGE_INVALID")
+        candidate_charges = tuple(sorted(
+            (map_by_atom[atom_id], charges_by_atom[atom_id])
+            for atom_id in retained_atoms
+        ))
+        if approved_charges != candidate_charges:
+            raise ValueError("MACHINE_AUTHORITATIVE_FORMAL_CHARGE_REVIEW_MISMATCH")
+        return {
+            "canonical_ligand_smiles": candidate.canonical_ligand_smiles,
+            "smarts_atom_ids": candidate.smarts_atom_ids,
+            "explicit_graph_bonds": candidate.explicit_graph_bonds,
+            "pre_reaction_bonds": candidate.pre_reaction_bonds,
+            "atom_formal_charges": candidate.atom_formal_charges,
+            "pre_reaction_graph_authoritative": True,
+            "formal_charge_authoritative": True,
+        }
 
     try:
         from rdkit import Chem
