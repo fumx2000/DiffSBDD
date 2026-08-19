@@ -17,6 +17,7 @@ from covalent_ext.covapie_cys_sg_dataset_expansion_pipeline_v1 import (  # noqa:
     REVIEW_ONLY,
     atomic_write_review_only_report_v1,
     load_candidate_batch_v1,
+    load_cumulative_expansion_leakage_registry_v1,
     load_current_non_exact16_candidates_v1,
     load_reusable_authority_registry_v1,
     pipeline_output_sha256_v1,
@@ -50,6 +51,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--approval-records-json", type=Path)
     parser.add_argument("--candidate-batch-json", type=Path)
     parser.add_argument("--reusable-authority-registry-json", type=Path)
+    parser.add_argument("--cumulative-leakage-registry-json", type=Path)
     parser.add_argument(
         "--mode", choices=(REVIEW_ONLY, MATERIALIZE_APPROVED),
         default=REVIEW_ONLY,
@@ -74,6 +76,16 @@ def main(argv: list[str] | None = None) -> int:
         )
         if args.reusable_authority_registry_json is not None else ()
     )
+    cumulative_registry_path = (
+        args.cumulative_leakage_registry_json.resolve()
+        if args.cumulative_leakage_registry_json is not None else None
+    )
+    cumulative_registry = (
+        load_cumulative_expansion_leakage_registry_v1(
+            cumulative_registry_path, repo_root=repo_root,
+        )
+        if cumulative_registry_path is not None else None
+    )
     materialization_root = args.materialization_output_root
     if materialization_root is not None and not materialization_root.is_absolute():
         materialization_root = (repo_root / materialization_root).resolve()
@@ -83,6 +95,8 @@ def main(argv: list[str] | None = None) -> int:
         approval_records=approvals,
         execution_mode=args.mode,
         output_root=materialization_root,
+        cumulative_leakage_registry=cumulative_registry,
+        cumulative_leakage_registry_source_path=cumulative_registry_path,
     )
     if args.output_json is not None:
         if args.mode != REVIEW_ONLY:

@@ -214,6 +214,31 @@ def _completed_real_5f2e_template_fixture() -> dict[str, object]:
 _FROZEN_5F2E_OPTION_B_SIGNATURE = (
     "8fee9f8c3381d74ed05333d55805aff9501ce964c508d2fd6b4aa9541fdb4179"
 )
+_FROZEN_6OIM_SIGNATURE = (
+    "4075756dcc32346352c51dd410fc5a468977487d770b657e07b30158cb6fb48f"
+)
+_FROZEN_ACRYLAMIDE_FAMILY_ID = (
+    "COVAPIE_CYS_SG_REACTION_FAMILY_17F8EC65B1E1541A"
+)
+_FROZEN_5F2E_EXPANSION_GROUP = (
+    "COVAPIE_EXPANSION_LEAKAGE_GROUP_1004A7009A23CEA8"
+)
+_CUMULATIVE_5F2E_SEED = ROOT / (
+    "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/"
+    "covapie_cys_sg_cumulative_leakage_registry_after_5f2e_v1.json"
+)
+_PUBLISHED_5F2E_AUTHORITY_REGISTRY = ROOT / (
+    "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/"
+    "5f2e_5ut_approved_v1/reusable_authority_registry_v1.json"
+)
+_PUBLISHED_5F2E_APPROVAL = ROOT / (
+    "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/"
+    "covapie_5f2e_5ut_human_approval_v1.json"
+)
+_SIX_OIM_PROPOSAL = ROOT / (
+    "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/"
+    "covapie_6oim_mov_human_review_proposal_v1.json"
+)
 
 
 def _completed_real_5f2e_option_b_fixture() -> tuple[
@@ -244,6 +269,87 @@ def _completed_real_5f2e_option_b_fixture() -> tuple[
         if item.candidate_identity == "5F2E/5UT"
     )
     return candidate, record
+
+
+def _completed_real_6oim_test_only_fixture() -> tuple[
+    pipeline.ExpansionCandidateV1, dict[str, object], dict[str, object],
+]:
+    proposal = json.loads(_SIX_OIM_PROPOSAL.read_text())
+    assert proposal["proposal_status"] == "PROPOSED_FOR_HUMAN_REVIEW_NOT_AUTHORITY"
+    assert proposal["local_electrophile_review"]["pre_local_electrophile"] == (
+        "N6-C23(=O2)-C24=C25"
+    )
+    assert proposal["local_electrophile_review"]["reactive_atom"] == {
+        "atom_id": 7, "pdb_atom_name": "C25", "atom_map_number": 8,
+    }
+    assert proposal["role_partition_review"]["scaffold_atom_ids_recommendation"] == list(
+        range(11, 41)
+    )
+    assert proposal["role_partition_review"]["linker_atom_ids_recommendation"] == [
+        0, 1, 2, 3, 8, 9, 10,
+    ]
+    assert proposal["role_partition_review"]["warhead_atom_ids_recommendation"] == [
+        4, 5, 6, 7,
+    ]
+    assert proposal["seed_anchor_review"]["minimal_seed_recommendation"] == [
+        11, 12, 28,
+    ]
+    assert proposal["published_5f2e_authority_comparison"]["exact_signature"][
+        "six_oim_exact_signature"
+    ] == _FROZEN_6OIM_SIGNATURE
+
+    template = json.loads(
+        pipeline.build_real_exact4_human_review_decision_template_v2(ROOT)
+    )
+    record = next(
+        item for item in template["approval_records"]
+        if item["candidate_identity"] == "6OIM/MOV"
+    )
+    record.update({
+        "review_status": "APPROVE",
+        "review_scope": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE",
+        "independent_sample_assignment_decision": "APPROVE",
+        "reaction_family_authority_action": "NEW_AUTHORITY_REQUIRED",
+        "reaction_family_id": _FROZEN_ACRYLAMIDE_FAMILY_ID,
+        "reaction_family_version": "V1",
+        "warhead_rule_authority_action": "NEW_AUTHORITY_REQUIRED",
+        "warhead_rule_id": "TEST_ONLY_6OIM_EXACT_WARHEAD_V1",
+        "warhead_rule_version": "V1",
+        "approved_warhead_smarts": "[#6:5](=[#8:6])-[#6:7]=[#6:8]",
+        "warhead_atom_map_numbers": [5, 6, 7, 8],
+        "reviewed_warhead_atom_ids": [4, 5, 6, 7],
+        "reviewed_warhead_attachment_atom_id": 4,
+        "reviewed_nonwarhead_boundary_atom_id": 3,
+        "reviewed_attachment_boundary_bond_order": "single",
+        "reviewed_scaffold_atom_ids": list(range(11, 41)),
+        "reviewed_linker_atom_ids": [0, 1, 2, 3, 8, 9, 10],
+        "reviewed_warhead_role_atom_ids": [4, 5, 6, 7],
+        "reviewed_minimal_seed_atom_ids": [11, 12, 28],
+        "reviewed_scaffold_linker_boundary_bond": [11, 10],
+        "reviewed_linker_warhead_boundary_bond": [3, 4],
+        "primary_anchor_atom": 11,
+        "direction_anchor_atom": 12,
+        "optional_plane_anchor_atom": 28,
+        "role_profile": pipeline.STRICT_PROFILE,
+        "role_rule_id": "TEST_ONLY_6OIM_EXACT_ROLE_V1",
+        "role_rule_version": "V1",
+        "expected_final_chemistry_signature_sha256": _FROZEN_6OIM_SIGNATURE,
+        "reviewer_id": "chemist_test_fixture_6oim_not_production",
+        "review_rationale": (
+            "TEST-ONLY plumbing proof using the accepted frozen 6OIM proposal; "
+            "not production approval"
+        ),
+        "review_notes": (
+            "TEST ONLY; same scientific family label, new exact warhead and "
+            "role identities, no cross-signature admission"
+        ),
+    })
+    _redigest(record)
+    candidate = next(
+        item for item in pipeline.load_current_non_exact16_candidates_v1(ROOT)
+        if item.candidate_identity == "6OIM/MOV"
+    )
+    return candidate, record, template
 
 
 def _authority(candidate: pipeline.ExpansionCandidateV1) -> pipeline.ReusableChemistryAuthorityV1:
@@ -614,6 +720,214 @@ def test_existing_group_inherits_split_and_new_successor_is_order_independent(tm
     assert "% 20" not in source and "hash_modulo" not in source
 
 
+def test_cumulative_5f2e_seed_registry_is_exact_and_roundtrips() -> None:
+    registry = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_5F2E_SEED, repo_root=ROOT,
+    )
+    assert pipeline.serialize_cumulative_expansion_leakage_registry_v1(
+        registry
+    ) == _CUMULATIVE_5F2E_SEED.read_bytes()
+    assert registry.schema_version == (
+        pipeline.CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_SCHEMA_V1
+    )
+    assert registry.policy_id == pipeline.CUMULATIVE_EXPANSION_LEAKAGE_POLICY_ID_V1
+    assert len(registry.groups) == 1
+    group = registry.groups[0]
+    assert group.leakage_key == (
+        "COVAPIE_REAL_EXACT4_LEAKAGE_V1:"
+        "d6266afcdb1a52970a958bc6a563403a2b2a83274495a762f55a26eb14156ee7"
+    )
+    assert group.final_leakage_group_id == _FROZEN_5F2E_EXPANSION_GROUP
+    assert group.assigned_split == "test"
+    assert group.member_identities == ("5F2E/5UT",)
+    assert group.member_count == len(group.member_identities) == 1
+    assert {item.artifact_role for item in registry.source_artifacts} == {
+        "PUBLISHED_EXPANSION_PIPELINE_RUN",
+        "PUBLISHED_EXPANSION_MATERIALIZED_SAMPLE",
+        "PUBLISHED_LEAKAGE_SPLIT_POLICY",
+    }
+
+
+@pytest.mark.parametrize(
+    ("case", "reason"),
+    (
+        ("duplicate_key", "CUMULATIVE_LEAKAGE_DUPLICATE_KEY"),
+        ("key_group_conflict", "CUMULATIVE_LEAKAGE_KEY_GROUP_ID_CONFLICT"),
+        ("key_split_conflict", "CUMULATIVE_LEAKAGE_KEY_SPLIT_CONFLICT"),
+        ("group_id_conflict", "CUMULATIVE_LEAKAGE_GROUP_ID_KEY_CONFLICT"),
+        ("identity_conflict", "CUMULATIVE_LEAKAGE_MEMBER_GROUP_CONFLICT"),
+        ("member_count", "CUMULATIVE_LEAKAGE_MEMBER_COUNT_MISMATCH"),
+        ("unsupported_split", "CUMULATIVE_LEAKAGE_SPLIT_UNSUPPORTED"),
+        ("malformed_identity", "CUMULATIVE_LEAKAGE_MEMBER_IDENTITIES_INVALID"),
+        ("duplicate_member", "CUMULATIVE_LEAKAGE_MEMBER_IDENTITIES_INVALID"),
+        ("unsorted_members", "CUMULATIVE_LEAKAGE_MEMBER_IDENTITIES_INVALID"),
+        ("invalid_provenance_sha", "CUMULATIVE_LEAKAGE_PROVENANCE_SHA256_INVALID"),
+        ("missing_provenance_sha", "CUMULATIVE_LEAKAGE_PROVENANCE_RECORD_SCHEMA_INVALID"),
+        ("mismatched_provenance_sha", "CUMULATIVE_LEAKAGE_PROVENANCE_SOURCE_SHA256_MISMATCH"),
+    ),
+)
+def test_malformed_cumulative_registry_fails_closed(
+    tmp_path: Path, case: str, reason: str,
+) -> None:
+    payload = json.loads(_CUMULATIVE_5F2E_SEED.read_text())
+    group = payload["groups"][0]
+    if case == "duplicate_key":
+        payload["groups"].append(dict(group))
+    elif case == "key_group_conflict":
+        other = dict(group)
+        other.update({
+            "final_leakage_group_id": "COVAPIE_EXPANSION_LEAKAGE_GROUP_OTHER",
+            "member_identities": ["6OIM/MOV"],
+        })
+        payload["groups"].append(other)
+    elif case == "key_split_conflict":
+        other = dict(group)
+        other.update({
+            "assigned_split": "train", "member_identities": ["6OIM/MOV"],
+        })
+        payload["groups"].append(other)
+    elif case == "group_id_conflict":
+        other = dict(group)
+        other.update({
+            "leakage_key": "OTHER_LEAKAGE_KEY",
+            "member_identities": ["6OIM/MOV"],
+        })
+        payload["groups"].append(other)
+    elif case == "identity_conflict":
+        other = dict(group)
+        other.update({
+            "leakage_key": "OTHER_LEAKAGE_KEY",
+            "final_leakage_group_id": "COVAPIE_EXPANSION_LEAKAGE_GROUP_OTHER",
+        })
+        payload["groups"].append(other)
+    elif case == "member_count":
+        group["member_count"] = 2
+    elif case == "unsupported_split":
+        group["assigned_split"] = "holdout"
+    elif case == "malformed_identity":
+        group["member_identities"] = ["not a sample identity"]
+    elif case == "duplicate_member":
+        group["member_identities"] = ["5F2E/5UT", "5F2E/5UT"]
+        group["member_count"] = 2
+    elif case == "unsorted_members":
+        group["member_identities"] = ["6OIM/MOV", "5F2E/5UT"]
+        group["member_count"] = 2
+    elif case == "invalid_provenance_sha":
+        payload["provenance"]["source_artifacts"][0]["sha256"] = "invalid"
+    elif case == "missing_provenance_sha":
+        del payload["provenance"]["source_artifacts"][0]["sha256"]
+    else:
+        payload["provenance"]["source_artifacts"][0]["sha256"] = "f" * 64
+    path = tmp_path / f"malformed-{case}.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match=reason):
+        pipeline.load_cumulative_expansion_leakage_registry_v1(
+            path, repo_root=ROOT,
+        )
+
+
+def test_cumulative_group_inheritance_dedup_conflict_and_order_independence() -> None:
+    registry = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_5F2E_SEED, repo_root=ROOT,
+    )
+    groups = pipeline.merge_published_and_cumulative_leakage_groups_v1(
+        pipeline.load_published_leakage_group_population_v1(ROOT), registry,
+    )
+    candidates = {
+        item.candidate_identity: item
+        for item in pipeline.load_current_non_exact16_candidates_v1(ROOT)
+    }
+    five_f2e, six_oim = candidates["5F2E/5UT"], candidates["6OIM/MOV"]
+    with pytest.raises(
+        ValueError, match="CUMULATIVE_LEAKAGE_REGISTRY_SOURCE_PATH_REQUIRED"
+    ):
+        pipeline.run_covapie_cys_sg_dataset_expansion_pipeline_v1(
+            (six_oim,), cumulative_leakage_registry=registry,
+        )
+    left = pipeline.assign_expansion_leakage_splits_v1(
+        (five_f2e, six_oim), existing_groups=groups,
+    )
+    right = pipeline.assign_expansion_leakage_splits_v1(
+        (six_oim, five_f2e), existing_groups=tuple(reversed(groups)),
+    )
+    assert left == right
+    assert left[six_oim.leakage_key] == (_FROZEN_5F2E_EXPANSION_GROUP, "test")
+    assert pipeline.assign_expansion_leakage_splits_v1(
+        (five_f2e,), existing_groups=groups,
+    )[five_f2e.leakage_key] == (_FROZEN_5F2E_EXPANSION_GROUP, "test")
+    conflicting = replace(
+        six_oim,
+        candidate_identity="5F2E/5UT",
+        leakage_key="INCOMPATIBLE_LEAKAGE_KEY",
+    )
+    with pytest.raises(ValueError, match="REGISTERED_IDENTITY_LEAKAGE_KEY_CONFLICT"):
+        pipeline.assign_expansion_leakage_splits_v1(
+            (conflicting,), existing_groups=groups,
+        )
+    overlapping_registry = replace(
+        registry,
+        groups=(replace(
+            registry.groups[0], leakage_key="COVAPIE_LEAKAGE_GROUP_000001",
+        ),),
+    )
+    with pytest.raises(
+        ValueError, match="CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP"
+    ):
+        pipeline.merge_published_and_cumulative_leakage_groups_v1(
+            pipeline.load_published_leakage_group_population_v1(ROOT),
+            overlapping_registry,
+        )
+
+
+def test_repeated_5f2e_cumulative_successor_does_not_double_count(
+    tmp_path: Path,
+) -> None:
+    candidate = next(
+        item for item in pipeline.load_current_non_exact16_candidates_v1(ROOT)
+        if item.candidate_identity == "5F2E/5UT"
+    )
+    approval = json.loads(_PUBLISHED_5F2E_APPROVAL.read_text())["approval_records"][0]
+    authorities = pipeline.load_reusable_authority_registry_v1(
+        _PUBLISHED_5F2E_AUTHORITY_REGISTRY
+    )
+    cumulative = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_5F2E_SEED, repo_root=ROOT,
+    )
+    output = tmp_path / "repeat-5f2e"
+    kwargs = {
+        "reusable_authorities": authorities,
+        "approval_records": {"5F2E/5UT": approval},
+        "execution_mode": pipeline.MATERIALIZE_APPROVED,
+        "output_root": output,
+        "cumulative_leakage_registry": cumulative,
+        "cumulative_leakage_registry_source_path": _CUMULATIVE_5F2E_SEED,
+    }
+    first = pipeline.run_covapie_cys_sg_dataset_expansion_pipeline_v1(
+        (candidate,), **kwargs,
+    )
+    successor_path = output / pipeline.CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_FILENAME_V1
+    successor = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        successor_path, repo_root=ROOT,
+    )
+    assert successor.groups[0].member_identities == ("5F2E/5UT",)
+    assert successor.groups[0].member_count == 1
+    before = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*") if path.is_file()
+    }
+    second = pipeline.run_covapie_cys_sg_dataset_expansion_pipeline_v1(
+        (candidate,), **kwargs,
+    )
+    after = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*") if path.is_file()
+    }
+    assert pipeline.serialize_pipeline_run_v1(first) == (
+        pipeline.serialize_pipeline_run_v1(second)
+    )
+    assert before == after
+
+
 def test_post_authority_is_recomputed_from_exact_source_pair(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     valid, reasons, recomputed = pipeline.validate_post_geometry_authority_v1(candidate)
@@ -655,6 +969,67 @@ def test_current_replay_counts_blank_packet_and_review_only_safety() -> None:
     assert outcomes["2R9F/K2Z"].terminal_disposition == pipeline.RUNTIME_EXTENSION
     assert "DRAFT_ROLE_PARTITION_HAS_TWO_SCAFFOLD_LINKER_BOUNDARIES" in outcomes["6DI9/GJJ"].blocking_reasons
     assert all(not item.materialization_performed and not item.tensorization_performed for item in run.outcomes)
+    assert pipeline.pipeline_output_sha256_v1(run) == (
+        "27d48bebc1f6355feff962b5a11ec96ee75bb349a5365aca6aeecbbf2a5bf9ad"
+    )
+
+
+def test_cli_explicit_cumulative_registry_input_preserves_blank_replay() -> None:
+    completed = subprocess.run(
+        (
+            sys.executable,
+            "scripts/run_covapie_cys_sg_dataset_expansion_pipeline_v1.py",
+            "--repo-root", str(ROOT),
+            "--cumulative-leakage-registry-json", str(_CUMULATIVE_5F2E_SEED),
+        ),
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        check=True,
+    )
+    summary = json.loads(completed.stdout)
+    assert summary["output_sha256"] == (
+        "27d48bebc1f6355feff962b5a11ec96ee75bb349a5365aca6aeecbbf2a5bf9ad"
+    )
+    assert summary["aggregate"] == {
+        "candidate_count": 12,
+        "source_verified_count": 12,
+        "mechanically_eligible_count": 5,
+        "auto_admitted_count": 0,
+        "human_review_required_count": 4,
+        "runtime_extension_required_count": 1,
+        "missing_source_authority_count": 5,
+        "rejected_count": 2,
+        "materialization_ready_count": 0,
+    }
+
+
+def test_6oim_proposal_science_is_frozen_and_serialization_is_deterministic() -> None:
+    first = json.loads(_SIX_OIM_PROPOSAL.read_text())
+    second = json.loads(_SIX_OIM_PROPOSAL.read_text())
+    generate = lambda value: (
+        json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n"
+    ).encode()
+    assert generate(first) == generate(second)
+    assert first["proposal_status"] == "PROPOSED_FOR_HUMAN_REVIEW_NOT_AUTHORITY"
+    assert "review_status" not in first and "reviewer_id" not in first
+    assert first["local_electrophile_review"]["pre_local_electrophile"] == (
+        "N6-C23(=O2)-C24=C25"
+    )
+    assert first["local_electrophile_review"]["electrophile_class"] == (
+        "N_SUBSTITUTED_ACRYLAMIDE_ALPHA_BETA_UNSATURATED_AMIDE_MICHAEL_ACCEPTOR"
+    )
+    assert first["published_5f2e_authority_comparison"]["reaction_family"][
+        "existing_semantic_family_id"
+    ] == _FROZEN_ACRYLAMIDE_FAMILY_ID
+    assert first["published_5f2e_authority_comparison"]["exact_signature"][
+        "six_oim_exact_signature"
+    ] == _FROZEN_6OIM_SIGNATURE
+    assert first["published_5f2e_authority_comparison"]["exact_signature"][
+        "exact_signature_matches_5f2e"
+    ] is False
+    assert first["seed_anchor_review"]["minimal_seed_recommendation"] == [
+        11, 12, 28,
+    ]
+    assert first["seed_anchor_review"]["canonical_anchor_tie"] is False
 
 
 def test_real_exact4_loader_machine_evidence_and_v2_template_are_complete() -> None:
@@ -794,6 +1169,130 @@ def test_real_5f2e_test_only_approval_resumes_through_cli_materialization_and_te
     assert len(tensorized["canonical_task_masks"]) == 5
     assert before == {path: _sha(path.read_bytes()) for path in protected}
     assert not (ROOT / pipeline.REVIEW_TEMPLATE_V2_RELATIVE.parent / "reusable_authority_registry_v1.json").exists()
+    assert not list(tmp_path.rglob("*.tmp")) and not list(tmp_path.rglob("*.part"))
+
+
+def test_real_6oim_test_only_cumulative_cli_proof_preserves_5f2e_authority(
+    tmp_path: Path,
+) -> None:
+    candidate, record, completed_template = _completed_real_6oim_test_only_fixture()
+    prior_authorities = pipeline.load_reusable_authority_registry_v1(
+        _PUBLISHED_5F2E_AUTHORITY_REGISTRY
+    )
+    effective, test_only_authority = pipeline.ingest_completed_human_approval_v1(
+        candidate, record, existing_authorities=prior_authorities,
+    )
+    assert test_only_authority is not None
+    assert effective.chemistry_signature_sha256 == _FROZEN_6OIM_SIGNATURE
+    assert effective.chemistry_signature_sha256 != (
+        prior_authorities[0].chemistry_signature_sha256
+    )
+    cumulative = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_5F2E_SEED, repo_root=ROOT,
+    )
+    no_cross_signature_admission = (
+        pipeline.run_covapie_cys_sg_dataset_expansion_pipeline_v1(
+            (effective,),
+            reusable_authorities=prior_authorities,
+            cumulative_leakage_registry=cumulative,
+            cumulative_leakage_registry_source_path=_CUMULATIVE_5F2E_SEED,
+        ).outcomes[0]
+    )
+    assert no_cross_signature_admission.terminal_disposition == pipeline.HUMAN_REQUIRED
+    assert no_cross_signature_admission.human_sample_decision_consumed is False
+
+    approval_path = tmp_path / "completed-6oim-test-only.json"
+    approval_path.write_text(
+        json.dumps(completed_template, sort_keys=True, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "real-6oim-cumulative-materialized"
+    command = (
+        sys.executable,
+        "scripts/run_covapie_cys_sg_dataset_expansion_pipeline_v1.py",
+        "--repo-root", str(ROOT),
+        "--approval-records-json", str(approval_path),
+        "--reusable-authority-registry-json",
+        str(_PUBLISHED_5F2E_AUTHORITY_REGISTRY),
+        "--cumulative-leakage-registry-json", str(_CUMULATIVE_5F2E_SEED),
+        "--mode", pipeline.MATERIALIZE_APPROVED,
+        "--materialization-output-root", str(output),
+    )
+    completed = subprocess.run(
+        command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, check=True,
+    )
+    summary = json.loads(completed.stdout)
+    assert summary["aggregate"]["materialization_ready_count"] == 1
+    assert summary["materialization_performed_count"] == 1
+    assert summary["tensorization_performed_count"] == 1
+    run = json.loads((output / "pipeline_run_v1.json").read_text())
+    outcome = next(
+        item for item in run["outcomes"]
+        if item["candidate_identity"] == "6OIM/MOV"
+    )
+    assert outcome["terminal_disposition"] == pipeline.HUMAN_APPROVED
+    assert outcome["admitted_by"] == "VALID_COMPLETED_HUMAN_APPROVAL"
+    assert outcome["human_sample_decision_consumed"] is True
+    assert outcome["leakage_group_id"] == _FROZEN_5F2E_EXPANSION_GROUP
+    assert outcome["assigned_split"] == "test"
+    assert outcome["post_geometry_authority"] is True
+    assert outcome["pre_geometry_authority"] is False
+    assert outcome["pre_geometry_masked"] is True
+    assert outcome["materialization_performed"] is True
+    assert outcome["tensorization_performed"] is True
+    materialized_path = next((output / "samples").glob("*.materialized.json"))
+    materialized = json.loads(materialized_path.read_text())
+    assert materialized["candidate_identity"] == candidate.candidate_identity
+    assert materialized["chemistry_signature_sha256"] == _FROZEN_6OIM_SIGNATURE
+    assert materialized["leakage_group_id"] == _FROZEN_5F2E_EXPANSION_GROUP
+    assert materialized["assigned_split"] == "test"
+
+    successor_path = output / pipeline.CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_FILENAME_V1
+    successor = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        successor_path, repo_root=ROOT,
+    )
+    assert len(successor.groups) == 1
+    assert successor.groups[0].member_identities == ("5F2E/5UT", "6OIM/MOV")
+    assert successor.groups[0].member_count == 2
+    assert successor.groups[0].assigned_split == "test"
+
+    prior_registry = json.loads(_PUBLISHED_5F2E_AUTHORITY_REGISTRY.read_text())
+    successor_authorities = json.loads(
+        (output / "reusable_authority_registry_v1.json").read_text()
+    )
+    prior_authority = prior_registry["authorities"][0]
+    preserved = next(
+        item for item in successor_authorities["authorities"]
+        if item["authority_id"] == prior_authority["authority_id"]
+    )
+    assert preserved == prior_authority
+    six_oim_authority = next(
+        item for item in successor_authorities["authorities"]
+        if item["chemistry_signature_sha256"] == _FROZEN_6OIM_SIGNATURE
+    )
+    assert six_oim_authority["reaction_family_id"] == _FROZEN_ACRYLAMIDE_FAMILY_ID
+    assert six_oim_authority["chemistry_signature_sha256"] != (
+        prior_authority["chemistry_signature_sha256"]
+    )
+    assert six_oim_authority["warhead_rule_id"] != prior_authority["warhead_rule_id"]
+    assert six_oim_authority["role_rule_id"] != prior_authority["role_rule_id"]
+    assert six_oim_authority["cross_signature_propagation_allowed"] is False
+    assert record["reaction_family_authority_action"] == "NEW_AUTHORITY_REQUIRED"
+
+    before = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*") if path.is_file()
+    }
+    subprocess.run(
+        command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, check=True,
+    )
+    after = {
+        path.relative_to(output): path.read_bytes()
+        for path in output.rglob("*") if path.is_file()
+    }
+    assert before == after
     assert not list(tmp_path.rglob("*.tmp")) and not list(tmp_path.rglob("*.part"))
 
 

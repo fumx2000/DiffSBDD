@@ -61,6 +61,15 @@ SUCCESSOR_POLICY_ID = "APPROVED_REUSABLE_SIGNATURE_AUTO_ADMISSION_V1"
 REUSABLE_AUTHORITY_REGISTRY_SCHEMA_V1 = (
     "covapie_cys_sg_reusable_chemistry_authority_registry_v1"
 )
+CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_SCHEMA_V1 = (
+    "covapie_cys_sg_cumulative_expansion_leakage_registry_v1"
+)
+CUMULATIVE_EXPANSION_LEAKAGE_POLICY_ID_V1 = (
+    "COVAPIE_CUMULATIVE_EXPANSION_LEAKAGE_MEMBERSHIP_AND_SPLIT_V1"
+)
+CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_FILENAME_V1 = (
+    "cumulative_leakage_registry_v1.json"
+)
 MATERIALIZATION_SCHEMA_V1 = (
     "covapie_cys_sg_authorized_expansion_materialization_v1"
 )
@@ -226,6 +235,20 @@ PUBLISHED_GROUP_SPLIT_SHA256 = (
 
 _LOWER_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _ID = re.compile(r"^[A-Z0-9][A-Z0-9_.:-]*$")
+_LEAKAGE_KEY = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]*$")
+_SAMPLE_IDENTITY = re.compile(
+    r"^[A-Z0-9][A-Z0-9_.:-]*/[A-Z0-9][A-Z0-9_.:-]*$"
+)
+_CUMULATIVE_PROVENANCE_PATH_SCOPES_V1 = frozenset((
+    "REPOSITORY_ROOT_RELATIVE", "REGISTRY_DIRECTORY_RELATIVE",
+))
+_CUMULATIVE_PROVENANCE_ARTIFACT_ROLES_V1 = frozenset((
+    "PUBLISHED_EXPANSION_PIPELINE_RUN",
+    "PUBLISHED_EXPANSION_MATERIALIZED_SAMPLE",
+    "PUBLISHED_LEAKAGE_SPLIT_POLICY",
+    "SUCCESSOR_EXPANSION_PIPELINE_RUN",
+    "SUCCESSOR_EXPANSION_MATERIALIZED_SAMPLE",
+))
 _FORBIDDEN_REVIEWERS = {
     "auto", "chatgpt", "codex", "none", "placeholder", "synthetic",
     "system", "unknown",
@@ -502,6 +525,32 @@ class LeakageGroupAssignmentV1:
     member_count: int
     assigned_split: str
     frozen: bool
+    member_identities: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class CumulativeLeakageSourceArtifactV1:
+    artifact_role: str
+    path: str
+    path_scope: str
+    sha256: str
+
+
+@dataclass(frozen=True)
+class CumulativeExpansionLeakageGroupV1:
+    leakage_key: str
+    final_leakage_group_id: str
+    assigned_split: str
+    member_identities: tuple[str, ...]
+    member_count: int
+
+
+@dataclass(frozen=True)
+class CumulativeExpansionLeakageRegistryV1:
+    schema_version: str
+    policy_id: str
+    source_artifacts: tuple[CumulativeLeakageSourceArtifactV1, ...]
+    groups: tuple[CumulativeExpansionLeakageGroupV1, ...]
 
 
 @dataclass(frozen=True)
@@ -831,6 +880,359 @@ def load_reusable_authority_registry_v1(
         raise ValueError("REUSABLE_AUTHORITY_REGISTRY_SCHEMA_INVALID")
     return _validated_authority_registry_v1(tuple(
         _authority_from_mapping_v1(item) for item in parsed["authorities"]
+    ))
+
+
+def _valid_cumulative_provenance_path_v1(value: object) -> bool:
+    if type(value) is not str or not value or value.strip() != value:
+        return False
+    path = Path(value)
+    return (
+        not path.is_absolute()
+        and value == path.as_posix()
+        and all(part not in {"", ".", ".."} for part in path.parts)
+    )
+
+
+def _validated_cumulative_expansion_leakage_registry_v1(
+    registry: CumulativeExpansionLeakageRegistryV1,
+) -> CumulativeExpansionLeakageRegistryV1:
+    if type(registry) is not CumulativeExpansionLeakageRegistryV1:
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_TYPE_INVALID")
+    if registry.schema_version != CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_SCHEMA_V1:
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_SCHEMA_INVALID")
+    if registry.policy_id != CUMULATIVE_EXPANSION_LEAKAGE_POLICY_ID_V1:
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_POLICY_INVALID")
+    if not registry.source_artifacts:
+        raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_EMPTY")
+    artifacts: list[CumulativeLeakageSourceArtifactV1] = []
+    seen_artifacts: set[tuple[str, str]] = set()
+    policy_owner_count = 0
+    run_artifact_count = 0
+    materialized_artifact_count = 0
+    for artifact in registry.source_artifacts:
+        if type(artifact) is not CumulativeLeakageSourceArtifactV1:
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_RECORD_TYPE_INVALID")
+        if artifact.artifact_role not in _CUMULATIVE_PROVENANCE_ARTIFACT_ROLES_V1:
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_ROLE_INVALID")
+        if artifact.path_scope not in _CUMULATIVE_PROVENANCE_PATH_SCOPES_V1:
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_PATH_SCOPE_INVALID")
+        if not _valid_cumulative_provenance_path_v1(artifact.path):
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_PATH_INVALID")
+        if not _is_sha(artifact.sha256):
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_SHA256_INVALID")
+        identity = (artifact.path_scope, artifact.path)
+        if identity in seen_artifacts:
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_DUPLICATE_ARTIFACT")
+        seen_artifacts.add(identity)
+        policy_owner_count += artifact.artifact_role == "PUBLISHED_LEAKAGE_SPLIT_POLICY"
+        run_artifact_count += artifact.artifact_role.endswith("PIPELINE_RUN")
+        materialized_artifact_count += artifact.artifact_role.endswith(
+            "MATERIALIZED_SAMPLE"
+        )
+        artifacts.append(artifact)
+    if policy_owner_count != 1:
+        raise ValueError("CUMULATIVE_LEAKAGE_POLICY_OWNER_NOT_EXACT_ONE")
+    if run_artifact_count < 1 or materialized_artifact_count < 1:
+        raise ValueError("CUMULATIVE_LEAKAGE_MEMBERSHIP_PROVENANCE_INCOMPLETE")
+
+    if not registry.groups:
+        raise ValueError("CUMULATIVE_LEAKAGE_GROUPS_EMPTY")
+    groups: list[CumulativeExpansionLeakageGroupV1] = []
+    seen_keys: set[str] = set()
+    prior_group_by_key: dict[str, CumulativeExpansionLeakageGroupV1] = {}
+    group_id_to_key: dict[str, str] = {}
+    member_to_key: dict[str, str] = {}
+    for group in registry.groups:
+        if type(group) is not CumulativeExpansionLeakageGroupV1:
+            raise ValueError("CUMULATIVE_LEAKAGE_GROUP_RECORD_TYPE_INVALID")
+        if (
+            type(group.leakage_key) is not str
+            or _LEAKAGE_KEY.fullmatch(group.leakage_key) is None
+        ):
+            raise ValueError("CUMULATIVE_LEAKAGE_KEY_INVALID")
+        if not _is_id(group.final_leakage_group_id):
+            raise ValueError("CUMULATIVE_LEAKAGE_GROUP_ID_INVALID")
+        if group.assigned_split not in split_owner.SPLITS:
+            raise ValueError("CUMULATIVE_LEAKAGE_SPLIT_UNSUPPORTED")
+        if group.leakage_key in seen_keys:
+            prior_group = prior_group_by_key[group.leakage_key]
+            if prior_group.final_leakage_group_id != group.final_leakage_group_id:
+                raise ValueError("CUMULATIVE_LEAKAGE_KEY_GROUP_ID_CONFLICT")
+            if prior_group.assigned_split != group.assigned_split:
+                raise ValueError("CUMULATIVE_LEAKAGE_KEY_SPLIT_CONFLICT")
+            raise ValueError("CUMULATIVE_LEAKAGE_DUPLICATE_KEY")
+        seen_keys.add(group.leakage_key)
+        prior_group_by_key[group.leakage_key] = group
+        prior_key = group_id_to_key.get(group.final_leakage_group_id)
+        if prior_key is not None and prior_key != group.leakage_key:
+            raise ValueError("CUMULATIVE_LEAKAGE_GROUP_ID_KEY_CONFLICT")
+        group_id_to_key[group.final_leakage_group_id] = group.leakage_key
+        if (
+            type(group.member_identities) is not tuple
+            or not group.member_identities
+            or tuple(sorted(group.member_identities)) != group.member_identities
+            or len(set(group.member_identities)) != len(group.member_identities)
+            or any(
+                type(identity) is not str
+                or _SAMPLE_IDENTITY.fullmatch(identity) is None
+                for identity in group.member_identities
+            )
+        ):
+            raise ValueError("CUMULATIVE_LEAKAGE_MEMBER_IDENTITIES_INVALID")
+        if type(group.member_count) is not int or group.member_count != len(
+            group.member_identities
+        ):
+            raise ValueError("CUMULATIVE_LEAKAGE_MEMBER_COUNT_MISMATCH")
+        for identity in group.member_identities:
+            prior_member_key = member_to_key.get(identity)
+            if prior_member_key is not None and prior_member_key != group.leakage_key:
+                raise ValueError("CUMULATIVE_LEAKAGE_MEMBER_GROUP_CONFLICT")
+            member_to_key[identity] = group.leakage_key
+        groups.append(group)
+    return CumulativeExpansionLeakageRegistryV1(
+        schema_version=registry.schema_version,
+        policy_id=registry.policy_id,
+        source_artifacts=tuple(sorted(
+            artifacts,
+            key=lambda item: (
+                item.path_scope, item.path, item.artifact_role, item.sha256,
+            ),
+        )),
+        groups=tuple(sorted(
+            groups,
+            key=lambda item: (item.final_leakage_group_id, item.leakage_key),
+        )),
+    )
+
+
+def serialize_cumulative_expansion_leakage_registry_v1(
+    registry: CumulativeExpansionLeakageRegistryV1,
+) -> bytes:
+    normalized = _validated_cumulative_expansion_leakage_registry_v1(registry)
+    return _canonical_json({
+        "schema_version": normalized.schema_version,
+        "policy_id": normalized.policy_id,
+        "provenance": {
+            "source_artifacts": tuple(
+                asdict(item) for item in normalized.source_artifacts
+            ),
+        },
+        "groups": tuple(asdict(item) for item in normalized.groups),
+    })
+
+
+def _cumulative_source_artifact_from_mapping_v1(
+    value: object,
+) -> CumulativeLeakageSourceArtifactV1:
+    if type(value) is not dict or set(value) != {
+        "artifact_role", "path", "path_scope", "sha256",
+    }:
+        raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_RECORD_SCHEMA_INVALID")
+    return CumulativeLeakageSourceArtifactV1(**value)
+
+
+def _cumulative_group_from_mapping_v1(
+    value: object,
+) -> CumulativeExpansionLeakageGroupV1:
+    if type(value) is not dict or set(value) != {
+        "leakage_key", "final_leakage_group_id", "assigned_split",
+        "member_identities", "member_count",
+    } or type(value.get("member_identities")) is not list:
+        raise ValueError("CUMULATIVE_LEAKAGE_GROUP_RECORD_SCHEMA_INVALID")
+    converted = dict(value)
+    converted["member_identities"] = tuple(converted["member_identities"])
+    return CumulativeExpansionLeakageGroupV1(**converted)
+
+
+def _record_cumulative_provenance_claim_v1(
+    claims: dict[str, tuple[str, str]],
+    *,
+    identity: object,
+    group_id: object,
+    split: object,
+) -> None:
+    if (
+        type(identity) is not str
+        or _SAMPLE_IDENTITY.fullmatch(identity) is None
+        or type(group_id) is not str
+        or not _is_id(group_id)
+        or split not in split_owner.SPLITS
+    ):
+        raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_CLAIM_INVALID")
+    claim = (group_id, split)
+    if identity in claims and claims[identity] != claim:
+        raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_CLAIM_CONFLICT")
+    claims[identity] = claim
+
+
+def _verify_cumulative_expansion_leakage_provenance_v1(
+    registry: CumulativeExpansionLeakageRegistryV1,
+    *,
+    registry_path: Path,
+    repo_root: Path,
+) -> None:
+    repo_root = repo_root.resolve()
+    registry_directory = registry_path.resolve().parent
+    run_claims: dict[str, tuple[str, str]] = {}
+    materialized_claims: dict[str, tuple[str, str]] = {}
+    for artifact in registry.source_artifacts:
+        base = (
+            repo_root
+            if artifact.path_scope == "REPOSITORY_ROOT_RELATIVE"
+            else registry_directory
+        )
+        source_path = (base / artifact.path).resolve()
+        if not source_path.is_relative_to(base) or not source_path.is_file():
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_SOURCE_MISSING")
+        payload = source_path.read_bytes()
+        if _sha256(payload) != artifact.sha256:
+            raise ValueError("CUMULATIVE_LEAKAGE_PROVENANCE_SOURCE_SHA256_MISMATCH")
+        if artifact.artifact_role == "PUBLISHED_LEAKAGE_SPLIT_POLICY":
+            if (
+                artifact.path_scope != "REPOSITORY_ROOT_RELATIVE"
+                or artifact.path != PUBLISHED_GROUP_SPLIT_RELATIVE.as_posix()
+                or artifact.sha256 != PUBLISHED_GROUP_SPLIT_SHA256
+            ):
+                raise ValueError("CUMULATIVE_LEAKAGE_POLICY_OWNER_INVALID")
+            continue
+        try:
+            parsed = json.loads(payload)
+        except (UnicodeError, json.JSONDecodeError) as error:
+            raise ValueError(
+                "CUMULATIVE_LEAKAGE_PROVENANCE_ARTIFACT_UNREADABLE"
+            ) from error
+        if artifact.artifact_role.endswith("PIPELINE_RUN"):
+            if (
+                type(parsed) is not dict
+                or parsed.get("pipeline_version") != PIPELINE_VERSION
+                or type(parsed.get("outcomes")) is not list
+            ):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_PIPELINE_RUN_PROVENANCE_INVALID"
+                )
+            for outcome in parsed["outcomes"]:
+                if (
+                    type(outcome) is dict
+                    and outcome.get("leakage_group_id") not in (None, "", "NONE")
+                    and outcome.get("assigned_split") not in (None, "", "NONE")
+                ):
+                    _record_cumulative_provenance_claim_v1(
+                        run_claims,
+                        identity=outcome.get("candidate_identity"),
+                        group_id=outcome.get("leakage_group_id"),
+                        split=outcome.get("assigned_split"),
+                    )
+        else:
+            if (
+                type(parsed) is not dict
+                or parsed.get("schema_version") != MATERIALIZATION_SCHEMA_V1
+                or parsed.get("materialization_performed") is not True
+            ):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_MATERIALIZED_PROVENANCE_INVALID"
+                )
+            _record_cumulative_provenance_claim_v1(
+                materialized_claims,
+                identity=parsed.get("candidate_identity"),
+                group_id=parsed.get("leakage_group_id"),
+                split=parsed.get("assigned_split"),
+            )
+    for group in registry.groups:
+        expected = (group.final_leakage_group_id, group.assigned_split)
+        for identity in group.member_identities:
+            if (
+                run_claims.get(identity) != expected
+                or materialized_claims.get(identity) != expected
+            ):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_MEMBER_PROVENANCE_MISMATCH"
+                )
+
+
+def load_cumulative_expansion_leakage_registry_v1(
+    path: Path,
+    *,
+    repo_root: Path,
+) -> CumulativeExpansionLeakageRegistryV1:
+    try:
+        parsed = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_UNREADABLE") from error
+    if (
+        type(parsed) is not dict
+        or set(parsed) != {"schema_version", "policy_id", "provenance", "groups"}
+        or type(parsed.get("provenance")) is not dict
+        or set(parsed["provenance"]) != {"source_artifacts"}
+        or type(parsed["provenance"].get("source_artifacts")) is not list
+        or type(parsed.get("groups")) is not list
+    ):
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_SCHEMA_INVALID")
+    registry = _validated_cumulative_expansion_leakage_registry_v1(
+        CumulativeExpansionLeakageRegistryV1(
+            schema_version=parsed["schema_version"],
+            policy_id=parsed["policy_id"],
+            source_artifacts=tuple(
+                _cumulative_source_artifact_from_mapping_v1(item)
+                for item in parsed["provenance"]["source_artifacts"]
+            ),
+            groups=tuple(
+                _cumulative_group_from_mapping_v1(item)
+                for item in parsed["groups"]
+            ),
+        )
+    )
+    _verify_cumulative_expansion_leakage_provenance_v1(
+        registry, registry_path=path, repo_root=repo_root,
+    )
+    return registry
+
+
+def merge_published_and_cumulative_leakage_groups_v1(
+    published_groups: Sequence[LeakageGroupAssignmentV1],
+    cumulative_registry: CumulativeExpansionLeakageRegistryV1,
+) -> tuple[LeakageGroupAssignmentV1, ...]:
+    registry = _validated_cumulative_expansion_leakage_registry_v1(
+        cumulative_registry
+    )
+    if type(published_groups) not in (tuple, list) or not published_groups:
+        raise ValueError("PUBLISHED_LEAKAGE_GROUPS_INVALID")
+    published_keys: set[str] = set()
+    published_ids: set[str] = set()
+    normalized_published: list[LeakageGroupAssignmentV1] = []
+    for group in published_groups:
+        if (
+            type(group) is not LeakageGroupAssignmentV1
+            or group.frozen is not True
+            or group.assigned_split not in split_owner.SPLITS
+            or group.member_count <= 0
+            or not group.leakage_key
+            or not group.final_leakage_group_id
+            or group.leakage_key in published_keys
+            or group.final_leakage_group_id in published_ids
+        ):
+            raise ValueError("PUBLISHED_LEAKAGE_GROUPS_INVALID")
+        published_keys.add(group.leakage_key)
+        published_ids.add(group.final_leakage_group_id)
+        normalized_published.append(group)
+    cumulative_keys = {group.leakage_key for group in registry.groups}
+    cumulative_ids = {group.final_leakage_group_id for group in registry.groups}
+    if published_keys & cumulative_keys or published_ids & cumulative_ids:
+        raise ValueError("CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP")
+    combined = [*normalized_published, *(
+        LeakageGroupAssignmentV1(
+            leakage_key=group.leakage_key,
+            final_leakage_group_id=group.final_leakage_group_id,
+            member_count=group.member_count,
+            assigned_split=group.assigned_split,
+            frozen=True,
+            member_identities=group.member_identities,
+        )
+        for group in registry.groups
+    )]
+    return tuple(sorted(
+        combined,
+        key=lambda item: (item.final_leakage_group_id, item.leakage_key),
     ))
 
 
@@ -1965,26 +2367,73 @@ def assign_expansion_leakage_splits_v1(
     existing = {item.leakage_key: item for item in existing_groups}
     if len(existing) != len(existing_groups):
         raise ValueError("LEAKAGE_GROUP_REGISTRY_DUPLICATE_KEY")
-    if any(
-        item.frozen is not True or item.assigned_split not in split_owner.SPLITS
-        or item.member_count <= 0
-        for item in existing_groups
-    ):
-        raise ValueError("LEAKAGE_GROUP_REGISTRY_INVALID")
+    group_id_to_key: dict[str, str] = {}
+    prior_member_to_key: dict[str, str] = {}
+    for item in existing_groups:
+        if (
+            type(item) is not LeakageGroupAssignmentV1
+            or item.frozen is not True
+            or item.assigned_split not in split_owner.SPLITS
+            or item.member_count <= 0
+            or not item.leakage_key.strip()
+            or not item.final_leakage_group_id.strip()
+        ):
+            raise ValueError("LEAKAGE_GROUP_REGISTRY_INVALID")
+        prior_key = group_id_to_key.get(item.final_leakage_group_id)
+        if prior_key is not None and prior_key != item.leakage_key:
+            raise ValueError("LEAKAGE_GROUP_REGISTRY_GROUP_ID_KEY_CONFLICT")
+        group_id_to_key[item.final_leakage_group_id] = item.leakage_key
+        if item.member_identities:
+            if (
+                tuple(sorted(item.member_identities)) != item.member_identities
+                or len(set(item.member_identities)) != len(item.member_identities)
+                or item.member_count != len(item.member_identities)
+                or any(
+                    _SAMPLE_IDENTITY.fullmatch(identity) is None
+                    for identity in item.member_identities
+                )
+            ):
+                raise ValueError("LEAKAGE_GROUP_REGISTRY_MEMBER_IDENTITIES_INVALID")
+            for identity in item.member_identities:
+                prior_member_key = prior_member_to_key.get(identity)
+                if (
+                    prior_member_key is not None
+                    and prior_member_key != item.leakage_key
+                ):
+                    raise ValueError("LEAKAGE_GROUP_REGISTRY_MEMBER_GROUP_CONFLICT")
+                prior_member_to_key[identity] = item.leakage_key
     members_by_key: dict[str, set[str]] = {}
+    candidate_key_by_identity: dict[str, str] = {}
     for candidate in candidates:
         if not candidate.leakage_key.strip():
             raise ValueError("LEAKAGE_KEY_MISSING")
+        prior_candidate_key = candidate_key_by_identity.get(
+            candidate.candidate_identity
+        )
+        if (
+            prior_candidate_key is not None
+            and prior_candidate_key != candidate.leakage_key
+        ):
+            raise ValueError("CANDIDATE_IDENTITY_LEAKAGE_KEY_CONFLICT")
+        registered_key = prior_member_to_key.get(candidate.candidate_identity)
+        if registered_key is not None and registered_key != candidate.leakage_key:
+            raise ValueError("REGISTERED_IDENTITY_LEAKAGE_KEY_CONFLICT")
+        candidate_key_by_identity[candidate.candidate_identity] = (
+            candidate.leakage_key
+        )
         members_by_key.setdefault(candidate.leakage_key, set()).add(
             candidate.candidate_identity
         )
     groups: list[dict[str, Any]] = []
     new_keys: list[str] = []
     for item in existing_groups:
+        new_members = members_by_key.get(item.leakage_key, set()) - set(
+            item.member_identities
+        )
         groups.append({
             "key": item.leakage_key,
             "id": item.final_leakage_group_id,
-            "member_count": item.member_count + len(members_by_key.get(item.leakage_key, set())),
+            "member_count": item.member_count + len(new_members),
             "fixed_rank": split_owner.RANK[item.assigned_split],
         })
     for key in sorted(set(members_by_key) - set(existing)):
@@ -3635,11 +4084,117 @@ def _validated_materialization_root_v1(output_root: Path) -> Path:
     return candidate
 
 
+def _portable_prior_cumulative_provenance_v1(
+    registry: CumulativeExpansionLeakageRegistryV1,
+    *,
+    prior_registry_path: Path | None,
+    repo_root: Path,
+) -> tuple[CumulativeLeakageSourceArtifactV1, ...]:
+    portable: list[CumulativeLeakageSourceArtifactV1] = []
+    for artifact in registry.source_artifacts:
+        if artifact.path_scope == "REPOSITORY_ROOT_RELATIVE":
+            portable.append(artifact)
+            continue
+        if prior_registry_path is None:
+            raise ValueError(
+                "CUMULATIVE_LEAKAGE_PRIOR_REGISTRY_PATH_REQUIRED_FOR_PROVENANCE"
+            )
+        resolved = (prior_registry_path.resolve().parent / artifact.path).resolve()
+        if not resolved.is_relative_to(repo_root):
+            raise ValueError(
+                "CUMULATIVE_LEAKAGE_SUCCESSOR_PROVENANCE_NOT_PORTABLE"
+            )
+        portable.append(replace(
+            artifact,
+            path=resolved.relative_to(repo_root).as_posix(),
+            path_scope="REPOSITORY_ROOT_RELATIVE",
+        ))
+    return tuple(portable)
+
+
+def build_successor_cumulative_expansion_leakage_registry_v1(
+    prior_registry: CumulativeExpansionLeakageRegistryV1,
+    *,
+    completed_outcomes: Sequence[CandidateOutcomeV1],
+    effective_candidates: Mapping[str, ExpansionCandidateV1],
+    current_source_artifacts: Sequence[CumulativeLeakageSourceArtifactV1],
+    prior_registry_path: Path | None = None,
+) -> CumulativeExpansionLeakageRegistryV1:
+    prior = _validated_cumulative_expansion_leakage_registry_v1(prior_registry)
+    repo_root = Path(__file__).resolve().parents[2]
+    groups = {group.leakage_key: group for group in prior.groups}
+    group_id_to_key = {
+        group.final_leakage_group_id: group.leakage_key for group in prior.groups
+    }
+    member_to_key = {
+        identity: group.leakage_key
+        for group in prior.groups
+        for identity in group.member_identities
+    }
+    for outcome in completed_outcomes:
+        if not outcome.materialization_performed:
+            continue
+        candidate = effective_candidates.get(outcome.candidate_identity)
+        if candidate is None or not candidate.leakage_key:
+            raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_CANDIDATE_MISSING")
+        registered_key = member_to_key.get(candidate.candidate_identity)
+        if registered_key is not None and registered_key != candidate.leakage_key:
+            raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_MEMBER_GROUP_CONFLICT")
+        group = groups.get(candidate.leakage_key)
+        if group is not None:
+            if (
+                group.final_leakage_group_id != outcome.leakage_group_id
+                or group.assigned_split != outcome.assigned_split
+            ):
+                raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_GROUP_SPLIT_CONFLICT")
+            members = tuple(sorted({
+                *group.member_identities, candidate.candidate_identity,
+            }))
+            groups[candidate.leakage_key] = replace(
+                group, member_identities=members, member_count=len(members),
+            )
+        else:
+            prior_key = group_id_to_key.get(outcome.leakage_group_id)
+            if prior_key is not None and prior_key != candidate.leakage_key:
+                raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_GROUP_ID_CONFLICT")
+            groups[candidate.leakage_key] = CumulativeExpansionLeakageGroupV1(
+                leakage_key=candidate.leakage_key,
+                final_leakage_group_id=outcome.leakage_group_id,
+                assigned_split=outcome.assigned_split,
+                member_identities=(candidate.candidate_identity,),
+                member_count=1,
+            )
+            group_id_to_key[outcome.leakage_group_id] = candidate.leakage_key
+        member_to_key[candidate.candidate_identity] = candidate.leakage_key
+    if not any(item.materialization_performed for item in completed_outcomes):
+        raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_HAS_NO_MATERIALIZED_MEMBER")
+    artifacts = (
+        *_portable_prior_cumulative_provenance_v1(
+            prior,
+            prior_registry_path=prior_registry_path,
+            repo_root=repo_root,
+        ),
+        *current_source_artifacts,
+    )
+    return _validated_cumulative_expansion_leakage_registry_v1(
+        CumulativeExpansionLeakageRegistryV1(
+            schema_version=CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_SCHEMA_V1,
+            policy_id=CUMULATIVE_EXPANSION_LEAKAGE_POLICY_ID_V1,
+            source_artifacts=tuple(artifacts),
+            groups=tuple(groups.values()),
+        )
+    )
+
+
 def materialize_approved_successor_v1(
     output_root: Path,
     run: PipelineRunV1,
     effective_candidates: Mapping[str, ExpansionCandidateV1],
     authorities: Sequence[ReusableChemistryAuthorityV1],
+    cumulative_leakage_registry: (
+        CumulativeExpansionLeakageRegistryV1 | None
+    ) = None,
+    cumulative_leakage_registry_source_path: Path | None = None,
 ) -> PipelineRunV1:
     output_root = _validated_materialization_root_v1(output_root)
     admitted = [item for item in run.outcomes if item.materialization_ready]
@@ -3672,8 +4227,41 @@ def materialize_approved_successor_v1(
         run, outcomes=tuple(updated),
         reusable_authority_registry_sha256=_sha256(registry_payload),
     )
+    pipeline_payload = serialize_pipeline_run_v1(completed)
     expected_files["reusable_authority_registry_v1.json"] = registry_payload
-    expected_files["pipeline_run_v1.json"] = serialize_pipeline_run_v1(completed)
+    expected_files["pipeline_run_v1.json"] = pipeline_payload
+    if cumulative_leakage_registry is not None:
+        current_sources = [CumulativeLeakageSourceArtifactV1(
+            artifact_role="SUCCESSOR_EXPANSION_PIPELINE_RUN",
+            path="pipeline_run_v1.json",
+            path_scope="REGISTRY_DIRECTORY_RELATIVE",
+            sha256=_sha256(pipeline_payload),
+        )]
+        for outcome in completed.outcomes:
+            if not outcome.materialization_performed:
+                continue
+            token = _sha256(outcome.candidate_identity.encode("utf-8"))[:16]
+            relative = f"samples/{token}.materialized.json"
+            current_sources.append(CumulativeLeakageSourceArtifactV1(
+                artifact_role="SUCCESSOR_EXPANSION_MATERIALIZED_SAMPLE",
+                path=relative,
+                path_scope="REGISTRY_DIRECTORY_RELATIVE",
+                sha256=_sha256(expected_files[relative]),
+            ))
+        successor_registry = (
+            build_successor_cumulative_expansion_leakage_registry_v1(
+                cumulative_leakage_registry,
+                completed_outcomes=completed.outcomes,
+                effective_candidates=effective_candidates,
+                current_source_artifacts=tuple(current_sources),
+                prior_registry_path=cumulative_leakage_registry_source_path,
+            )
+        )
+        expected_files[CUMULATIVE_EXPANSION_LEAKAGE_REGISTRY_FILENAME_V1] = (
+            serialize_cumulative_expansion_leakage_registry_v1(
+                successor_registry
+            )
+        )
     if output_root.exists():
         if not output_root.is_dir() or output_root.is_symlink():
             raise ValueError("MATERIALIZATION_EXISTING_OUTPUT_INVALID")
@@ -3728,6 +4316,10 @@ def run_covapie_cys_sg_dataset_expansion_pipeline_v1(
     execution_mode: str = REVIEW_ONLY,
     output_root: Path | None = None,
     leakage_groups: Sequence[LeakageGroupAssignmentV1] | None = None,
+    cumulative_leakage_registry: (
+        CumulativeExpansionLeakageRegistryV1 | None
+    ) = None,
+    cumulative_leakage_registry_source_path: Path | None = None,
 ) -> PipelineRunV1:
     if execution_mode not in {REVIEW_ONLY, MATERIALIZE_APPROVED}:
         raise ValueError("PIPELINE_EXECUTION_MODE_INVALID")
@@ -3735,6 +4327,30 @@ def run_covapie_cys_sg_dataset_expansion_pipeline_v1(
         raise ValueError("REVIEW_ONLY_MODE_FORBIDS_MATERIALIZATION_OUTPUT_ROOT")
     if execution_mode == MATERIALIZE_APPROVED and output_root is None:
         raise ValueError("MATERIALIZE_APPROVED_MODE_REQUIRES_OUTPUT_ROOT")
+    if leakage_groups is not None and cumulative_leakage_registry is not None:
+        raise ValueError(
+            "EXPLICIT_LEAKAGE_GROUPS_AND_CUMULATIVE_REGISTRY_MUTUALLY_EXCLUSIVE"
+        )
+    if (
+        cumulative_leakage_registry_source_path is not None
+        and cumulative_leakage_registry is None
+    ):
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_SOURCE_WITHOUT_REGISTRY")
+    if (
+        cumulative_leakage_registry is not None
+        and cumulative_leakage_registry_source_path is None
+    ):
+        raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_SOURCE_PATH_REQUIRED")
+    if cumulative_leakage_registry is not None:
+        assert cumulative_leakage_registry_source_path is not None
+        source_registry = load_cumulative_expansion_leakage_registry_v1(
+            cumulative_leakage_registry_source_path,
+            repo_root=Path(__file__).resolve().parents[2],
+        )
+        if source_registry != _validated_cumulative_expansion_leakage_registry_v1(
+            cumulative_leakage_registry
+        ):
+            raise ValueError("CUMULATIVE_LEAKAGE_REGISTRY_SOURCE_CONTENT_MISMATCH")
     if type(candidates) not in (list, tuple):
         raise ValueError("CANDIDATE_BATCH_CONTAINER_INVALID")
     approvals = dict(approval_records or {})
@@ -3824,10 +4440,19 @@ def run_covapie_cys_sg_dataset_expansion_pipeline_v1(
             )
         ):
             potentially_admitted.append(effective)
-    groups = (
-        tuple(leakage_groups) if leakage_groups is not None
-        else load_published_leakage_group_population_v1(Path(__file__).resolve().parents[2])
-    )
+    if leakage_groups is not None:
+        groups = tuple(leakage_groups)
+    else:
+        published_groups = load_published_leakage_group_population_v1(
+            Path(__file__).resolve().parents[2]
+        )
+        groups = (
+            merge_published_and_cumulative_leakage_groups_v1(
+                published_groups, cumulative_leakage_registry,
+            )
+            if cumulative_leakage_registry is not None
+            else published_groups
+        )
     split_assignments = (
         assign_expansion_leakage_splits_v1(
             potentially_admitted, existing_groups=groups,
@@ -3901,7 +4526,11 @@ def run_covapie_cys_sg_dataset_expansion_pipeline_v1(
     if execution_mode == MATERIALIZE_APPROVED:
         assert output_root is not None
         return materialize_approved_successor_v1(
-            output_root, run, effective_candidates, tuple(effective_authorities)
+            output_root, run, effective_candidates, tuple(effective_authorities),
+            cumulative_leakage_registry=cumulative_leakage_registry,
+            cumulative_leakage_registry_source_path=(
+                cumulative_leakage_registry_source_path
+            ),
         )
     return run
 
