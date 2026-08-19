@@ -1,0 +1,485 @@
+{
+  "schema_version": "covapie_2djf_1zb_human_scientific_review_proposal_v1",
+  "proposal_status": "PROPOSED_FOR_HUMAN_REVIEW_NOT_AUTHORITY",
+  "candidate_identity": "2DJF/1ZB",
+  "task_scope": {
+    "task_name": "prepare_covapie_2djf_1zb_human_scientific_review_v1",
+    "production_approval_task": false,
+    "production_materialization_task": false,
+    "atom_deletion_implementation_task": false,
+    "other_candidate_reviewed": false
+  },
+  "frozen_baseline": {
+    "branch": "main",
+    "head": "11995d02bb32c49a7e1430d0c3c6cb8e1f3eb6d8",
+    "origin_main": "11995d02bb32c49a7e1430d0c3c6cb8e1f3eb6d8",
+    "ahead": 0,
+    "behind": 0,
+    "head_subject": "add CovaPIE human-approved 6OIM MOV expansion sample v1",
+    "historical_exact16_count": 16,
+    "published_expansion_member_identities": [
+      "5F2E/5UT",
+      "6OIM/MOV"
+    ],
+    "published_expansion_member_count": 2,
+    "current_authorized_population": 18,
+    "reusable_authority_registry": {
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6oim_mov_approved_v1/reusable_authority_registry_v1.json",
+      "sha256": "f49c7d68ff8ac7804cc8c27efbfb39b89e5aeccc36fcacd9139ccc9bb22730cb",
+      "authority_count": 2
+    },
+    "cumulative_leakage_registry": {
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6oim_mov_approved_v1/cumulative_leakage_registry_v1.json",
+      "sha256": "ac58ed02523ac8191b56433a01bf162266e67cd03670dd0a374a1e7e3bd8055d",
+      "member_identities": [
+        "5F2E/5UT",
+        "6OIM/MOV"
+      ],
+      "member_count": 2,
+      "assigned_split": "test"
+    }
+  },
+  "machine_evidence": {
+    "bound_source_identity": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/2djf.cif",
+    "bound_source_sha256": "909fdf9bb28d1875a3ab80c5108b50025e6180196656e0eb5e46f572e4c185c2",
+    "pre_review_evidence_digest": "ead24eb7d6da442b37a5785370c88c66dd69811001769bd0654b775c360dcce2",
+    "source_assignment_record_sha256": "e2b08cc4c321e01e29eb3b48f6479c90efc38a611ab398b2f37cfdaacd24658d",
+    "source_evidence_bindings": [
+      [
+        "data/derived/covalent_small/covapie_cys_sg_recovered7_canonical_topology_exact10_pocket_closure_v1/covapie_cys_sg_recovered7_canonical_model_graph_and_pocket_evidence.json",
+        "c0a5196f94284bc78c49f1a981798c85b1fd5869237d54f30ba239321c3eb799"
+      ],
+      [
+        "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_near_ready_human_review_packet_v1.md",
+        "7d35fcaf254cf23a07c9f469173871acc63bcb89f6c76794e69bc72796ca496f"
+      ],
+      [
+        "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_non_exact16_candidate_inventory.csv",
+        "182d0bcff8e1dea1f29eb4977e0908510f6b8594db83b39efed1580e9f6f2946"
+      ],
+      [
+        "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_ligand_graph_scaffold_evidence.csv",
+        "982a9f89a89d3a4ad6a3e468cfd16d2fdfd5435cbf6d593e086fbd7fadd3ec73"
+      ],
+      [
+        "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_protein_sequence_accession_evidence.csv",
+        "51f208c2582bc41c265fa35fa18e71e0e0d0634babe63b9735f084aa486a0d30"
+      ],
+      [
+        "data/derived/covalent_small/covapie_unified_independence_group_assignment_and_sample_index_merge_smoke_v0/covapie_final_leakage_group_assignment.csv",
+        "768c964f22e19a8fb6232b1fa26c531e53d023042abcd9b1bcca44df2b4f4416"
+      ]
+    ],
+    "additional_published_2djf_sources_reviewed": [
+      {
+        "path": "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_near_ready_human_review_decision_template_v2.json",
+        "sha256": "a56a1f3608fb85c9f84889c02e6048d7d7582032d3ff2d98a626c2f390ae2697"
+      },
+      {
+        "path": "data/derived/covalent_small/covapie_cys_sg_recovered7_canonical_topology_exact10_pocket_closure_v1/covapie_cys_sg_recovered7_canonical_closure_matrix.csv",
+        "sha256": "ee0ef9a33344f6204ebb6b54b3b6b1d6e8fe2956754efefbe76e71ba2214d796"
+      },
+      {
+        "path": "data/derived/covalent_small/covapie_cys_sg_recovered7_targeted_chemistry_review_packages_v1/covapie_recovered7_chemistry_review_package_evidence.json",
+        "sha256": "880d6fd8922dd2fda0ca14b0528182cc7eb70c98258c20055273899fcbe48db1"
+      },
+      {
+        "path": "data/derived/covalent_small/covapie_cys_sg_recovered7_targeted_chemistry_review_packages_v1/covapie_recovered7_chemistry_review_package_index.csv",
+        "sha256": "e99e0366269714fdd6ffd339563e4aa3d91cebc320385384d84a69fb24c02ad9"
+      },
+      {
+        "path": "${COVAPIE_STATE_ROOT}/manual-review-aids/recovered7-targeted-chemistry-review-v1/COVAPIE_RECOVERED7_CHEM_REVIEW_CLASS_C0E3CCE067B699C68B74C8260D5479A4D3FF5454A5B40B68EA11DDA2B147E2AD/review_decision_template.csv",
+        "sha256": "bffac068bb54c3bfa87f44b6e0e69d359c797fca63654a96f247cb91785f7ac9",
+        "published_decision_state": "NOT_REVIEWED"
+      }
+    ],
+    "exact_event": {
+      "protein_endpoint": "B:CYS:234:SG",
+      "protein_endpoint_atom_site_id": 1165,
+      "protein_endpoint_element": "S",
+      "protein_endpoint_coordinates_angstrom": [
+        27.012,
+        23.486,
+        20.476
+      ],
+      "ligand_endpoint": "B:1ZB:801:C2",
+      "ligand_endpoint_atom_site_id": 2825,
+      "ligand_endpoint_atom_id": "C2",
+      "ligand_endpoint_element": "C",
+      "ligand_endpoint_coordinates_angstrom": [
+        26.513,
+        25.275,
+        20.576
+      ],
+      "ligand_reactive_atom_map_number": 16,
+      "ligand_reactive_atom_retained": true,
+      "struct_conn_pdbx_leaving_atom_flag": "one",
+      "struct_conn_exact_match_count": 1,
+      "protein_atom_site_id_match_count": 1,
+      "ligand_atom_site_id_match_count": 1,
+      "recorded_post_distance_angstrom": 1.859979032,
+      "recomputed_post_distance_angstrom": 1.8599790321398764,
+      "distance_recomputation_passed": true
+    },
+    "retained_post_namespace": [
+      {"atom_id": "N", "atom_map_number": 1, "element": "N"},
+      {"atom_id": "CA", "atom_map_number": 2, "element": "C"},
+      {"atom_id": "C", "atom_map_number": 3, "element": "C"},
+      {"atom_id": "O", "atom_map_number": 4, "element": "O"},
+      {"atom_id": "N1", "atom_map_number": 5, "element": "N"},
+      {"atom_id": "CA1", "atom_map_number": 6, "element": "C"},
+      {"atom_id": "C1", "atom_map_number": 7, "element": "C"},
+      {"atom_id": "O1", "atom_map_number": 8, "element": "O"},
+      {"atom_id": "CB", "atom_map_number": 9, "element": "C"},
+      {"atom_id": "CG", "atom_map_number": 10, "element": "C"},
+      {"atom_id": "CD1", "atom_map_number": 11, "element": "C"},
+      {"atom_id": "CD2", "atom_map_number": 12, "element": "C"},
+      {"atom_id": "CE1", "atom_map_number": 13, "element": "C"},
+      {"atom_id": "CE2", "atom_map_number": 14, "element": "C"},
+      {"atom_id": "CZ", "atom_map_number": 15, "element": "C"},
+      {"atom_id": "C2", "atom_map_number": 16, "element": "C"}
+    ],
+    "retained_heavy_atom_count": 16,
+    "pre_reaction_graph_authoritative": false,
+    "formal_charge_authoritative": false,
+    "available_pre_reaction_bond_orders": [],
+    "available_formal_charge_pattern": {}
+  },
+  "full_component_topology_audit": {
+    "component_id": "1ZB",
+    "topology_source_kind": "RCSB_ENTRY_MMCIF_EMBEDDED_CHEM_COMP_ATOM_BOND",
+    "topology_source_path": "data/raw/covalent_sources/covpdb/future_struct_conn_crosscheck_raw_v0/2djf.cif#chem_comp_atom_and_bond:1ZB",
+    "topology_source_sha256": "909fdf9bb28d1875a3ab80c5108b50025e6180196656e0eb5e46f572e4c185c2",
+    "embedded_component_name": "N-[(1S)-1-benzyl-3-diazen-1-iumylidene-2-oxopropyl]glycinamide",
+    "embedded_component_formula": "C12 H14 N4 O2",
+    "heavy_atom_count": 18,
+    "heavy_heavy_bond_count": 18,
+    "component_atoms": [
+      {"atom_id": "N", "atom_map_number": 1, "element": "N", "formal_charge": 0, "neighbors": [{"atom_id": "CA", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CA", "atom_map_number": 2, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "N", "bond_order": "single"}, {"atom_id": "C", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "C", "atom_map_number": 3, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CA", "bond_order": "single"}, {"atom_id": "O", "bond_order": "double"}, {"atom_id": "N1", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "O", "atom_map_number": 4, "element": "O", "formal_charge": 0, "neighbors": [{"atom_id": "C", "bond_order": "double"}], "retained_in_bound_post_model": true},
+      {"atom_id": "N1", "atom_map_number": 5, "element": "N", "formal_charge": 0, "neighbors": [{"atom_id": "C", "bond_order": "single"}, {"atom_id": "CA1", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CA1", "atom_map_number": 6, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "N1", "bond_order": "single"}, {"atom_id": "C1", "bond_order": "single"}, {"atom_id": "CB", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "C1", "atom_map_number": 7, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CA1", "bond_order": "single"}, {"atom_id": "O1", "bond_order": "double"}, {"atom_id": "C2", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "O1", "atom_map_number": 8, "element": "O", "formal_charge": 0, "neighbors": [{"atom_id": "C1", "bond_order": "double"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CB", "atom_map_number": 9, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CA1", "bond_order": "single"}, {"atom_id": "CG", "bond_order": "single"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CG", "atom_map_number": 10, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CB", "bond_order": "single"}, {"atom_id": "CD1", "bond_order": "aromatic"}, {"atom_id": "CD2", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CD1", "atom_map_number": 11, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CG", "bond_order": "aromatic"}, {"atom_id": "CE1", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CD2", "atom_map_number": 12, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CG", "bond_order": "aromatic"}, {"atom_id": "CE2", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CE1", "atom_map_number": 13, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CD1", "bond_order": "aromatic"}, {"atom_id": "CZ", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CE2", "atom_map_number": 14, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CD2", "bond_order": "aromatic"}, {"atom_id": "CZ", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "CZ", "atom_map_number": 15, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "CE1", "bond_order": "aromatic"}, {"atom_id": "CE2", "bond_order": "aromatic"}], "retained_in_bound_post_model": true},
+      {"atom_id": "C2", "atom_map_number": 16, "element": "C", "formal_charge": 0, "neighbors": [{"atom_id": "C1", "bond_order": "single"}, {"atom_id": "N3", "bond_order": "double"}], "retained_in_bound_post_model": true},
+      {"atom_id": "N3", "atom_map_number": 17, "element": "N", "formal_charge": 1, "neighbors": [{"atom_id": "C2", "bond_order": "double"}, {"atom_id": "N4", "bond_order": "double"}], "retained_in_bound_post_model": false},
+      {"atom_id": "N4", "atom_map_number": 18, "element": "N", "formal_charge": -1, "neighbors": [{"atom_id": "N3", "bond_order": "double"}], "retained_in_bound_post_model": false}
+    ],
+    "formal_charge_evidence": {
+      "direct_atom_table_charge_column_available": false,
+      "repository_derivation": "The embedded neutral component formula and the embedded name containing diazen-1-iumylidene, together with the exact C2=N3=N4 double-bond chain, require the valence-complete neutral pattern C2=[N3+]=[N4-].",
+      "c2_formal_charge": 0,
+      "n3_formal_charge": 1,
+      "n4_formal_charge": -1,
+      "formal_charge_derivation_complete": true
+    },
+    "repository_confirms_diazomethyl_ketone_pre_chemistry": true,
+    "external_human_review_context": {
+      "statement": "The official RCSB CCD contextual cross-check identifies 1ZB as Gly-Phe-CHN2 and gives a C=[N+]=[N-] diazo fragment.",
+      "production_authority": false,
+      "used_as_sha_bound_source": false,
+      "repository_independent_confirmation_present": true
+    }
+  },
+  "graph_states": {
+    "full_pre_graph": {
+      "status": "SCIENTIFICALLY_ESTABLISHED_FOR_THIS_NON_AUTHORITY_REVIEW",
+      "heavy_atom_count": 18,
+      "atom_ids": ["N", "CA", "C", "O", "N1", "CA1", "C1", "O1", "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "C2", "N3", "N4"],
+      "component_order_review_only_atom_maps": {"N": 1, "CA": 2, "C": 3, "O": 4, "N1": 5, "CA1": 6, "C1": 7, "O1": 8, "CB": 9, "CG": 10, "CD1": 11, "CD2": 12, "CE1": 13, "CE2": 14, "CZ": 15, "C2": 16, "N3": 17, "N4": 18},
+      "canonical_smiles_for_review": "[N-]=[N+]=CC(=O)C(Cc1ccccc1)NC(=O)CN",
+      "mapped_smiles_for_review": "[NH2:1][CH2:2][C:3](=[O:4])[NH:5][CH:6]([C:7](=[O:8])[CH:16]=[N+:17]=[N-:18])[CH2:9][c:10]1[cH:11][cH:13][cH:15][cH:14][cH:12]1",
+      "molecular_formula": "C12H14N4O2",
+      "bonds": [
+        ["N", "CA", "single"], ["CA", "C", "single"], ["C", "O", "double"], ["C", "N1", "single"], ["N1", "CA1", "single"], ["CA1", "C1", "single"], ["CA1", "CB", "single"], ["C1", "O1", "double"], ["C1", "C2", "single"], ["CB", "CG", "single"], ["CG", "CD1", "aromatic"], ["CG", "CD2", "aromatic"], ["CD1", "CE1", "aromatic"], ["CD2", "CE2", "aromatic"], ["CE1", "CZ", "aromatic"], ["CE2", "CZ", "aromatic"], ["C2", "N3", "double"], ["N3", "N4", "double"]
+      ],
+      "formal_charge_pattern_by_map": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0, "13": 0, "14": 0, "15": 0, "16": 0, "17": 1, "18": -1},
+      "local_electrophile_or_reactive_fragment": "CA1-C1(=O1)-C2(H)=[N3+]=[N4-]"
+    },
+    "retained_pre_projection": {
+      "status": "LOSSY_GRAPH_PROJECTION_NOT_AUTHORITATIVE_PRE_CHEMISTRY",
+      "heavy_atom_count": 16,
+      "atom_ids": ["N", "CA", "C", "O", "N1", "CA1", "C1", "O1", "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "C2"],
+      "removed_from_full_pre": ["N3", "N4"],
+      "bonds": [
+        ["N", "CA", "single"], ["CA", "C", "single"], ["C", "O", "double"], ["C", "N1", "single"], ["N1", "CA1", "single"], ["CA1", "C1", "single"], ["CA1", "CB", "single"], ["C1", "O1", "double"], ["C1", "C2", "single"], ["CB", "CG", "single"], ["CG", "CD1", "aromatic"], ["CG", "CD2", "aromatic"], ["CD1", "CE1", "aromatic"], ["CD2", "CE2", "aromatic"], ["CE1", "CZ", "aromatic"], ["CE2", "CZ", "aromatic"]
+      ],
+      "formal_charge_pattern_by_map": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0, "13": 0, "14": 0, "15": 0, "16": 0},
+      "sanitized_molecule_if_misinterpreted_as_complete": {
+        "canonical_smiles": "CC(=O)C(Cc1ccccc1)NC(=O)CN",
+        "molecular_formula": "C12H16N2O2",
+        "c2_implicit_hydrogen_count": 3,
+        "chemical_identity": "METHYL_KETONE_NOT_DIAZOMETHYL_KETONE"
+      },
+      "retained_only_pre_projection_is_chemically_equivalent_to_full_pre": false,
+      "scientifically_valid_as_authoritative_pre": false
+    },
+    "observed_post_graph": {
+      "status": "OBSERVED_16_HEAVY_ATOM_INVENTORY_WITH_COMPONENT_INDUCED_INTERNAL_TOPOLOGY_AND_EXACT_EXTERNAL_COVALENT_EVENT",
+      "heavy_atom_count": 16,
+      "atom_ids": ["N", "CA", "C", "O", "N1", "CA1", "C1", "O1", "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "C2"],
+      "internal_bonds": [
+        ["N", "CA", "single"], ["CA", "C", "single"], ["C", "O", "double"], ["C", "N1", "single"], ["N1", "CA1", "single"], ["CA1", "C1", "single"], ["CA1", "CB", "single"], ["C1", "O1", "double"], ["C1", "C2", "single"], ["CB", "CG", "single"], ["CG", "CD1", "aromatic"], ["CG", "CD2", "aromatic"], ["CD1", "CE1", "aromatic"], ["CD2", "CE2", "aromatic"], ["CE1", "CZ", "aromatic"], ["CE2", "CZ", "aromatic"]
+      ],
+      "reaction_specific_internal_post_bond_order_authority": false,
+      "protein_covalent_event_relation": {
+        "protein_atom": "B:CYS:234:SG",
+        "ligand_atom": "B:1ZB:801:C2",
+        "relation": "COVALENT_BOND",
+        "scientific_net_bond_order": "single",
+        "part_of_ligand_internal_topology": false
+      },
+      "retained_atom_formal_charges_for_scientific_post_assignment": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0, "13": 0, "14": 0, "15": 0, "16": 0},
+      "implicit_hydrogen_boundary": "The heavy-atom adduct requires saturated C2 after C2-SG formation, but the proton source and hydrogen coordinates are not repository authority and are not fabricated here."
+    },
+    "transitions": {
+      "full_pre_to_retained_pre_projection": {
+        "atoms_added": [],
+        "atoms_removed": ["N3", "N4"],
+        "bonds_added": [],
+        "bonds_removed": [["C2", "N3", "double"], ["N3", "N4", "double"]],
+        "bond_orders_changed": [],
+        "formal_charges_changed": [{"atom_id": "N3", "from": 1, "to": "ATOM_REMOVED_FROM_PROJECTION"}, {"atom_id": "N4", "from": -1, "to": "ATOM_REMOVED_FROM_PROJECTION"}],
+        "chemical_interpretation": "Graph restriction only; not a chemically equivalent precursor."
+      },
+      "retained_pre_projection_to_observed_post": {
+        "ligand_atoms_added": [],
+        "ligand_atoms_removed": [],
+        "ligand_internal_bonds_added": [],
+        "ligand_internal_bonds_removed": [],
+        "ligand_internal_bond_orders_changed": [],
+        "retained_formal_charges_changed": [],
+        "external_event_relations_added": [["B:CYS:234:SG", "B:1ZB:801:C2", "single"]],
+        "implicit_hydrogen_note": "A hydrogen-count change at C2 follows chemical valence completion, but no explicit hydrogen is added to the authority graph."
+      },
+      "full_pre_to_observed_post_net_heavy_atom_transformation": {
+        "atoms_added_to_ligand": [],
+        "atoms_removed_from_bound_ligand": ["N3", "N4"],
+        "ligand_bonds_removed": [["C2", "N3", "double"], ["N3", "N4", "double"]],
+        "external_bonds_added": [["B:CYS:234:SG", "B:1ZB:801:C2", "single"]],
+        "retained_ligand_bond_orders_changed": [],
+        "retained_ligand_formal_charges_changed": [],
+        "leaving_product_boundary": "N3/N4 are absent from the bound ligand adduct and are consistent with dinitrogen loss; the bond order and proton-transfer sequence of the unobserved leaving product are not claimed."
+      }
+    }
+  },
+  "atom_loss_assessment": {
+    "n3_n4_classification": "A_TRUE_PRE_ONLY_ATOMS_REMOVED_FROM_COVALENT_PRODUCT_LEAVING_GROUP_CHEMISTRY",
+    "pre_only_atom_ids_or_names": ["N3", "N4"],
+    "post_only_atom_ids_or_names": [],
+    "net_atom_loss": ["N3", "N4"],
+    "assessment_confidence": "HIGH_FOR_NET_BOUND_ADDUCT_ATOM_LOSS",
+    "evidence": [
+      "The local component is named as the Gly-Phe-CHN2 diazenium inhibitor and has formula C12H14N4O2.",
+      "The local component graph contains C2=N3=N4 with the valence-complete C2=[N3+]=[N4-] charge pattern.",
+      "The bound instance contains exactly the other 16 heavy atoms and omits N3/N4.",
+      "The exact source struct_conn row reports pdbx_leaving_atom_flag=one; this is supportive leaving-atom metadata but does not by itself identify N3/N4.",
+      "The unique exact covalent event is Cys234-SG to C2 at 1.8599790321398764 angstrom.",
+      "Keeping the parent C2=N3 bond together with the recorded parent C2-H and the new C2-SG bond would overfill C2 valence."
+    ],
+    "not_inferred": [
+      "stepwise mechanism",
+      "proton donor identity",
+      "unobserved dinitrogen product bond order from coordinates"
+    ]
+  },
+  "current_v1_representability": {
+    "current_v1_supports_pre_only_atoms": false,
+    "current_v1_supports_atom_deletion_reaction": false,
+    "current_v1_signature_supports_pre_only_atoms": false,
+    "current_v1_tensorization_supports_pre_only_atoms": false,
+    "current_v1_fixed_retained_heavy_atom_representation_scientifically_represents_full_pre_without_fabrication": false,
+    "current_candidate_atom_map_coverage_valid_for_retained_16": true,
+    "current_candidate_atom_map_coverage_valid_for_full_pre_18": false,
+    "approval_ingestion_contract_evidence": [
+      "The V1 completed-approval path requires atom_map_numbers to cover exactly retained_heavy_atoms.",
+      "The reviewed PRE validator builds atoms only by iterating candidate.retained_heavy_atoms.",
+      "The V1 chemistry-warhead atom set must equal the retained role-warhead atom set.",
+      "N3/N4 have no current retained atom IDs, coordinate rows, or production atom-map entries."
+    ],
+    "signature_contract_evidence": "Although the standalone hash helper accepts its supplied molecular namespace, no valid V1 authoritative ingestion path can supply a namespace containing N3/N4 while retained_heavy_atoms remains the observed 16; therefore the current authoritative signature contract does not support PRE-only atoms.",
+    "tensorization_contract_evidence": "V1 requires the ligand coordinate ID set to equal retained_heavy_atoms and tensors only that retained namespace; adding N3/N4 without fabricated coordinates fails TENSORIZATION_LIGAND_COORDINATE_COVERAGE_INVALID.",
+    "atom_deletion_contract_evidence": "V1 has no PRE-only atom inventory, atom-deletion delta, leaving-group tensor, or separate PRE/POST atom namespace.",
+    "exact_remaining_blocker": "ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE",
+    "deferred_capability": "ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE"
+  },
+  "human_established_pre_ingestion_experiment": {
+    "test_only_in_memory": true,
+    "files_written": false,
+    "production_authority_persisted": false,
+    "full_pre": {
+      "full_pre_pipeline_ingestion_supported": false,
+      "attempted_heavy_atom_count": 18,
+      "primary_exact_failure": "REVIEWED_PRE_GRAPH_ATOM_MAP_COVERAGE_INVALID",
+      "all_reported_failures": [
+        "WARHEAD_ATOM_MAP_NUMBERS_MISMATCH",
+        "REVIEWED_PRE_GRAPH_ATOM_MAP_COVERAGE_INVALID",
+        "AUTHORITATIVE_SIGNATURE_REQUIRES_PRE_GRAPH_AND_CHARGE_AUTHORITY",
+        "APPROVED_SMARTS_MATCH_NOT_EXACT_ONE",
+        "APPROVED_SMARTS_WARHEAD_ATOM_SET_MISMATCH",
+        "HUMAN_WARHEAD_RULE_APPROVAL_INVALID",
+        "HUMAN_GOLD_SAMPLE_APPROVAL_INVALID",
+        "ROLE_PARTITION_NOT_EXHAUSTIVE"
+      ]
+    },
+    "retained_projection": {
+      "retained_projection_pipeline_ingestion_supported": true,
+      "attempted_heavy_atom_count": 16,
+      "technical_ingestion_result": "ACCEPTED_IN_MEMORY_BY_CURRENT_V1",
+      "technical_molecule_identity": "METHYL_KETONE_WITH_C2_AS_CH3",
+      "retained_projection_scientifically_valid": false,
+      "diagnostic_exact_authority_hash_recorded": false,
+      "in_memory_result_discarded": true
+    }
+  },
+  "reaction_family_review": {
+    "reaction_family_semantic_recommendation": "CYS_SG_ALKYLATION_BY_DIAZOMETHYL_KETONE_WITH_DINITROGEN_LOSS_V1",
+    "recommendation_is_production_id": false,
+    "broad_reaction_class": "DIAZOMETHYL_KETONE_COVALENT_INHIBITION_ALKYLATION",
+    "not_michael_acceptor_chemistry": true,
+    "same_reaction_family_as_5f2e_6oim": false,
+    "net_transformation_confidence": "HIGH",
+    "mechanistic_confidence": "MODERATE",
+    "mechanistic_boundary": "The net C2-SG formation with loss of the diazo/dinitrogen moiety is supported; a detailed stepwise pathway is not asserted."
+  },
+  "warhead_definition_review": {
+    "full_pre_warhead_atoms": ["C1", "O1", "C2", "N3", "N4"],
+    "retained_post_warhead_atoms": ["C1", "O1", "C2"],
+    "pre_only_warhead_atoms": ["N3", "N4"],
+    "full_pre_warhead_smarts_proposal": "[#6:7](=[#8:8])-[#6H1:16]=[N+:17]=[N-:18]",
+    "full_pre_warhead_smarts_match_count_in_review_graph": 1,
+    "full_pre_warhead_smarts_status": "REVIEW_PROPOSAL_ONLY_NOT_PRODUCTION_AUTHORITY",
+    "retained_post_reaction_center_description": "C1(=O1)-C2-SG(Cys234)",
+    "retained_only_diazomethyl_ketone_smarts_proposed": false,
+    "current_exact_warhead_schema_can_encode_true_pre_warhead": false,
+    "reason": "The true PRE warhead includes N3/N4, but V1 requires the chemistry warhead and role warhead to be the same set in the retained namespace."
+  },
+  "role_partition_review": {
+    "status": "RETAINED_NAMESPACE_SCIENTIFIC_PROPOSAL_ONLY",
+    "role_profile_recommendation": "STRICT_LINKER_PRESENT_V1",
+    "role_partition_recommendation": {
+      "scaffold_atom_ids": ["CG", "CD1", "CD2", "CE1", "CE2", "CZ"],
+      "linker_atom_ids": ["N", "CA", "C", "O", "N1", "CA1", "CB"],
+      "warhead_atom_ids": ["C1", "O1", "C2"]
+    },
+    "partition_complete_over_retained_16": true,
+    "partition_disjoint": true,
+    "all_retained_atoms_assigned_exactly_once": true,
+    "cross_role_boundaries": {
+      "scaffold_linker": [["CG", "CB", "single"]],
+      "linker_warhead": [["CA1", "C1", "single"]],
+      "scaffold_warhead": []
+    },
+    "profile_validator_reasons": [],
+    "scientific_rationale": "The phenyl ring is the retained scaffold core; the connected Gly-Phe backbone and benzyl bridge form the single linker component between that core and the diazomethyl-ketone reaction center; C1/O1/C2 are the retained reaction-center atoms.",
+    "warhead_completeness_boundary": "This retained role partition is complete for modeling masks but is not a complete chemical encoding of the true PRE warhead because N3/N4 are PRE-only."
+  },
+  "seed_anchor_review": {
+    "role_partition_sufficiently_resolved_for_seed_review": true,
+    "scaffold_induced_graph_only": true,
+    "post_coordinates_used": false,
+    "reactive_geometry_used": false,
+    "warhead_direction_used": false,
+    "primary_anchor_recommendation": "CG",
+    "primary_anchor_basis": "unique retained scaffold-side atom of the CG-CB scaffold-linker boundary",
+    "valid_connected_seed_atom_sets_containing_primary_anchor": {
+      "two_node": [["CG", "CD1"], ["CG", "CD2"]],
+      "three_node": [["CG", "CD1", "CD2"], ["CG", "CD1", "CE1"], ["CG", "CD2", "CE2"]]
+    },
+    "canonical_ranking_policy": [
+      "prefer a valid three-node plane-capable seed over a two-node seed",
+      "then maximize the number of seed neighbors directly adjacent to primary anchor CG",
+      "then rank by rooted scaffold-graph automorphism orbit without atom-name or geometry tie-breaking"
+    ],
+    "ranked_seed_equivalence_classes": [
+      {"rank": 1, "seed_sets": [["CG", "CD1", "CD2"]], "primary_neighbor_count": 2},
+      {"rank": 2, "seed_sets": [["CG", "CD1", "CE1"], ["CG", "CD2", "CE2"]], "primary_neighbor_count": 1, "symmetry_tied": true},
+      {"rank": 3, "seed_sets": [["CG", "CD1"], ["CG", "CD2"]], "primary_neighbor_count": 1, "symmetry_tied": true}
+    ],
+    "minimal_seed_recommendation": ["CG", "CD1", "CD2"],
+    "canonical_anchor_tie": true,
+    "direction_anchor_recommendation": "HUMAN_SYMMETRY_CHOICE_CD1_OR_CD2",
+    "optional_plane_anchor_recommendation": "THE_OTHER_OF_CD1_OR_CD2",
+    "human_anchor_options": [
+      {"primary_anchor": "CG", "direction_anchor": "CD1", "optional_plane_anchor": "CD2"},
+      {"primary_anchor": "CG", "direction_anchor": "CD2", "optional_plane_anchor": "CD1"}
+    ]
+  },
+  "leakage_cumulative_preflight": {
+    "two_djf_leakage_key": "COVAPIE_REAL_EXACT4_LEAKAGE_V1:413793f61a6aa90038c55bc684a456793fccc46564ac3b7fef55a2b112d00354",
+    "ligand_graph_scope": "PUBLISHED_RETAINED_COMPONENT_TOPOLOGY_FOR_LEAKAGE_ONLY_NOT_PRE_CHEMISTRY",
+    "matches_existing_cumulative_group": false,
+    "matches_historical_baseline_group": false,
+    "predicted_future_group": "COVAPIE_EXPANSION_LEAKAGE_GROUP_8C5D543E6EC3970D",
+    "predicted_future_split": "train",
+    "historical_baseline_group_extension_limitation_affects_2djf": false,
+    "preflight_only": true,
+    "successor_state_persisted": false
+  },
+  "feature_semantics_state": {
+    "feature_semantics_audit_completed": true,
+    "feature_semantics_known": true,
+    "unknown_atom_feature_policy_resolved": true,
+    "unknown_atom_policy_contract_resolved": true,
+    "effective_open_issue_count": 0,
+    "feature_semantics_is_this_sample_blocker": false
+  },
+  "scientific_verdict": {
+    "chemical_review_complete": true,
+    "scientifically_valid_covalent_complex": true,
+    "independent_sample_assignment_recommendation": "QUARANTINE_PRE_REACTION_REPRESENTATION_GAP",
+    "ready_for_human_decision": true,
+    "ready_for_third_production_materialization": false,
+    "exact_remaining_blocker": "ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE",
+    "crystal_validity_distinct_from_training_representability": true
+  },
+  "validation_evidence": {
+    "source_sha256_verified": true,
+    "source_binding_sha256s_verified": true,
+    "endpoint_uniqueness_verified": true,
+    "post_distance_recomputed": true,
+    "full_component_18_vs_retained_16_inventory_verified": true,
+    "n3_n4_connectivity_and_mapping_verified": true,
+    "full_component_bond_and_charge_valence_verified": true,
+    "current_retained_atom_map_coverage_verified": true,
+    "full_pre_atom_map_coverage_failure_verified": true,
+    "human_established_full_pre_ingestion_failure_verified": true,
+    "retained_projection_technical_ingestion_verified": true,
+    "retained_projection_scientific_nonequivalence_verified": true,
+    "role_completeness_and_boundaries_verified": true,
+    "seed_contract_options_verified": true,
+    "cumulative_registry_read_only_reload_verified": true,
+    "proposal_deterministic_double_generation_required": true,
+    "proposal_deterministic_double_generation_verified": true
+  },
+  "proposal_safety": {
+    "cli_ingestible_as_completed_approval": false,
+    "production_approval_written": false,
+    "real_sample_materialized": false,
+    "production_reviewer_identity_present": false,
+    "review_status_field_present": false,
+    "production_exact_chemistry_signature_authority_minted": false,
+    "fabricated_retained_projection_exact_authority_hash_included": false,
+    "raw_modified": false,
+    "state_modified": false,
+    "checkpoint_modified": false,
+    "pipeline_source_modified": false,
+    "tests_modified": false,
+    "model_forward_run": false,
+    "backward_run": false,
+    "optimizer_step_run": false,
+    "Trainer_fit_run": false,
+    "commit_created": false,
+    "push_performed": false
+  },
+  "recommended_next_step_exactly": "defer_covapie_2djf_1zb_and_human_review_covapie_6di9_gjj_v1"
+}
