@@ -1199,6 +1199,7 @@ def merge_published_and_cumulative_leakage_groups_v1(
         raise ValueError("PUBLISHED_LEAKAGE_GROUPS_INVALID")
     published_keys: set[str] = set()
     published_ids: set[str] = set()
+    published_members: set[str] = set()
     normalized_published: list[LeakageGroupAssignmentV1] = []
     for group in published_groups:
         if (
@@ -1210,17 +1211,53 @@ def merge_published_and_cumulative_leakage_groups_v1(
             or not group.final_leakage_group_id
             or group.leakage_key in published_keys
             or group.final_leakage_group_id in published_ids
+            or type(group.member_identities) is not tuple
+            or tuple(sorted(group.member_identities)) != group.member_identities
+            or len(set(group.member_identities)) != len(group.member_identities)
+            or group.member_count != len(group.member_identities)
+            or any(
+                _SAMPLE_IDENTITY.fullmatch(identity) is None
+                for identity in group.member_identities
+            )
+            or published_members.intersection(group.member_identities)
         ):
             raise ValueError("PUBLISHED_LEAKAGE_GROUPS_INVALID")
         published_keys.add(group.leakage_key)
         published_ids.add(group.final_leakage_group_id)
+        published_members.update(group.member_identities)
         normalized_published.append(group)
-    cumulative_keys = {group.leakage_key for group in registry.groups}
-    cumulative_ids = {group.final_leakage_group_id for group in registry.groups}
-    if published_keys & cumulative_keys or published_ids & cumulative_ids:
-        raise ValueError("CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP")
-    combined = [*normalized_published, *(
-        LeakageGroupAssignmentV1(
+    published_by_key = {group.leakage_key: group for group in normalized_published}
+    published_by_id = {
+        group.final_leakage_group_id: group for group in normalized_published
+    }
+    combined_by_key = dict(published_by_key)
+    for group in registry.groups:
+        key_owner = published_by_key.get(group.leakage_key)
+        id_owner = published_by_id.get(group.final_leakage_group_id)
+        if key_owner is not None or id_owner is not None:
+            if (
+                key_owner is None
+                or id_owner is None
+                or key_owner != id_owner
+                or group.assigned_split != key_owner.assigned_split
+            ):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP"
+                )
+            if published_members.intersection(group.member_identities):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_EXTENSION_DUPLICATES_BASELINE_IDENTITY"
+                )
+            members = tuple(sorted({
+                *key_owner.member_identities, *group.member_identities,
+            }))
+            combined_by_key[group.leakage_key] = replace(
+                key_owner,
+                member_count=len(members),
+                member_identities=members,
+            )
+            continue
+        combined_by_key[group.leakage_key] = LeakageGroupAssignmentV1(
             leakage_key=group.leakage_key,
             final_leakage_group_id=group.final_leakage_group_id,
             member_count=group.member_count,
@@ -1228,8 +1265,7 @@ def merge_published_and_cumulative_leakage_groups_v1(
             frozen=True,
             member_identities=group.member_identities,
         )
-        for group in registry.groups
-    )]
+    combined = list(combined_by_key.values())
     return tuple(sorted(
         combined,
         key=lambda item: (item.final_leakage_group_id, item.leakage_key),
@@ -2337,6 +2373,19 @@ def load_published_leakage_group_population_v1(
     if _sha256(payload) != PUBLISHED_GROUP_SPLIT_SHA256:
         raise ValueError("PUBLISHED_GROUP_SPLIT_ASSIGNMENT_SHA256_MISMATCH")
     rows = _csv_rows(path)
+    baseline_rows = _sha_bound_csv_rows_v1(
+        repo_root, BASELINE_FINAL_GROUP_RELATIVE,
+    )
+    members_by_group: dict[str, list[str]] = {}
+    for row in baseline_rows:
+        if row.get("final_group_assignment_passed") != "True":
+            raise ValueError("PUBLISHED_LEAKAGE_BASELINE_MEMBERS_INVALID")
+        identity = f"{row['pdb_id']}/{row['ligand_comp_id']}"
+        if _SAMPLE_IDENTITY.fullmatch(identity) is None:
+            raise ValueError("PUBLISHED_LEAKAGE_BASELINE_MEMBERS_INVALID")
+        members_by_group.setdefault(row["final_leakage_group_id"], []).append(
+            identity
+        )
     result: list[LeakageGroupAssignmentV1] = []
     for row in rows:
         if (
@@ -2345,14 +2394,26 @@ def load_published_leakage_group_population_v1(
             or row.get("group_split_assignment_passed") != "True"
         ):
             raise ValueError("PUBLISHED_GROUP_SPLIT_ASSIGNMENT_SEMANTICS_INVALID")
+        members = tuple(sorted(members_by_group.get(
+            row["final_leakage_group_id"], (),
+        )))
+        if len(members) != int(row["member_count"]):
+            raise ValueError("PUBLISHED_LEAKAGE_BASELINE_MEMBERS_INVALID")
         result.append(LeakageGroupAssignmentV1(
             leakage_key=row["final_leakage_group_id"],
             final_leakage_group_id=row["final_leakage_group_id"],
             member_count=int(row["member_count"]),
             assigned_split=row["assigned_split"],
             frozen=True,
+            member_identities=members,
         ))
-    if len(result) != 5 or len({item.final_leakage_group_id for item in result}) != 5:
+    if (
+        len(result) != 5
+        or len({item.final_leakage_group_id for item in result}) != 5
+        or set(members_by_group) != {
+            item.final_leakage_group_id for item in result
+        }
+    ):
         raise ValueError("PUBLISHED_GROUP_SPLIT_ASSIGNMENT_POPULATION_INVALID")
     return tuple(result)
 
@@ -4122,6 +4183,18 @@ def build_successor_cumulative_expansion_leakage_registry_v1(
 ) -> CumulativeExpansionLeakageRegistryV1:
     prior = _validated_cumulative_expansion_leakage_registry_v1(prior_registry)
     repo_root = Path(__file__).resolve().parents[2]
+    published = load_published_leakage_group_population_v1(repo_root)
+    # Validate every prior record against the independently loaded frozen owner.
+    merge_published_and_cumulative_leakage_groups_v1(published, prior)
+    published_by_key = {group.leakage_key: group for group in published}
+    published_by_id = {
+        group.final_leakage_group_id: group for group in published
+    }
+    published_member_to_key = {
+        identity: group.leakage_key
+        for group in published
+        for identity in group.member_identities
+    }
     groups = {group.leakage_key: group for group in prior.groups}
     group_id_to_key = {
         group.final_leakage_group_id: group.leakage_key for group in prior.groups
@@ -4137,6 +4210,22 @@ def build_successor_cumulative_expansion_leakage_registry_v1(
         candidate = effective_candidates.get(outcome.candidate_identity)
         if candidate is None or not candidate.leakage_key:
             raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_CANDIDATE_MISSING")
+        if candidate.candidate_identity in published_member_to_key:
+            raise ValueError(
+                "CUMULATIVE_LEAKAGE_EXTENSION_DUPLICATES_BASELINE_IDENTITY"
+            )
+        historical_key_owner = published_by_key.get(candidate.leakage_key)
+        historical_id_owner = published_by_id.get(outcome.leakage_group_id)
+        if historical_key_owner is not None or historical_id_owner is not None:
+            if (
+                historical_key_owner is None
+                or historical_id_owner is None
+                or historical_key_owner != historical_id_owner
+                or outcome.assigned_split != historical_key_owner.assigned_split
+            ):
+                raise ValueError(
+                    "CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP"
+                )
         registered_key = member_to_key.get(candidate.candidate_identity)
         if registered_key is not None and registered_key != candidate.leakage_key:
             raise ValueError("CUMULATIVE_LEAKAGE_SUCCESSOR_MEMBER_GROUP_CONFLICT")

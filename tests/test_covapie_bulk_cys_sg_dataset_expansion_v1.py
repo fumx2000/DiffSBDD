@@ -807,6 +807,225 @@ def test_new_leakage_evidence_resolves_through_current_policy_read_only() -> Non
     assert (authority_path.read_bytes(), leakage_path.read_bytes()) == before
 
 
+def test_single_historical_group_hit_inherits_frozen_split_and_original_route() -> None:
+    authorities, leakage, historical = bulk._load_frozen_state_v1(ROOT)
+    context = bulk._load_leakage_prediction_context_v1(
+        ROOT, authorities=authorities, leakage_registry=leakage,
+    )
+    reference = next(
+        item for item in context["references"]
+        if item["group_id"] == "COVAPIE_LEAKAGE_GROUP_000005"
+    )
+    evidence = {
+        "complete": True,
+        "ligand_graph_sha256": reference["ligand_graph_sha256"],
+        "ligand_scaffold_sha256": reference["ligand_scaffold_sha256"],
+        "protein_accession": reference["protein_accession"],
+        "protein_sequence_sha256": reference["protein_sequence_sha256"],
+        "protein_sequence": reference["protein_sequence"],
+        "linking_axes": [
+            "PROTEIN_ACCESSION:" + reference["protein_accession"],
+        ],
+    }
+    event = _merged_event(pdb="9XA1", comp="TST")
+    outcome = bulk._terminal_outcome(
+        event,
+        phases={stage: "PASSED" for stage in bulk.BULK_STAGES},
+        route="HUMAN_REVIEW_REQUIRED_PRE_CHEMISTRY",
+        reasons=("PRE",),
+        structural={"leakage_evidence": evidence},
+        pre={"status": "PRE_REACTION_UNRESOLVED", "atom_loss_flag": False},
+    )
+    bulk.apply_leakage_predictions_read_only_v1(
+        [outcome], historical=historical, context=context,
+    )
+    assert outcome["leakage_classification"] == "HISTORICAL_BASELINE_COMPONENT"
+    assert outcome["leakage_key"] == "COVAPIE_LEAKAGE_GROUP_000005"
+    assert outcome["predicted_group_id"] == "COVAPIE_LEAKAGE_GROUP_000005"
+    assert outcome["predicted_split"] == "test"
+    assert outcome["leakage_linking_axes"]
+    assert outcome["terminal_outcome"] == "HUMAN_REVIEW_REQUIRED_PRE_CHEMISTRY"
+    assert outcome["terminal_reasons"] == ["PRE"]
+
+
+def test_incompatible_existing_group_hits_fail_closed_with_precise_route() -> None:
+    event = _merged_event(pdb="9XA2", comp="TST")
+    evidence = {
+        "complete": True,
+        "ligand_graph_sha256": "1" * 64,
+        "ligand_scaffold_sha256": "2" * 64,
+        "protein_accession": "CONFLICT_ACCESSION",
+        "protein_sequence_sha256": "3" * 64,
+        "protein_sequence": "ACDEFGHIKLMNPQRSTVWY",
+        "linking_axes": ["PROTEIN_ACCESSION:CONFLICT_ACCESSION"],
+    }
+    references = [
+        {
+            "identity": f"1AA{index}/T{index}",
+            "leakage_key": f"COVAPIE_LEAKAGE_GROUP_00000{index}",
+            "group_id": f"COVAPIE_LEAKAGE_GROUP_00000{index}",
+            "split": split,
+            "kind": "HISTORICAL",
+            **{key: evidence[key] for key in (
+                "ligand_graph_sha256", "ligand_scaffold_sha256",
+                "protein_accession", "protein_sequence_sha256",
+                "protein_sequence",
+            )},
+        }
+        for index, split in ((2, "validation"), (4, "train"))
+    ]
+    outcome = bulk._terminal_outcome(
+        event,
+        phases={stage: "PASSED" for stage in bulk.BULK_STAGES},
+        route="HUMAN_REVIEW_REQUIRED_PRE_CHEMISTRY",
+        reasons=("PRE",),
+        structural={"leakage_evidence": evidence},
+        pre={"status": "PRE_REACTION_UNRESOLVED", "atom_loss_flag": False},
+    )
+    bulk.apply_leakage_predictions_read_only_v1(
+        [outcome],
+        historical=set(),
+        context={"references": references, "existing_groups": ()},
+    )
+    assert outcome["leakage_classification"] == (
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    )
+    assert outcome["predicted_group_id"] is None
+    assert outcome["predicted_split"] == "BLOCKED_READ_ONLY"
+    assert outcome["terminal_outcome"] == "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    assert outcome["terminal_reasons"] == ["LEAKAGE_EXISTING_GROUP_CONFLICT"]
+    assert "FROZEN_HISTORICAL_BASELINE_EXTENSION_NOT_SUPPORTED" not in (
+        outcome["terminal_reasons"]
+    )
+
+
+@pytest.mark.parametrize((
+    "pdb_id", "ligand", "initial_route", "initial_reason", "pre_status",
+), (
+    (
+        "2DJF", "1ZB", "KNOWN_EXISTING_QUARANTINE",
+        "ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE",
+        "PRE_ATOM_LOSS_REPRESENTATION_GAP",
+    ),
+    (
+        "2R9F", "K2Z", "KNOWN_RUNTIME_EXTENSION",
+        "FROZEN_RUNTIME_EXTENSION_CANDIDATE", "PRE_REACTION_UNRESOLVED",
+    ),
+))
+def test_known_control_terminal_precedes_component_conflict_diagnostic(
+    pdb_id: str,
+    ligand: str,
+    initial_route: str,
+    initial_reason: str,
+    pre_status: str,
+) -> None:
+    evidence = {
+        "complete": True,
+        "ligand_graph_sha256": "1" * 64,
+        "ligand_scaffold_sha256": "2" * 64,
+        "protein_accession": "KNOWN_CONTROL_CONFLICT_ACCESSION",
+        "protein_sequence_sha256": "3" * 64,
+        "protein_sequence": "ACDEFGHIKLMNPQRSTVWY",
+        "linking_axes": [
+            "PROTEIN_ACCESSION:KNOWN_CONTROL_CONFLICT_ACCESSION",
+        ],
+    }
+    references = [
+        {
+            "identity": f"1AB{index}/T{index}",
+            "leakage_key": f"COVAPIE_LEAKAGE_GROUP_00000{index}",
+            "group_id": f"COVAPIE_LEAKAGE_GROUP_00000{index}",
+            "split": split,
+            "kind": "HISTORICAL",
+            **{key: evidence[key] for key in (
+                "ligand_graph_sha256", "ligand_scaffold_sha256",
+                "protein_accession", "protein_sequence_sha256",
+                "protein_sequence",
+            )},
+        }
+        for index, split in ((2, "validation"), (4, "train"))
+    ]
+    event = _merged_event(pdb=pdb_id, comp=ligand)
+    outcome = bulk._terminal_outcome(
+        event,
+        phases={stage: "PASSED" for stage in bulk.BULK_STAGES},
+        route=initial_route,
+        reasons=(initial_reason,),
+        structural={"leakage_evidence": evidence},
+        pre={"status": pre_status, "atom_loss_flag": pdb_id == "2DJF"},
+    )
+    bulk.apply_leakage_predictions_read_only_v1(
+        [outcome],
+        historical=set(),
+        context={"references": references, "existing_groups": ()},
+    )
+    assert outcome["leakage_classification"] == (
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    )
+    assert outcome["predicted_split"] == "BLOCKED_READ_ONLY"
+    assert outcome["terminal_outcome"] == initial_route
+    assert outcome["terminal_reasons"] == [initial_reason]
+
+
+def test_real_known_control_terminal_precedence_artifacts_are_truthful() -> None:
+    output = ROOT / bulk.REPOSITORY_OUTPUT_RELATIVE
+    events = json.loads(
+        (output / "bulk_processing_outcomes_v1.json").read_text()
+    )["events"]
+    summary = json.loads((output / "bulk_summary_v1.json").read_text())
+
+    def exact(pdb_id: str, ligand: str) -> dict[str, object]:
+        matches = [
+            item for item in events
+            if item["pdb_id"] == pdb_id
+            and item["ligand_component_id"] == ligand
+        ]
+        assert len(matches) == 1
+        return matches[0]
+
+    two_djf = exact("2DJF", "1ZB")
+    assert two_djf["pre_representability"]["status"] == (
+        "PRE_ATOM_LOSS_REPRESENTATION_GAP"
+    )
+    assert two_djf["leakage_classification"] == (
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    )
+    assert two_djf["terminal_outcome"] == "KNOWN_EXISTING_QUARANTINE"
+    assert two_djf["terminal_reasons"] == [
+        "ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE"
+    ]
+    two_r9f = exact("2R9F", "K2Z")
+    assert two_r9f["leakage_classification"] == (
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    )
+    assert two_r9f["terminal_outcome"] == "KNOWN_RUNTIME_EXTENSION"
+    assert two_r9f["terminal_reasons"] == [
+        "FROZEN_RUNTIME_EXTENSION_CANDIDATE"
+    ]
+    assert summary["terminal_route_counts"]["KNOWN_EXISTING_QUARANTINE"] == 1
+    assert summary["terminal_route_counts"]["KNOWN_RUNTIME_EXTENSION"] == 1
+    assert summary["terminal_route_counts"][
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    ] == 88
+    assert summary[
+        "all_leakage_existing_group_conflict_classification_count"
+    ] == 90
+    assert summary["new_candidate_existing_group_conflict_count"] == 88
+    assert summary["known_control_conflict_annotation_count"] == 2
+    assert summary["known_control_conflict_annotation_identities"] == [
+        "2DJF/1ZB", "2R9F/K2Z",
+    ]
+    assert summary["terminal_leakage_existing_group_conflict_count"] == 88
+    assert summary["remaining_existing_group_conflict_event_count"] == 88
+    assert summary["2djf_quarantine_preserved"] is True
+    assert summary["k2z_runtime_extension_preserved"] is True
+    source = (
+        ROOT / "src/covalent_ext/covapie_bulk_cys_sg_dataset_expansion_v1.py"
+    ).read_text()
+    assert '"2djf_quarantine_preserved": True' not in source
+    assert '"k2z_runtime_extension_preserved": True' not in source
+
+
 def test_leakage_lcs_upper_bound_skips_only_impossible_policy_alignment(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

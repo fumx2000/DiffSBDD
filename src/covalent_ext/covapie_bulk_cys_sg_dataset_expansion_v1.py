@@ -54,8 +54,7 @@ from covalent_ext import (
 SNAPSHOT_DATE = "2026-08-19"
 STAGE = "covapie_bulk_cys_sg_dataset_expansion_v1"
 TASK_NAME = (
-    "revise_covapie_bulk_multisource_cys_sg_dataset_expansion_v1_"
-    "for_real_automation"
+    "resolve_covapie_bulk_historical_baseline_leakage_extension_v1"
 )
 SCHEMA_VERSION = "covapie_bulk_multisource_cys_sg_dataset_expansion_v1"
 
@@ -124,6 +123,7 @@ TERMINAL_ROUTES = (
     "QUARANTINE_REPRESENTATION_GAP",
     "RUNTIME_EXTENSION_REQUIRED",
     "LEAKAGE_BASELINE_EXTENSION_BLOCKED",
+    "LEAKAGE_EXISTING_GROUP_CONFLICT",
     "STRUCTURAL_EVIDENCE_INCOMPLETE",
     "SOURCE_ANNOTATION_CONFLICT",
     "MISSING_SOURCE_AUTHORITY",
@@ -2390,17 +2390,17 @@ def apply_leakage_predictions_read_only_v1(
                 item for item in reference_hits.values()
                 if item["kind"] == "CUMULATIVE"
             ]
-            if historical_hits or len(reference_hits) != 1:
-                selected = sorted(reference_hits.values(), key=lambda item: item["group_id"])[0]
+            if len(historical_hits) == 1 and not cumulative_hits:
+                selected = historical_hits[0]
                 prediction = {
                     "classification": "HISTORICAL_BASELINE_COMPONENT",
                     "leakage_key": selected["leakage_key"],
                     "predicted_group_id": selected["group_id"],
-                    "predicted_split": "BLOCKED_READ_ONLY",
+                    "predicted_split": selected["split"],
                     "linking_axes": sorted(linking_axes),
-                    "blocker": "LEAKAGE_BASELINE_EXTENSION_BLOCKED",
+                    "blocker": None,
                 }
-            else:
+            elif len(cumulative_hits) == 1 and not historical_hits:
                 selected = cumulative_hits[0]
                 prediction = {
                     "classification": "SAME_EXISTING_EXPANSION_COMPONENT",
@@ -2408,6 +2408,15 @@ def apply_leakage_predictions_read_only_v1(
                     "predicted_group_id": selected["group_id"],
                     "predicted_split": selected["split"],
                     "linking_axes": sorted(linking_axes), "blocker": None,
+                }
+            else:
+                prediction = {
+                    "classification": "LEAKAGE_EXISTING_GROUP_CONFLICT",
+                    "leakage_key": None,
+                    "predicted_group_id": None,
+                    "predicted_split": "BLOCKED_READ_ONLY",
+                    "linking_axes": sorted(linking_axes),
+                    "blocker": "LEAKAGE_EXISTING_GROUP_CONFLICT",
                 }
         else:
             component_evidence = sorted(
@@ -2454,6 +2463,10 @@ def apply_leakage_predictions_read_only_v1(
             }
         for item in members:
             identity = (item["pdb_id"], item["ligand_component_id"])
+            known_control_terminal = (
+                identity in KNOWN_QUARANTINE
+                or identity in KNOWN_RUNTIME_EXTENSION
+            )
             if identity in KNOWN_EXPANSION_APPROVED:
                 known = next(
                     ref for ref in context["references"]
@@ -2481,11 +2494,9 @@ def apply_leakage_predictions_read_only_v1(
             item["predicted_split"] = effective["predicted_split"]
             item["leakage_linking_axes"] = effective["linking_axes"]
             item["stage_statuses"][BULK_STAGES[11]] = effective["classification"]
-            if effective["blocker"]:
+            if effective["blocker"] and not known_control_terminal:
                 item["terminal_outcome"] = effective["blocker"]
-                item["terminal_reasons"] = [
-                    "FROZEN_HISTORICAL_BASELINE_EXTENSION_NOT_SUPPORTED"
-                ]
+                item["terminal_reasons"] = [effective["blocker"]]
                 item["stage_statuses"][BULK_STAGES[12]] = effective["blocker"]
 
 
@@ -3283,6 +3294,85 @@ def _build_summary_v1(
         item for item in outcomes
         if item["canonical_event_id"] not in known_event_ids
     ]
+    known_control_contracts = (
+        (
+            ("2DJF", "1ZB"),
+            "PRE_ATOM_LOSS_REPRESENTATION_GAP",
+            "KNOWN_EXISTING_QUARANTINE",
+            ("ATOM_LOSS_PRE_REACTION_SUPPORT_FOR_DIAZOMETHYL_KETONE",),
+        ),
+        (
+            ("2R9F", "K2Z"),
+            None,
+            "KNOWN_RUNTIME_EXTENSION",
+            ("FROZEN_RUNTIME_EXTENSION_CANDIDATE",),
+        ),
+    )
+    known_controls: dict[tuple[str, str], Mapping[str, Any]] = {}
+    for identity, expected_pre_status, expected_terminal, expected_reasons in (
+        known_control_contracts
+    ):
+        matches = [
+            item for item in outcomes
+            if (item["pdb_id"], item["ligand_component_id"]) == identity
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                "KNOWN_CONTROL_OUTCOME_NOT_EXACT_ONE:" + "/".join(identity)
+            )
+        control = matches[0]
+        if (
+            expected_pre_status is not None
+            and control["pre_representability"]["status"]
+            != expected_pre_status
+        ):
+            raise ValueError(
+                "KNOWN_CONTROL_PRE_STATUS_INVALID:" + "/".join(identity)
+            )
+        if (
+            control["terminal_outcome"] != expected_terminal
+            or tuple(control["terminal_reasons"]) != expected_reasons
+        ):
+            raise ValueError(
+                "KNOWN_CONTROL_FROZEN_TERMINAL_INVALID:" + "/".join(identity)
+            )
+        known_controls[identity] = control
+    known_control_conflict_identities = sorted(
+        "/".join(identity)
+        for identity, control in known_controls.items()
+        if control["leakage_classification"]
+        == "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    )
+    expected_known_control_conflicts = ["2DJF/1ZB", "2R9F/K2Z"]
+    if known_control_conflict_identities != expected_known_control_conflicts:
+        raise ValueError("KNOWN_CONTROL_CONFLICT_ANNOTATION_SET_INVALID")
+    all_existing_group_conflict_count = sum(
+        item["leakage_classification"] == "LEAKAGE_EXISTING_GROUP_CONFLICT"
+        for item in outcomes
+    )
+    new_existing_group_conflict_count = sum(
+        item["leakage_classification"] == "LEAKAGE_EXISTING_GROUP_CONFLICT"
+        for item in new_outcomes
+    )
+    terminal_existing_group_conflict_count = route_counts[
+        "LEAKAGE_EXISTING_GROUP_CONFLICT"
+    ]
+    if (
+        all_existing_group_conflict_count
+        != new_existing_group_conflict_count
+        + len(known_control_conflict_identities)
+        or terminal_existing_group_conflict_count
+        != new_existing_group_conflict_count
+    ):
+        raise ValueError("KNOWN_CONTROL_CONFLICT_RECONCILIATION_FAILED")
+    two_djf_quarantine_preserved = bool(
+        known_controls[("2DJF", "1ZB")]["terminal_outcome"]
+        == "KNOWN_EXISTING_QUARANTINE"
+    )
+    k2z_runtime_extension_preserved = bool(
+        known_controls[("2R9F", "K2Z")]["terminal_outcome"]
+        == "KNOWN_RUNTIME_EXTENSION"
+    )
     duplicate_count = (
         all_source_normalized_record_count
         - records_without_event_identity
@@ -3448,7 +3538,10 @@ def _build_summary_v1(
             } for item in new_outcomes
         ),
         "new_candidate_leakage_unresolved_count": sum(
-            item["leakage_classification"] == "LEAKAGE_EVIDENCE_INCOMPLETE"
+            item["leakage_classification"] in {
+                "LEAKAGE_EVIDENCE_INCOMPLETE",
+                "LEAKAGE_EXISTING_GROUP_CONFLICT",
+            }
             for item in new_outcomes
         ),
         "new_candidate_existing_expansion_component_count": sum(
@@ -3461,6 +3554,27 @@ def _build_summary_v1(
         ),
         "new_candidate_new_component_count": sum(
             item["leakage_classification"] == "NEW_EXPANSION_COMPONENT"
+            for item in new_outcomes
+        ),
+        "new_candidate_existing_group_conflict_count": sum(
+            item["leakage_classification"] == "LEAKAGE_EXISTING_GROUP_CONFLICT"
+            for item in new_outcomes
+        ),
+        "all_leakage_existing_group_conflict_classification_count": (
+            all_existing_group_conflict_count
+        ),
+        "known_control_conflict_annotation_count": len(
+            known_control_conflict_identities
+        ),
+        "known_control_conflict_annotation_identities": (
+            known_control_conflict_identities
+        ),
+        "terminal_leakage_existing_group_conflict_count": (
+            terminal_existing_group_conflict_count
+        ),
+        "resolved_historical_extension_event_count": sum(
+            item["leakage_classification"] == "HISTORICAL_BASELINE_COMPONENT"
+            and item["terminal_outcome"] != "LEAKAGE_BASELINE_EXTENSION_BLOCKED"
             for item in new_outcomes
         ),
         "human_review_new_chemistry_count": route_counts["HUMAN_REVIEW_REQUIRED_NEW_CHEMISTRY"],
@@ -3491,6 +3605,9 @@ def _build_summary_v1(
         "quarantine_representation_gap_count": route_counts["QUARANTINE_REPRESENTATION_GAP"],
         "runtime_extension_count": route_counts["RUNTIME_EXTENSION_REQUIRED"] + route_counts["KNOWN_RUNTIME_EXTENSION"],
         "leakage_baseline_extension_blocked_count": route_counts["LEAKAGE_BASELINE_EXTENSION_BLOCKED"],
+        "remaining_existing_group_conflict_event_count": route_counts[
+            "LEAKAGE_EXISTING_GROUP_CONFLICT"
+        ],
         "structural_evidence_incomplete_count": route_counts["STRUCTURAL_EVIDENCE_INCOMPLETE"],
         "source_annotation_conflict_count": route_counts["SOURCE_ANNOTATION_CONFLICT"],
         "feature_rejected_count": route_counts["REJECTED_FEATURE_INCOMPATIBLE"],
@@ -3507,8 +3624,11 @@ def _build_summary_v1(
         "production_materialization_performed": False,
         "production_approval_written": False,
         "production_trainable_new_sample_count": 0,
-        "2djf_quarantine_preserved": True,
-        "k2z_runtime_extension_preserved": True,
+        "historical_extension_overlay_implemented": True,
+        "historical_group_split_inheritance_implemented": True,
+        "ratio_refit_for_historical_extension": False,
+        "2djf_quarantine_preserved": two_djf_quarantine_preserved,
+        "k2z_runtime_extension_preserved": k2z_runtime_extension_preserved,
         "feature_semantics_audit_completed": True,
         "feature_semantics_known": True,
         "unknown_atom_feature_policy_resolved": True,
@@ -3546,6 +3666,16 @@ def _build_summary_v1(
         summary["exact_authority_match_is_not_identity_stub"],
         summary["new_candidate_exact_signature_computability_reported"],
         summary["new_candidate_leakage_prediction_real_path_implemented"],
+        summary["historical_extension_overlay_implemented"],
+        summary["historical_group_split_inheritance_implemented"],
+        summary["ratio_refit_for_historical_extension"] is False,
+        summary["2djf_quarantine_preserved"],
+        summary["k2z_runtime_extension_preserved"],
+        summary["all_leakage_existing_group_conflict_classification_count"]
+        == summary["new_candidate_existing_group_conflict_count"]
+        + summary["known_control_conflict_annotation_count"],
+        summary["terminal_leakage_existing_group_conflict_count"]
+        == summary["remaining_existing_group_conflict_event_count"],
         summary["all_terminal_counts_reconcile"],
         summary["production_population_unchanged"],
         summary["regressions_pass"],
@@ -3557,7 +3687,7 @@ def _build_summary_v1(
         else "PREPUBLICATION_MAINLINE_REVISION_INCOMPLETE"
     )
     summary["recommended_next_step_exactly"] = (
-        "review_and_publish_covapie_bulk_multisource_cys_sg_dataset_expansion_v1"
+        "review_and_publish_covapie_bulk_historical_baseline_leakage_extension_v1"
         if ready else "resolve_the_single_reported_bulk_mainline_blocker_v1"
     )
     return summary
@@ -3603,6 +3733,32 @@ def validate_summary_reconciliation_v1(summary: Mapping[str, Any]) -> None:
         != int(summary["new_unique_candidate_event_count"])
     ):
         raise ValueError("SUMMARY_NEW_LEAKAGE_RECONCILIATION_FAILED")
+    conflict_keys = {
+        "all_leakage_existing_group_conflict_classification_count",
+        "new_candidate_existing_group_conflict_count",
+        "known_control_conflict_annotation_count",
+        "known_control_conflict_annotation_identities",
+        "terminal_leakage_existing_group_conflict_count",
+        "remaining_existing_group_conflict_event_count",
+    }
+    if conflict_keys.issubset(summary):
+        identities = summary["known_control_conflict_annotation_identities"]
+        if (
+            type(identities) is not list
+            or identities != ["2DJF/1ZB", "2R9F/K2Z"]
+            or int(summary[
+                "all_leakage_existing_group_conflict_classification_count"
+            ])
+            != int(summary["new_candidate_existing_group_conflict_count"])
+            + int(summary["known_control_conflict_annotation_count"])
+            or int(summary["known_control_conflict_annotation_count"])
+            != len(identities)
+            or int(summary["terminal_leakage_existing_group_conflict_count"])
+            != int(summary["remaining_existing_group_conflict_event_count"])
+            or int(summary["terminal_leakage_existing_group_conflict_count"])
+            != int(routes["LEAKAGE_EXISTING_GROUP_CONFLICT"])
+        ):
+            raise ValueError("SUMMARY_EXISTING_GROUP_CONFLICT_RECONCILIATION_FAILED")
 
 
 def _relative_cache_summary(

@@ -227,6 +227,10 @@ _CUMULATIVE_5F2E_SEED = ROOT / (
     "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/"
     "covapie_cys_sg_cumulative_leakage_registry_after_5f2e_v1.json"
 )
+_CUMULATIVE_CURRENT = ROOT / (
+    "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/"
+    "6di9_gjj_approved_v1/cumulative_leakage_registry_v1.json"
+)
 _PUBLISHED_5F2E_AUTHORITY_REGISTRY = ROOT / (
     "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/"
     "5f2e_5ut_approved_v1/reusable_authority_registry_v1.json"
@@ -876,6 +880,250 @@ def test_cumulative_group_inheritance_dedup_conflict_and_order_independence() ->
         pipeline.merge_published_and_cumulative_leakage_groups_v1(
             pipeline.load_published_leakage_group_population_v1(ROOT),
             overlapping_registry,
+        )
+
+
+def test_historical_extension_overlay_merge_matrix_and_compatibility() -> None:
+    published = pipeline.load_published_leakage_group_population_v1(ROOT)
+    target = next(
+        group for group in published
+        if group.final_leakage_group_id == "COVAPIE_LEAKAGE_GROUP_000005"
+    )
+    current = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_CURRENT, repo_root=ROOT,
+    )
+    assert pipeline.serialize_cumulative_expansion_leakage_registry_v1(
+        current
+    ) == _CUMULATIVE_CURRENT.read_bytes()
+    baseline_effective = pipeline.merge_published_and_cumulative_leakage_groups_v1(
+        published, current,
+    )
+    overlay = pipeline.CumulativeExpansionLeakageGroupV1(
+        leakage_key=target.leakage_key,
+        final_leakage_group_id=target.final_leakage_group_id,
+        assigned_split=target.assigned_split,
+        member_identities=("9XA1/TST",),
+        member_count=1,
+    )
+    successor = replace(current, groups=(*current.groups, overlay))
+    effective = pipeline.merge_published_and_cumulative_leakage_groups_v1(
+        published, successor,
+    )
+    assert len(effective) == len(baseline_effective)
+    extended = next(
+        group for group in effective
+        if group.final_leakage_group_id == target.final_leakage_group_id
+    )
+    assert extended.assigned_split == target.assigned_split == "test"
+    assert extended.member_identities == tuple(sorted({
+        *target.member_identities, "9XA1/TST",
+    }))
+    assert extended.member_count == target.member_count + 1
+    assert {
+        group.final_leakage_group_id: group
+        for group in effective
+        if group.final_leakage_group_id != target.final_leakage_group_id
+    } == {
+        group.final_leakage_group_id: group
+        for group in baseline_effective
+        if group.final_leakage_group_id != target.final_leakage_group_id
+    }
+
+    incompatible = (
+        replace(overlay, final_leakage_group_id="COVAPIE_LEAKAGE_GROUP_WRONG"),
+        replace(overlay, leakage_key="COVAPIE_LEAKAGE_GROUP_WRONG"),
+        replace(overlay, assigned_split="train"),
+    )
+    for record in incompatible:
+        with pytest.raises(
+            ValueError, match="CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP",
+        ):
+            pipeline.merge_published_and_cumulative_leakage_groups_v1(
+                published, replace(current, groups=(*current.groups, record)),
+            )
+    duplicate_baseline = replace(
+        overlay,
+        member_identities=(target.member_identities[0],),
+    )
+    with pytest.raises(
+        ValueError,
+        match="CUMULATIVE_LEAKAGE_EXTENSION_DUPLICATES_BASELINE_IDENTITY",
+    ):
+        pipeline.merge_published_and_cumulative_leakage_groups_v1(
+            published,
+            replace(current, groups=(*current.groups, duplicate_baseline)),
+        )
+    duplicate_other_group = pipeline.CumulativeExpansionLeakageGroupV1(
+        leakage_key="TEST_OTHER_LEAKAGE_KEY",
+        final_leakage_group_id="COVAPIE_EXPANSION_LEAKAGE_GROUP_TEST_OTHER",
+        assigned_split="train",
+        member_identities=("9XA1/TST",),
+        member_count=1,
+    )
+    with pytest.raises(
+        ValueError, match="CUMULATIVE_LEAKAGE_MEMBER_GROUP_CONFLICT",
+    ):
+        pipeline.merge_published_and_cumulative_leakage_groups_v1(
+            published,
+            replace(
+                current,
+                groups=(*current.groups, overlay, duplicate_other_group),
+            ),
+        )
+
+
+def test_historical_overlay_successor_two_members_idempotence_and_fail_closed(
+    tmp_path: Path,
+) -> None:
+    published = pipeline.load_published_leakage_group_population_v1(ROOT)
+    target = next(
+        group for group in published
+        if group.final_leakage_group_id == "COVAPIE_LEAKAGE_GROUP_000005"
+    )
+    current = pipeline.load_cumulative_expansion_leakage_registry_v1(
+        _CUMULATIVE_CURRENT, repo_root=ROOT,
+    )
+
+    def candidate(identity: str) -> pipeline.ExpansionCandidateV1:
+        return _candidate(tmp_path, identity, leakage_key=target.leakage_key)
+
+    def outcome(item: pipeline.ExpansionCandidateV1, *, group: str = target.final_leakage_group_id, split: str = target.assigned_split) -> pipeline.CandidateOutcomeV1:
+        return pipeline._outcome_v1(
+            item,
+            disposition=pipeline.HUMAN_APPROVED,
+            reasons=(),
+            phases={phase: "PASSED" for phase in pipeline.PHASES},
+            source_verified=True,
+            mechanically_eligible=True,
+            group_id=group,
+            split=split,
+            post_geometry_authority=True,
+            materialization_ready=True,
+            materialization_performed=True,
+        )
+
+    def provenance(tag: str) -> tuple[pipeline.CumulativeLeakageSourceArtifactV1, ...]:
+        return (
+            pipeline.CumulativeLeakageSourceArtifactV1(
+                artifact_role="SUCCESSOR_EXPANSION_PIPELINE_RUN",
+                path=f"test-only-{tag}/pipeline_run_v1.json",
+                path_scope="REGISTRY_DIRECTORY_RELATIVE",
+                sha256="a" * 64,
+            ),
+            pipeline.CumulativeLeakageSourceArtifactV1(
+                artifact_role="SUCCESSOR_EXPANSION_MATERIALIZED_SAMPLE",
+                path=f"test-only-{tag}/materialized_sample_v1.json",
+                path_scope="REGISTRY_DIRECTORY_RELATIVE",
+                sha256="b" * 64,
+            ),
+        )
+
+    test_a, test_b = candidate("9XA1/TST"), candidate("9XA2/TST")
+    first = pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+        current,
+        completed_outcomes=(outcome(test_a),),
+        effective_candidates={test_a.candidate_identity: test_a},
+        current_source_artifacts=provenance("a"),
+        prior_registry_path=_CUMULATIVE_CURRENT,
+    )
+    overlay = next(
+        group for group in first.groups if group.leakage_key == target.leakage_key
+    )
+    assert len(first.groups) == len(current.groups) + 1
+    assert overlay.member_identities == ("9XA1/TST",)
+    assert overlay.member_count == 1
+    assert overlay.final_leakage_group_id == target.final_leakage_group_id
+    assert overlay.assigned_split == target.assigned_split
+    assert not set(overlay.member_identities).intersection(target.member_identities)
+
+    second = pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+        first,
+        completed_outcomes=(outcome(test_b),),
+        effective_candidates={test_b.candidate_identity: test_b},
+        current_source_artifacts=provenance("b"),
+        prior_registry_path=_CUMULATIVE_CURRENT,
+    )
+    overlay = next(
+        group for group in second.groups if group.leakage_key == target.leakage_key
+    )
+    assert overlay.member_identities == ("9XA1/TST", "9XA2/TST")
+    assert overlay.member_count == 2
+    effective = pipeline.merge_published_and_cumulative_leakage_groups_v1(
+        published, second,
+    )
+    assert len(effective) == len(published) + len(current.groups)
+    extended = next(
+        group for group in effective
+        if group.final_leakage_group_id == target.final_leakage_group_id
+    )
+    assert extended.member_count == target.member_count + 2
+
+    repeated = pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+        second,
+        completed_outcomes=(outcome(test_a),),
+        effective_candidates={test_a.candidate_identity: test_a},
+        current_source_artifacts=provenance("repeat-a"),
+        prior_registry_path=_CUMULATIVE_CURRENT,
+    )
+    repeated_overlay = next(
+        group for group in repeated.groups if group.leakage_key == target.leakage_key
+    )
+    assert repeated_overlay.member_identities == overlay.member_identities
+    assert repeated_overlay.member_count == 2
+
+    wrong_key_candidate = replace(test_a, leakage_key="TEST_OTHER_LEAKAGE_KEY")
+    wrong_cases = (
+        (test_a, outcome(test_a, group="COVAPIE_LEAKAGE_GROUP_WRONG")),
+        (wrong_key_candidate, outcome(wrong_key_candidate)),
+        (test_a, outcome(test_a, split="train")),
+    )
+    for bad_candidate, bad_outcome in wrong_cases:
+        with pytest.raises(
+            ValueError, match="CUMULATIVE_LEAKAGE_HISTORICAL_BASELINE_OVERLAP",
+        ):
+            pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+                current,
+                completed_outcomes=(bad_outcome,),
+                effective_candidates={
+                    bad_candidate.candidate_identity: bad_candidate,
+                },
+                current_source_artifacts=provenance("bad"),
+                prior_registry_path=_CUMULATIVE_CURRENT,
+            )
+
+    baseline_duplicate = replace(
+        test_a, candidate_identity=target.member_identities[0],
+    )
+    with pytest.raises(
+        ValueError,
+        match="CUMULATIVE_LEAKAGE_EXTENSION_DUPLICATES_BASELINE_IDENTITY",
+    ):
+        pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+            current,
+            completed_outcomes=(outcome(baseline_duplicate),),
+            effective_candidates={
+                baseline_duplicate.candidate_identity: baseline_duplicate,
+            },
+            current_source_artifacts=provenance("duplicate-baseline"),
+            prior_registry_path=_CUMULATIVE_CURRENT,
+        )
+
+    conflicting = replace(
+        test_a, leakage_key=current.groups[0].leakage_key,
+    )
+    with pytest.raises(
+        ValueError, match="CUMULATIVE_LEAKAGE_SUCCESSOR_MEMBER_GROUP_CONFLICT",
+    ):
+        pipeline.build_successor_cumulative_expansion_leakage_registry_v1(
+            second,
+            completed_outcomes=(outcome(
+                conflicting,
+                group=current.groups[0].final_leakage_group_id,
+                split=current.groups[0].assigned_split,
+            ),),
+            effective_candidates={conflicting.candidate_identity: conflicting},
+            current_source_artifacts=provenance("identity-conflict"),
+            prior_registry_path=_CUMULATIVE_CURRENT,
         )
 
 
