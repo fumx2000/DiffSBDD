@@ -1,0 +1,1679 @@
+{
+  "approval_records": [
+    {
+      "allowed_formal_charge_pattern": {
+        "1": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "2": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "3": 0,
+        "30": 0,
+        "31": 0,
+        "32": 0,
+        "33": 0,
+        "34": 0,
+        "35": 0,
+        "36": 0,
+        "37": 0,
+        "38": 0,
+        "39": 0,
+        "4": 0,
+        "40": 0,
+        "41": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "approved_pre_reaction_sdf_path": "data/derived/covalent_small/ligands_pre_reaction/KRAS_G12C_6OIM_pre_reaction.sdf",
+      "approved_pre_reaction_sdf_sha256": "09e366d2e8d7b761b23c0e0f8efb86173f9b5815bc84e53d29c8d465c445dfe1",
+      "approved_warhead_smarts": "[#6:5](=[#8:6])-[#6:7]=[#6:8]",
+      "bound_source_identity": "data/raw/covalent_sources/pdb_mmcif_direct/structures/6OIM.cif.gz",
+      "bound_source_sha256": "fb1594808cb5ce47fe60260b8b28ac3bb8fb1d10dfd6759ca96bade5d4b67241",
+      "candidate_identity": "6OIM/MOV",
+      "cross_signature_propagation_allowed": false,
+      "direction_anchor_atom": 12,
+      "expected_final_chemistry_signature_sha256": "4075756dcc32346352c51dd410fc5a468977487d770b657e07b30158cb6fb48f",
+      "expected_pre_reaction_bond_orders": [
+        [
+          1,
+          2,
+          "single"
+        ],
+        [
+          2,
+          3,
+          "single"
+        ],
+        [
+          2,
+          11,
+          "single"
+        ],
+        [
+          3,
+          4,
+          "single"
+        ],
+        [
+          4,
+          5,
+          "single"
+        ],
+        [
+          4,
+          9,
+          "single"
+        ],
+        [
+          5,
+          6,
+          "double"
+        ],
+        [
+          5,
+          7,
+          "single"
+        ],
+        [
+          7,
+          8,
+          "double"
+        ],
+        [
+          9,
+          10,
+          "single"
+        ],
+        [
+          10,
+          11,
+          "single"
+        ],
+        [
+          11,
+          12,
+          "single"
+        ],
+        [
+          12,
+          13,
+          "single"
+        ],
+        [
+          12,
+          29,
+          "single"
+        ],
+        [
+          13,
+          14,
+          "single"
+        ],
+        [
+          14,
+          15,
+          "single"
+        ],
+        [
+          14,
+          16,
+          "single"
+        ],
+        [
+          16,
+          17,
+          "single"
+        ],
+        [
+          16,
+          27,
+          "single"
+        ],
+        [
+          17,
+          18,
+          "single"
+        ],
+        [
+          17,
+          23,
+          "single"
+        ],
+        [
+          18,
+          19,
+          "single"
+        ],
+        [
+          18,
+          20,
+          "single"
+        ],
+        [
+          20,
+          21,
+          "single"
+        ],
+        [
+          21,
+          22,
+          "single"
+        ],
+        [
+          22,
+          23,
+          "single"
+        ],
+        [
+          23,
+          24,
+          "single"
+        ],
+        [
+          24,
+          25,
+          "single"
+        ],
+        [
+          24,
+          26,
+          "single"
+        ],
+        [
+          27,
+          28,
+          "single"
+        ],
+        [
+          27,
+          29,
+          "single"
+        ],
+        [
+          28,
+          33,
+          "single"
+        ],
+        [
+          29,
+          30,
+          "single"
+        ],
+        [
+          30,
+          31,
+          "single"
+        ],
+        [
+          31,
+          32,
+          "single"
+        ],
+        [
+          31,
+          33,
+          "single"
+        ],
+        [
+          33,
+          34,
+          "single"
+        ],
+        [
+          34,
+          35,
+          "single"
+        ],
+        [
+          34,
+          40,
+          "single"
+        ],
+        [
+          35,
+          36,
+          "single"
+        ],
+        [
+          35,
+          37,
+          "single"
+        ],
+        [
+          37,
+          38,
+          "single"
+        ],
+        [
+          38,
+          39,
+          "single"
+        ],
+        [
+          39,
+          40,
+          "single"
+        ],
+        [
+          40,
+          41,
+          "single"
+        ]
+      ],
+      "formal_charge_authoritative": true,
+      "independent_sample_assignment_decision": "APPROVE",
+      "ligand_reactive_atom_map_number": 8,
+      "machine_evidence": {
+        "available_formal_charge_pattern": {
+          "1": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "13": 0,
+          "14": 0,
+          "15": 0,
+          "16": 0,
+          "17": 0,
+          "18": 0,
+          "19": 0,
+          "2": 0,
+          "20": 0,
+          "21": 0,
+          "22": 0,
+          "23": 0,
+          "24": 0,
+          "25": 0,
+          "26": 0,
+          "27": 0,
+          "28": 0,
+          "29": 0,
+          "3": 0,
+          "30": 0,
+          "31": 0,
+          "32": 0,
+          "33": 0,
+          "34": 0,
+          "35": 0,
+          "36": 0,
+          "37": 0,
+          "38": 0,
+          "39": 0,
+          "4": 0,
+          "40": 0,
+          "41": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        },
+        "available_pre_reaction_bond_orders": [
+          [
+            1,
+            2,
+            "single"
+          ],
+          [
+            2,
+            3,
+            "single"
+          ],
+          [
+            2,
+            11,
+            "single"
+          ],
+          [
+            3,
+            4,
+            "single"
+          ],
+          [
+            4,
+            5,
+            "single"
+          ],
+          [
+            4,
+            9,
+            "single"
+          ],
+          [
+            5,
+            6,
+            "double"
+          ],
+          [
+            5,
+            7,
+            "single"
+          ],
+          [
+            7,
+            8,
+            "double"
+          ],
+          [
+            9,
+            10,
+            "single"
+          ],
+          [
+            10,
+            11,
+            "single"
+          ],
+          [
+            11,
+            12,
+            "single"
+          ],
+          [
+            12,
+            13,
+            "single"
+          ],
+          [
+            12,
+            29,
+            "single"
+          ],
+          [
+            13,
+            14,
+            "single"
+          ],
+          [
+            14,
+            15,
+            "single"
+          ],
+          [
+            14,
+            16,
+            "single"
+          ],
+          [
+            16,
+            17,
+            "single"
+          ],
+          [
+            16,
+            27,
+            "single"
+          ],
+          [
+            17,
+            18,
+            "single"
+          ],
+          [
+            17,
+            23,
+            "single"
+          ],
+          [
+            18,
+            19,
+            "single"
+          ],
+          [
+            18,
+            20,
+            "single"
+          ],
+          [
+            20,
+            21,
+            "single"
+          ],
+          [
+            21,
+            22,
+            "single"
+          ],
+          [
+            22,
+            23,
+            "single"
+          ],
+          [
+            23,
+            24,
+            "single"
+          ],
+          [
+            24,
+            25,
+            "single"
+          ],
+          [
+            24,
+            26,
+            "single"
+          ],
+          [
+            27,
+            28,
+            "single"
+          ],
+          [
+            27,
+            29,
+            "single"
+          ],
+          [
+            28,
+            33,
+            "single"
+          ],
+          [
+            29,
+            30,
+            "single"
+          ],
+          [
+            30,
+            31,
+            "single"
+          ],
+          [
+            31,
+            32,
+            "single"
+          ],
+          [
+            31,
+            33,
+            "single"
+          ],
+          [
+            33,
+            34,
+            "single"
+          ],
+          [
+            34,
+            35,
+            "single"
+          ],
+          [
+            34,
+            40,
+            "single"
+          ],
+          [
+            35,
+            36,
+            "single"
+          ],
+          [
+            35,
+            37,
+            "single"
+          ],
+          [
+            37,
+            38,
+            "single"
+          ],
+          [
+            38,
+            39,
+            "single"
+          ],
+          [
+            39,
+            40,
+            "single"
+          ],
+          [
+            40,
+            41,
+            "single"
+          ]
+        ],
+        "binding_status": "IMMUTABLE_MACHINE_EVIDENCE_PREFILLED",
+        "candidate_warnings": [
+          "REACTION_FAMILY_EXPLICIT_HUMAN_APPROVAL_MISSING",
+          "APPROVED_SMARTS_RULE_MISSING",
+          "INDEPENDENT_SAMPLE_ASSIGNMENT_APPROVAL_MISSING",
+          "HUMAN_GOLD_ROLE_PARTITION_MISSING",
+          "MINIMAL_SEED_AND_ANCHORS_MISSING",
+          "LEAKAGE_GROUP_AND_SPLIT_NOT_MATERIALIZED"
+        ],
+        "canonical_ligand_atom_namespace": [
+          {
+            "atom_id": 0,
+            "atom_map_number": 1,
+            "element": "C"
+          },
+          {
+            "atom_id": 1,
+            "atom_map_number": 2,
+            "element": "C"
+          },
+          {
+            "atom_id": 2,
+            "atom_map_number": 3,
+            "element": "C"
+          },
+          {
+            "atom_id": 3,
+            "atom_map_number": 4,
+            "element": "N"
+          },
+          {
+            "atom_id": 4,
+            "atom_map_number": 5,
+            "element": "C"
+          },
+          {
+            "atom_id": 5,
+            "atom_map_number": 6,
+            "element": "O"
+          },
+          {
+            "atom_id": 6,
+            "atom_map_number": 7,
+            "element": "C"
+          },
+          {
+            "atom_id": 7,
+            "atom_map_number": 8,
+            "element": "C"
+          },
+          {
+            "atom_id": 8,
+            "atom_map_number": 9,
+            "element": "C"
+          },
+          {
+            "atom_id": 9,
+            "atom_map_number": 10,
+            "element": "C"
+          },
+          {
+            "atom_id": 10,
+            "atom_map_number": 11,
+            "element": "N"
+          },
+          {
+            "atom_id": 11,
+            "atom_map_number": 12,
+            "element": "C"
+          },
+          {
+            "atom_id": 12,
+            "atom_map_number": 13,
+            "element": "N"
+          },
+          {
+            "atom_id": 13,
+            "atom_map_number": 14,
+            "element": "C"
+          },
+          {
+            "atom_id": 14,
+            "atom_map_number": 15,
+            "element": "O"
+          },
+          {
+            "atom_id": 15,
+            "atom_map_number": 16,
+            "element": "N"
+          },
+          {
+            "atom_id": 16,
+            "atom_map_number": 17,
+            "element": "C"
+          },
+          {
+            "atom_id": 17,
+            "atom_map_number": 18,
+            "element": "C"
+          },
+          {
+            "atom_id": 18,
+            "atom_map_number": 19,
+            "element": "C"
+          },
+          {
+            "atom_id": 19,
+            "atom_map_number": 20,
+            "element": "C"
+          },
+          {
+            "atom_id": 20,
+            "atom_map_number": 21,
+            "element": "C"
+          },
+          {
+            "atom_id": 21,
+            "atom_map_number": 22,
+            "element": "N"
+          },
+          {
+            "atom_id": 22,
+            "atom_map_number": 23,
+            "element": "C"
+          },
+          {
+            "atom_id": 23,
+            "atom_map_number": 24,
+            "element": "C"
+          },
+          {
+            "atom_id": 24,
+            "atom_map_number": 25,
+            "element": "C"
+          },
+          {
+            "atom_id": 25,
+            "atom_map_number": 26,
+            "element": "C"
+          },
+          {
+            "atom_id": 26,
+            "atom_map_number": 27,
+            "element": "C"
+          },
+          {
+            "atom_id": 27,
+            "atom_map_number": 28,
+            "element": "N"
+          },
+          {
+            "atom_id": 28,
+            "atom_map_number": 29,
+            "element": "C"
+          },
+          {
+            "atom_id": 29,
+            "atom_map_number": 30,
+            "element": "C"
+          },
+          {
+            "atom_id": 30,
+            "atom_map_number": 31,
+            "element": "C"
+          },
+          {
+            "atom_id": 31,
+            "atom_map_number": 32,
+            "element": "F"
+          },
+          {
+            "atom_id": 32,
+            "atom_map_number": 33,
+            "element": "C"
+          },
+          {
+            "atom_id": 33,
+            "atom_map_number": 34,
+            "element": "C"
+          },
+          {
+            "atom_id": 34,
+            "atom_map_number": 35,
+            "element": "C"
+          },
+          {
+            "atom_id": 35,
+            "atom_map_number": 36,
+            "element": "F"
+          },
+          {
+            "atom_id": 36,
+            "atom_map_number": 37,
+            "element": "C"
+          },
+          {
+            "atom_id": 37,
+            "atom_map_number": 38,
+            "element": "C"
+          },
+          {
+            "atom_id": 38,
+            "atom_map_number": 39,
+            "element": "C"
+          },
+          {
+            "atom_id": 39,
+            "atom_map_number": 40,
+            "element": "C"
+          },
+          {
+            "atom_id": 40,
+            "atom_map_number": 41,
+            "element": "O"
+          }
+        ],
+        "exact_event_endpoints": {
+          "ligand_endpoint_atom_id": 7,
+          "ligand_endpoint_descriptor": "A:MOV:303:C25",
+          "protein_endpoint_atom_id": 93,
+          "protein_endpoint_descriptor": "A:CYS:12:SG",
+          "retained_reactive_atom_id": 7
+        },
+        "existing_role_warhead_proposal": {
+          "atom_labels": [
+            {
+              "atom_id": 0,
+              "element": "C",
+              "pdb_atom_name": "C21",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 1,
+              "element": "C",
+              "pdb_atom_name": "C20",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 2,
+              "element": "C",
+              "pdb_atom_name": "C19",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 3,
+              "element": "N",
+              "pdb_atom_name": "N6",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 4,
+              "element": "C",
+              "pdb_atom_name": "C23",
+              "proposed_role": "warhead"
+            },
+            {
+              "atom_id": 5,
+              "element": "O",
+              "pdb_atom_name": "O2",
+              "proposed_role": "warhead"
+            },
+            {
+              "atom_id": 6,
+              "element": "C",
+              "pdb_atom_name": "C24",
+              "proposed_role": "warhead"
+            },
+            {
+              "atom_id": 7,
+              "element": "C",
+              "pdb_atom_name": "C25",
+              "proposed_role": "warhead"
+            },
+            {
+              "atom_id": 8,
+              "element": "C",
+              "pdb_atom_name": "C18",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 9,
+              "element": "C",
+              "pdb_atom_name": "C17",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 10,
+              "element": "N",
+              "pdb_atom_name": "N2",
+              "proposed_role": "linker"
+            },
+            {
+              "atom_id": 11,
+              "element": "C",
+              "pdb_atom_name": "C7",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 12,
+              "element": "N",
+              "pdb_atom_name": "N3",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 13,
+              "element": "C",
+              "pdb_atom_name": "C8",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 14,
+              "element": "O",
+              "pdb_atom_name": "O1",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 15,
+              "element": "N",
+              "pdb_atom_name": "N4",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 16,
+              "element": "C",
+              "pdb_atom_name": "C9",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 17,
+              "element": "C",
+              "pdb_atom_name": "C13",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 18,
+              "element": "C",
+              "pdb_atom_name": "C22",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 19,
+              "element": "C",
+              "pdb_atom_name": "C12",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 20,
+              "element": "C",
+              "pdb_atom_name": "C11",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 21,
+              "element": "N",
+              "pdb_atom_name": "N5",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 22,
+              "element": "C",
+              "pdb_atom_name": "C10",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 23,
+              "element": "C",
+              "pdb_atom_name": "C14",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 24,
+              "element": "C",
+              "pdb_atom_name": "C16",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 25,
+              "element": "C",
+              "pdb_atom_name": "C15",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 26,
+              "element": "C",
+              "pdb_atom_name": "C2",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 27,
+              "element": "N",
+              "pdb_atom_name": "N1",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 28,
+              "element": "C",
+              "pdb_atom_name": "C1",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 29,
+              "element": "C",
+              "pdb_atom_name": "C5",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 30,
+              "element": "C",
+              "pdb_atom_name": "C4",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 31,
+              "element": "F",
+              "pdb_atom_name": "F1",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 32,
+              "element": "C",
+              "pdb_atom_name": "C3",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 33,
+              "element": "C",
+              "pdb_atom_name": "C6",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 34,
+              "element": "C",
+              "pdb_atom_name": "C30",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 35,
+              "element": "F",
+              "pdb_atom_name": "F2",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 36,
+              "element": "C",
+              "pdb_atom_name": "C29",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 37,
+              "element": "C",
+              "pdb_atom_name": "C28",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 38,
+              "element": "C",
+              "pdb_atom_name": "C27",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 39,
+              "element": "C",
+              "pdb_atom_name": "C26",
+              "proposed_role": "scaffold"
+            },
+            {
+              "atom_id": 40,
+              "element": "O",
+              "pdb_atom_name": "O3",
+              "proposed_role": "scaffold"
+            }
+          ],
+          "linker_atom_ids": [
+            0,
+            1,
+            2,
+            3,
+            8,
+            9,
+            10
+          ],
+          "linker_warhead_boundaries": [
+            [
+              3,
+              4,
+              "single"
+            ]
+          ],
+          "proposed_warhead_smarts": "[#6:5](=[#8:6])-[#6:7]=[#6:8]",
+          "scaffold_atom_ids": [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ],
+          "scaffold_linker_boundaries": [
+            [
+              11,
+              10,
+              "single"
+            ]
+          ],
+          "source_path": "data/raw/covalent_small/metadata/KRAS_G12C_6OIM_MOV_annotation_template.csv",
+          "source_sha256": "c718277ba5ec2cb09edd36dbb841f4210c467fc94521fec036eb42594f95c14c",
+          "status": "DRAFT_PROPOSAL_ONLY_NOT_AUTHORITY",
+          "warhead_atom_ids": [
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "formal_charge_authoritative": true,
+        "leakage_evidence": {
+          "leakage_key": "COVAPIE_REAL_EXACT4_LEAKAGE_V1:d6266afcdb1a52970a958bc6a563403a2b2a83274495a762f55a26eb14156ee7",
+          "ligand_graph_scope": "HUMAN_APPROVED_PRE_REACTION_GRAPH",
+          "ligand_graph_sha256": "93f58baaea162ec14949779606f40b2ea9071d800b3b56bbb258899a630324aa",
+          "ligand_scaffold_sha256": "b3eb864ead373afe4f8e79d12c345d12fbfa8d3b8e7a2ce48ff32268d4bdcaba",
+          "machine_derived": true,
+          "policy": "conservative_union_of_ligand_graph_scaffold_and_protein_accession_sequence_clusters_v1",
+          "protein_accession": "P01116",
+          "protein_sequence_sha256": "27aa0d1620acd85070848fb2f0ec13c31ec03757870224b25dfe6c4d8f319815"
+        },
+        "observed_post_distance_angstrom": 1.8054,
+        "post_endpoint_coordinates": {
+          "ligand": [
+            7,
+            "C",
+            -5.364,
+            -2.168,
+            -0.643
+          ],
+          "protein": [
+            93,
+            "S",
+            -6.344,
+            -3.26,
+            0.409
+          ]
+        },
+        "pre_reaction_graph_authoritative": true,
+        "source_evidence_bindings": [
+          [
+            "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_near_ready_human_review_packet_v1.md",
+            "7d35fcaf254cf23a07c9f469173871acc63bcb89f6c76794e69bc72796ca496f"
+          ],
+          [
+            "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_cys_sg_non_exact16_candidate_inventory.csv",
+            "182d0bcff8e1dea1f29eb4977e0908510f6b8594db83b39efed1580e9f6f2946"
+          ],
+          [
+            "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_ligand_graph_scaffold_evidence.csv",
+            "982a9f89a89d3a4ad6a3e468cfd16d2fdfd5435cbf6d593e086fbd7fadd3ec73"
+          ],
+          [
+            "data/derived/covalent_small/covapie_independent_group_expansion_batch_independence_evidence_materialization_smoke_v0/covapie_protein_sequence_accession_evidence.csv",
+            "51f208c2582bc41c265fa35fa18e71e0e0d0634babe63b9735f084aa486a0d30"
+          ],
+          [
+            "data/derived/covalent_small/covapie_unified_independence_group_assignment_and_sample_index_merge_smoke_v0/covapie_final_leakage_group_assignment.csv",
+            "768c964f22e19a8fb6232b1fa26c531e53d023042abcd9b1bcca44df2b4f4416"
+          ],
+          [
+            "data/derived/covalent_small/ligands_pre_reaction/KRAS_G12C_6OIM_pre_reaction.sdf",
+            "09e366d2e8d7b761b23c0e0f8efb86173f9b5815bc84e53d29c8d465c445dfe1"
+          ],
+          [
+            "data/derived/covalent_small/pre_reaction_graph/pre_reaction_training_readiness_gate_report.csv",
+            "a2cc8ddab41e6439e1d0b2577fdb3514aefb617881975226d6e6bd73ecad8c2d"
+          ],
+          [
+            "data/derived/covalent_small/pre_reaction_graph/pre_reaction_transform_manual_write_back_report.csv",
+            "32e7a66e8b2c1b1f87cacdd2c57d1b1dc868e3dc83cf7c843ef1585efed54aca"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_confirmed_candidate_coordinate_pair_sanity_gate_v1_altloc_aware/real_covalent_confirmed_candidate_coordinate_pair_sanity_table_v1_altloc_aware.csv",
+            "0293909b9a3ab96063eda3e5eed12609793cc8837ed7e2cd33d8681d0f8249c9"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_confirmed_candidate_full_atom_extraction_smoke_v0/real_covalent_confirmed_candidate_ligand_full_atom_table.csv",
+            "0eeeab569545dc3e3c1ec7f12edb3a18d604bbbac9444b79f4d9e2a40c4d3b0f"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_observed_atom_topology_smoke_table.csv",
+            "b47d03598a077e6201e21585c683fe46a7423d99fae231b47c303657bad89c59"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_confirmed_candidate_ligand_topology_smoke_retry_with_exported_step8_topology_v0/ligand_observed_bond_topology_smoke_table.csv",
+            "007d3b7a57b5878389e1229ceeec999442a532923e475f32cf7bcaea0e580d7f"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_confirmed_candidate_pocket_extraction_smoke_v0/real_covalent_confirmed_candidate_pocket_atom_table.csv",
+            "77dc7777d44ec48ecc985c9c7d66d603756781455b7b3d5c9151dd5800ceaee9"
+          ],
+          [
+            "data/derived/covalent_small/real_covalent_struct_conn_candidate_manual_review_fill_validation_v0/real_covalent_struct_conn_confirmed_candidate_table.csv",
+            "981c59f1131ae8c5f1bb17680986eccda9d85a44caf0f44d1711246283f04186"
+          ],
+          [
+            "data/raw/covalent_small/metadata/KRAS_G12C_6OIM_MOV_annotation_template.csv",
+            "c718277ba5ec2cb09edd36dbb841f4210c467fc94521fec036eb42594f95c14c"
+          ]
+        ]
+      },
+      "optional_plane_anchor_atom": 28,
+      "pre_reaction_graph_authoritative": true,
+      "pre_review_evidence_digest": "38ab68668c2095ffe0b04ce857f8ca1a04fbe1da592211d4594fb98d0dd538a1",
+      "primary_anchor_atom": 11,
+      "prior_cumulative_leakage_registry_path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/covapie_cys_sg_cumulative_leakage_registry_after_5f2e_v1.json",
+      "prior_cumulative_leakage_registry_sha256": "a470f267bdb672e75201fff34e0099f6d02bad18878eba0a7adc9259b23bf391",
+      "prior_reusable_authority_registry_path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/5f2e_5ut_approved_v1/reusable_authority_registry_v1.json",
+      "prior_reusable_authority_registry_sha256": "74ac8ce2a560034219bd3ee8543f732064b80734dc93b6e4ee8895b81434fc05",
+      "reaction_family_authority_action": "NEW_AUTHORITY_REQUIRED",
+      "reaction_family_id": "COVAPIE_CYS_SG_REACTION_FAMILY_17F8EC65B1E1541A",
+      "reaction_family_semantic_signature_payload": {
+        "approval_scope": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE",
+        "attacked_ligand_position": "BETA_CARBON",
+        "electrophile_class": "N_SUBSTITUTED_ACRYLAMIDE_ALPHA_BETA_UNSATURATED_AMIDE",
+        "formed_covalent_bond_order": "single",
+        "ligand_reactive_atom_map_number": 30,
+        "reaction_class": "MICHAEL_ADDITION",
+        "schema_version": "covapie_cys_sg_reaction_family_semantic_payload_v1",
+        "semantic_name": "CYS_SG_MICHAEL_ADDITION_TO_N_SUBSTITUTED_ACRYLAMIDE_BETA_CARBON_V1",
+        "target_residue": "CYS",
+        "target_residue_reactive_atom": "SG",
+        "version": "V1"
+      },
+      "reaction_family_semantic_signature_sha256": "17f8ec65b1e1541a60e43d70fdb427958054d192a6f3e3a276baff4698f0721c",
+      "reaction_family_version": "V1",
+      "required_inherited_leakage_group": "COVAPIE_EXPANSION_LEAKAGE_GROUP_1004A7009A23CEA8",
+      "required_inherited_split": "test",
+      "review_notes": "N6 remains linker by CovaPIE modeling convention. 6OIM and 5F2E share the same scientific reaction-family identity. This does not authorize cross-signature chemistry reuse. 6OIM requires a new exact warhead rule and exact chemistry authority. Approval scope is exact chemistry signature only. 6OIM must inherit the published 5F2E expansion leakage group and test split.",
+      "review_rationale": "Human approval after atom-exact CovaPIE scientific review of 6OIM/MOV: the N-substituted acrylamide Michael acceptor, exact Cys-SG/C25 event, scaffold-linker-warhead partition, Exact4 SMARTS, shared acrylamide reaction family, deterministic scaffold seed/anchors, exact-signature reusable scope, and inherited cumulative leakage assignment are accepted.",
+      "review_scope": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE",
+      "review_status": "APPROVE",
+      "reviewed_attachment_boundary_bond_order": "single",
+      "reviewed_linker_atom_ids": [
+        0,
+        1,
+        2,
+        3,
+        8,
+        9,
+        10
+      ],
+      "reviewed_linker_warhead_boundary_bond": [
+        3,
+        4
+      ],
+      "reviewed_minimal_seed_atom_ids": [
+        11,
+        12,
+        28
+      ],
+      "reviewed_nonwarhead_boundary_atom_id": 3,
+      "reviewed_proposal_path": "data/derived/covalent_small/covapie_cys_sg_training_dataset_expansion_v1/covapie_6oim_mov_human_review_proposal_v1.json",
+      "reviewed_proposal_sha256": "cfe0d0debd5d13ac3004ecf3e5fdceebc48ffac1647b19011ad4e3f6683dfb43",
+      "reviewed_scaffold_atom_ids": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "reviewed_scaffold_linker_boundary_bond": [
+        11,
+        10
+      ],
+      "reviewed_warhead_atom_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "reviewed_warhead_attachment_atom_id": 4,
+      "reviewed_warhead_role_atom_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "reviewer_id": "fmx",
+      "role_profile": "STRICT_LINKER_PRESENT_V1",
+      "role_rule_id": "COVAPIE_CYS_SG_ROLE_RULE_6D4981C415122BE3",
+      "role_rule_semantic_signature_payload": {
+        "direction_anchor_map": 13,
+        "linker_atom_maps": [
+          1,
+          2,
+          3,
+          4,
+          9,
+          10,
+          11
+        ],
+        "linker_warhead_boundary": [
+          4,
+          5,
+          "single"
+        ],
+        "minimal_seed_atom_maps": [
+          12,
+          13,
+          29
+        ],
+        "optional_plane_anchor_map": 29,
+        "primary_anchor_map": 12,
+        "role_profile": "STRICT_LINKER_PRESENT_V1",
+        "scaffold_atom_maps": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41
+        ],
+        "scaffold_linker_boundary": [
+          12,
+          11,
+          "single"
+        ],
+        "schema_version": "covapie_cys_sg_role_rule_semantic_payload_v1",
+        "version": "V1",
+        "warhead_atom_maps": [
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "role_rule_semantic_signature_sha256": "6d4981c415122be3278145e82c2b28853e97efca93fabc2368cbb33fc8261241",
+      "role_rule_version": "V1",
+      "signature_migration_required": false,
+      "source_assignment_record_sha256": "4edfce23c5bba66bf221251204056ac8f5d8d4e070836ae10d547a872f27dd88",
+      "source_human_review_record_sha256": "12c882e43ab55b3ff915b8475e10ee10556c5334c92a3b875aad5fb7f6002fce",
+      "warhead_atom_map_numbers": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "warhead_rule_authority_action": "NEW_AUTHORITY_REQUIRED",
+      "warhead_rule_id": "COVAPIE_CYS_SG_WARHEAD_RULE_62F0319C1232FAA7",
+      "warhead_rule_semantic_signature_payload": {
+        "allowed_formal_charge_pattern": {
+          "1": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "13": 0,
+          "14": 0,
+          "15": 0,
+          "16": 0,
+          "17": 0,
+          "18": 0,
+          "19": 0,
+          "2": 0,
+          "20": 0,
+          "21": 0,
+          "22": 0,
+          "23": 0,
+          "24": 0,
+          "25": 0,
+          "26": 0,
+          "27": 0,
+          "28": 0,
+          "29": 0,
+          "3": 0,
+          "30": 0,
+          "31": 0,
+          "32": 0,
+          "33": 0,
+          "34": 0,
+          "35": 0,
+          "36": 0,
+          "37": 0,
+          "38": 0,
+          "39": 0,
+          "4": 0,
+          "40": 0,
+          "41": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        },
+        "allowed_match_count": 1,
+        "approval_scope": "EXACT_CHEMISTRY_SIGNATURE_REUSABLE",
+        "approved_warhead_smarts": "[#6:5](=[#8:6])-[#6:7]=[#6:8]",
+        "attachment_bond_order": "single",
+        "expected_pre_reaction_bond_orders": [
+          [
+            1,
+            2,
+            "single"
+          ],
+          [
+            2,
+            3,
+            "single"
+          ],
+          [
+            2,
+            11,
+            "single"
+          ],
+          [
+            3,
+            4,
+            "single"
+          ],
+          [
+            4,
+            5,
+            "single"
+          ],
+          [
+            4,
+            9,
+            "single"
+          ],
+          [
+            5,
+            6,
+            "double"
+          ],
+          [
+            5,
+            7,
+            "single"
+          ],
+          [
+            7,
+            8,
+            "double"
+          ],
+          [
+            9,
+            10,
+            "single"
+          ],
+          [
+            10,
+            11,
+            "single"
+          ],
+          [
+            11,
+            12,
+            "single"
+          ],
+          [
+            12,
+            13,
+            "single"
+          ],
+          [
+            12,
+            29,
+            "single"
+          ],
+          [
+            13,
+            14,
+            "single"
+          ],
+          [
+            14,
+            15,
+            "single"
+          ],
+          [
+            14,
+            16,
+            "single"
+          ],
+          [
+            16,
+            17,
+            "single"
+          ],
+          [
+            16,
+            27,
+            "single"
+          ],
+          [
+            17,
+            18,
+            "single"
+          ],
+          [
+            17,
+            23,
+            "single"
+          ],
+          [
+            18,
+            19,
+            "single"
+          ],
+          [
+            18,
+            20,
+            "single"
+          ],
+          [
+            20,
+            21,
+            "single"
+          ],
+          [
+            21,
+            22,
+            "single"
+          ],
+          [
+            22,
+            23,
+            "single"
+          ],
+          [
+            23,
+            24,
+            "single"
+          ],
+          [
+            24,
+            25,
+            "single"
+          ],
+          [
+            24,
+            26,
+            "single"
+          ],
+          [
+            27,
+            28,
+            "single"
+          ],
+          [
+            27,
+            29,
+            "single"
+          ],
+          [
+            28,
+            33,
+            "single"
+          ],
+          [
+            29,
+            30,
+            "single"
+          ],
+          [
+            30,
+            31,
+            "single"
+          ],
+          [
+            31,
+            32,
+            "single"
+          ],
+          [
+            31,
+            33,
+            "single"
+          ],
+          [
+            33,
+            34,
+            "single"
+          ],
+          [
+            34,
+            35,
+            "single"
+          ],
+          [
+            34,
+            40,
+            "single"
+          ],
+          [
+            35,
+            36,
+            "single"
+          ],
+          [
+            35,
+            37,
+            "single"
+          ],
+          [
+            37,
+            38,
+            "single"
+          ],
+          [
+            38,
+            39,
+            "single"
+          ],
+          [
+            39,
+            40,
+            "single"
+          ],
+          [
+            40,
+            41,
+            "single"
+          ]
+        ],
+        "formed_covalent_bond_order": "single",
+        "ligand_reactive_atom_map_number": 8,
+        "nonwarhead_boundary_atom_map": 4,
+        "reaction_family_id": "COVAPIE_CYS_SG_REACTION_FAMILY_17F8EC65B1E1541A",
+        "reaction_family_version": "V1",
+        "schema_version": "covapie_cys_sg_warhead_rule_semantic_payload_v1",
+        "semantic_name": "N_SUBSTITUTED_ACRYLAMIDE_C23_O2_C24_C25_EXACT4_MICHAEL_ACCEPTOR_RULE_V1",
+        "target_residue": "CYS",
+        "target_residue_reactive_atom": "SG",
+        "version": "V1",
+        "warhead_atom_ids": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "warhead_atom_map_numbers": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "warhead_attachment_atom_map": 5
+      },
+      "warhead_rule_semantic_signature_sha256": "62f0319c1232faa798da4598b53e5d36010b3b97404346fcea1fb86b316bf8d4",
+      "warhead_rule_version": "V1"
+    }
+  ],
+  "schema_version": "covapie_6oim_mov_human_approval_v1"
+}
