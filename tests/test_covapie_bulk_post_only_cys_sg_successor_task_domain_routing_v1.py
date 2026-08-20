@@ -19,6 +19,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / routing.OUTPUT_ROOT_RELATIVE
 EB1C0 = "COVAPIE_BULK_REVIEW_UNIT_EB1C0FF8712C32A9"
 CALIBRATION = "COVAPIE_BULK_REVIEW_UNIT_5184266C4D495D18"
+DTT_S1 = "COVAPIE_BULK_REVIEW_UNIT_A3782D89BDEF47C1"
+DTT_S4 = "COVAPIE_BULK_REVIEW_UNIT_2EBCD325E1CD2081"
+DTU = "COVAPIE_BULK_REVIEW_UNIT_024EEB356034F83D"
 EIP = "COVAPIE_BULK_REVIEW_UNIT_07BD3B72031BD7CC"
 AJ3 = "COVAPIE_BULK_REVIEW_UNIT_5662273FCD38234C"
 FIVE_X = "COVAPIE_BULK_REVIEW_UNIT_59100AAB78E957D9"
@@ -60,6 +63,9 @@ def state() -> dict[str, object]:
         "override": override,
         "production_context": production_context,
         "context": bindings["gate_manifest"]["scientific_rule_context"],
+        "dtt_context": bindings["dtt_gate_manifest"][
+            "scientific_rule_context"
+        ],
     }
 
 
@@ -74,9 +80,13 @@ def _unit_evaluations(
             routing.dispatch_exact_auto_negative_rules_v1(
                 event=inputs["event_by_id"][event_id],
                 outcome=inputs["outcome_by_id"][event_id],
-                rule_context_by_id={routing.gate.RULE_ID: state["context"]},
+                rule_context_by_id={
+                    routing.gate.RULE_ID: state["context"],
+                    routing.dtt_gate.RULE_ID: state["dtt_context"],
+                },
                 override_context_by_id={
-                    routing.gate.RULE_ID: state["override"]
+                    routing.gate.RULE_ID: state["override"],
+                    routing.dtt_gate.RULE_ID: state["override"],
                 },
             )
         )
@@ -92,28 +102,104 @@ def _route(state: dict[str, object], unit_id: str):
     )
 
 
+def test_ordered_real_registry_is_exact_ts_then_dtt() -> None:
+    assert routing.INTEGRATED_AUTO_NEGATIVE_RULE_IDS == (
+        routing.gate.RULE_ID,
+        routing.dtt_gate.RULE_ID,
+    )
+    assert routing.dtt_gate.AutoNegativeEvaluationResult is (
+        routing.gate.AutoNegativeEvaluationResult
+    )
+
+
+def test_published_dtt_artifacts_and_scientific_context_are_sha_bound(
+    artifacts: dict[str, bytes], state: dict[str, object]
+) -> None:
+    manifest = json.loads(artifacts[routing.MANIFEST])
+    assert manifest["published_dtt_gate_artifact_bindings"] == state[
+        "bindings"
+    ]["published_dtt_gate"]
+    assert manifest["dtt_gate_publication"] == {
+        "commit": routing.DTT_GATE_PUBLICATION_COMMIT,
+        "subject": routing.DTT_GATE_PUBLICATION_SUBJECT,
+        "required_as_ancestor_of_synchronized_head_and_origin_main": True,
+    }
+    source = manifest["integrated_scientific_rule_context_sources"][
+        routing.dtt_gate.RULE_ID
+    ]
+    assert source["path"] == routing.DTT_GATE_MANIFEST_RELATIVE.as_posix()
+    assert source["sha256"] == routing.DTT_GATE_ARTIFACT_BINDINGS[
+        routing.DTT_GATE_MANIFEST_RELATIVE
+    ]["sha256"]
+    assert source["external_cache_reconstruction_used"] is False
+
+
+def test_default_build_uses_published_dtt_context_without_cache_rebuild(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def forbidden(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("DTT_EXTERNAL_CACHE_RECONSTRUCTION_CALLED")
+
+    for name in (
+        "build_static_rule_context_v1",
+        "_build_static_rule_context_v1",
+        "_read_sha_bound_cache_file",
+        "_parse_official_ccd",
+        "_build_independent_1fvg_reagent_context",
+    ):
+        monkeypatch.setattr(routing.dtt_gate, name, forbidden)
+    built = routing.build_artifacts_v1(repo_root=ROOT)
+    assert json.loads(built[routing.SUMMARY])[
+        "total_rule_event_evaluation_count"
+    ] == 246
+
+
+def test_default_build_shares_one_current_runtime_override_between_rules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original = routing.dispatch_exact_auto_negative_rules_v1
+    observed_calls = 0
+
+    def wrapped(**kwargs: object):
+        nonlocal observed_calls
+        override_by_id = kwargs["override_context_by_id"]
+        assert override_by_id[routing.gate.RULE_ID] is override_by_id[
+            routing.dtt_gate.RULE_ID
+        ]
+        observed_calls += 1
+        return original(**kwargs)
+
+    monkeypatch.setattr(routing, "dispatch_exact_auto_negative_rules_v1", wrapped)
+    routing.build_artifacts_v1(repo_root=ROOT)
+    assert observed_calls == 123
+
+
 def test_exact_36_unit_and_123_event_reconciliation(
     artifacts: dict[str, bytes],
 ) -> None:
     units = _csv(artifacts[routing.UNIT_INVENTORY])
     events = _csv(artifacts[routing.EVENT_INVENTORY])
     assert len(units) == 36
-    assert len(events) == 123
+    assert len(events) == 246
     assert Counter(row["final_task_domain_route"] for row in units) == {
         routing.HUMAN_NOT_RELEVANT_FINAL: 7,
         routing.HUMAN_RELEVANT_FINAL: 3,
-        routing.AUTO_NEGATIVE_EXACT_FINAL: 1,
-        routing.HUMAN_REVIEW_REQUIRED: 25,
+        routing.AUTO_NEGATIVE_EXACT_FINAL: 2,
+        routing.HUMAN_REVIEW_REQUIRED: 24,
     }
-    assert Counter(row["unit_final_task_domain_route"] for row in events) == {
+    route_by_event = {
+        row["canonical_event_id"]: row["unit_final_task_domain_route"]
+        for row in events
+    }
+    assert Counter(route_by_event.values()) == {
         routing.HUMAN_NOT_RELEVANT_FINAL: 30,
         routing.HUMAN_RELEVANT_FINAL: 5,
-        routing.AUTO_NEGATIVE_EXACT_FINAL: 31,
-        routing.HUMAN_REVIEW_REQUIRED: 57,
+        routing.AUTO_NEGATIVE_EXACT_FINAL: 32,
+        routing.HUMAN_REVIEW_REQUIRED: 56,
     }
 
 
-def test_raw_47_is_distinct_from_effective_new_31(
+def test_per_rule_raw_metrics_are_distinct_from_effective_new_32(
     artifacts: dict[str, bytes],
 ) -> None:
     summary = json.loads(artifacts[routing.SUMMARY])
@@ -122,21 +208,45 @@ def test_raw_47_is_distinct_from_effective_new_31(
     assert sum(
         row["gate_event_status"] == routing.gate.MATCHED_AUTO_NEGATIVE_EXACT
         for row in events
-    ) == 47
-    assert sum(row["effective_auto_negative"] == "true" for row in events) == 31
+    ) == 49
+    assert len(
+        {
+            row["canonical_event_id"]
+            for row in events
+            if row["effective_auto_negative"] == "true"
+        }
+    ) == 32
     assert sum(
         any(item["all_events_match"] for item in json.loads(row["per_rule_evidence_json"]))
         for row in units
-    ) == 2
-    assert sum(row["effective_new_auto_negative"] == "true" for row in units) == 1
+    ) == 4
+    assert sum(row["effective_new_auto_negative"] == "true" for row in units) == 2
     assert summary["raw_gate_matched_events"] == 47
     assert summary["raw_gate_matched_units"] == 2
-    assert summary["effective_new_auto_negative_events"] == 31
-    assert summary["effective_new_auto_negative_units"] == 1
-    assert summary["total_rule_event_evaluation_count"] == 123
-    assert summary["matched_rule_event_evaluation_count"] == 47
+    assert summary["raw_gate_metric_semantics"] == "LEGACY_TS_DUMP_RULE_ONLY"
+    assert summary["raw_rule_metrics_by_rule"] == {
+        routing.gate.RULE_ID: {
+            "matched_events": 47,
+            "fully_matched_units": 2,
+            "invalid_events": 0,
+        },
+        routing.dtt_gate.RULE_ID: {
+            "matched_events": 2,
+            "fully_matched_units": 2,
+            "invalid_events": 0,
+        },
+    }
+    assert summary["effective_new_auto_negative_events"] == 32
+    assert summary["effective_new_auto_negative_units"] == 2
+    assert summary["total_rule_event_evaluation_count"] == 246
+    assert summary["matched_rule_event_evaluation_count"] == 49
     assert summary["invalid_rule_event_evaluation_count"] == 0
-    assert summary["fully_matched_rule_unit_pairs"] == 2
+    assert summary["fully_matched_rule_unit_pairs"] == 4
+    assert summary["multiple_full_match_conflict_units"] == 0
+    assert summary["effective_auto_negative_metrics_by_rule"] == {
+        routing.gate.RULE_ID: {"events": 31, "units": 1},
+        routing.dtt_gate.RULE_ID: {"events": 1, "units": 1},
+    }
 
 
 def test_2aaz_human_negative_precedes_raw_gate_match(
@@ -154,6 +264,13 @@ def test_2aaz_human_negative_precedes_raw_gate_match(
             not_matched_event_count=0,
             invalid_event_count=0,
             all_events_match=True,
+        ),
+        routing.ExactRuleUnitEvidence(
+            rule_id=routing.dtt_gate.RULE_ID,
+            matched_event_count=0,
+            not_matched_event_count=16,
+            invalid_event_count=0,
+            all_events_match=False,
         ),
     )
     assert route.route_status == routing.HUMAN_NOT_RELEVANT_FINAL
@@ -190,10 +307,65 @@ def test_eb1c0_exact_live_integration_and_no_human_write(
     assert route.auto_negative_rule_id == routing.gate.RULE_ID
     assert route.rule_evidence[0].matched_event_count == 31
     assert route.rule_evidence[0].all_events_match is True
+    assert route.rule_evidence[1] == routing.ExactRuleUnitEvidence(
+        routing.dtt_gate.RULE_ID, 0, 31, 0, False
+    )
     assert before == {
         path: hashlib.sha256(path.read_bytes()).hexdigest()
         for path in (decisions_path, progress_path)
     }
+
+
+def test_dtt_s1_exact_live_integration_uses_second_registry_rule(
+    state: dict[str, object],
+) -> None:
+    human = state["inputs"]["human_unit_by_id"][DTT_S1]
+    assert human["workflow_status"] == "UNREVIEWED"
+    assert human["training_domain_relevance_decision"] == ""
+    route = _route(state, DTT_S1)
+    assert route.event_count == 1
+    assert route.rule_evidence == (
+        routing.ExactRuleUnitEvidence(routing.gate.RULE_ID, 0, 1, 0, False),
+        routing.ExactRuleUnitEvidence(
+            routing.dtt_gate.RULE_ID, 1, 0, 0, True
+        ),
+    )
+    assert route.total_gate_invalid_evaluation_count == 0
+    assert route.auto_negative_rule_id == routing.dtt_gate.RULE_ID
+    assert route.auto_negative_event_match_count == 1
+    assert route.gate_unit_all_events_match is True
+    assert route.route_status == routing.AUTO_NEGATIVE_EXACT_FINAL
+    assert route.effective_new_auto_negative is True
+
+
+def test_dtt_s4_raw_match_preserves_human_negative_precedence(
+    state: dict[str, object],
+) -> None:
+    route = _route(state, DTT_S4)
+    assert route.rule_evidence == (
+        routing.ExactRuleUnitEvidence(routing.gate.RULE_ID, 0, 1, 0, False),
+        routing.ExactRuleUnitEvidence(
+            routing.dtt_gate.RULE_ID, 1, 0, 0, True
+        ),
+    )
+    assert route.auto_negative_rule_id == ""
+    assert route.route_status == routing.HUMAN_NOT_RELEVANT_FINAL
+    assert route.human_precedence_applied is True
+    assert route.effective_new_auto_negative is False
+
+
+def test_dtu_remains_outside_dtt_rule_and_requires_human_review(
+    state: dict[str, object],
+) -> None:
+    route = _route(state, DTU)
+    assert route.rule_evidence == (
+        routing.ExactRuleUnitEvidence(routing.gate.RULE_ID, 0, 1, 0, False),
+        routing.ExactRuleUnitEvidence(
+            routing.dtt_gate.RULE_ID, 0, 1, 0, False
+        ),
+    )
+    assert route.auto_negative_rule_id == ""
+    assert route.route_status == routing.HUMAN_REVIEW_REQUIRED
 
 
 def test_current_human_relevant_units_have_first_precedence_and_aj3_remains(
@@ -321,6 +493,26 @@ def test_current_human_sha_bound_and_synthetic_change_is_stale(
         )
 
 
+def test_published_dtt_artifact_drift_stales_successor_snapshot(
+    artifacts: dict[str, bytes],
+) -> None:
+    manifest = json.loads(artifacts[routing.MANIFEST])
+    payloads = {
+        path.as_posix(): (ROOT / path).read_bytes()
+        for path in routing.DTT_GATE_ARTIFACT_BINDINGS
+    }
+    assert routing.verify_published_dtt_gate_snapshot_payload_bindings_v1(
+        manifest, payloads
+    )
+    drifted = dict(payloads)
+    manifest_path = routing.DTT_GATE_MANIFEST_RELATIVE.as_posix()
+    drifted[manifest_path] += b" "
+    with pytest.raises(ValueError, match="DTT_GATE_ROUTING_SNAPSHOT_STALE"):
+        routing.verify_published_dtt_gate_snapshot_payload_bindings_v1(
+            manifest, drifted
+        )
+
+
 def test_artifacts_embed_no_runtime_git_identity_or_timestamp(
     artifacts: dict[str, bytes],
 ) -> None:
@@ -342,6 +534,7 @@ def test_build_does_not_mutate_human_legacy_or_gate_inputs() -> None:
         ROOT / routing.HUMAN_PROGRESS_RELATIVE,
         *[ROOT / path for path in routing.LEGACY_INPUT_SHA256],
         *[ROOT / path for path in routing.GATE_ARTIFACT_BINDINGS],
+        *[ROOT / path for path in routing.DTT_GATE_ARTIFACT_BINDINGS],
         ROOT / routing.CURRENT_PRODUCTION_AUTHORITY_REGISTRY_RELATIVE,
         ROOT / routing.CURRENT_PRODUCTION_AUTHORITY_PUBLICATION_RELATIVE,
     ]

@@ -24,6 +24,10 @@ from typing import Any
 
 from covalent_ext import covapie_bulk_post_only_cys_sg_human_review_v1 as review
 from covalent_ext import covapie_post_only_auto_negative_ts_dump_exact_v1 as gate
+from covalent_ext import (
+    covapie_post_only_auto_negative_dtt_crystallization_reducing_exact_v1
+    as dtt_gate,
+)
 
 
 SCHEMA_VERSION = (
@@ -38,6 +42,10 @@ BASE_SUCCESSOR_COMMIT_ANCESTOR = (
 )
 BASE_SUCCESSOR_COMMIT_SUBJECT = (
     "fix CovaPIE TS dUMP shadow artifact descendant determinism v1"
+)
+DTT_GATE_PUBLICATION_COMMIT = "c49ee4e67318cd2cf09e8ef0cddd913ad2642772"
+DTT_GATE_PUBLICATION_SUBJECT = (
+    "add CovaPIE exact DTT crystallization reducing shadow gate v1"
 )
 
 HUMAN_NOT_RELEVANT_FINAL = "HUMAN_NOT_RELEVANT_FINAL"
@@ -75,6 +83,11 @@ HUMAN_PROGRESS_RELATIVE = review.OUTPUT_ROOT_RELATIVE / review.PROGRESS
 GATE_MANIFEST_RELATIVE = gate.OUTPUT_ROOT_RELATIVE / gate.RULE_MANIFEST
 GATE_INVENTORY_RELATIVE = gate.OUTPUT_ROOT_RELATIVE / gate.SHADOW_INVENTORY
 GATE_SUMMARY_RELATIVE = gate.OUTPUT_ROOT_RELATIVE / gate.SUMMARY
+DTT_GATE_MANIFEST_RELATIVE = dtt_gate.OUTPUT_ROOT_RELATIVE / dtt_gate.RULE_MANIFEST
+DTT_GATE_INVENTORY_RELATIVE = (
+    dtt_gate.OUTPUT_ROOT_RELATIVE / dtt_gate.SHADOW_INVENTORY
+)
+DTT_GATE_SUMMARY_RELATIVE = dtt_gate.OUTPUT_ROOT_RELATIVE / dtt_gate.SUMMARY
 CURRENT_PRODUCTION_AUTHORITY_REGISTRY_RELATIVE = Path(
     "data/derived/covalent_small/"
     "covapie_cys_sg_dataset_expansion_pipeline_v1/"
@@ -118,6 +131,26 @@ GATE_ARTIFACT_BINDINGS = {
         "byte_count": 4662,
         "sha256": (
             "a5dc0e93c2a1c425371caf15c96813d25849cde130c1eddd58992b5fcd9676a7"
+        ),
+    },
+}
+DTT_GATE_ARTIFACT_BINDINGS = {
+    DTT_GATE_MANIFEST_RELATIVE: {
+        "byte_count": 34012,
+        "sha256": (
+            "9b41905df37beb80f73b3b5e02615439fcbe1f707dd5c1548bb71d0fb4976e45"
+        ),
+    },
+    DTT_GATE_INVENTORY_RELATIVE: {
+        "byte_count": 228071,
+        "sha256": (
+            "b8ecc5dc3ab392b3907bdfdaf6cba07f9a2038f28a7af5348f3cf4017dfc67ab"
+        ),
+    },
+    DTT_GATE_SUMMARY_RELATIVE: {
+        "byte_count": 2625,
+        "sha256": (
+            "10e5f45ec09f16506f88f137b5a5904d09c70aa563c31e81f6c9c156c7c9aa71"
         ),
     },
 }
@@ -214,6 +247,12 @@ EXACT_AUTO_NEGATIVE_RULE_REGISTRY_V1 = (
     ExactAutoNegativeRuleRegistration(
         rule_id=gate.RULE_ID,
         evaluator=gate.evaluate_neg_v1_ts_dump_catalytic_adduct_exact,
+    ),
+    ExactAutoNegativeRuleRegistration(
+        rule_id=dtt_gate.RULE_ID,
+        evaluator=(
+            dtt_gate.evaluate_neg_v2_dtt_crystallization_reducing_adduct_exact
+        ),
     ),
 )
 INTEGRATED_AUTO_NEGATIVE_RULE_IDS = tuple(
@@ -315,6 +354,30 @@ def verify_repository_binding_v1(repo_root: Path) -> dict[str, object]:
     )
     if subject != BASE_SUCCESSOR_COMMIT_SUBJECT:
         raise ValueError("BASE_SUCCESSOR_COMMIT_SUBJECT_MISMATCH")
+    for descendant, label in ((head, "HEAD"), (origin, "ORIGIN_MAIN")):
+        dtt_ancestor = subprocess.run(
+            [
+                "git",
+                "merge-base",
+                "--is-ancestor",
+                DTT_GATE_PUBLICATION_COMMIT,
+                descendant,
+            ],
+            cwd=repo_root,
+            check=False,
+            capture_output=True,
+        )
+        if dtt_ancestor.returncode != 0:
+            raise ValueError("DTT_GATE_PUBLICATION_NOT_ANCESTOR_OF_" + label)
+    dtt_subject = _git(
+        repo_root,
+        "show",
+        "-s",
+        "--format=%s",
+        DTT_GATE_PUBLICATION_COMMIT,
+    )
+    if dtt_subject != DTT_GATE_PUBLICATION_SUBJECT:
+        raise ValueError("DTT_GATE_PUBLICATION_SUBJECT_MISMATCH")
     return {
         "branch": branch,
         "head": head,
@@ -322,6 +385,8 @@ def verify_repository_binding_v1(repo_root: Path) -> dict[str, object]:
         "ahead": int(ahead_text),
         "behind": int(behind_text),
         "base_successor_commit_is_ancestor": True,
+        "dtt_gate_publication_is_ancestor_of_head": True,
+        "dtt_gate_publication_is_ancestor_of_origin_main": True,
     }
 
 
@@ -408,6 +473,15 @@ def verify_predecessor_bindings_v1(repo_root: Path) -> dict[str, Any]:
             raise ValueError("GATE_ARTIFACT_BINDING_MISMATCH:" + relative.as_posix())
         published_gate[relative.as_posix()] = observed
 
+    published_dtt_gate: dict[str, dict[str, object]] = {}
+    for relative, expected in DTT_GATE_ARTIFACT_BINDINGS.items():
+        observed = _file_binding(repo_root / relative)
+        if observed != expected:
+            raise ValueError(
+                "DTT_GATE_ARTIFACT_BINDING_MISMATCH:" + relative.as_posix()
+            )
+        published_dtt_gate[relative.as_posix()] = observed
+
     gate_manifest = _read_json_object(repo_root / GATE_MANIFEST_RELATIVE)
     gate_summary = _read_json_object(repo_root / GATE_SUMMARY_RELATIVE)
     required_gate_summary = {
@@ -429,6 +503,51 @@ def verify_predecessor_bindings_v1(repo_root: Path) -> dict[str, Any]:
         or not isinstance(gate_manifest.get("scientific_rule_context"), Mapping)
     ):
         raise ValueError("PUBLISHED_GATE_MANIFEST_STATE_INVALID")
+
+    dtt_gate_manifest = _read_json_object(repo_root / DTT_GATE_MANIFEST_RELATIVE)
+    dtt_gate_summary = _read_json_object(repo_root / DTT_GATE_SUMMARY_RELATIVE)
+    required_dtt_gate_summary = {
+        "rule_id": dtt_gate.RULE_ID,
+        "artifact_semantics": (
+            "IMMUTABLE_CALIBRATION_SNAPSHOT_SHADOW_EVALUATION"
+        ),
+        "readiness_mode": (
+            "SAME_STRUCTURE_DTT_ENDPOINT_GENERALIZATION_PROVEN_WITHOUT_"
+            "SHADOW_LABEL_LEAKAGE"
+        ),
+        "observed_shadow_matched_event_count": 2,
+        "observed_shadow_matched_unit_count": 2,
+        "human_calibration_matched_event_count": 1,
+        "calibration_snapshot_unreviewed_shadow_auto_negative_event_count": 1,
+        "calibration_snapshot_unreviewed_shadow_auto_negative_unit_count": 1,
+        "DTT_endpoint_automorphism_proven": True,
+        "generalization_without_sibling_label_leakage": True,
+        "DTU_counterexample_match_count": 0,
+        "cross_CCD_DTU_generalization_authorized": False,
+        "cross_pdb_DTT_generalization_authorized": False,
+        "invalid_evidence_count": 0,
+        "live_integration_ready": True,
+        "integration_into_live_successor_routing_performed": False,
+    }
+    for field, expected in required_dtt_gate_summary.items():
+        if dtt_gate_summary.get(field) != expected:
+            raise ValueError("PUBLISHED_DTT_GATE_SUMMARY_STATE_MISMATCH:" + field)
+    if (
+        dtt_gate_manifest.get("rule_id") != dtt_gate.RULE_ID
+        or dtt_gate_manifest.get("artifact_semantics")
+        != "IMMUTABLE_CALIBRATION_SNAPSHOT_SHADOW_EVALUATION"
+        or dtt_gate_manifest.get("live_integration_ready") is not True
+        or dtt_gate_manifest.get("cross_CCD_DTU_generalization_authorized")
+        is not False
+        or dtt_gate_manifest.get(
+            "integration_into_live_successor_routing_performed"
+        )
+        is not False
+        or not isinstance(
+            dtt_gate_manifest.get("scientific_rule_context"), Mapping
+        )
+    ):
+        raise ValueError("PUBLISHED_DTT_GATE_MANIFEST_STATE_INVALID")
 
     human_path = repo_root / gate.HUMAN_DECISIONS_RELATIVE
     progress_path = repo_root / HUMAN_PROGRESS_RELATIVE
@@ -459,8 +578,11 @@ def verify_predecessor_bindings_v1(repo_root: Path) -> dict[str, Any]:
     return {
         "legacy": legacy,
         "published_gate": published_gate,
+        "published_dtt_gate": published_dtt_gate,
         "gate_manifest": gate_manifest,
         "gate_summary": gate_summary,
+        "dtt_gate_manifest": dtt_gate_manifest,
+        "dtt_gate_summary": dtt_gate_summary,
         "current_human": human,
         "current_human_payload": human_payload,
         "current_human_progress": persisted_progress,
@@ -974,12 +1096,37 @@ def _build_manifest_v1(
         "stage": STAGE,
         "snapshot_semantics": SNAPSHOT_SEMANTICS,
         "base_successor_commit_ancestor": BASE_SUCCESSOR_COMMIT_ANCESTOR,
+        "dtt_gate_publication": {
+            "commit": DTT_GATE_PUBLICATION_COMMIT,
+            "subject": DTT_GATE_PUBLICATION_SUBJECT,
+            "required_as_ancestor_of_synchronized_head_and_origin_main": True,
+        },
         "legacy_candidate_input_bindings": bindings["legacy"],
         "current_human_snapshot_binding": bindings["current_human_snapshot"],
         "current_production_exact_positive_authority_binding": (
             production_binding
         ),
         "published_ts_dump_gate_artifact_bindings": bindings["published_gate"],
+        "published_dtt_gate_artifact_bindings": bindings[
+            "published_dtt_gate"
+        ],
+        "integrated_scientific_rule_context_sources": {
+            gate.RULE_ID: {
+                "source": "PUBLISHED_SHA_BOUND_TS_DUMP_GATE_MANIFEST",
+                "path": GATE_MANIFEST_RELATIVE.as_posix(),
+                "sha256": GATE_ARTIFACT_BINDINGS[GATE_MANIFEST_RELATIVE][
+                    "sha256"
+                ],
+            },
+            dtt_gate.RULE_ID: {
+                "source": "PUBLISHED_SHA_BOUND_DTT_GATE_MANIFEST",
+                "path": DTT_GATE_MANIFEST_RELATIVE.as_posix(),
+                "sha256": DTT_GATE_ARTIFACT_BINDINGS[
+                    DTT_GATE_MANIFEST_RELATIVE
+                ]["sha256"],
+                "external_cache_reconstruction_used": False,
+            },
+        },
         "integrated_auto_negative_rule_ids": list(integrated_rule_ids),
         "integrated_rule_registry_order_is_semantic": True,
         "routing_precedence": [
@@ -1023,6 +1170,17 @@ def _build_manifest_v1(
         "routing_scope": (
             "UNIT_LEVEL_HUMAN_TASK_DOMAIN_RELEVANCE_REVIEW_REQUIREMENT_ONLY"
         ),
+        "legacy_raw_gate_metric_semantics": (
+            "raw_gate_matched_events/raw_gate_matched_units/"
+            "raw_gate_invalid_events retain TS_DUMP_RULE_ONLY semantics"
+        ),
+        "dtt_live_integration_semantics": {
+            "shadow_artifact_remains_immutable": True,
+            "live_integration_occurs_only_in_successor_routing": True,
+            "cross_pdb_dtt_propagation_authorized": False,
+            "cross_ccd_dtu_generalization_authorized": False,
+            "chemistry_family_or_training_authority_created": False,
+        },
         "not_authority_for": [
             "warhead_family",
             "warhead_atoms",
@@ -1031,6 +1189,8 @@ def _build_manifest_v1(
             "event_geometry_inclusion",
             "training_admission",
             "production_chemistry",
+            "cross_pdb_dtt_propagation",
+            "cross_ccd_dtu_generalization",
         ],
         "output_sha256_excluding_manifest_and_summary": {
             EVENT_INVENTORY: _sha(event_payload),
@@ -1039,6 +1199,8 @@ def _build_manifest_v1(
         "current_human_overlay_mutated": False,
         "legacy_triage_modified": False,
         "gate_artifacts_modified": False,
+        "ts_dump_shadow_artifacts_modified": False,
+        "dtt_shadow_artifacts_modified": False,
         "production_authority_created": False,
         "training_materialization_performed": False,
         "future_production_authority_change_requires_successor_rebuild": True,
@@ -1090,12 +1252,18 @@ def build_artifacts_v1(
         current_human_overlay_sha256=current_human_sha,
         outcome_by_id=production_context["outcome_by_id"],
     )
-    rule_context = bindings_before["gate_manifest"]["scientific_rule_context"]
+    ts_dump_rule_context = bindings_before["gate_manifest"][
+        "scientific_rule_context"
+    ]
+    dtt_rule_context = bindings_before["dtt_gate_manifest"][
+        "scientific_rule_context"
+    ]
     if rule_context_by_id is None:
         if rule_ids != INTEGRATED_AUTO_NEGATIVE_RULE_IDS:
             raise ValueError("CUSTOM_RULE_REGISTRY_CONTEXT_REQUIRED")
         effective_rule_context_by_id: Mapping[str, Mapping[str, Any]] = {
-            gate.RULE_ID: rule_context
+            gate.RULE_ID: ts_dump_rule_context,
+            dtt_gate.RULE_ID: dtt_rule_context,
         }
     else:
         effective_rule_context_by_id = rule_context_by_id
@@ -1103,7 +1271,8 @@ def build_artifacts_v1(
         if rule_ids != INTEGRATED_AUTO_NEGATIVE_RULE_IDS:
             raise ValueError("CUSTOM_RULE_REGISTRY_OVERRIDE_CONTEXT_REQUIRED")
         effective_override_context_by_id: Mapping[str, Any] = {
-            gate.RULE_ID: override
+            gate.RULE_ID: override,
+            dtt_gate.RULE_ID: override,
         }
     else:
         effective_override_context_by_id = override_context_by_id
@@ -1245,6 +1414,40 @@ def build_artifacts_v1(
     raw_invalid_events = sum(
         item.status == gate.INVALID_EVIDENCE for item in ts_dump_evaluations
     )
+    raw_rule_metrics_by_rule: dict[str, dict[str, int]] = {}
+    effective_auto_negative_metrics_by_rule: dict[str, dict[str, int]] = {}
+    for rule_id in rule_ids:
+        rule_evaluations = [
+            item
+            for (_event_id, observed_rule_id), item in event_evaluation_by_key.items()
+            if observed_rule_id == rule_id
+        ]
+        raw_rule_metrics_by_rule[rule_id] = {
+            "matched_events": sum(
+                item.status == gate.MATCHED_AUTO_NEGATIVE_EXACT
+                for item in rule_evaluations
+            ),
+            "fully_matched_units": sum(
+                item.all_events_match
+                for route in routes.values()
+                for item in route.rule_evidence
+                if item.rule_id == rule_id
+            ),
+            "invalid_events": sum(
+                item.status == gate.INVALID_EVIDENCE
+                for item in rule_evaluations
+            ),
+        }
+        selected_routes = [
+            route
+            for route in routes.values()
+            if route.route_status == AUTO_NEGATIVE_EXACT_FINAL
+            and route.auto_negative_rule_id == rule_id
+        ]
+        effective_auto_negative_metrics_by_rule[rule_id] = {
+            "events": sum(route.event_count for route in selected_routes),
+            "units": len(selected_routes),
+        }
     matched_rule_event_evaluations = sum(
         item.status == gate.MATCHED_AUTO_NEGATIVE_EXACT
         for item in event_evaluation_by_key.values()
@@ -1257,6 +1460,10 @@ def build_artifacts_v1(
         item.all_events_match
         for route in routes.values()
         for item in route.rule_evidence
+    )
+    multiple_full_match_conflict_units = sum(
+        sum(item.all_events_match for item in route.rule_evidence) > 1
+        for route in routes.values()
     )
     auto_units = route_units[AUTO_NEGATIVE_EXACT_FINAL]
     auto_events = route_events[AUTO_NEGATIVE_EXACT_FINAL]
@@ -1311,6 +1518,8 @@ def build_artifacts_v1(
         "raw_gate_matched_events": raw_matched_events,
         "raw_gate_matched_units": raw_matched_units,
         "raw_gate_invalid_events": raw_invalid_events,
+        "raw_gate_metric_semantics": "LEGACY_TS_DUMP_RULE_ONLY",
+        "raw_rule_metrics_by_rule": raw_rule_metrics_by_rule,
         "total_rule_event_evaluation_count": len(event_evaluation_by_key),
         "matched_rule_event_evaluation_count": (
             matched_rule_event_evaluations
@@ -1319,8 +1528,32 @@ def build_artifacts_v1(
             invalid_rule_event_evaluations
         ),
         "fully_matched_rule_unit_pairs": fully_matched_rule_unit_pairs,
+        "multiple_full_match_conflict_units": multiple_full_match_conflict_units,
         "effective_new_auto_negative_events": auto_events,
         "effective_new_auto_negative_units": auto_units,
+        "effective_auto_negative_metrics_by_rule": (
+            effective_auto_negative_metrics_by_rule
+        ),
+        "ts_dump_effective_auto_negative_events": (
+            effective_auto_negative_metrics_by_rule.get(
+                gate.RULE_ID, {"events": 0}
+            )["events"]
+        ),
+        "ts_dump_effective_auto_negative_units": (
+            effective_auto_negative_metrics_by_rule.get(
+                gate.RULE_ID, {"units": 0}
+            )["units"]
+        ),
+        "dtt_incremental_effective_auto_negative_events": (
+            effective_auto_negative_metrics_by_rule.get(
+                dtt_gate.RULE_ID, {"events": 0}
+            )["events"]
+        ),
+        "dtt_incremental_effective_auto_negative_units": (
+            effective_auto_negative_metrics_by_rule.get(
+                dtt_gate.RULE_ID, {"units": 0}
+            )["units"]
+        ),
         "new_machine_resolved_events": auto_events,
         "new_machine_resolved_units": auto_units,
         "effective_task_domain_resolved_units": resolved_units,
@@ -1339,6 +1572,8 @@ def build_artifacts_v1(
         "human_overlay_modified": False,
         "legacy_triage_modified": False,
         "gate_artifacts_modified": False,
+        "ts_dump_shadow_artifacts_modified": False,
+        "dtt_shadow_artifacts_modified": False,
         "production_authority_created": False,
         "training_materialization_performed": False,
         "production_materialization_performed": False,
@@ -1347,8 +1582,8 @@ def build_artifacts_v1(
         "ready_for_gpt_review": invalid_rule_event_evaluations == 0
         and route_units[HUMAN_REVIEW_REQUIRED_GATE_INVALID] == 0,
         "recommended_next_step_exactly": (
-            "gpt_audit_multi_rule_and_production_positive_revision_then_"
-            "commit_push_successor_integration"
+            "gpt_audit_DTT_successor_integration_then_commit_push_two_rule_"
+            "successor_snapshot"
         ),
         "output_sha256_excluding_summary": {
             MANIFEST: _sha(manifest_payload),
@@ -1368,6 +1603,7 @@ def build_artifacts_v1(
     for field in (
         "legacy",
         "published_gate",
+        "published_dtt_gate",
         "current_human_snapshot",
         "current_production_authority_binding",
     ):
@@ -1412,16 +1648,88 @@ def verify_current_production_positive_snapshot_binding_v1(
     return True
 
 
+def _verify_published_gate_snapshot_payload_bindings_v1(
+    *,
+    manifest: Mapping[str, Any],
+    manifest_field: str,
+    current_payload_by_path: Mapping[str, bytes],
+    error_prefix: str,
+) -> bool:
+    try:
+        bindings = manifest[manifest_field]
+    except (KeyError, TypeError) as error:
+        raise ValueError(error_prefix + "_SNAPSHOT_BINDING_MISSING") from error
+    if not isinstance(bindings, Mapping) or set(bindings) != set(
+        current_payload_by_path
+    ):
+        raise ValueError(error_prefix + "_SNAPSHOT_BINDING_INVALID")
+    for path, payload in current_payload_by_path.items():
+        expected = bindings.get(path)
+        if (
+            not isinstance(expected, Mapping)
+            or not isinstance(expected.get("byte_count"), int)
+            or not isinstance(expected.get("sha256"), str)
+            or not _SHA256_RE.fullmatch(expected["sha256"])
+        ):
+            raise ValueError(error_prefix + "_SNAPSHOT_BINDING_INVALID")
+        if (
+            len(payload) != expected["byte_count"]
+            or _sha(payload) != expected["sha256"]
+        ):
+            raise ValueError(error_prefix + "_ROUTING_SNAPSHOT_STALE")
+    return True
+
+
+def verify_published_ts_dump_gate_snapshot_payload_bindings_v1(
+    manifest: Mapping[str, Any], current_payload_by_path: Mapping[str, bytes]
+) -> bool:
+    """Fail when any published TS/dUMP gate artifact differs from the snapshot."""
+
+    return _verify_published_gate_snapshot_payload_bindings_v1(
+        manifest=manifest,
+        manifest_field="published_ts_dump_gate_artifact_bindings",
+        current_payload_by_path=current_payload_by_path,
+        error_prefix="PUBLISHED_TS_DUMP_GATE",
+    )
+
+
+def verify_published_dtt_gate_snapshot_payload_bindings_v1(
+    manifest: Mapping[str, Any], current_payload_by_path: Mapping[str, bytes]
+) -> bool:
+    """Fail when any immutable published DTT gate artifact drifts."""
+
+    return _verify_published_gate_snapshot_payload_bindings_v1(
+        manifest=manifest,
+        manifest_field="published_dtt_gate_artifact_bindings",
+        current_payload_by_path=current_payload_by_path,
+        error_prefix="PUBLISHED_DTT_GATE",
+    )
+
+
 def verify_current_snapshot_v1(repo_root: Path) -> bool:
     manifest = _read_json_object(repo_root / OUTPUT_ROOT_RELATIVE / MANIFEST)
     human_payload = (repo_root / gate.HUMAN_DECISIONS_RELATIVE).read_bytes()
     production_payload = (
         repo_root / CURRENT_PRODUCTION_AUTHORITY_REGISTRY_RELATIVE
     ).read_bytes()
+    ts_dump_payloads = {
+        path.as_posix(): (repo_root / path).read_bytes()
+        for path in GATE_ARTIFACT_BINDINGS
+    }
+    dtt_payloads = {
+        path.as_posix(): (repo_root / path).read_bytes()
+        for path in DTT_GATE_ARTIFACT_BINDINGS
+    }
     return bool(
         verify_human_snapshot_payload_binding_v1(manifest, human_payload)
         and verify_current_production_positive_snapshot_binding_v1(
             manifest, production_payload
+        )
+        and verify_published_ts_dump_gate_snapshot_payload_bindings_v1(
+            manifest, ts_dump_payloads
+        )
+        and verify_published_dtt_gate_snapshot_payload_bindings_v1(
+            manifest, dtt_payloads
         )
     )
 

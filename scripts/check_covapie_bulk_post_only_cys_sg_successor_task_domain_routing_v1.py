@@ -14,6 +14,8 @@ from covalent_ext import (
     covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1 as routing,
 )
 
+DTT_S1_UNIT_ID = "COVAPIE_BULK_REVIEW_UNIT_A3782D89BDEF47C1"
+
 
 def _assert(condition: bool, message: str) -> None:
     if not condition:
@@ -126,6 +128,20 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
         "gate bindings",
     )
     _assert(
+        manifest["published_dtt_gate_artifact_bindings"]
+        == bindings["published_dtt_gate"],
+        "DTT gate bindings",
+    )
+    _assert(
+        manifest["dtt_gate_publication"]
+        == {
+            "commit": routing.DTT_GATE_PUBLICATION_COMMIT,
+            "subject": routing.DTT_GATE_PUBLICATION_SUBJECT,
+            "required_as_ancestor_of_synchronized_head_and_origin_main": True,
+        },
+        "DTT publication provenance",
+    )
+    _assert(
         manifest["current_human_snapshot_binding"]
         == bindings["current_human_snapshot"],
         "human bindings",
@@ -146,7 +162,7 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
     )
     _assert(
         manifest["integrated_auto_negative_rule_ids"]
-        == [routing.gate.RULE_ID],
+        == [routing.gate.RULE_ID, routing.dtt_gate.RULE_ID],
         "integrated rule registry",
     )
     rule_ids = tuple(manifest["integrated_auto_negative_rule_ids"])
@@ -199,8 +215,8 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
             {
                 routing.HUMAN_NOT_RELEVANT_FINAL: 30,
                 routing.HUMAN_RELEVANT_FINAL: 5,
-                routing.AUTO_NEGATIVE_EXACT_FINAL: 31,
-                routing.HUMAN_REVIEW_REQUIRED: 57,
+                routing.AUTO_NEGATIVE_EXACT_FINAL: 32,
+                routing.HUMAN_REVIEW_REQUIRED: 56,
             }
         ),
         "123-event route reconciliation",
@@ -211,20 +227,35 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
             {
                 routing.HUMAN_NOT_RELEVANT_FINAL: 7,
                 routing.HUMAN_RELEVANT_FINAL: 3,
-                routing.AUTO_NEGATIVE_EXACT_FINAL: 1,
-                routing.HUMAN_REVIEW_REQUIRED: 25,
+                routing.AUTO_NEGATIVE_EXACT_FINAL: 2,
+                routing.HUMAN_REVIEW_REQUIRED: 24,
             }
         ),
         "36-unit route reconciliation",
     )
     _assert(
-        sum(row["gate_event_status"] == routing.gate.MATCHED_AUTO_NEGATIVE_EXACT for row in event_rows)
+        sum(
+            row["rule_id"] == routing.gate.RULE_ID
+            and row["gate_event_status"]
+            == routing.gate.MATCHED_AUTO_NEGATIVE_EXACT
+            for row in event_rows
+        )
         == 47,
-        "raw gate matched events",
+        "raw TS/dUMP gate matched events",
+    )
+    _assert(
+        sum(
+            row["rule_id"] == routing.dtt_gate.RULE_ID
+            and row["gate_event_status"]
+            == routing.gate.MATCHED_AUTO_NEGATIVE_EXACT
+            for row in event_rows
+        )
+        == 2,
+        "raw DTT gate matched events",
     )
     _assert(
         sum(value == routing.AUTO_NEGATIVE_EXACT_FINAL for value in event_route.values())
-        == 31,
+        == 32,
         "effective auto-negative events",
     )
     _assert(
@@ -259,6 +290,9 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
     unit_by_id = {row["review_unit_id"]: row for row in unit_rows}
     eb1c0 = unit_by_id[routing.gate.SIBLING_UNIT_ID]
     calibration = unit_by_id[routing.gate.CALIBRATION_UNIT_ID]
+    dtt_s1 = unit_by_id[DTT_S1_UNIT_ID]
+    dtt_s4 = unit_by_id[routing.dtt_gate.CALIBRATION_UNIT_ID]
+    dtu = unit_by_id[routing.dtt_gate.DTU_COUNTEREXAMPLE_UNIT_ID]
     _assert(
         eb1c0["selected_auto_negative_rule_id"] == routing.gate.RULE_ID
         and eb1c0["selected_rule_matched_event_count"] == "31"
@@ -276,6 +310,34 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
         and calibration_evidence[0]["all_events_match"] is True,
         "2AAZ human-negative precedence with raw rule evidence",
     )
+    dtt_s1_evidence = json.loads(dtt_s1["per_rule_evidence_json"])
+    _assert(
+        dtt_s1["selected_auto_negative_rule_id"] == routing.dtt_gate.RULE_ID
+        and dtt_s1["selected_rule_matched_event_count"] == "1"
+        and dtt_s1["selected_rule_all_events_match"] == "true"
+        and dtt_s1["final_task_domain_route"]
+        == routing.AUTO_NEGATIVE_EXACT_FINAL
+        and dtt_s1_evidence[0]["matched_event_count"] == 0
+        and dtt_s1_evidence[1]["matched_event_count"] == 1,
+        "DTT-S1 selected-rule integration",
+    )
+    dtt_s4_evidence = json.loads(dtt_s4["per_rule_evidence_json"])
+    _assert(
+        dtt_s4["selected_auto_negative_rule_id"] == ""
+        and dtt_s4["final_task_domain_route"]
+        == routing.HUMAN_NOT_RELEVANT_FINAL
+        and dtt_s4_evidence[1]["matched_event_count"] == 1
+        and dtt_s4_evidence[1]["all_events_match"] is True,
+        "DTT-S4 human-negative precedence",
+    )
+    dtu_evidence = json.loads(dtu["per_rule_evidence_json"])
+    _assert(
+        dtu["selected_auto_negative_rule_id"] == ""
+        and dtu["final_task_domain_route"] == routing.HUMAN_REVIEW_REQUIRED
+        and dtu_evidence[1]["matched_event_count"] == 0
+        and dtu_evidence[1]["all_events_match"] is False,
+        "DTU DTT-rule safety",
+    )
     _assert(
         all(row["human_overlay_mutated"] == "false" for row in unit_rows),
         "human overlay mutation marker",
@@ -290,24 +352,56 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
         "human_relevant_final_units": 3,
         "raw_gate_matched_events": 47,
         "raw_gate_matched_units": 2,
-        "effective_new_auto_negative_events": 31,
-        "effective_new_auto_negative_units": 1,
-        "effective_task_domain_resolved_units": 11,
-        "effective_task_domain_human_review_required_units": 25,
-        "effective_task_domain_human_review_required_events": 57,
+        "effective_new_auto_negative_events": 32,
+        "effective_new_auto_negative_units": 2,
+        "effective_task_domain_resolved_units": 12,
+        "effective_task_domain_human_review_required_units": 24,
+        "effective_task_domain_human_review_required_events": 56,
         "gate_invalid_units": 0,
-        "total_rule_event_evaluation_count": 123,
-        "matched_rule_event_evaluation_count": 47,
+        "total_rule_event_evaluation_count": 246,
+        "matched_rule_event_evaluation_count": 49,
         "invalid_rule_event_evaluation_count": 0,
-        "fully_matched_rule_unit_pairs": 2,
+        "fully_matched_rule_unit_pairs": 4,
+        "multiple_full_match_conflict_units": 0,
+        "ts_dump_effective_auto_negative_events": 31,
+        "ts_dump_effective_auto_negative_units": 1,
+        "dtt_incremental_effective_auto_negative_events": 1,
+        "dtt_incremental_effective_auto_negative_units": 1,
         "current_production_exact_positive_authority_event_count": 0,
     }
     for field, expected_value in expected_summary.items():
         _assert(summary.get(field) == expected_value, "summary field: " + field)
+    _assert(
+        summary["raw_gate_metric_semantics"] == "LEGACY_TS_DUMP_RULE_ONLY"
+        and summary["raw_rule_metrics_by_rule"]
+        == {
+            routing.gate.RULE_ID: {
+                "matched_events": 47,
+                "fully_matched_units": 2,
+                "invalid_events": 0,
+            },
+            routing.dtt_gate.RULE_ID: {
+                "matched_events": 2,
+                "fully_matched_units": 2,
+                "invalid_events": 0,
+            },
+        },
+        "per-rule raw metrics",
+    )
+    _assert(
+        summary["effective_auto_negative_metrics_by_rule"]
+        == {
+            routing.gate.RULE_ID: {"events": 31, "units": 1},
+            routing.dtt_gate.RULE_ID: {"events": 1, "units": 1},
+        },
+        "per-rule effective metrics",
+    )
     for field in (
         "human_overlay_modified",
         "legacy_triage_modified",
         "gate_artifacts_modified",
+        "ts_dump_shadow_artifacts_modified",
+        "dtt_shadow_artifacts_modified",
         "production_authority_created",
         "training_materialization_performed",
         "production_materialization_performed",
@@ -322,8 +416,8 @@ def check_v1(repo_root: Path) -> dict[str, Any]:
     _assert(
         summary["recommended_next_step_exactly"]
         == (
-            "gpt_audit_multi_rule_and_production_positive_revision_then_"
-            "commit_push_successor_integration"
+            "gpt_audit_DTT_successor_integration_then_commit_push_two_rule_"
+            "successor_snapshot"
         ),
         "next step",
     )

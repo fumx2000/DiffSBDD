@@ -811,10 +811,31 @@ def test_published_successor_dispatcher_contract_accepts_dtt_result(
     assert result[0].status == gate.MATCHED_AUTO_NEGATIVE_EXACT
 
 
-def test_dtt_rule_is_not_integrated_into_live_successor() -> None:
-    assert gate.RULE_ID not in successor.INTEGRATED_AUTO_NEGATIVE_RULE_IDS
-    source = inspect.getsource(successor)
-    assert gate.RULE_ID not in source
+def test_dtt_rule_live_successor_integration_is_future_compatible() -> None:
+    assert successor.INTEGRATED_AUTO_NEGATIVE_RULE_IDS.count(gate.RULE_ID) == 1
+    assert checker.validate_successor_live_integration_v1(REPO_ROOT) is True
+    checker_source = inspect.getsource(
+        checker.validate_successor_live_integration_v1
+    )
+    assert "integrated_auto_negative_rule_count" not in checker_source
+
+
+def test_dtt_checker_reports_not_observed_before_live_integration(
+    tmp_path: Path,
+) -> None:
+    output_root = tmp_path / successor.OUTPUT_ROOT_RELATIVE
+    output_root.mkdir(parents=True)
+    (output_root / successor.MANIFEST).write_text(
+        json.dumps(
+            {
+                "integrated_auto_negative_rule_ids": [
+                    successor.gate.RULE_ID
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert checker.validate_successor_live_integration_v1(tmp_path) is False
 
 
 def test_distance_is_not_an_identity_predicate() -> None:

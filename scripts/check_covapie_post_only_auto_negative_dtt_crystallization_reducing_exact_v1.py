@@ -16,6 +16,9 @@ from typing import Any, Mapping, Sequence
 from covalent_ext import (
     covapie_post_only_auto_negative_dtt_crystallization_reducing_exact_v1 as gate,
 )
+from covalent_ext import (
+    covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1 as successor,
+)
 
 
 PROTECTED_SOURCE_PATHS = {
@@ -41,6 +44,7 @@ FORBIDDEN_SUFFIXES = {
 }
 PRECOMMIT_CANDIDATE_PROFILE = "DTT_GATE_PRECOMMIT_CANDIDATE"
 PUBLISHED_CLEAN_DESCENDANT_PROFILE = "DTT_GATE_PUBLISHED_CLEAN_DESCENDANT"
+DTT_S1_UNIT_ID = "COVAPIE_BULK_REVIEW_UNIT_A3782D89BDEF47C1"
 
 
 def _assert(condition: bool, message: str) -> None:
@@ -140,6 +144,96 @@ def validate_current_human_overlay_coverage_v1(
             "current human event coverage: " + unit_id,
         )
     return current_units
+
+
+def validate_successor_live_integration_v1(repo_root: Path) -> bool:
+    """Validate this immutable DTT gate's live contribution when present."""
+
+    output_root = repo_root / successor.OUTPUT_ROOT_RELATIVE
+    manifest = json.loads((output_root / successor.MANIFEST).read_bytes())
+    rule_ids = manifest.get("integrated_auto_negative_rule_ids")
+    _assert(isinstance(rule_ids, list), "successor integrated rule registry")
+    occurrence_count = rule_ids.count(gate.RULE_ID)
+    _assert(occurrence_count <= 1, "DTT rule duplicated in successor registry")
+    if occurrence_count == 0:
+        return False
+
+    expected_bindings = {
+        path.as_posix(): dict(expected)
+        for path, expected in successor.DTT_GATE_ARTIFACT_BINDINGS.items()
+    }
+    observed_bindings = {
+        path: {
+            "byte_count": len((repo_root / path).read_bytes()),
+            "sha256": hashlib.sha256((repo_root / path).read_bytes()).hexdigest(),
+        }
+        for path in expected_bindings
+    }
+    _assert(observed_bindings == expected_bindings, "immutable DTT artifact bytes")
+    _assert(
+        manifest.get("published_dtt_gate_artifact_bindings")
+        == expected_bindings,
+        "successor DTT artifact bindings",
+    )
+
+    event_rows = _csv(
+        output_root / successor.EVENT_INVENTORY, successor.EVENT_HEADER
+    )
+    unit_rows = _csv(output_root / successor.UNIT_INVENTORY, successor.UNIT_HEADER)
+    dtt_event_rows = [row for row in event_rows if row["rule_id"] == gate.RULE_ID]
+    _assert(dtt_event_rows, "successor DTT rule-event evidence missing")
+    unit_by_id = {row["review_unit_id"]: row for row in unit_rows}
+    _assert(len(unit_by_id) == len(unit_rows), "successor unit inventory duplicate")
+
+    dtt_s1 = unit_by_id[DTT_S1_UNIT_ID]
+    _assert(
+        dtt_s1["selected_auto_negative_rule_id"] == gate.RULE_ID
+        and dtt_s1["final_task_domain_route"]
+        == successor.AUTO_NEGATIVE_EXACT_FINAL,
+        "DTT-S1 live integration",
+    )
+    dtt_s1_events = [
+        row for row in dtt_event_rows if row["review_unit_id"] == DTT_S1_UNIT_ID
+    ]
+    _assert(
+        len(dtt_s1_events) == 1
+        and dtt_s1_events[0]["gate_event_status"]
+        == gate.MATCHED_AUTO_NEGATIVE_EXACT,
+        "DTT-S1 raw DTT match",
+    )
+
+    dtt_s4 = unit_by_id[gate.CALIBRATION_UNIT_ID]
+    _assert(
+        dtt_s4["selected_auto_negative_rule_id"] == ""
+        and dtt_s4["final_task_domain_route"]
+        == successor.HUMAN_NOT_RELEVANT_FINAL,
+        "DTT-S4 human-negative precedence",
+    )
+    dtt_s4_events = [
+        row
+        for row in dtt_event_rows
+        if row["review_unit_id"] == gate.CALIBRATION_UNIT_ID
+    ]
+    _assert(
+        len(dtt_s4_events) == 1
+        and dtt_s4_events[0]["gate_event_status"]
+        == gate.MATCHED_AUTO_NEGATIVE_EXACT,
+        "DTT-S4 raw DTT calibration match",
+    )
+
+    dtu = unit_by_id[gate.DTU_COUNTEREXAMPLE_UNIT_ID]
+    dtu_events = [
+        row
+        for row in dtt_event_rows
+        if row["review_unit_id"] == gate.DTU_COUNTEREXAMPLE_UNIT_ID
+    ]
+    _assert(
+        dtu["selected_auto_negative_rule_id"] != gate.RULE_ID
+        and len(dtu_events) == 1
+        and dtu_events[0]["gate_event_status"] == gate.NOT_MATCHED,
+        "DTU must not auto-negative because of DTT",
+    )
+    return True
 
 
 def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
@@ -388,46 +482,8 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
     )
     _assert(replay_sha[gate.RULE_MANIFEST] == hashlib.sha256((output_root / gate.RULE_MANIFEST).read_bytes()).hexdigest(), "replay manifest")
 
-    successor_summary_path = repo_root / (
-        "data/derived/covalent_small/"
-        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1/"
-        "covapie_successor_task_domain_routing_summary_v1.json"
-    )
-    successor = json.loads(successor_summary_path.read_bytes())
-    _assert(
-        {
-            "candidate_units": successor.get("candidate_units"),
-            "candidate_events": successor.get("candidate_events"),
-            "integrated_auto_negative_rule_count": successor.get(
-                "integrated_auto_negative_rule_count"
-            ),
-            "effective_task_domain_resolved_units": successor.get(
-                "effective_task_domain_resolved_units"
-            ),
-            "effective_task_domain_human_review_required_units": successor.get(
-                "effective_task_domain_human_review_required_units"
-            ),
-            "effective_task_domain_human_review_required_events": successor.get(
-                "effective_task_domain_human_review_required_events"
-            ),
-        }
-        == {
-            "candidate_units": 36,
-            "candidate_events": 123,
-            "integrated_auto_negative_rule_count": 1,
-            "effective_task_domain_resolved_units": 11,
-            "effective_task_domain_human_review_required_units": 25,
-            "effective_task_domain_human_review_required_events": 57,
-        },
-        "published successor snapshot changed",
-    )
-    _assert(
-        gate.RULE_ID
-        not in (
-            repo_root
-            / "src/covalent_ext/covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1.py"
-        ).read_text(encoding="utf-8"),
-        "DTT rule integrated into successor",
+    live_integration_observed = validate_successor_live_integration_v1(
+        repo_root
     )
 
     current_human_payload = (repo_root / gate.HUMAN_DECISIONS_RELATIVE).read_bytes()
@@ -485,6 +541,7 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
             "DTT_endpoint_automorphism_proven"
         ],
         "live_integration_ready": summary["live_integration_ready"],
+        "live_integration_observed": live_integration_observed,
         "untracked_file_count": len(untracked),
         "modified_tracked_file_count": len(modified),
         "staged_file_count": len(staged),
