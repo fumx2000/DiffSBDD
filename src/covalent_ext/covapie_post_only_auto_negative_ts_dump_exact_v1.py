@@ -868,6 +868,7 @@ def validate_current_human_overlay_v1(
         "",
         "RELEVANT_FOR_COVAPIE_POST_ONLY_V1",
         "NOT_RELEVANT_TO_COVAPIE_SMALL_MOLECULE_TASK",
+        "DEFERRED_INSUFFICIENT_EVIDENCE",
     }
     for unit in units:
         if not isinstance(unit, Mapping):

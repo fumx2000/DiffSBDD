@@ -385,6 +385,37 @@ def test_current_overlay_may_evolve_without_changing_calibration_gold(
     assert gate.build_artifacts_v1(repo_root=ROOT, cache_root=CACHE) == real_artifacts
 
 
+def test_current_overlay_accepts_official_deferred_relevance_without_positive_override(
+    real_evidence: dict[str, object],
+) -> None:
+    evidence = real_evidence["evidence"]
+    changed = deepcopy(evidence["current_human"])
+    unit = next(
+        item
+        for item in changed["units"]
+        if item["review_unit_id"] == gate.SIBLING_UNIT_ID
+    )
+    unit["workflow_status"] = "DEFERRED"
+    unit["training_domain_relevance_decision"] = (
+        "DEFERRED_INSUFFICIENT_EVIDENCE"
+    )
+    current_units = gate.validate_current_human_overlay_v1(changed)
+    assert current_units[gate.SIBLING_UNIT_ID][
+        "training_domain_relevance_decision"
+    ] == "DEFERRED_INSUFFICIENT_EVIDENCE"
+    override = gate.build_runtime_positive_override_context_v1(
+        current_human_overlay=changed,
+        current_human_overlay_sha256="d" * 64,
+        outcome_by_id=evidence["outcome_by_id"],
+    )
+    deferred_event_ids = {
+        event["canonical_event_id"] for event in unit["events"]
+    }
+    assert deferred_event_ids.isdisjoint(
+        override.current_human_relevant_event_ids
+    )
+
+
 def test_malformed_override_context_never_matches(
     real_evidence: dict[str, object],
 ) -> None:

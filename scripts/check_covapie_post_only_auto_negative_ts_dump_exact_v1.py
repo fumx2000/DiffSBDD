@@ -36,6 +36,51 @@ DETERMINISM_FIX_PATHS = {
     ),
 }
 
+GATE_DEFERRED_COMPATIBILITY_PATHS = {
+    "src/covalent_ext/covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+    "scripts/check_covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+    "tests/test_covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+}
+
+SUCCESSOR_TASK_DOMAIN_ROUTING_PATHS = {
+    (
+        "src/covalent_ext/"
+        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1.py"
+    ),
+    (
+        "scripts/"
+        "build_covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1.py"
+    ),
+    (
+        "scripts/"
+        "check_covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1.py"
+    ),
+    (
+        "tests/"
+        "test_covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1.py"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1/"
+        "covapie_successor_task_domain_routing_manifest_v1.json"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1/"
+        "covapie_successor_task_domain_event_routing_inventory_v1.csv"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1/"
+        "covapie_successor_task_domain_unit_routing_inventory_v1.csv"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_bulk_post_only_cys_sg_successor_task_domain_routing_v1/"
+        "covapie_successor_task_domain_routing_summary_v1.json"
+    ),
+}
+
 
 def _assert(condition: bool, message: str) -> None:
     if not condition:
@@ -462,12 +507,21 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
     tracked_worktree = _git(repo_root, "diff", "--name-only").splitlines()
     staged = _git(repo_root, "diff", "--cached", "--name-only")
     untracked = _git(repo_root, "ls-files", "--others", "--exclude-standard").splitlines()
+    tracked_set = set(tracked_worktree)
+    untracked_set = set(untracked)
     _assert(
-        set(tracked_worktree) in (set(), DETERMINISM_FIX_PATHS),
-        "tracked worktree is neither clean nor exact determinism-fix scope",
+        (tracked_set, untracked_set)
+        in (
+            (set(), set()),
+            (DETERMINISM_FIX_PATHS, set()),
+            (
+                GATE_DEFERRED_COMPATIBILITY_PATHS,
+                SUCCESSOR_TASK_DOMAIN_ROUTING_PATHS,
+            ),
+        ),
+        "worktree is neither clean nor an exact authorized gate/successor scope",
     )
     _assert(staged == "", "staged path exists")
-    _assert(not untracked, "untracked path exists")
     forbidden_suffixes = {
         ".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip",
         ".tgz", ".npz", ".tmp", ".part",
