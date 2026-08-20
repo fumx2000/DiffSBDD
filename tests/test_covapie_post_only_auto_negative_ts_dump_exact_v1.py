@@ -153,6 +153,9 @@ def test_rule_context_contains_no_sibling_or_shadow_label_dependency(
         "repo_root",
         "cache_root",
     }
+    artifact_builder_source = inspect.getsource(gate.build_artifacts_v1)
+    assert "_load_bound_evidence_v1" not in artifact_builder_source
+    assert "_load_calibration_snapshot_evidence_v1" in artifact_builder_source
 
 
 def test_context_is_invariant_to_sibling_removal_from_evaluation_population(
@@ -330,6 +333,8 @@ def test_future_current_human_positive_override_beats_otherwise_exact_match(
 
 def test_current_overlay_may_evolve_without_changing_calibration_gold(
     real_evidence: dict[str, object],
+    real_artifacts: dict[str, bytes],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     evidence = real_evidence["evidence"]
     changed = deepcopy(evidence["current_human"])
@@ -352,6 +357,17 @@ def test_current_overlay_may_evolve_without_changing_calibration_gold(
     )
     calibration_ids = {event["canonical_event_id"] for event in calibration["events"]}
     assert calibration_ids <= override.current_human_relevant_event_ids
+    event_id = sorted(calibration_ids)[0]
+    result = gate.evaluate_neg_v1_ts_dump_catalytic_adduct_exact(
+        event=evidence["event_by_id"][event_id],
+        outcome=evidence["outcome_by_id"][event_id],
+        rule_context=real_evidence["context"],
+        override_context=override,
+    )
+    assert result.status == gate.NOT_MATCHED
+    assert "no_runtime_positive_override" in gate._reason_failed_predicates(
+        result.reason
+    )
     immutable = gate.load_immutable_human_gold_v1(ROOT)
     immutable_calibration = next(
         unit
@@ -361,6 +377,12 @@ def test_current_overlay_may_evolve_without_changing_calibration_gold(
     assert immutable_calibration["training_domain_relevance_decision"] == (
         "NOT_RELEVANT_TO_COVAPIE_SMALL_MOLECULE_TASK"
     )
+
+    def dynamic_loader_must_not_be_used(_repo_root: Path):
+        raise AssertionError("persisted artifact build read dynamic current state")
+
+    monkeypatch.setattr(gate, "_load_bound_evidence_v1", dynamic_loader_must_not_be_used)
+    assert gate.build_artifacts_v1(repo_root=ROOT, cache_root=CACHE) == real_artifacts
 
 
 def test_malformed_override_context_never_matches(
@@ -472,11 +494,26 @@ def test_conflict_existing_authority_and_production_approval_never_match(
         real_evidence, gate.CALIBRATION_UNIT_ID
     )
     outcome["existing_exact_authority_match"] = True
+    evidence = real_evidence["evidence"]
+    outcome_by_id = deepcopy(evidence["outcome_by_id"])
+    outcome_by_id[event["canonical_event_id"]] = outcome
+    override = gate.build_runtime_positive_override_context_v1(
+        current_human_overlay=evidence["current_human"],
+        current_human_overlay_sha256=evidence["current_human_overlay_sha256"],
+        outcome_by_id=outcome_by_id,
+    )
+    assert (
+        event["canonical_event_id"]
+        in override.current_production_exact_positive_event_ids
+    )
     result = gate.evaluate_neg_v1_ts_dump_catalytic_adduct_exact(
         event=event, outcome=outcome, rule_context=context, override_context=override
     )
     assert result.status == gate.NOT_MATCHED
     assert "no_existing_exact_positive_authority" in gate._reason_failed_predicates(
+        result.reason
+    )
+    assert "no_runtime_positive_override" in gate._reason_failed_predicates(
         result.reason
     )
 
@@ -637,6 +674,44 @@ def test_repository_binding_rejects_unsynchronized_or_non_descendant(
         gate.verify_repository_binding_v1(ROOT)
 
 
+def test_artifact_bytes_are_identical_at_calibration_and_descendant_runtime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    descendant_state = gate.verify_repository_binding_v1(ROOT)
+    assert descendant_state["head"] != gate.CALIBRATION_COMMIT
+    assert descendant_state["head"] == descendant_state["origin_main"]
+    assert descendant_state["calibration_is_ancestor_of_head"] is True
+    descendant_artifacts = gate.build_artifacts_v1(repo_root=ROOT, cache_root=CACHE)
+
+    validation_calls = 0
+
+    def calibration_equivalent_validation(_repo_root: Path) -> dict[str, object]:
+        nonlocal validation_calls
+        validation_calls += 1
+        return {
+            "branch": "main",
+            "head": gate.CALIBRATION_COMMIT,
+            "origin_main": gate.CALIBRATION_COMMIT,
+            "ahead": 0,
+            "behind": 0,
+            "calibration_commit": gate.CALIBRATION_COMMIT,
+            "calibration_subject": gate.CALIBRATION_SUBJECT,
+            "calibration_is_ancestor_of_head": True,
+            "calibration_is_ancestor_of_origin_main": True,
+            "descendant_repository_compatible": True,
+        }
+
+    monkeypatch.setattr(
+        gate, "verify_repository_binding_v1", calibration_equivalent_validation
+    )
+    calibration_artifacts = gate.build_artifacts_v1(
+        repo_root=ROOT, cache_root=CACHE
+    )
+    assert validation_calls == 1
+    assert calibration_artifacts == descendant_artifacts
+    assert set(calibration_artifacts) == set(gate.OUTPUT_FILENAMES)
+
+
 def test_summary_and_manifest_report_observed_generalization(
     real_artifacts: dict[str, bytes],
 ) -> None:
@@ -652,8 +727,39 @@ def test_summary_and_manifest_report_observed_generalization(
     assert summary["UFP_counterexample_match_count"] == 0
     assert summary["calibration_snapshot_human_relevant_match_count"] == 0
     assert summary["PYR_boundary_match_count"] == 0
-    assert summary["current_human_overlay_no_longer_frozen_to_calibration_sha"] is True
+    assert summary["artifact_semantics"] == gate.ARTIFACT_SEMANTICS
+    assert summary["runtime_state_embedded_in_deterministic_artifacts"] is False
+    assert (
+        summary["current_human_overlay_embedded_in_deterministic_artifacts"]
+        is False
+    )
+    assert summary["runtime_positive_override_evaluated_separately"] is True
     assert summary["future_human_positive_override_supported"] is True
+    assert "base_git_binding" not in summary
+    assert "current_human_overlay_sha256" not in summary
+    assert summary["calibration_snapshot_unreviewed_unit_workload"] == 26
+    assert (
+        summary["calibration_snapshot_unreviewed_shadow_auto_negative_event_count"]
+        == 31
+    )
+    assert (
+        summary["calibration_snapshot_unreviewed_shadow_auto_negative_unit_count"]
+        == 1
+    )
+    assert (
+        summary[
+            "calibration_snapshot_projected_remaining_unreviewed_unit_workload"
+        ]
+        == 25
+    )
+    assert manifest["artifact_semantics"] == gate.ARTIFACT_SEMANTICS
+    assert manifest["runtime_state_embedded_in_deterministic_artifacts"] is False
+    assert (
+        manifest["current_human_overlay_embedded_in_deterministic_artifacts"]
+        is False
+    )
+    assert manifest["runtime_positive_override_evaluated_separately"] is True
+    assert "shadow_runtime_context_observation" not in manifest
     assert manifest["observed_shadow_counts"]["matched_event_count"] == 47
     assert manifest["leave_one_unit_out_generalization"][
         "rule_context_constructed_without_reporting_unit_or_event_ids"
@@ -674,7 +780,10 @@ def test_inventory_is_one_row_per_candidate_and_writes_no_decision(
     )
     sibling = [row for row in rows if row["review_unit_id"] == gate.SIBLING_UNIT_ID]
     assert len(sibling) == 31
-    assert all(row["human_review_state_if_any"] == "UNREVIEWED" for row in sibling)
+    assert all(
+        row["calibration_snapshot_human_review_state"] == "UNREVIEWED"
+        for row in sibling
+    )
     assert all(row["shadow_would_auto_negative"] == "true" for row in sibling)
 
 

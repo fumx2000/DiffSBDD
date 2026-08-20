@@ -15,6 +15,28 @@ from typing import Any, Sequence
 from covalent_ext import covapie_post_only_auto_negative_ts_dump_exact_v1 as gate
 
 
+DETERMINISM_FIX_PATHS = {
+    "src/covalent_ext/covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+    "scripts/check_covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+    "tests/test_covapie_post_only_auto_negative_ts_dump_exact_v1.py",
+    (
+        "data/derived/covalent_small/"
+        "covapie_post_only_auto_negative_ts_dump_exact_v1/"
+        "covapie_ts_dump_auto_negative_rule_manifest_v1.json"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_post_only_auto_negative_ts_dump_exact_v1/"
+        "covapie_ts_dump_shadow_match_inventory_v1.csv"
+    ),
+    (
+        "data/derived/covalent_small/"
+        "covapie_post_only_auto_negative_ts_dump_exact_v1/"
+        "covapie_ts_dump_auto_negative_summary_v1.json"
+    ),
+}
+
+
 def _assert(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
@@ -59,6 +81,16 @@ def _contains_absolute_path(value: object) -> bool:
     return False
 
 
+def _contains_mapping_key(value: object, key: str) -> bool:
+    if isinstance(value, dict):
+        return key in value or any(
+            _contains_mapping_key(item, key) for item in value.values()
+        )
+    if isinstance(value, list):
+        return any(_contains_mapping_key(item, key) for item in value)
+    return False
+
+
 def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
     repo_root = repo_root.resolve()
     resolved_cache = (
@@ -91,6 +123,17 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
     current_units = gate.validate_current_human_overlay_v1(current_human)
     current_human_sha = hashlib.sha256(current_human_payload).hexdigest()
     _assert(len(current_units) >= 36, "current human overlay unit coverage")
+
+    runtime_evidence = gate._load_bound_evidence_v1(repo_root)
+    runtime_override = gate.build_runtime_positive_override_context_v1(
+        current_human_overlay=current_human,
+        current_human_overlay_sha256=current_human_sha,
+        outcome_by_id=runtime_evidence["outcome_by_id"],
+    )
+    _assert(
+        runtime_evidence["current_human_overlay_sha256"] == current_human_sha,
+        "runtime current human read mismatch",
+    )
 
     expected = gate.build_artifacts_v1(
         repo_root=repo_root, cache_root=resolved_cache
@@ -135,17 +178,50 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         "CURRENT_HUMAN_RELEVANT" in manifest["runtime_positive_override_policy"],
         "runtime override policy",
     )
+    for artifact in (manifest, summary):
+        _assert(
+            artifact["artifact_semantics"] == gate.ARTIFACT_SEMANTICS,
+            "calibration snapshot semantics",
+        )
+        _assert(
+            artifact["runtime_state_embedded_in_deterministic_artifacts"]
+            is False,
+            "runtime state embedded",
+        )
+        _assert(
+            artifact["current_human_overlay_embedded_in_deterministic_artifacts"]
+            is False,
+            "current human embedded",
+        )
+        _assert(
+            artifact["runtime_positive_override_evaluated_separately"] is True,
+            "runtime override separation",
+        )
     _assert(
-        manifest["shadow_runtime_context_observation"][
-            "current_human_overlay_sha256"
-        ]
-        == current_human_sha,
-        "current human SHA reported separately",
+        "shadow_runtime_context_observation" not in manifest,
+        "dynamic runtime observation persisted",
     )
+    for forbidden_key in (
+        "base_git_binding",
+        "head",
+        "origin_main",
+        "ahead",
+        "behind",
+        "current_human_overlay_sha256",
+        "current_unreviewed_unit_workload",
+        "currently_unreviewed_shadow_auto_negative_event_count",
+        "currently_unreviewed_shadow_auto_negative_unit_count",
+        "remaining_unreviewed_unit_workload_if_gate_were_integrated",
+    ):
+        _assert(
+            not _contains_mapping_key(manifest, forbidden_key)
+            and not _contains_mapping_key(summary, forbidden_key),
+            "dynamic artifact key persisted: " + forbidden_key,
+        )
 
     context = manifest["scientific_rule_context"]
     context_json = json.dumps(context, sort_keys=True)
-    evidence = gate._load_bound_evidence_v1(repo_root)
+    evidence = gate._load_calibration_snapshot_evidence_v1(repo_root)
     sibling_ids = evidence["unit_by_id"][gate.SIBLING_UNIT_ID]["canonical_event_ids"]
     _assert(gate.SIBLING_UNIT_ID not in context_json, "sibling unit leaked into context")
     _assert(
@@ -234,6 +310,16 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         ),
         "matched predicate coverage",
     )
+    sibling_rows = [
+        row for row in rows if row["review_unit_id"] == gate.SIBLING_UNIT_ID
+    ]
+    _assert(
+        all(
+            row["calibration_snapshot_human_review_state"] == "UNREVIEWED"
+            for row in sibling_rows
+        ),
+        "sibling calibration snapshot state",
+    )
 
     rows_by_unit: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in rows:
@@ -286,6 +372,25 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         "PYR matched",
     )
 
+    runtime_positive_ids = sorted(
+        runtime_override.current_human_relevant_event_ids
+        & set(runtime_evidence["event_by_id"])
+    )
+    _assert(runtime_positive_ids, "runtime human-positive smoke input missing")
+    runtime_positive_id = runtime_positive_ids[0]
+    runtime_result = gate.evaluate_neg_v1_ts_dump_catalytic_adduct_exact(
+        event=runtime_evidence["event_by_id"][runtime_positive_id],
+        outcome=runtime_evidence["outcome_by_id"][runtime_positive_id],
+        rule_context=context,
+        override_context=runtime_override,
+    )
+    _assert(runtime_result.status == gate.NOT_MATCHED, "runtime positive matched")
+    _assert(
+        "no_runtime_positive_override"
+        in gate._reason_failed_predicates(runtime_result.reason),
+        "runtime human-positive precedence not exercised",
+    )
+
     _assert(summary["readiness_mode"] == gate.GENERALIZATION_MODE, "readiness")
     for field in (
         "generalization_without_sibling_label_leakage",
@@ -294,13 +399,38 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         "shadow_label_leakage_removed",
         "rule_context_independent_of_shadow_population",
         "descendant_repository_compatible",
-        "current_human_overlay_no_longer_frozen_to_calibration_sha",
         "future_human_positive_override_supported",
+        "runtime_positive_override_evaluated_separately",
         "ready_for_gpt_review",
     ):
         _assert(summary[field] is True, "summary truth: " + field)
     _assert(summary["observed_shadow_matched_event_count"] == 47, "summary events")
     _assert(summary["observed_shadow_matched_unit_count"] == 2, "summary units")
+    _assert(
+        summary["calibration_snapshot_unreviewed_unit_workload"] == 26,
+        "snapshot workload",
+    )
+    _assert(
+        summary[
+            "calibration_snapshot_unreviewed_shadow_auto_negative_event_count"
+        ]
+        == 31,
+        "snapshot unreviewed events",
+    )
+    _assert(
+        summary[
+            "calibration_snapshot_unreviewed_shadow_auto_negative_unit_count"
+        ]
+        == 1,
+        "snapshot unreviewed units",
+    )
+    _assert(
+        summary[
+            "calibration_snapshot_projected_remaining_unreviewed_unit_workload"
+        ]
+        == 25,
+        "snapshot projected workload",
+    )
     _assert(summary["UFP_counterexample_match_count"] == 0, "summary UFP")
     _assert(
         summary["calibration_snapshot_human_relevant_match_count"] == 0,
@@ -309,7 +439,7 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
     _assert(summary["PYR_boundary_match_count"] == 0, "summary PYR")
     _assert(
         summary["recommended_next_step_exactly"]
-        == "gpt_audit_revised_exact_gate_then_integrate_into_successor_bulk_triage",
+        == "gpt_audit_descendant_determinism_fix_then_commit_push_fix",
         "next step",
     )
     for field in (
@@ -329,15 +459,15 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         "output hashes",
     )
 
-    tracked_worktree = _git(repo_root, "diff", "--name-only")
+    tracked_worktree = _git(repo_root, "diff", "--name-only").splitlines()
     staged = _git(repo_root, "diff", "--cached", "--name-only")
     untracked = _git(repo_root, "ls-files", "--others", "--exclude-standard").splitlines()
-    _assert(tracked_worktree == "", "existing tracked file modified")
-    _assert(staged == "", "staged path exists")
     _assert(
-        set(untracked) == {path.as_posix() for path in gate.AUTHORIZED_NEW_PATHS},
-        "untracked path set is not exact seven-file scope",
+        set(tracked_worktree) in (set(), DETERMINISM_FIX_PATHS),
+        "tracked worktree is neither clean nor exact determinism-fix scope",
     )
+    _assert(staged == "", "staged path exists")
+    _assert(not untracked, "untracked path exists")
     forbidden_suffixes = {
         ".pt", ".ckpt", ".pth", ".pkl", ".lmdb", ".tar", ".zip",
         ".tgz", ".npz", ".tmp", ".part",
@@ -355,13 +485,24 @@ def check_v1(repo_root: Path, cache_root: Path | None = None) -> dict[str, Any]:
         "observed_matched_unit_count": len(matched_by_unit),
         "invalid_evidence_count": counts[gate.INVALID_EVIDENCE],
         "target_family_key_count": len(registry),
-        "current_human_overlay_sha256": current_human_sha,
+        "runtime_head": git_state["head"],
+        "runtime_origin_main": git_state["origin_main"],
+        "runtime_ahead": git_state["ahead"],
+        "runtime_behind": git_state["behind"],
+        "runtime_current_human_overlay_sha256": current_human_sha,
+        "runtime_current_human_relevant_override_event_count": len(
+            runtime_override.current_human_relevant_event_ids
+        ),
+        "runtime_current_production_exact_positive_override_event_count": len(
+            runtime_override.current_production_exact_positive_event_ids
+        ),
+        "runtime_positive_override_smoke_event_id": runtime_positive_id,
         "immutable_calibration_gold_sha256": gate.CALIBRATION_HUMAN_SHA256,
         "deterministic_output_sha256": output_hashes,
         "git_state": git_state,
         "untracked_file_count": len(untracked),
         "staged_file_count": 0,
-        "modified_existing_tracked_file_count": 0,
+        "modified_existing_tracked_file_count": len(tracked_worktree),
         "ready_for_gpt_review": True,
     }
 

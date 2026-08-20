@@ -111,6 +111,12 @@ GENERALIZATION_MODE = "GENERALIZATION_PROVEN_WITHOUT_SHADOW_LABEL_LEAKAGE"
 CALIBRATION_ONLY_MODE = (
     "CALIBRATION_ONLY_TARGET_FAMILY_GENERALIZATION_NOT_YET_AUTHORIZED"
 )
+ARTIFACT_SEMANTICS = "IMMUTABLE_CALIBRATION_SNAPSHOT_SHADOW_EVALUATION"
+RUNTIME_POSITIVE_OVERRIDE_POLICY = (
+    "CURRENT_HUMAN_RELEVANT_OR_CURRENT_PRODUCTION_EXACT_POSITIVE_OR_"
+    "EXPLICIT_RUNTIME_POSITIVE_OVERRIDES_AUTO_NEGATIVE; MALFORMED_"
+    "OVERRIDE_CONTEXT_INVALIDATES_MATCH"
+)
 
 INPUT_SHA256 = {
     EVENT_INVENTORY_RELATIVE: (
@@ -178,7 +184,7 @@ SHADOW_HEADER = (
     "evaluation_status",
     "evaluation_reason",
     "matched_predicates_json",
-    "human_review_state_if_any",
+    "calibration_snapshot_human_review_state",
     "review_unit_shadow_status",
     "shadow_would_auto_negative",
 )
@@ -932,6 +938,26 @@ def build_runtime_positive_override_context_v1(
     )
 
 
+def build_calibration_snapshot_positive_override_context_v1(
+    *,
+    immutable_calibration_human: Mapping[str, Any],
+    frozen_outcome_by_id: Mapping[str, Mapping[str, Any]],
+) -> RuntimePositiveOverrideContext:
+    """Build the immutable override context for persisted shadow artifacts.
+
+    The evaluator intentionally uses the same explicit precedence-context type
+    at runtime and for the historical shadow experiment.  This constructor
+    binds that context to the calibration Git object and SHA-bound production
+    authority snapshot, never to the mutable descendant human overlay.
+    """
+
+    return build_runtime_positive_override_context_v1(
+        current_human_overlay=immutable_calibration_human,
+        current_human_overlay_sha256=CALIBRATION_HUMAN_SHA256,
+        outcome_by_id=frozen_outcome_by_id,
+    )
+
+
 def _required_mapping(value: object, owner: str) -> Mapping[str, Any]:
     if not isinstance(value, Mapping):
         raise _EvidenceError(owner + ":EXPECTED_MAPPING")
@@ -1512,7 +1538,9 @@ def aggregate_review_unit_shadow_v1(
     )
 
 
-def _load_bound_evidence_v1(repo_root: Path) -> dict[str, Any]:
+def _load_calibration_snapshot_evidence_v1(repo_root: Path) -> dict[str, Any]:
+    """Load only SHA-bound and immutable calibration-snapshot evidence."""
+
     input_hashes = verify_bound_inputs_v1(repo_root)
     with (repo_root / EVENT_INVENTORY_RELATIVE).open(
         "r", encoding="utf-8", newline=""
@@ -1596,11 +1624,6 @@ def _load_bound_evidence_v1(repo_root: Path) -> dict[str, Any]:
         ) != "RELEVANT_FOR_COVAPIE_POST_ONLY_V1":
             raise ValueError("HUMAN_RELEVANT_COUNTEREXAMPLE_STATE_MISMATCH:" + unit_id)
 
-    current_human_payload = (repo_root / HUMAN_DECISIONS_RELATIVE).read_bytes()
-    current_human = json.loads(current_human_payload)
-    current_human_unit_by_id = validate_current_human_overlay_v1(current_human)
-    if not set(unit_by_id) <= set(current_human_unit_by_id):
-        raise ValueError("CURRENT_HUMAN_REVIEW_UNIT_COVERAGE_MISMATCH")
     return {
         "input_hashes": input_hashes,
         "event_by_id": event_by_id,
@@ -1609,10 +1632,24 @@ def _load_bound_evidence_v1(repo_root: Path) -> dict[str, Any]:
         "unit_by_event": unit_by_event,
         "calibration_human": calibration_human,
         "calibration_human_unit_by_id": calibration_human_unit_by_id,
+        "legacy_summary": legacy_summary,
+    }
+
+
+def _load_bound_evidence_v1(repo_root: Path) -> dict[str, Any]:
+    """Load frozen evidence plus separately validated current runtime state."""
+
+    evidence = _load_calibration_snapshot_evidence_v1(repo_root)
+    current_human_payload = (repo_root / HUMAN_DECISIONS_RELATIVE).read_bytes()
+    current_human = json.loads(current_human_payload)
+    current_human_unit_by_id = validate_current_human_overlay_v1(current_human)
+    if not set(evidence["unit_by_id"]) <= set(current_human_unit_by_id):
+        raise ValueError("CURRENT_HUMAN_REVIEW_UNIT_COVERAGE_MISMATCH")
+    return {
+        **evidence,
         "current_human": current_human,
         "current_human_unit_by_id": current_human_unit_by_id,
         "current_human_overlay_sha256": _sha(current_human_payload),
-        "legacy_summary": legacy_summary,
     }
 
 
@@ -1739,6 +1776,10 @@ def _build_rule_manifest_base_v1(
         "rule_id": RULE_ID,
         "rule_role": "TASK_DOMAIN_AUTO_NEGATIVE_RULE",
         "implementation_mode": "SHADOW_EXACT_GATE_NOT_YET_LIVE_ROUTING",
+        "artifact_semantics": ARTIFACT_SEMANTICS,
+        "runtime_state_embedded_in_deterministic_artifacts": False,
+        "current_human_overlay_embedded_in_deterministic_artifacts": False,
+        "runtime_positive_override_evaluated_separately": True,
         "human_readable_meaning": (
             "Exact natural dUMP C6-to-Cys-SG adduct in an independently "
             "EC-authorized thymidylate-synthase target family context, "
@@ -1787,11 +1828,7 @@ def _build_rule_manifest_base_v1(
         "calibration_human_history_evidence": history,
         "input_artifact_sha256": evidence["input_hashes"],
         "scientific_rule_context": dict(scientific_rule_context),
-        "runtime_positive_override_policy": (
-            "CURRENT_HUMAN_RELEVANT_OR_CURRENT_PRODUCTION_EXACT_POSITIVE_OR_"
-            "EXPLICIT_RUNTIME_POSITIVE_OVERRIDES_AUTO_NEGATIVE; MALFORMED_"
-            "OVERRIDE_CONTEXT_INVALIDATES_MATCH"
-        ),
+        "runtime_positive_override_policy": RUNTIME_POSITIVE_OVERRIDE_POLICY,
         "calibration_snapshot_positive_counterexamples": {
             "review_unit_ids": list(HUMAN_RELEVANT_COUNTEREXAMPLE_UNITS),
             "canonical_event_ids": calibration_snapshot_positive_event_ids,
@@ -1817,7 +1854,6 @@ def build_artifacts_v1(
     *,
     repo_root: Path,
     cache_root: Path | None = None,
-    verify_git_binding: bool = True,
 ) -> dict[str, bytes]:
     """Build three deterministic shadow artifacts entirely in memory."""
 
@@ -1827,31 +1863,15 @@ def build_artifacts_v1(
         if cache_root is not None
         else repo_root.parent / CACHE_ROOT_RELATIVE_TO_REPOSITORY_PARENT
     )
-    git_state = (
-        verify_repository_binding_v1(repo_root)
-        if verify_git_binding
-        else {
-            "branch": "main",
-            "head": CALIBRATION_COMMIT,
-            "origin_main": CALIBRATION_COMMIT,
-            "ahead": 0,
-            "behind": 0,
-            "calibration_commit": CALIBRATION_COMMIT,
-            "calibration_subject": CALIBRATION_SUBJECT,
-            "calibration_is_ancestor_of_head": True,
-            "calibration_is_ancestor_of_origin_main": True,
-            "descendant_repository_compatible": True,
-        }
-    )
+    verify_repository_binding_v1(repo_root)
     input_hashes_before = verify_bound_inputs_v1(repo_root)
     scientific_rule_context = _build_static_rule_context_v1(
         repo_root=repo_root, cache_root=resolved_cache_root
     )
-    evidence = _load_bound_evidence_v1(repo_root)
-    override_context = build_runtime_positive_override_context_v1(
-        current_human_overlay=evidence["current_human"],
-        current_human_overlay_sha256=evidence["current_human_overlay_sha256"],
-        outcome_by_id=evidence["outcome_by_id"],
+    evidence = _load_calibration_snapshot_evidence_v1(repo_root)
+    override_context = build_calibration_snapshot_positive_override_context_v1(
+        immutable_calibration_human=evidence["calibration_human"],
+        frozen_outcome_by_id=evidence["outcome_by_id"],
     )
     manifest = _build_rule_manifest_base_v1(
         scientific_rule_context=scientific_rule_context,
@@ -1911,7 +1931,6 @@ def build_artifacts_v1(
         generalization_without_sibling_label_leakage
         and target_family_generalization_authorized
         and event_counts[INVALID_EVIDENCE] == 0
-        and git_state["descendant_repository_compatible"] is True
     )
     readiness_mode = (
         GENERALIZATION_MODE if live_integration_ready else CALIBRATION_ONLY_MODE
@@ -1971,19 +1990,6 @@ def build_artifacts_v1(
                     generalization_without_sibling_label_leakage
                 ),
             },
-            "shadow_runtime_context_observation": {
-                "current_human_overlay_path": HUMAN_DECISIONS_RELATIVE.as_posix(),
-                "current_human_overlay_sha256": evidence[
-                    "current_human_overlay_sha256"
-                ],
-                "current_human_relevant_override_event_count": len(
-                    override_context.current_human_relevant_event_ids
-                ),
-                "current_production_positive_override_event_count": len(
-                    override_context.current_production_exact_positive_event_ids
-                ),
-                "current_overlay_is_not_calibration_gold": True,
-            },
             "counterexample_observations": {
                 "UFP_match_count": sum(
                     event_results[event_id].status
@@ -2032,8 +2038,8 @@ def build_artifacts_v1(
             "evaluation_status": result.status,
             "evaluation_reason": result.reason,
             "matched_predicates_json": _json_cell(list(result.matched_predicates)),
-            "human_review_state_if_any": _human_state(
-                evidence["current_human_unit_by_id"][unit_id]
+            "calibration_snapshot_human_review_state": _human_state(
+                evidence["calibration_human_unit_by_id"][unit_id]
             ),
             "review_unit_shadow_status": unit_result.status,
             "shadow_would_auto_negative": (
@@ -2044,14 +2050,14 @@ def build_artifacts_v1(
 
     manifest_bytes = _json_bytes(manifest)
     inventory_bytes = _csv_bytes(SHADOW_HEADER, rows)
-    human_units = list(evidence["current_human_unit_by_id"].values())
-    current_unreviewed_units = sum(
+    human_units = list(evidence["calibration_human_unit_by_id"].values())
+    calibration_snapshot_unreviewed_units = sum(
         unit.get("workflow_status") == "UNREVIEWED" for unit in human_units
     )
     unreviewed_matched_units = [
         unit_id
         for unit_id in matched_units
-        if evidence["current_human_unit_by_id"][unit_id].get("workflow_status")
+        if evidence["calibration_human_unit_by_id"][unit_id].get("workflow_status")
         == "UNREVIEWED"
     ]
     unreviewed_matched_events = sum(
@@ -2069,6 +2075,10 @@ def build_artifacts_v1(
         "stage": STAGE,
         "rule_id": RULE_ID,
         "implementation_mode": "SHADOW_EXACT_GATE_NOT_YET_LIVE_ROUTING",
+        "artifact_semantics": ARTIFACT_SEMANTICS,
+        "runtime_state_embedded_in_deterministic_artifacts": False,
+        "current_human_overlay_embedded_in_deterministic_artifacts": False,
+        "runtime_positive_override_evaluated_separately": True,
         "readiness_mode": readiness_mode,
         "generalization_without_sibling_label_leakage": (
             generalization_without_sibling_label_leakage
@@ -2080,13 +2090,16 @@ def build_artifacts_v1(
         "shadow_label_leakage_removed": True,
         "rule_context_independent_of_shadow_population": True,
         "descendant_repository_compatible": True,
-        "current_human_overlay_no_longer_frozen_to_calibration_sha": True,
         "future_human_positive_override_supported": True,
-        "current_human_overlay_sha256": evidence[
-            "current_human_overlay_sha256"
-        ],
         "immutable_calibration_gold_sha256": CALIBRATION_HUMAN_SHA256,
-        "base_git_binding": git_state,
+        "repository_binding_policy": {
+            "branch_required": "main",
+            "head_must_equal_origin_main": True,
+            "ahead_behind_required": "0/0",
+            "calibration_commit": CALIBRATION_COMMIT,
+            "calibration_commit_must_be_ancestor": True,
+            "descendant_repository_supported": True,
+        },
         "input_artifact_sha256": evidence["input_hashes"],
         "historical_frozen_v1_state": {
             "source_summary_path": LEGACY_SUMMARY_RELATIVE.as_posix(),
@@ -2110,20 +2123,16 @@ def build_artifacts_v1(
         "human_calibration_matched_unit_count": int(
             CALIBRATION_UNIT_ID in matched_units
         ),
-        "currently_unreviewed_shadow_auto_negative_event_count": (
+        "calibration_snapshot_unreviewed_shadow_auto_negative_event_count": (
             unreviewed_matched_events
         ),
-        "currently_unreviewed_shadow_auto_negative_unit_count": len(
+        "calibration_snapshot_unreviewed_shadow_auto_negative_unit_count": len(
             unreviewed_matched_units
         ),
         "UFP_counterexample_match_count": sum(
             event_results[event_id].status == MATCHED_AUTO_NEGATIVE_EXACT
             for unit_id in UFP_COUNTEREXAMPLE_UNITS
             for event_id in evidence["unit_by_id"][unit_id]["canonical_event_ids"]
-        ),
-        "committed_human_relevant_match_count": sum(
-            event_results[event_id].status == MATCHED_AUTO_NEGATIVE_EXACT
-            for event_id in human_relevant_ids
         ),
         "calibration_snapshot_human_relevant_match_count": sum(
             event_results[event_id].status == MATCHED_AUTO_NEGATIVE_EXACT
@@ -2138,8 +2147,8 @@ def build_artifacts_v1(
             {
                 "review_unit_id": unit_id,
                 "event_count": unit_results[unit_id].event_count,
-                "human_review_state": _human_state(
-                    evidence["current_human_unit_by_id"][unit_id]
+                "calibration_snapshot_human_review_state": _human_state(
+                    evidence["calibration_human_unit_by_id"][unit_id]
                 ),
                 "shadow_only": True,
             }
@@ -2149,12 +2158,14 @@ def build_artifacts_v1(
             "EVERY_EVENT_MUST_INDEPENDENTLY_MATCH_SAME_EXACT_RULE; "
             "PARTIAL_OR_INVALID_UNIT_FAILS_CLOSED"
         ),
-        "current_unreviewed_unit_workload": current_unreviewed_units,
-        "remaining_unreviewed_unit_workload_if_gate_were_integrated": (
-            current_unreviewed_units - len(unreviewed_matched_units)
+        "calibration_snapshot_unreviewed_unit_workload": (
+            calibration_snapshot_unreviewed_units
         ),
-        "remaining_unreviewed_unit_workload_projection_label": (
-            "SHADOW_PROJECTION_ONLY"
+        "calibration_snapshot_projected_remaining_unreviewed_unit_workload": (
+            calibration_snapshot_unreviewed_units - len(unreviewed_matched_units)
+        ),
+        "calibration_snapshot_workload_projection_label": (
+            "CALIBRATION_SNAPSHOT_SHADOW_PROJECTION_ONLY"
         ),
         "legacy_triage_artifacts_modified": False,
         "human_review_overlay_modified": False,
@@ -2167,7 +2178,7 @@ def build_artifacts_v1(
         },
         "ready_for_gpt_review": True,
         "recommended_next_step_exactly": (
-            "gpt_audit_revised_exact_gate_then_integrate_into_successor_bulk_triage"
+            "gpt_audit_descendant_determinism_fix_then_commit_push_fix"
             if live_integration_ready
             else "gpt_audit_revised_gate_then_resolve_target_family_generalization_blocker"
         ),
