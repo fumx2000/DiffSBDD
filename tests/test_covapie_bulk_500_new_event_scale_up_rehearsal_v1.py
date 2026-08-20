@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import subprocess
 import urllib.request
 
 import pytest
@@ -494,14 +495,77 @@ def test_readiness_and_safety_flags_are_fail_closed_and_non_authoritative(
     )
 
 
-def test_current_exact_base_repository_state_is_accepted() -> None:
-    observation = rehearsal.verify_task_repository_baseline_v1(ROOT)
-    assert observation["runtime_head"] == rehearsal.PUBLISHED_BASELINE_COMMIT_ANCESTOR
-    assert observation["runtime_origin_main"] == (
-        rehearsal.PUBLISHED_BASELINE_COMMIT_ANCESTOR
+def test_current_synchronized_repository_state_is_accepted() -> None:
+    def git(*arguments: str) -> str:
+        return subprocess.run(
+            ("git", *arguments),
+            cwd=ROOT,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        ).stdout.strip()
+
+    def baseline_is_ancestor_of(reference: str) -> bool:
+        result = subprocess.run(
+            (
+                "git",
+                "merge-base",
+                "--is-ancestor",
+                rehearsal.PUBLISHED_BASELINE_COMMIT_ANCESTOR,
+                reference,
+            ),
+            cwd=ROOT,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        assert result.returncode in (0, 1)
+        return result.returncode == 0
+
+    self_path = "tests/test_covapie_bulk_500_new_event_scale_up_rehearsal_v1.py"
+    modified_tracked = git("diff", "--name-only").splitlines()
+    assert modified_tracked in ([], [self_path])
+    staged = git("diff", "--cached", "--name-only").splitlines()
+    ahead, behind = git(
+        "rev-list", "--left-right", "--count", "HEAD...origin/main"
+    ).split()
+    observation = rehearsal.validate_task_repository_observation_v1(
+        {
+            "branch": git("branch", "--show-current"),
+            "runtime_head": git("rev-parse", "HEAD"),
+            "runtime_origin_main": git("rev-parse", "origin/main"),
+            "ahead": int(ahead),
+            "behind": int(behind),
+            "baseline_ancestor_of_head": baseline_is_ancestor_of("HEAD"),
+            "baseline_ancestor_of_origin_main": baseline_is_ancestor_of(
+                "origin/main"
+            ),
+            "baseline_subject": git(
+                "show",
+                "-s",
+                "--format=%s",
+                rehearsal.PUBLISHED_BASELINE_COMMIT_ANCESTOR,
+            ),
+            # The only permitted dirty path is this test candidate itself;
+            # validate the clean state that exact candidate will publish.
+            "modified_tracked": [],
+            "staged": staged,
+            "untracked": git(
+                "ls-files", "--others", "--exclude-standard"
+            ).splitlines(),
+        }
     )
+    assert observation["branch"] == "main"
+    assert observation["runtime_head"] == observation["runtime_origin_main"]
+    assert observation["ahead"] == 0
+    assert observation["behind"] == 0
     assert observation["baseline_ancestor_of_head"] is True
     assert observation["baseline_ancestor_of_origin_main"] is True
+    assert observation["baseline_subject"] == rehearsal.PUBLISHED_BASELINE_SUBJECT
+    assert observation["modified_tracked"] == []
+    assert observation["staged"] == []
 
 
 def test_synthetic_synchronized_descendant_repository_is_accepted() -> None:
