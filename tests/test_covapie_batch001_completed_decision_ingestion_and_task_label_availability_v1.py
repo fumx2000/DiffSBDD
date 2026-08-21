@@ -97,8 +97,14 @@ def test_exact_seven_file_publication_scope() -> None:
     )
 
 
-def test_current_repository_is_exact_precommit_profile() -> None:
-    assert checker.verify_repository_state_v1(ROOT) == checker.PRECOMMIT_PROFILE
+def test_current_repository_has_exact_lifecycle_profile() -> None:
+    observation = checker.observe_repository_state_v1(ROOT)
+    expected = (
+        checker.PRECOMMIT_PROFILE
+        if observation["head"] == checker.BASELINE_COMMIT
+        else checker.PUBLISHED_PROFILE
+    )
+    assert checker.verify_repository_state_v1(ROOT) == expected
 
 
 def test_synthetic_published_clean_descendant_is_accepted() -> None:
@@ -883,7 +889,11 @@ def test_no_authority_batch002_tensorization_or_training(state: dict[str, object
 
 def test_full_checker_passes() -> None:
     result = checker.check_v1(ROOT)
-    assert result["repository_profile"] == checker.PRECOMMIT_PROFILE
+    assert result["repository_profile"] == checker.verify_repository_state_v1(ROOT)
+    assert result["repository_profile"] in {
+        checker.PRECOMMIT_PROFILE,
+        checker.PUBLISHED_PROFILE,
+    }
     assert result["completed_unit_snapshot_count"] == 9
     assert result["task_label_matrix_row_count"] == 37
     assert set(result["mask_counts"].values()) == {11}
