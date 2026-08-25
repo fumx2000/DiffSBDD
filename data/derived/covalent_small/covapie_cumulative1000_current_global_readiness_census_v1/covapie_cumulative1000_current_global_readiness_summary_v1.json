@@ -1,0 +1,451 @@
+{
+  "authority_boundary": {
+    "CURRENT_GLOBAL_READINESS_CENSUS_COMPLETE": true,
+    "CURRENT_GLOBAL_RECONCILIATION_COMPLETE": true,
+    "HUMAN_REVIEW_DECISION_NOT_PERFORMED": true,
+    "NEXT_RECOMMENDED_MAINLINE": "HIGH_YIELD_HUMAN_REVIEW_EXPANSION",
+    "READY_FOR_FORMAL_TRAINING": false,
+    "READY_FOR_NEXT_HIGH_YIELD_HUMAN_REVIEW_SELECTION": true,
+    "auxiliary_head_executed": false,
+    "backward_performed": false,
+    "batch_modified": false,
+    "feature_semantics_audit_performed": false,
+    "feature_semantics_status": "AUDIT_REQUIRED_LATER",
+    "fine_tune_performed": false,
+    "loader_modified": false,
+    "loss_executed": false,
+    "model_forward_performed": false,
+    "new_chemistry_authority_created": false,
+    "new_human_authority_created": false,
+    "new_reusable_authority_created": false,
+    "next_priority_review_unit": "COVAPIE_BULK_REVIEW_UNIT_FC5A3060FADCBA74",
+    "optimizer_created": false,
+    "optimizer_step_performed": false,
+    "parameter_update_performed": false,
+    "tensor_integration_performed": false,
+    "tensor_status": "NOT_STARTED",
+    "training_admission_created": false,
+    "training_admission_status": "NOT_STARTED",
+    "training_dataset_changed": false,
+    "training_performed": false,
+    "training_status": "NOT_STARTED"
+  },
+  "blockers": {
+    "chemistry_unresolved": {
+      "all_1000": 865
+    },
+    "feature_semantics_pending": {
+      "within_positive_49": 49
+    },
+    "human_training_exclusion": {
+      "within_positive_49": 20
+    },
+    "missing_POST_training_authority": {
+      "within_include_29": 12,
+      "within_positive_49": 32
+    },
+    "missing_split_authority": {
+      "within_include_29": 4,
+      "within_positive_49": 8
+    },
+    "missing_tensor_integration": {
+      "all_missing_are_g3h_excluded_population": true,
+      "within_include_29": 0,
+      "within_positive_49": 8
+    },
+    "missing_training_admission": {
+      "within_include_29": 24,
+      "within_positive_49": 44
+    },
+    "non_exclusive_counts_must_not_be_summed": true,
+    "pair_authority_absent": {
+      "all_1000": 951,
+      "within_positive_49": 0
+    },
+    "role_authority_absent": {
+      "all_1000": 951,
+      "within_positive_49": 0
+    }
+  },
+  "canonical_exact5": {
+    "B3_present": true,
+    "sixth_task_present": false,
+    "task_count": 5,
+    "tasks": [
+      {
+        "display_alias": "A",
+        "semantic_name": "warhead_only",
+        "structurally_applicable_authoritative_role_count": 49,
+        "task_id": 0
+      },
+      {
+        "display_alias": "B",
+        "semantic_name": "linker_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 31,
+        "task_id": 1
+      },
+      {
+        "display_alias": "B2",
+        "semantic_name": "scaffold_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 31,
+        "task_id": 2
+      },
+      {
+        "display_alias": "B3",
+        "semantic_name": "scaffold_only",
+        "structurally_applicable_authoritative_role_count": 49,
+        "task_id": 3
+      },
+      {
+        "display_alias": "C",
+        "semantic_name": "scaffold_plus_linker_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 49,
+        "task_id": 4
+      }
+    ]
+  },
+  "chemistry": {
+    "NEGATIVE": {
+      "count": 0,
+      "event_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "NOT_ESTABLISHED": {
+      "count": 86,
+      "event_set_sha256": "38cc71900a3a2158c2cf562123c4783360aac300873480ddc2f239315d730344"
+    },
+    "POSITIVE": {
+      "count": 49,
+      "event_set_sha256": "60407f93dca67d192d622aecb054d4016934e43a321295f413905ca6fa3b2bdc"
+    },
+    "UNRESOLVED": {
+      "count": 865,
+      "event_set_sha256": "b958a01a8d7258950ae6dc80bbd4983ff297586b8c97d2a2ad184c773bd58a12"
+    },
+    "positive_authority_collision_count": 0,
+    "positive_source_composition": {
+      "CURRENT_RUNTIME": 17,
+      "FFQ": 8,
+      "G3H": 8,
+      "POA": 16
+    }
+  },
+  "geometry": {
+    "POST_sample_authoritative_count": 21,
+    "POST_source_evidence_available_count": 867,
+    "POST_to_PRE_promotion_performed": false,
+    "POST_training_target_available_count": 17,
+    "PRE_is_v1_hard_requirement": false,
+    "PRE_sample_authoritative_count": 0,
+    "PRE_source_evidence_available_count": 0,
+    "PRE_training_target_available_count": 0,
+    "PRE_zero_fill_performed": false
+  },
+  "global_status_distribution": {
+    "counts": {
+      "COMPLETED_HUMAN_NEGATIVE": 54,
+      "COMPLETED_HUMAN_POSITIVE": 32,
+      "COMPLETED_PARTIAL_AUTHORITY": 1,
+      "CURRENTLY_IN_PROGRESS": 9,
+      "CURRENTLY_UNREVIEWED": 273,
+      "CURRENT_RUNTIME_MODEL_USABLE": 17,
+      "LEAKAGE_EXISTING_GROUP_CONFLICT": 369,
+      "PUBLISHED_EXACT_AUTO_NEGATIVE": 32,
+      "QUARANTINE_REPRESENTATION_GAP": 78,
+      "REJECTED_FEATURE_INCOMPATIBLE": 2,
+      "STRUCTURAL_EVIDENCE_INCOMPLETE": 133
+    },
+    "exactly_one_status_per_event": true,
+    "presentation_only_not_authority": true,
+    "status_priority": [
+      "CURRENTLY_UNREVIEWED",
+      "CURRENTLY_IN_PROGRESS",
+      "COMPLETED_HUMAN_POSITIVE",
+      "COMPLETED_HUMAN_NEGATIVE",
+      "COMPLETED_PARTIAL_AUTHORITY",
+      "CURRENT_RUNTIME_MODEL_USABLE",
+      "PUBLISHED_EXACT_AUTO_NEGATIVE",
+      "LEAKAGE_EXISTING_GROUP_CONFLICT",
+      "STRUCTURAL_EVIDENCE_INCOMPLETE",
+      "QUARANTINE_REPRESENTATION_GAP",
+      "REJECTED_FEATURE_INCOMPATIBLE"
+    ],
+    "total_count": 1000
+  },
+  "human_review": {
+    "completed_event_count": 56,
+    "completed_negative_event_count": 24,
+    "completed_positive_event_count": 32,
+    "current_pending_review_unit_count": 124,
+    "in_progress_event_count": 9,
+    "pending_event_count": 282,
+    "priority_review_population_event_count": 338,
+    "review_unit_count": 131,
+    "unreviewed_event_count": 273
+  },
+  "reactive_pair": {
+    "current_runtime_bound_target_count": 17,
+    "g3h_sample_authority_contribution_count": 8,
+    "g3h_training_target_contribution_count": 0,
+    "published_model_bound_target_constructible_count": 41,
+    "raw_structural_pair_evidence_count": 865,
+    "sample_level_authoritative_pair_count": 49
+  },
+  "role": {
+    "all_five_structurally_applicable_count": 31,
+    "canonical_mask_structural_labels_available_count": 49,
+    "direct_profile_A_B3_C_count": 18,
+    "role_partition_sample_authoritative_count": 49,
+    "role_profile_counts": {
+      "DIRECT_ATTACHMENT_OPTIONAL_LINKER_V1": 18,
+      "STRICT_LINKER_PRESENT_V1": 31,
+      "other": 0
+    },
+    "unknown_role_rows_are_not_false_applicability": true
+  },
+  "schema_version": "covapie_cumulative1000_current_global_readiness_census_v1",
+  "stage": "COVAPIE_CUMULATIVE1000_CURRENT_GLOBAL_READINESS_CENSUS_V1",
+  "structural": {
+    "ccd_graph_complete_count": 865,
+    "distance_only_event_inference_used_count": 0,
+    "exact_cys_sg_event_recovered_count": 867,
+    "explicit_covalent_evidence_count": 867,
+    "feature_compatible_count": 865,
+    "feature_incompatible_count": 2,
+    "full_coordinate_post_evidence_available_count": 867,
+    "post_geometry_source_evidence_available_count": 867,
+    "raw_structure_available_count": 997,
+    "representation_gap_count": 78,
+    "structural_processing_success_count": 865
+  },
+  "task_relevance": {
+    "NOT_RELEVANT": {
+      "count": 86,
+      "event_set_sha256": "38cc71900a3a2158c2cf562123c4783360aac300873480ddc2f239315d730344"
+    },
+    "RELEVANT": {
+      "count": 50,
+      "event_set_sha256": "beb8b17508e71234f77c4731e6abbd23fd3e3d4cb2b373b5b15632b546811061"
+    },
+    "UNRESOLVED": {
+      "count": 864,
+      "event_set_sha256": "0befe9f63bd7bb323b8d1a252786de37d52d79a58af2188142b97d0883e5ddc3"
+    }
+  },
+  "top_pending_review_units_by_event_yield": [
+    {
+      "ccd_complete_count": 9,
+      "current_review_status": "CURRENTLY_IN_PROGRESS",
+      "event_count": 9,
+      "exact_pair_count": 9,
+      "full_coordinate_count": 9,
+      "ligand_component_ids": [
+        "ONL"
+      ],
+      "pdb_ids": [
+        "1ECC",
+        "1ECG",
+        "1OFE",
+        "3DLA"
+      ],
+      "post_source_evidence_count": 9,
+      "rank": 1,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_FC5A3060FADCBA74"
+    },
+    {
+      "ccd_complete_count": 8,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 8,
+      "exact_pair_count": 8,
+      "full_coordinate_count": 8,
+      "ligand_component_ids": [
+        "PRF"
+      ],
+      "pdb_ids": [
+        "3S19",
+        "3UXJ"
+      ],
+      "post_source_evidence_count": 8,
+      "rank": 2,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_1569D77F66026B58"
+    },
+    {
+      "ccd_complete_count": 8,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 8,
+      "exact_pair_count": 8,
+      "full_coordinate_count": 8,
+      "ligand_component_ids": [
+        "2VS"
+      ],
+      "pdb_ids": [
+        "4NPI",
+        "4OUB"
+      ],
+      "post_source_evidence_count": 8,
+      "rank": 3,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_5834329D9E2A1F22"
+    },
+    {
+      "ccd_complete_count": 8,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 8,
+      "exact_pair_count": 8,
+      "full_coordinate_count": 8,
+      "ligand_component_ids": [
+        "1F8"
+      ],
+      "pdb_ids": [
+        "3ORX"
+      ],
+      "post_source_evidence_count": 8,
+      "rank": 4,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_9723B0F9EC07CC81"
+    },
+    {
+      "ccd_complete_count": 7,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 7,
+      "exact_pair_count": 7,
+      "full_coordinate_count": 7,
+      "ligand_component_ids": [
+        "YUN"
+      ],
+      "pdb_ids": [
+        "4LL0",
+        "4LRM"
+      ],
+      "post_source_evidence_count": 7,
+      "rank": 5,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_1138FFC288DFD03D"
+    },
+    {
+      "ccd_complete_count": 6,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 6,
+      "exact_pair_count": 6,
+      "full_coordinate_count": 6,
+      "ligand_component_ids": [
+        "NEQ"
+      ],
+      "pdb_ids": [
+        "3V61",
+        "3V62"
+      ],
+      "post_source_evidence_count": 6,
+      "rank": 6,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_0E0F340A9F98DA62"
+    },
+    {
+      "ccd_complete_count": 5,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 5,
+      "exact_pair_count": 5,
+      "full_coordinate_count": 5,
+      "ligand_component_ids": [
+        "CHT"
+      ],
+      "pdb_ids": [
+        "4V3F",
+        "5A2D"
+      ],
+      "post_source_evidence_count": 5,
+      "rank": 7,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BCA0E7B8C2B33410"
+    },
+    {
+      "ccd_complete_count": 4,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 4,
+      "exact_pair_count": 4,
+      "full_coordinate_count": 4,
+      "ligand_component_ids": [
+        "OZJ"
+      ],
+      "pdb_ids": [
+        "4CL8"
+      ],
+      "post_source_evidence_count": 4,
+      "rank": 8,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_18734D9C06222450"
+    },
+    {
+      "ccd_complete_count": 4,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 4,
+      "exact_pair_count": 4,
+      "full_coordinate_count": 4,
+      "ligand_component_ids": [
+        "F24"
+      ],
+      "pdb_ids": [
+        "3V4X"
+      ],
+      "post_source_evidence_count": 4,
+      "rank": 9,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_2557BFE1E3B5C4C5"
+    },
+    {
+      "ccd_complete_count": 4,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 4,
+      "exact_pair_count": 4,
+      "full_coordinate_count": 4,
+      "ligand_component_ids": [
+        "2A2"
+      ],
+      "pdb_ids": [
+        "3ORZ"
+      ],
+      "post_source_evidence_count": 4,
+      "rank": 10,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_6B422BBF7FAD44F6"
+    }
+  ],
+  "training_stage": {
+    "current_runtime_model_usable_count": 17,
+    "feature_semantics_audit_completed": false,
+    "feature_semantics_status": "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER",
+    "formal_training_admitted_count": 5,
+    "future_candidate_source_composition": {
+      "FFQ": 4,
+      "G3H": 0,
+      "POA": 8
+    },
+    "future_training_admission_candidate_count": 12,
+    "ready_for_formal_training_event_count": 0,
+    "step12d_status": "SMOKE_LEGALITY_CHECK_NOT_FINAL_TRAINING_FEATURE_CONTRACT",
+    "training_materialization_allowed_global_status": "NOT_COMPUTABLE_FROM_CURRENT_PUBLISHED_AUTHORITY",
+    "training_use_include_count": 29
+  },
+  "training_use": {
+    "EXCLUDE_FROM_TRAINING_ONLY": {
+      "count": 20,
+      "event_set_sha256": "12b8d1520b51d1a06d2bd580e16925066539deeb6bd1bf6bdc2ad299efb22b12"
+    },
+    "INCLUDE": {
+      "count": 29,
+      "event_set_sha256": "b10edcff066c41d1bbdce5314ed9ad5db948ccab5c769f6cbeef21c66416f0df"
+    },
+    "NOT_APPLICABLE": {
+      "count": 86,
+      "event_set_sha256": "38cc71900a3a2158c2cf562123c4783360aac300873480ddc2f239315d730344"
+    },
+    "UNRESOLVED": {
+      "count": 865,
+      "event_set_sha256": "b958a01a8d7258950ae6dc80bbd4983ff297586b8c97d2a2ad184c773bd58a12"
+    },
+    "excluded_positive_is_not_chemistry_negative": true,
+    "total_count": 1000
+  },
+  "universe": {
+    "canonical_event_set_sha256": "f74d4e568d97ac23e2bc2cba2e8473e6705b726daf92204868efb1afbe0453ce",
+    "duplicate_canonical_event_id_count": 0,
+    "event_count": 1000,
+    "missing_rank_count": 0,
+    "rank_end": 1000,
+    "rank_start": 1,
+    "unique_canonical_event_id_count": 1000,
+    "unique_ligand_component_count": 416,
+    "unique_pdb_count": 546
+  }
+}
