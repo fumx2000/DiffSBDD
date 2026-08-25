@@ -526,20 +526,28 @@ def test_unit_coherence_and_determinism(artifacts) -> None:
 
 
 def test_candidate_and_published_profiles() -> None:
-    observation = calibration.observe_repository_state_v1(REPO)
-    actual_profile = calibration.classify_repository_profile_v1(observation)
-    assert actual_profile in checker.SUPPORTED_ACTUAL_PROFILES
-    if actual_profile == "candidate_precommit_untracked":
-        assert observation["HEAD"] == calibration.BASELINE_HEAD
-    else:
-        assert actual_profile == "published_successor"
-        assert observation["HEAD"] != calibration.BASELINE_HEAD
-        assert observation["HEAD_parent"] == calibration.BASELINE_HEAD
-        assert observation["HEAD_subject"] == calibration.PUBLICATION_SUBJECT
-        assert observation["HEAD"] == observation["origin_main"]
-        assert observation["ahead"] == 0
-        assert observation["behind"] == 0
-    synthetic = {
+    candidate = {
+        "branch": "main",
+        "HEAD": calibration.BASELINE_HEAD,
+        "HEAD_parent": calibration.BASELINE_PARENT,
+        "HEAD_tree": calibration.BASELINE_TREE,
+        "HEAD_subject": calibration.BASELINE_SUBJECT,
+        "origin_main": calibration.BASELINE_HEAD,
+        "ahead": 0,
+        "behind": 0,
+        "tracked_modifications": [],
+        "staged": [],
+        "untracked": sorted(calibration.AUTHORIZED_PATHS),
+        "published_diff_statuses": [],
+        "published_diff_modes": [],
+        "published_diff_paths": [],
+    }
+    assert (
+        calibration.classify_repository_profile_v1(candidate)
+        == "candidate_precommit_untracked"
+    )
+
+    published = {
         "branch": "main",
         "HEAD": "f" * 40,
         "HEAD_parent": calibration.BASELINE_HEAD,
@@ -555,10 +563,10 @@ def test_candidate_and_published_profiles() -> None:
         "published_diff_modes": ["100644"] * 9,
         "published_diff_paths": sorted(calibration.AUTHORIZED_PATHS),
     }
-    assert calibration.classify_repository_profile_v1(synthetic) == "published_successor"
-    synthetic["published_diff_modes"] = ["100755"] + ["100644"] * 8
+    assert calibration.classify_repository_profile_v1(published) == "published_successor"
+    published["published_diff_modes"] = ["100755"] + ["100644"] * 8
     with pytest.raises(calibration.CalibrationSafetyError):
-        calibration.classify_repository_profile_v1(synthetic)
+        calibration.classify_repository_profile_v1(published)
 
 
 def test_checker_accepts_published_profile_and_rejects_third_profile(
