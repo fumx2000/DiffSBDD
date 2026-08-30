@@ -1,0 +1,228 @@
+{
+  "current_good_reference": {
+    "CURRENT_2A2_CENSUS_PROPAGATES_EXACT_POSIX_MODE_AUTHORITY": false,
+    "binding_fields": [
+      "artifact_role",
+      "path",
+      "path_namespace",
+      "byte_count",
+      "sha256"
+    ],
+    "canonical_digest": "964f4b3747d42a43d05d1adc6f432264ce546ef93f9faace23fa3379452bfd15",
+    "exact_posix_mode_field_count": 0,
+    "negative_control_pass": true,
+    "semantic_binding_count": 108
+  },
+  "debt_disposition_counts": {
+    "PRESERVE_AS_IS": 1979,
+    "PRESERVE_HISTORICAL_BUT_DO_NOT_PROPAGATE": 180,
+    "REVIEW_REQUIRED": 0,
+    "V2_MIGRATION_REQUIRED": 12
+  },
+  "historical_compatibility_policy": {
+    "future_validators_forbid_exact_posix_numeric_mode_in_semantic_identity": true,
+    "historical_replay_mechanism": "disposable verification context reconstructing the frozen environment",
+    "historical_v1_authority_bytes_remain_immutable": true,
+    "historical_validator_rewrite_required": false,
+    "normal_downstream_publication_requires_historical_mode_replay": false
+  },
+  "implementation_plan": [
+    {
+      "action": "add one common content-identity and separate security-policy helper",
+      "step": "V2-B1"
+    },
+    {
+      "action": "adopt it only in new/current active authority consumers listed by the audit",
+      "step": "V2-B2"
+    },
+    {
+      "action": "prove frozen historical validators and authority bytes remain untouched",
+      "step": "V2-B3"
+    },
+    {
+      "action": "retire exact POSIX semantic identity from future templates and checkers",
+      "step": "V2-B4"
+    }
+  ],
+  "inventory_counts": {
+    "active_v2_migration_target_file_count": 8,
+    "active_v2_migration_target_files": [
+      "scripts/check_covapie_2a2_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "scripts/check_covapie_f24_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_2a2_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_cht_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_f24_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_neq_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_ozj_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "src/covalent_ext/covapie_yun_completed_decision_ingestion_and_task_label_availability_v1.py"
+    ],
+    "exact_posix_debt_by_literal_mode": {
+      "0600": 3,
+      "0644": 88,
+      "0664": 75,
+      "0755": 18
+    },
+    "exact_posix_debt_by_source_scope": {
+      "DERIVED_JSON": 114,
+      "EXTERNAL_COVAPIE_STATE_JSON": 58,
+      "EXTERNAL_COVAPIE_STATE_PYTHON": 8,
+      "REPOSITORY_CHECKER_PYTHON": 2,
+      "REPOSITORY_OWNER_PYTHON": 10,
+      "REPOSITORY_TEST_PYTHON": 6
+    },
+    "exact_posix_semantic_debt_occurrences": 198,
+    "total_relevant_mode_occurrences": 2171
+  },
+  "known_regression_cases": [
+    {
+      "byte_sha_can_remain_exact_while_checkout_mode_changes": true,
+      "content_identity_contract": [
+        "byte_count",
+        "sha256"
+      ],
+      "debt_disposition": "PRESERVE_HISTORICAL_BUT_DO_NOT_PROPAGATE",
+      "expected_mode": "0644",
+      "lifecycle_class": "HISTORICAL_IMMUTABLE_V1",
+      "path": "DiffSBDD-base/src/covalent_ext/covapie_direct_attachment_optional_linker_runtime_v1.py",
+      "path_namespace": "project_parent_relative",
+      "semantic_class": "SEMANTIC_SOURCE_IDENTITY_EXACT_POSIX_MODE",
+      "source_role": "published_role_profile_runtime_owner",
+      "static_contract_line": 622
+    },
+    {
+      "byte_sha_can_remain_exact_while_checkout_mode_changes": true,
+      "content_identity_contract": [
+        "byte_count",
+        "sha256"
+      ],
+      "debt_disposition": "PRESERVE_HISTORICAL_BUT_DO_NOT_PROPAGATE",
+      "expected_mode": "0644",
+      "lifecycle_class": "HISTORICAL_IMMUTABLE_V1",
+      "path": "DiffSBDD-base/src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py",
+      "path_namespace": "project_parent_relative",
+      "semantic_class": "SEMANTIC_SOURCE_IDENTITY_EXACT_POSIX_MODE",
+      "source_role": "canonical_role_and_task_semantics_owner",
+      "static_contract_line": 628
+    },
+    {
+      "byte_sha_can_remain_exact_while_checkout_mode_changes": true,
+      "content_identity_contract": [
+        "byte_count",
+        "sha256"
+      ],
+      "debt_disposition": "PRESERVE_HISTORICAL_BUT_DO_NOT_PROPAGATE",
+      "expected_mode": "0600",
+      "lifecycle_class": "HISTORICAL_IMMUTABLE_V1",
+      "path": "DiffSBDD-base/data/derived/covalent_small/covapie_1f8_completed_decision_ingestion_and_task_label_availability_v1/covapie_1f8_event_task_label_availability_v1.csv",
+      "path_namespace": "project_parent_relative",
+      "semantic_class": "SEMANTIC_SOURCE_IDENTITY_EXACT_POSIX_MODE",
+      "source_role": "published_1f8_event_task_label_availability",
+      "static_contract_line": 481
+    }
+  ],
+  "lifecycle_class_counts": {
+    "ACTIVE_CURRENT_DEPENDENCY": 1576,
+    "DOCUMENTATION_ONLY": 0,
+    "HISTORICAL_IMMUTABLE_V1": 261,
+    "NEW_CURRENT_V2_REFERENCE": 0,
+    "TEST_ONLY": 334
+  },
+  "proposed_v2_policy": {
+    "exact_runtime_posix_mode_is_semantic_identity": false,
+    "external_semantic_source_identity": [
+      "path",
+      "path_namespace",
+      "byte_count",
+      "sha256",
+      "schema_or_version_where_applicable"
+    ],
+    "git_tracked_semantic_source_identity": [
+      "path",
+      "path_namespace",
+      "byte_count",
+      "sha256"
+    ],
+    "optional_git_native_identity": [
+      "git_blob_sha",
+      "git_file_class"
+    ],
+    "optional_git_native_identity_rationale": "Git blob and 100644/100755 class are checkout-stable when repository executable identity matters; they are not runtime POSIX permissions.",
+    "semantic_identity_and_security_hygiene_are_separate": true
+  },
+  "readiness": {
+    "audit_scope_complete": true,
+    "current_2a2_census_negative_control_pass": true,
+    "historical_authority_modification_required": false,
+    "known_2a2_mode_regression_reproduced_by_static_contract": true,
+    "ready_for_v2_implementation": true
+  },
+  "schema_version": "covapie_source_binding_filesystem_mode_authority_v2_audit_v1",
+  "scientific_boundary": {
+    "B3_present": true,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER": true,
+    "I12_REVIEW_STARTED": false,
+    "READY_FOR_TRAINING": false,
+    "TRAINING_STARTED": false,
+    "canonical_exact5_task_count": 5,
+    "semantic_long_names": [
+      "warhead_only",
+      "linker_plus_warhead",
+      "scaffold_plus_warhead",
+      "scaffold_only",
+      "scaffold_plus_linker_plus_warhead"
+    ],
+    "sixth_task_present": false
+  },
+  "scope": {
+    "authority_provenance_json_files_inspected": 542,
+    "derived_json_files_inspected": 528,
+    "external_authority_provenance_json_files_inspected": 14,
+    "external_covapie_state_python_files_scanned": 14,
+    "external_scan_root": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1",
+    "external_stage_directories": [
+      "formal-human-decision-v1",
+      "human-review-preview-v1",
+      "review-preparation-v1"
+    ],
+    "path_escape_count": 0,
+    "repository_python_files_scanned": 1199,
+    "repository_scan_patterns": [
+      "src/covalent_ext/**/*.py",
+      "scripts/check_covapie*.py",
+      "tests/test_covapie*.py",
+      "data/derived/covalent_small/**/*.json"
+    ],
+    "scan_is_static_and_does_not_execute_discovered_python": true,
+    "total_files_scanned": 1755
+  },
+  "security_hygiene_policy": {
+    "candidate_safe_mode_family": [
+      "0644",
+      "0664"
+    ],
+    "evidence": "published authority records contain legitimate 0664 files, so an owner-readable, non-world-writable policy must not reject group write by default",
+    "expected_executable_class_where_relevant": true,
+    "group_write_0664_automatically_forbidden": false,
+    "non_symlink": true,
+    "not_world_writable": true,
+    "owner_readable": true,
+    "regular_file": true,
+    "security_gate_is_not_semantic_identity": true
+  },
+  "semantic_class_counts": {
+    "AMBIGUOUS_REQUIRES_HUMAN_REVIEW": 0,
+    "CANDIDATE_ARTIFACT_MODE_HYGIENE": 144,
+    "GIT_EXECUTABLE_BIT_OR_FILE_CLASS_CONTRACT": 421,
+    "REPORTING_OR_DIAGNOSTIC_MODE_METADATA": 113,
+    "SECURITY_HYGIENE_MODE_CHECK": 1295,
+    "SEMANTIC_SOURCE_IDENTITY_EXACT_POSIX_MODE": 198
+  },
+  "separate_future_tech_debts": [
+    {
+      "blocks_v2_mode_design": false,
+      "disposition": "SEPARATE_FUTURE_TECH_DEBT",
+      "name": "HISTORICAL_REPOSITORY_PROVENANCE_CONTRACT"
+    }
+  ],
+  "stage": "COVAPIE_SOURCE_BINDING_FILESYSTEM_MODE_AUTHORITY_V2_AUDIT"
+}
