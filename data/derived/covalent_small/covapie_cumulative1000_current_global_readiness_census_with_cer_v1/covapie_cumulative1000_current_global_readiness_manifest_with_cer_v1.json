@@ -1,0 +1,1103 @@
+{
+  "authority_boundary": {
+    "CENSUS_REFRESH": true,
+    "CER_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "CER_REVIEW_COMPLETED": true,
+    "CURRENT_GLOBAL_READINESS_CENSUS_COMPLETE": true,
+    "CURRENT_GLOBAL_RECONCILIATION_COMPLETE": true,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER": true,
+    "HUMAN_REVIEW_DECISION_NOT_PERFORMED": true,
+    "NEXT_REVIEW_STARTED": false,
+    "QUEUE_REFRESH": false,
+    "READY_FOR_FORMAL_TRAINING": false,
+    "READY_FOR_NEXT_HIGH_YIELD_HUMAN_REVIEW_SELECTION": false,
+    "READY_FOR_TRAINING": false,
+    "Step12D": "SMOKE_LEGALITY_VALIDATION_ONLY_NOT_FINAL_TRAINING_FEATURE_CONTRACT",
+    "TRAINING_STARTED": false,
+    "auxiliary_head_executed": false,
+    "backward_performed": false,
+    "batch_modified": false,
+    "census_refreshed": true,
+    "feature_semantics_audit_performed": false,
+    "feature_semantics_status": "AUDIT_REQUIRED_LATER",
+    "fine_tune_performed": false,
+    "formal_decision_bound_directly": false,
+    "formal_decision_read_directly": false,
+    "formal_validator_executed": false,
+    "future_candidate_is_not_training_admission": true,
+    "loader_modified": false,
+    "loss_executed": false,
+    "minimal_seed_authority_created": false,
+    "model_forward_performed": false,
+    "new_ambiguous_source_mode_authority_introduced": false,
+    "new_chemistry_authority_created": false,
+    "new_exact_posix_source_mode_authority_introduced": false,
+    "new_human_authority_created": false,
+    "new_pair_authority_created": false,
+    "new_reusable_authority_created": false,
+    "new_role_authority_created": false,
+    "new_scientific_authority_created": false,
+    "next_priority_review_current_pending_rank": 1,
+    "next_priority_review_event_count": 4,
+    "next_priority_review_ligand": "4M5",
+    "next_priority_review_raw_priority_rank": 20,
+    "next_priority_review_unit": "COVAPIE_BULK_REVIEW_UNIT_9E98765987D25C42",
+    "next_review_started": false,
+    "optimizer_created": false,
+    "optimizer_step_performed": false,
+    "parameter_update_authorization": false,
+    "parameter_update_performed": false,
+    "post_geometry_training_authority_created": false,
+    "pre_geometry_authority_created": false,
+    "priority_queue_file_created": false,
+    "priority_queue_file_modified": false,
+    "reaction_family_authority": false,
+    "reusable_chemistry_authority": false,
+    "reusable_pair_authority": false,
+    "reusable_role_authority": false,
+    "separate_CER_census_V2_successor_required": false,
+    "tensor_integration_performed": false,
+    "tensor_status": "NOT_STARTED",
+    "training_admission_created": false,
+    "training_admission_status": "NOT_STARTED",
+    "training_dataset_changed": false,
+    "training_materialization_allowed": false,
+    "training_performed": false,
+    "training_started": false,
+    "training_status": "NOT_STARTED",
+    "warhead_rule_authority": false,
+    "warhead_type_authority": false
+  },
+  "candidate_contract_bindings": [
+    {
+      "artifact_role": "PRODUCTION_OWNER",
+      "byte_count": 74431,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "sha256": "dba9110cda9ec62b540f3bdefee0c3df78a58dc571407994d8b594ae9d9ccd1b"
+    },
+    {
+      "artifact_role": "CHECKER",
+      "byte_count": 64295,
+      "path": "scripts/check_covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "sha256": "a0f5a781b5dc935ccf7f08bd3d7a138f17e8e78c66764c9a6b9d075dd4f99b47"
+    },
+    {
+      "artifact_role": "TARGETED_TESTS",
+      "byte_count": 49097,
+      "path": "tests/test_covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "sha256": "7bced244791462a46ceac1bbcc42f4d07be8e19f1f8d55de54db5e03ad33ce4e"
+    },
+    {
+      "artifact_role": "GUIDE",
+      "byte_count": 2379,
+      "path": "docs/covapie_cumulative1000_current_global_readiness_census_with_cer_v1_guide.md",
+      "sha256": "79fa6835d96ec7cba671634baa94aa064937a3c309124661345c969414fda9bd"
+    }
+  ],
+  "candidate_inventory": {
+    "exact_file_count": 7,
+    "paths": [
+      "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "scripts/check_covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "tests/test_covapie_cumulative1000_current_global_readiness_census_with_cer_v1.py",
+      "docs/covapie_cumulative1000_current_global_readiness_census_with_cer_v1_guide.md",
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_census_with_cer_v1.csv",
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_summary_with_cer_v1.json",
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_manifest_with_cer_v1.json"
+    ]
+  },
+  "derived_projection_contract_digests": {
+    "authority_created": false,
+    "refreshed_census_sha256": "9da898c15da0dad45dd37a33ca2665e5e1634d588b566f824fe688c6cc49e71a",
+    "refreshed_summary_sha256": "12187f4067b5b5f07e364c6e4f9fe74a7b44e0819d4afcaa24c1b6db1fb12d2b",
+    "semantic_source_bindings_sha256": "4107486a5fb2e3086302f0064f0a1dff7d351697c74ffe18fe86e2a22d3f14fe"
+  },
+  "determinism_contract": {
+    "lf_only": true,
+    "live_git_state_recorded": false,
+    "machine_absolute_paths_recorded": false,
+    "single_final_lf": true,
+    "source_derived": true,
+    "timestamps_recorded": false,
+    "utf8": true
+  },
+  "frozen_priority_queue_validation_binding": {
+    "artifact_role": "CURRENT_FROZEN_PRIORITY_QUEUE",
+    "byte_count": 50116,
+    "expected_executable": false,
+    "path": "data/derived/covalent_small/covapie_bulk_cys_sg_model_usable_auto_admission_scaleup_v1/covapie_bulk_cys_sg_priority_human_review_queue_v1.csv",
+    "path_namespace": "repository_relative",
+    "sha256": "a2c701324b9ffbcd6dcb28cc098fcdc614d7b2a0ad849f1872f62472ce21cee2"
+  },
+  "manifest_self_binding": {
+    "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_manifest_with_cer_v1.json",
+    "policy": "MANIFEST_SELF_SHA256_PROHIBITED",
+    "sha256_recorded_inside_self": false
+  },
+  "output_bindings_excluding_manifest_self": [
+    {
+      "artifact_role": "REFRESHED_CENSUS_CSV",
+      "byte_count": 535454,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_census_with_cer_v1.csv",
+      "sha256": "9da898c15da0dad45dd37a33ca2665e5e1634d588b566f824fe688c6cc49e71a"
+    },
+    {
+      "artifact_role": "REFRESHED_SUMMARY_JSON",
+      "byte_count": 18341,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_summary_with_cer_v1.json",
+      "sha256": "12187f4067b5b5f07e364c6e4f9fe74a7b44e0819d4afcaa24c1b6db1fb12d2b"
+    }
+  ],
+  "output_inventory": {
+    "exact_output_count": 3,
+    "paths": [
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_census_with_cer_v1.csv",
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_summary_with_cer_v1.json",
+      "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cer_v1/covapie_cumulative1000_current_global_readiness_manifest_with_cer_v1.json"
+    ]
+  },
+  "predecessor_manifest_validation_binding": {
+    "artifact_role": "PREDECESSOR_WITH_1N0_MANIFEST_VALIDATION_IDENTITY",
+    "byte_count": 53527,
+    "expected_executable": false,
+    "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_1n0_v1/covapie_cumulative1000_current_global_readiness_manifest_with_1n0_v1.json",
+    "path_namespace": "repository_relative",
+    "sha256": "e70b084c0a1f8ecdb35de9092a3d5cc1987d50ec18d0528610a6968faf2e173b"
+  },
+  "refresh_contract": {
+    "additive_semantic_source_binding_count": 6,
+    "census_refreshed": true,
+    "changed_event_count": 4,
+    "changed_field_count_per_cer_row": 18,
+    "column_count": 47,
+    "formal_decision_bound_directly": false,
+    "formal_decision_read_directly": false,
+    "formal_validator_executed": false,
+    "new_human_authority_created": false,
+    "new_numeric_POSIX_semantic_identity": false,
+    "new_pair_authority_created": false,
+    "new_role_authority_created": false,
+    "new_scientific_authority_created": false,
+    "predecessor_semantic_source_binding_count": 120,
+    "queue_refreshed": false,
+    "ready_for_training": false,
+    "row_count": 1000,
+    "semantic_identity_collision_count": 0,
+    "semantic_source_binding_count": 126,
+    "source_binding_v2_clean_from_birth": true,
+    "source_role_collision_count": 0,
+    "tensor_integration_performed": false,
+    "training_dataset_changed": false,
+    "training_started": false,
+    "unchanged_event_count": 996
+  },
+  "schema_version": "covapie_cumulative1000_current_global_readiness_census_with_cer_v1",
+  "semantic_source_bindings": [
+    {
+      "artifact_role": "STRUCTURAL_RANKS_0001_0500",
+      "byte_count": 6469651,
+      "path": "covapie-state/bulk-500-controlled-execution-v1/attempt-001/cumulative_processing_view_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "a27d4bf7977d5a175387af83021270c68f9cf3e8db391113dc6f1ff22f0bfc44"
+    },
+    {
+      "artifact_role": "ONE_F8_FORMAL_HUMAN_DECISION",
+      "byte_count": 31063,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/1F8_COVAPIE_BULK_REVIEW_UNIT_9723B0F9EC07CC81/formal-human-decision-v1/1f8_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "6a73022e20e2562f95197b9f314b92b0ecead1cebbadf1c17d5ca292eee59e96"
+    },
+    {
+      "artifact_role": "TWO_VS_FORMAL_HUMAN_DECISION",
+      "byte_count": 28640,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/2VS_COVAPIE_BULK_REVIEW_UNIT_5834329D9E2A1F22/formal-human-decision-v1/2vs_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "49f33bb2a21669ddb7ab8e98cfa710380e031b280855d5f3ebe6796cde2d06aa"
+    },
+    {
+      "artifact_role": "CHT_FORMAL_HUMAN_DECISION",
+      "byte_count": 33307,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/CHT_COVAPIE_BULK_REVIEW_UNIT_BCA0E7B8C2B33410/formal-human-decision-v1/cht_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "0f8b48d08a116aa6fa2b30a67d89a51ae2b730f68514b0ce2e0985189dd1ea2b"
+    },
+    {
+      "artifact_role": "F24_FORMAL_HUMAN_DECISION",
+      "byte_count": 26652,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/F24_COVAPIE_BULK_REVIEW_UNIT_2557BFE1E3B5C4C5/formal-human-decision-v1/f24_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "ec2bc7c96e6272e99202a8cdbdef330ea4c1189f5fd47abe43f55de2a2db5f22"
+    },
+    {
+      "artifact_role": "FFQ_FORMAL_HUMAN_DECISION",
+      "byte_count": 14197,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/FFQ_COVAPIE_BULK_REVIEW_UNIT_431D2725ADFC9E9D/formal-human-decision-v1/ffq_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "ba0670519064399b2ecb0c73631009c8c6c4d3c14512377ecfaad0d87388e149"
+    },
+    {
+      "artifact_role": "G3H_FORMAL_HUMAN_DECISION",
+      "byte_count": 22456,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/G3H_COVAPIE_BULK_REVIEW_UNIT_5C788252BB9BA078/formal-human-decision-v1/g3h_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "872ac01500180f752928aeb2fb44287b7fa9cad7070e1b17a45f0d19b25d5203"
+    },
+    {
+      "artifact_role": "NEQ_FORMAL_HUMAN_DECISION",
+      "byte_count": 33908,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/NEQ_COVAPIE_BULK_REVIEW_UNIT_0E0F340A9F98DA62/formal-human-decision-v1/neq_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "c5aa577f8b507b9bf6eb8d22207c8c11e3858ddd138c034d31d6f32d40b6c73c"
+    },
+    {
+      "artifact_role": "ONL_FORMAL_HUMAN_DECISION",
+      "byte_count": 28678,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/ONL_COVAPIE_BULK_REVIEW_UNIT_FC5A3060FADCBA74/formal-human-decision-v1/onl_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "eb68b63046b561e857ae84640843914960c974ce7807be1ee18aba3f107581d5"
+    },
+    {
+      "artifact_role": "OZJ_FORMAL_HUMAN_DECISION",
+      "byte_count": 28914,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/OZJ_COVAPIE_BULK_REVIEW_UNIT_18734D9C06222450/formal-human-decision-v1/ozj_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "0b14271a4541e69d768e28b6433c87b8b22c21505f6e3bdf075bb94381c3c606"
+    },
+    {
+      "artifact_role": "POA_FORMAL_HUMAN_DECISION",
+      "byte_count": 15675,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/POA_COVAPIE_BULK_REVIEW_UNIT_6A4D564E712634EB/formal-human-decision-v1/poa_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "263eec2e33a7b50001f6c058959b9218601fc7fb122dc97e937b517f98c90ba8"
+    },
+    {
+      "artifact_role": "PRF_FORMAL_HUMAN_DECISION",
+      "byte_count": 26699,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/PRF_COVAPIE_BULK_REVIEW_UNIT_1569D77F66026B58/formal-human-decision-v1/prf_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "2b5b81290405761acaaacc5ba0764aeed23c93ea1eebe420f2c14528045c3ce3"
+    },
+    {
+      "artifact_role": "YUN_FORMAL_HUMAN_DECISION",
+      "byte_count": 30722,
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/YUN_COVAPIE_BULK_REVIEW_UNIT_1138FFC288DFD03D/formal-human-decision-v1/yun_formal_human_decision_v1.json",
+      "path_namespace": "repository_parent_relative",
+      "sha256": "b4eeebe03354e820d9658225997c34b58b41c66f4dfe126230024306816e1140"
+    },
+    {
+      "artifact_role": "ONE_F8_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 14662,
+      "path": "data/derived/covalent_small/covapie_1f8_completed_decision_ingestion_and_task_label_availability_v1/covapie_1f8_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "63520f56ddb1c9fa9f962fc79c009549897e18299139e6b160498ca48080fb30"
+    },
+    {
+      "artifact_role": "TWO_A2_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 8950,
+      "path": "data/derived/covalent_small/covapie_2a2_completed_decision_ingestion_and_task_label_availability_v1/covapie_2a2_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "f6533013dcb2eea5fcee579d906c7ab3009d1db8c9f2d9f906aca5ee0122f52b"
+    },
+    {
+      "artifact_role": "TWO_VS_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 13276,
+      "path": "data/derived/covalent_small/covapie_2vs_completed_decision_ingestion_and_task_label_availability_v1/covapie_2vs_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "b5c08fecbd5a68408cea6b7ce4747734f3d6c3ea37d81aef939a634d6439c5cc"
+    },
+    {
+      "artifact_role": "BATCH001_HUMAN_SNAPSHOT",
+      "byte_count": 33764,
+      "path": "data/derived/covalent_small/covapie_batch001_completed_decision_ingestion_and_task_label_availability_v1/covapie_batch001_completed_human_decision_snapshot_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "c0c887b9026638484ae453d68a6fc654e3bd1b3bce7aa222f8a285d4878e0200"
+    },
+    {
+      "artifact_role": "BATCH001_FORMAL_FULL_COMPONENT_REGISTRY",
+      "byte_count": 10237,
+      "path": "data/derived/covalent_small/covapie_batch001_formal_split_leakage_admission_v1/covapie_batch001_formal_leakage_component_registry_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "76e6ecae7dfde7c9e5081a0164f9a72628e4f30550e831a8f8ba5cd3d1d16544"
+    },
+    {
+      "artifact_role": "NDU_FULL_COMPONENT_RECOVERY_REGISTRY",
+      "byte_count": 19107,
+      "path": "data/derived/covalent_small/covapie_batch001_ndu4_leakage_recovery_and_formal_split_admission_v1/covapie_batch001_ndu4_full_component_registry_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "3f0edbca6d2b43226321ac71e46b593029e18bc31ddc4693d6077530fe7996d2"
+    },
+    {
+      "artifact_role": "CURRENT_LINKING_AXIS_REFERENCE_EVIDENCE",
+      "byte_count": 6845166,
+      "path": "data/derived/covalent_small/covapie_bulk_cys_sg_dataset_expansion_v1/bulk_pilot_v1/bulk_processing_outcomes_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "0270dd93a31427042d02f7751ab7b46679308c7f1ee5207a5560b199a6a94d57"
+    },
+    {
+      "artifact_role": "FROZEN_CUMULATIVE1000_UNIVERSE",
+      "byte_count": 492899,
+      "path": "data/derived/covalent_small/covapie_bulk_cys_sg_model_usable_auto_admission_scaleup_v1/covapie_bulk_cys_sg_cumulative_1000_model_usable_census_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "5998991f4a777dc8364d773e68a438837e656983aab805dae388b64c3619dbc5"
+    },
+    {
+      "artifact_role": "PRIORITY_REVIEW_QUEUE",
+      "byte_count": 50116,
+      "path": "data/derived/covalent_small/covapie_bulk_cys_sg_model_usable_auto_admission_scaleup_v1/covapie_bulk_cys_sg_priority_human_review_queue_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "a2c701324b9ffbcd6dcb28cc098fcdc614d7b2a0ad849f1872f62472ce21cee2"
+    },
+    {
+      "artifact_role": "STRUCTURAL_RANKS_0501_1000",
+      "byte_count": 5988559,
+      "path": "data/derived/covalent_small/covapie_bulk_cys_sg_model_usable_auto_admission_scaleup_v1/covapie_bulk_cys_sg_ranks_0501_1000_processing_outcomes_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "4f5ee75a645ee560cb8e272fd3ead8ba7a446dadf9aece38f12f0eeecad16e5f"
+    },
+    {
+      "artifact_role": "LEGACY_HUMAN_AUTHORITY",
+      "byte_count": 91133,
+      "path": "data/derived/covalent_small/covapie_bulk_post_only_cys_sg_human_review_v1/covapie_post_only_human_review_decisions_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "c2060a8b0a8123fbc6b9c11f2e70a9443367b63467bf9f9cf913a4c780168441"
+    },
+    {
+      "artifact_role": "CHT_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 10225,
+      "path": "data/derived/covalent_small/covapie_cht_completed_decision_ingestion_and_task_label_availability_v1/covapie_cht_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "a754c0764ec61eacf7ec64dabdc370e4bca5a00abdfb94ea3923b52be55df6b6"
+    },
+    {
+      "artifact_role": "PREDECESSOR_MATERIALIZED_CENSUS",
+      "byte_count": 497477,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_v1/covapie_cumulative1000_current_global_readiness_census_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "f4f44058a68f8161969b84a7e6b5efde08d6cd1d59520010c4f742d78b171dc9"
+    },
+    {
+      "artifact_role": "PREDECESSOR_MATERIALIZED_SUMMARY",
+      "byte_count": 13681,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_v1/covapie_cumulative1000_current_global_readiness_summary_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "569625aef3b22d12af528e2afe61ed5ebf381f84642a063a81970894b80dc74a"
+    },
+    {
+      "artifact_role": "PREDECESSOR_1F8_MATERIALIZED_CENSUS",
+      "byte_count": 514588,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_1f8_v1/covapie_cumulative1000_current_global_readiness_census_with_1f8_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "31d6add9d59d5eb9b40e8603eb9631230a75efa1f52590c3556827f62441175d"
+    },
+    {
+      "artifact_role": "PREDECESSOR_1F8_MATERIALIZED_SUMMARY",
+      "byte_count": 15062,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_1f8_v1/covapie_cumulative1000_current_global_readiness_summary_with_1f8_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "9a341222ff0932603f900042579b47f6969c50259bfd0d89d75dffe55bf3641f"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2A2_MATERIALIZED_CENSUS",
+      "byte_count": 529994,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_2a2_v1/covapie_cumulative1000_current_global_readiness_census_with_2a2_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "5b56422e9c8d0ec6c09fe71c49d51fff0c7e7a9720ccf3c4c20dc324e409c57d"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2A2_MATERIALIZED_SUMMARY",
+      "byte_count": 17389,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_2a2_v1/covapie_cumulative1000_current_global_readiness_summary_with_2a2_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "3217bf5e45de40e66f1af22d000a48fef81548c6431c3e6d9349c4824b1c80f3"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2VS_MATERIALIZED_CENSUS",
+      "byte_count": 510436,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_2vs_v1/covapie_cumulative1000_current_global_readiness_census_with_2vs_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "e0e4eb86d2961e2db2ca139ffe5492cfe9675b768826be85a3d0516b532ae24a"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2VS_MATERIALIZED_SUMMARY",
+      "byte_count": 14888,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_2vs_v1/covapie_cumulative1000_current_global_readiness_summary_with_2vs_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "1b5cca68c2b81426cfae86921a666d8766dc40d31032c24ba90888f0b88588f7"
+    },
+    {
+      "artifact_role": "PREDECESSOR_CHT_MATERIALIZED_CENSUS",
+      "byte_count": 523894,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cht_v1/covapie_cumulative1000_current_global_readiness_census_with_cht_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "b51bff3d31d910fa4990a1482e0d3b05364fed86a9cf503de833ddf8851f6384"
+    },
+    {
+      "artifact_role": "PREDECESSOR_CHT_MATERIALIZED_SUMMARY",
+      "byte_count": 15828,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_cht_v1/covapie_cumulative1000_current_global_readiness_summary_with_cht_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "b2130b1f0b9cf36455f1bf00e6e5c32e9a4ef250f18bb25f7a902af67c79e0b3"
+    },
+    {
+      "artifact_role": "PREDECESSOR_F24_MATERIALIZED_CENSUS",
+      "byte_count": 527918,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_f24_v1/covapie_cumulative1000_current_global_readiness_census_with_f24_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "0660614ee950828cbb468cc72fdb776b26a6257e144cbae5df2a6d2a2c8f9b74"
+    },
+    {
+      "artifact_role": "PREDECESSOR_F24_MATERIALIZED_SUMMARY",
+      "byte_count": 16992,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_f24_v1/covapie_cumulative1000_current_global_readiness_summary_with_f24_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "4a75f817138379c25fc67186b3316e400c0850ecbb2611fa8d8158860cf39c9b"
+    },
+    {
+      "artifact_role": "PREDECESSOR_NEQ_MATERIALIZED_CENSUS",
+      "byte_count": 521299,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_neq_v1/covapie_cumulative1000_current_global_readiness_census_with_neq_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "8ffbb6df299321393b0aeba8945ed6a4de7f74ed659253d874494a7757e782f2"
+    },
+    {
+      "artifact_role": "PREDECESSOR_NEQ_MATERIALIZED_SUMMARY",
+      "byte_count": 15641,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_neq_v1/covapie_cumulative1000_current_global_readiness_summary_with_neq_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "08f61b61014658a51be184285aae478989717f67808ef0fe8e0dc09d068312d9"
+    },
+    {
+      "artifact_role": "PREDECESSOR_ONL_MATERIALIZED_CENSUS",
+      "byte_count": 502004,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_onl_v1/covapie_cumulative1000_current_global_readiness_census_with_onl_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "57be12d7ed5d4e013dbd402ccf0ed49aa3d86067a952fdd339fcc945062894e4"
+    },
+    {
+      "artifact_role": "PREDECESSOR_ONL_MATERIALIZED_SUMMARY",
+      "byte_count": 14489,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_onl_v1/covapie_cumulative1000_current_global_readiness_summary_with_onl_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "3271df9a94bf72f8ae081735e07e132c4a7d0dfb389f3acfdf31789420f2c19b"
+    },
+    {
+      "artifact_role": "PREDECESSOR_OZJ_MATERIALIZED_CENSUS",
+      "byte_count": 525890,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_ozj_v1/covapie_cumulative1000_current_global_readiness_census_with_ozj_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "1d73fe9702988244006063ab522b3e8222837879c6f00d8deac032a54db2f9b6"
+    },
+    {
+      "artifact_role": "PREDECESSOR_OZJ_MATERIALIZED_SUMMARY",
+      "byte_count": 15982,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_ozj_v1/covapie_cumulative1000_current_global_readiness_summary_with_ozj_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "d6b249101eaec5e50d6d9585a05c9de0485bcea24d4d4143444429ab97408f56"
+    },
+    {
+      "artifact_role": "PREDECESSOR_PRF_MATERIALIZED_CENSUS",
+      "byte_count": 506220,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_prf_v1/covapie_cumulative1000_current_global_readiness_census_with_prf_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "a707cb60c8f788f9ad0e94e89c4038226cfa5f94c15b0afcfa6e36adca3c1b12"
+    },
+    {
+      "artifact_role": "PREDECESSOR_PRF_MATERIALIZED_SUMMARY",
+      "byte_count": 14742,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_prf_v1/covapie_cumulative1000_current_global_readiness_summary_with_prf_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "82d4d36beb21efb2a588beaea9d3b9c61a6275596482e39ff45341e4cbe316f7"
+    },
+    {
+      "artifact_role": "PREDECESSOR_YUN_MATERIALIZED_CENSUS",
+      "byte_count": 518137,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_yun_v1/covapie_cumulative1000_current_global_readiness_census_with_yun_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "28eaa9833d69f191bf7eee91956588324ea1a3d145ebe5a99a31752a42e962e3"
+    },
+    {
+      "artifact_role": "PREDECESSOR_YUN_MATERIALIZED_SUMMARY",
+      "byte_count": 15391,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_yun_v1/covapie_cumulative1000_current_global_readiness_summary_with_yun_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "084d264f874547544a6b674cc1672298d2ac4eb08f61d139aa654f975d1c5767"
+    },
+    {
+      "artifact_role": "HISTORICAL_RECONCILIATION",
+      "byte_count": 99335,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_high_yield_human_review_authority_calibration_v1/covapie_cumulative1000_current_review_status_reconciliation_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "4eb608e2d97b60230ae1e0ca4e4be6a7fe8b3dc45af3467cbc98f685c385862f"
+    },
+    {
+      "artifact_role": "CUMULATIVE_PUBLISHED_PIPELINE_RUN",
+      "byte_count": 45233,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/5f2e_5ut_approved_v1/pipeline_run_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "8f56116f02709caf2ecbbad59479dce7772c3fb83fd9aef59a7ff9f6b8233980"
+    },
+    {
+      "artifact_role": "CUMULATIVE_PUBLISHED_MATERIALIZED_SAMPLE",
+      "byte_count": 787,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/5f2e_5ut_approved_v1/samples/7aeb236b1946e96f.materialized.json",
+      "path_namespace": "repository_relative",
+      "sha256": "c7120c9c12e2b2d8fc1ec0bd214ac6096cf1b377d93bafb237a275842349e03b"
+    },
+    {
+      "artifact_role": "CUMULATIVE_EXPANSION_GROUP_REGISTRY",
+      "byte_count": 2704,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6di9_gjj_approved_v1/cumulative_leakage_registry_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "24a58a6f9cc551c9b38527c1bfbf64aa2661bf1173b8eabcb44428513bfe15c8"
+    },
+    {
+      "artifact_role": "CUMULATIVE_SUCCESSOR_PIPELINE_RUN",
+      "byte_count": 47337,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6di9_gjj_approved_v1/pipeline_run_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "bd68d9f20fdb99882520c5cdb82e452a52633b09869fac0e727ebba733638dd8"
+    },
+    {
+      "artifact_role": "CUMULATIVE_SUCCESSOR_MATERIALIZED_SAMPLE",
+      "byte_count": 788,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6di9_gjj_approved_v1/samples/8483b1e83aa8e1b6.materialized.json",
+      "path_namespace": "repository_relative",
+      "sha256": "254b76c7c9da09d559adbb59489b39ed39d95934d34362dfe53cecbee28ed6bd"
+    },
+    {
+      "artifact_role": "CUMULATIVE_SUCCESSOR_PIPELINE_RUN",
+      "byte_count": 49123,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6oim_mov_approved_v1/pipeline_run_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "f29293befa064970baaaa9e5c456f8b0de3d37b83c8700ebf5adc0ed37640355"
+    },
+    {
+      "artifact_role": "CUMULATIVE_SUCCESSOR_MATERIALIZED_SAMPLE",
+      "byte_count": 787,
+      "path": "data/derived/covalent_small/covapie_cys_sg_dataset_expansion_pipeline_v1/6oim_mov_approved_v1/samples/a23745e87b364fe7.materialized.json",
+      "path_namespace": "repository_relative",
+      "sha256": "edeb70f3a38a72f785def1e0eb42046793aa884d370fd7096b12eca877fb6b40"
+    },
+    {
+      "artifact_role": "CURRENT_RUNTIME_POSITIVE_INDEX",
+      "byte_count": 13511,
+      "path": "data/derived/covalent_small/covapie_existing_positive_runtime_and_split_closure_v1/covapie_current_runtime_model_usable_positive_index_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "5485305a750129e437ef68b43c758f9f0586add41fe54ee1d621b6c5bde62410"
+    },
+    {
+      "artifact_role": "EXISTING_POSITIVE_SPLIT_CLOSURE",
+      "byte_count": 16053,
+      "path": "data/derived/covalent_small/covapie_existing_positive_runtime_and_split_closure_v1/covapie_existing_positive_leakage_split_closure_inventory_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "2f673a8ca76217af1517d8254de79799d4fea333d9892af13a3ab0eeb90d8259"
+    },
+    {
+      "artifact_role": "CURRENT_RUNTIME_BINDING_INVENTORY",
+      "byte_count": 45567,
+      "path": "data/derived/covalent_small/covapie_existing_positive_runtime_and_split_closure_v1/covapie_existing_positive_runtime_binding_inventory_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "b8a0f4c2bc8ca46141775f0a5fa54322d12db685b37c930659f6f4a1ca3b4052"
+    },
+    {
+      "artifact_role": "F24_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 7641,
+      "path": "data/derived/covalent_small/covapie_f24_completed_decision_ingestion_and_task_label_availability_v1/covapie_f24_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "516c3ea3ac291c5039e1def72a891b54fd42d5aa45388f27b436a655467cd28c"
+    },
+    {
+      "artifact_role": "FFQ_EVENT_PROJECTION",
+      "byte_count": 21239,
+      "path": "data/derived/covalent_small/covapie_ffq_completed_decision_ingestion_and_task_label_availability_v1/covapie_ffq_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "781972cbee68403805bb0266db65221b0973cb61e666925264dc0d50524090a0"
+    },
+    {
+      "artifact_role": "G3H_EVENT_PROJECTION",
+      "byte_count": 20247,
+      "path": "data/derived/covalent_small/covapie_g3h_completed_decision_ingestion_and_task_label_availability_v1/covapie_g3h_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "f7afc5caf16bb81e18223258cfb39be79c7a18dd4938b756599ad228f6cffe10"
+    },
+    {
+      "artifact_role": "I12_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 10005,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_i12_completed_decision_ingestion_and_task_label_availability_v1/covapie_i12_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "21b1d98cb50f4f471647382f0ea31057afdc7d1e0eaf66e382acbc8173c1c017"
+    },
+    {
+      "artifact_role": "NEQ_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 11706,
+      "path": "data/derived/covalent_small/covapie_neq_completed_decision_ingestion_and_task_label_availability_v1/covapie_neq_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "b4b9a301440724464cb92f1b0f28ef1151b24b12eb3ec001a971dacda3632d4a"
+    },
+    {
+      "artifact_role": "ONL_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 14822,
+      "path": "data/derived/covalent_small/covapie_onl_completed_decision_ingestion_and_task_label_availability_v1/covapie_onl_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "175f2f070967fb33e0133501a488cf30022818dbbadcd4b85f3ab497afda969c"
+    },
+    {
+      "artifact_role": "OZJ_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 9031,
+      "path": "data/derived/covalent_small/covapie_ozj_completed_decision_ingestion_and_task_label_availability_v1/covapie_ozj_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "b039dbde52e2fe6a46866cdce0a378fc6dcc942e4a552845ce664fd80f1009d3"
+    },
+    {
+      "artifact_role": "MISSING_FROZEN_COMPONENT_RAW_PROTEIN_SEQUENCE_EVIDENCE_CARRIER",
+      "byte_count": 5922,
+      "path": "data/derived/covalent_small/covapie_poa_full_component_formal_split_authority_v1/covapie_poa_missing_frozen_component_protein_sequence_evidence_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "ed73ec02a2ffc07b515fbde1d54f2818b2003e2a0d551143c544972b0592fc5d"
+    },
+    {
+      "artifact_role": "PRF_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 14303,
+      "path": "data/derived/covalent_small/covapie_prf_completed_decision_ingestion_and_task_label_availability_v1/covapie_prf_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "40df3625bda841ffe94ee12681da5593fece9598f44a971b00154c66322ff75b"
+    },
+    {
+      "artifact_role": "HISTORICAL_EXACT5_GROUP_MEMBERS",
+      "byte_count": 6316,
+      "path": "data/derived/covalent_small/covapie_unified_independence_group_assignment_and_sample_index_merge_smoke_v0/covapie_final_leakage_group_assignment.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "768c964f22e19a8fb6232b1fa26c531e53d023042abcd9b1bcca44df2b4f4416"
+    },
+    {
+      "artifact_role": "HISTORICAL_EXACT5_SPLIT_POLICY",
+      "byte_count": 1823,
+      "path": "data/derived/covalent_small/covapie_unified_leakage_split_materialization_smoke_v0/covapie_leakage_group_split_assignment.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "ed62fcf56ad87d8a49743517329c97aa98d3a781562fa403b4b43a9b9ea3ffc3"
+    },
+    {
+      "artifact_role": "YUN_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 13886,
+      "path": "data/derived/covalent_small/covapie_yun_completed_decision_ingestion_and_task_label_availability_v1/covapie_yun_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "f5c58990490282a9a3ab5218f8ed83f8cead6062fdeb06c4fedc10665630ca0e"
+    },
+    {
+      "artifact_role": "ONE_F8_INGESTION_OWNER",
+      "byte_count": 82797,
+      "path": "src/covalent_ext/covapie_1f8_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "59401b7f495c28e5173771a329705286f76b98a7a0cc921fe345f9e5fa2248aa"
+    },
+    {
+      "artifact_role": "TWO_A2_INGESTION_OWNER",
+      "byte_count": 81311,
+      "path": "src/covalent_ext/covapie_2a2_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "57d42fcf673794f27adc7b897c0f51db4304d32f2d35a950b89d63cf4cf7060d"
+    },
+    {
+      "artifact_role": "TWO_VS_INGESTION_OWNER",
+      "byte_count": 79775,
+      "path": "src/covalent_ext/covapie_2vs_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "8812b4f9d0c77af4228b6f71ec9183867fec778311b290f8362a1164081e1409"
+    },
+    {
+      "artifact_role": "CHT_INGESTION_OWNER",
+      "byte_count": 103035,
+      "path": "src/covalent_ext/covapie_cht_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "7a5561f1cb35465a2dbe6af8121f06a07b7aea6d82051e3945352cf1c669aff7"
+    },
+    {
+      "artifact_role": "GENERIC_RECONCILIATION_OWNER",
+      "byte_count": 35925,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "2fcdf85f4753cedf6fe803ae1640fbf65484cdad2bc67732b5d9fdc24b8c3548"
+    },
+    {
+      "artifact_role": "ONE_F8_RECONCILIATION_SUCCESSOR",
+      "byte_count": 11913,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_1f8_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "496b4958679852de66905924c08aaa798b4536dd0aeb28c116f558c1e514cdce"
+    },
+    {
+      "artifact_role": "TWO_A2_RECONCILIATION_SUCCESSOR",
+      "byte_count": 26024,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_2a2_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "c0f417bbc4effb5b02d788a42779bd0eae4db2df4de85c33bb40bf6111b67863"
+    },
+    {
+      "artifact_role": "TWO_VS_RECONCILIATION_SUCCESSOR",
+      "byte_count": 11923,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_2vs_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "e4ffb8300f40e3883560605cbf485481a42adc9321c7d602104c7467ad3df4f7"
+    },
+    {
+      "artifact_role": "CHT_RECONCILIATION_SUCCESSOR",
+      "byte_count": 13577,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_cht_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "263b6726bee54059a0d52a3f32660601de80429d0f876ac79bf55705064cdf43"
+    },
+    {
+      "artifact_role": "F24_RECONCILIATION_SUCCESSOR",
+      "byte_count": 21089,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_f24_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "7ab2d47d247e6a342645b1a1b78352671d5d60a2902f1ef21fad9241a83ee325"
+    },
+    {
+      "artifact_role": "CURRENT_G3H_RECONCILIATION_OWNER",
+      "byte_count": 12686,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_g3h_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "2e1e0775b8123d7266bcc6d462a9b39c0ce3c0c9385e7aba4eee1f2fb5c367a6"
+    },
+    {
+      "artifact_role": "I12_RECONCILIATION_SUCCESSOR",
+      "byte_count": 25975,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_i12_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "d82d997f00479c29750f264c4afb7b56e58984d4356da730dff3de8c8c3cd439"
+    },
+    {
+      "artifact_role": "NEQ_RECONCILIATION_SUCCESSOR",
+      "byte_count": 12649,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_neq_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "ed5502e047124c30a0c16cb5b93c12d676966c271e24173eea96cea27d7f2c98"
+    },
+    {
+      "artifact_role": "ONL_RECONCILIATION_SUCCESSOR",
+      "byte_count": 13046,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_onl_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "f2c94ac8b4fe8f3706d0de288e2d5bb24ef211cf56d39e8362b43bdb17a2f475"
+    },
+    {
+      "artifact_role": "OZJ_RECONCILIATION_SUCCESSOR",
+      "byte_count": 16102,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_ozj_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "d021e64fa6af1da41246d0618e3a38f8d079c0100e74d7ff4aec80f395d843f0"
+    },
+    {
+      "artifact_role": "PRF_RECONCILIATION_SUCCESSOR",
+      "byte_count": 11728,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_prf_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "ce4db4fcbf909852a6fca1a919ee50750279a8a6ca0968d4b33ae8f510bd0f74"
+    },
+    {
+      "artifact_role": "YUN_RECONCILIATION_SUCCESSOR",
+      "byte_count": 11824,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_yun_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "84c6c57666ec96dfdb1f39a9dd87d097efff2eb000e6bf10281f29471540c287"
+    },
+    {
+      "artifact_role": "PREDECESSOR_CENSUS_OWNER",
+      "byte_count": 121594,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "2c35400febf7a7e407614c0bc3aa7504db2117f40430f2e990d3d41ac4bef6fe"
+    },
+    {
+      "artifact_role": "PREDECESSOR_1F8_CENSUS_OWNER",
+      "byte_count": 55130,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_1f8_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "cacb60cc5436b7744e7a545f275da44eb33a38825d04d91248ed91146f25f972"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2A2_CENSUS_OWNER",
+      "byte_count": 65504,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_2a2_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "e27b71b0007cd09083b87a40fa2c9474285c479ed20f7300167a3da0d6bbcdc5"
+    },
+    {
+      "artifact_role": "PREDECESSOR_2VS_CENSUS_OWNER",
+      "byte_count": 54575,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_2vs_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "0d574a3ae76caca7d6c90a226382a55f3f26e1fe9c229cf76ac1c10cdc3f3c47"
+    },
+    {
+      "artifact_role": "PREDECESSOR_CHT_CENSUS_OWNER",
+      "byte_count": 63414,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_cht_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "e478b41dca9555bda1caab2cacd3160f3b0cc98c744d50f2eb46a915fccb6f14"
+    },
+    {
+      "artifact_role": "PREDECESSOR_F24_CENSUS_OWNER",
+      "byte_count": 64468,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_f24_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "9afb435cb5110c68946a4356482665b2325707bacc96754aca2fa54337a2022b"
+    },
+    {
+      "artifact_role": "PREDECESSOR_NEQ_CENSUS_OWNER",
+      "byte_count": 63106,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_neq_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "ce1a94f1376c18c11e02d821133789dc75f643c2447f2f9d4091b5026f9e6dd4"
+    },
+    {
+      "artifact_role": "PREDECESSOR_ONL_CENSUS_OWNER",
+      "byte_count": 70095,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_onl_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "f74d2d486492a89c1aaeb523220e18558f80a8d50389e9deb076c86df7802f5b"
+    },
+    {
+      "artifact_role": "PREDECESSOR_OZJ_CENSUS_OWNER",
+      "byte_count": 63980,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_ozj_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "140c5668b9662829eb359d09504348baf99533ce78cec8307f057a93bf130d0a"
+    },
+    {
+      "artifact_role": "PREDECESSOR_PRF_CENSUS_OWNER",
+      "byte_count": 53480,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_prf_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "11c8fcadaa7fb25247de012ff5c9cb984006221969808dddfc87ba867286ad6f"
+    },
+    {
+      "artifact_role": "PREDECESSOR_YUN_CENSUS_OWNER",
+      "byte_count": 62922,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_yun_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "c26608686cf293026a5a4f52de931fb2de169eb7462338656dd252abc5177624"
+    },
+    {
+      "artifact_role": "CURRENT_RUNTIME_OWNER",
+      "byte_count": 103692,
+      "path": "src/covalent_ext/covapie_existing_positive_runtime_and_split_closure_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "dbca845ccaa7859e78301e413c676d40d28e49228471274f99e4d77c55d2816c"
+    },
+    {
+      "artifact_role": "F24_INGESTION_OWNER",
+      "byte_count": 77160,
+      "path": "src/covalent_ext/covapie_f24_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "c67c88f83e535fd4319425459b97dcfc22f90a3b617b5ddbf1e8f315e2de0525"
+    },
+    {
+      "artifact_role": "FFQ_INGESTION_OWNER",
+      "byte_count": 66788,
+      "path": "src/covalent_ext/covapie_ffq_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "2e71c3132a15f500d54430075688c37dc79469b096328943795c98a728fca7ce"
+    },
+    {
+      "artifact_role": "FFQ_ROLE_MASK_TENSORIZER_OWNER",
+      "byte_count": 12385,
+      "path": "src/covalent_ext/covapie_ffq_direct_profile_role_mask_tensorizer_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "aae4df0ee0b39d5a6ade2be4d98abc4daa03f03c929926a06ba3f7040f183252"
+    },
+    {
+      "artifact_role": "FFQ_MODEL_BOUND_PAIR_PROJECTION_OWNER",
+      "byte_count": 40954,
+      "path": "src/covalent_ext/covapie_ffq_supervised_forward_adapter_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "a5363fbc238debfee95626b805d439e8ee23232f5536f6aefa08a73e073efc4e"
+    },
+    {
+      "artifact_role": "G3H_INGESTION_OWNER",
+      "byte_count": 72232,
+      "path": "src/covalent_ext/covapie_g3h_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "ce64741183a384a238ebd8e905b4fd14b03c662021aa1e3ba3a23828a803d418"
+    },
+    {
+      "artifact_role": "I12_INGESTION_OWNER",
+      "byte_count": 73596,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_i12_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "4e291fd0af910f2590b8f2041c388c70746d1bcdb77419bf552a87ae657a4ed8"
+    },
+    {
+      "artifact_role": "EXACT5_SEMANTIC_OWNER",
+      "byte_count": 67274,
+      "path": "src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "18e386ea0412d917d4e3d9f6c15374cdbd680ea243e7b51c0045ae889a215f8b"
+    },
+    {
+      "artifact_role": "NEQ_INGESTION_OWNER",
+      "byte_count": 96020,
+      "path": "src/covalent_ext/covapie_neq_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "dee80c8ce26e0be030d3063e8ab9831c1bc0650c6a2dc9798c3c21007faae290"
+    },
+    {
+      "artifact_role": "ONL_INGESTION_OWNER",
+      "byte_count": 61281,
+      "path": "src/covalent_ext/covapie_onl_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "abbf2f2bbc5d144395f78b80ece5a7b52ebd2ddefd802b9cf023fe15beb23d7a"
+    },
+    {
+      "artifact_role": "OZJ_INGESTION_OWNER",
+      "byte_count": 106888,
+      "path": "src/covalent_ext/covapie_ozj_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "abb80e28e1e139c3515a01c53468530a815c5554b94053afb607053d14a84deb"
+    },
+    {
+      "artifact_role": "POA_MODEL_BOUND_PAIR_PROJECTION_OWNER",
+      "byte_count": 61559,
+      "path": "src/covalent_ext/covapie_poa_exact16_real_structure_tensor_preview_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "91b26dd9e0aae8cbda34c769cf98d766910b9b497f5ca1133105f8858072f989"
+    },
+    {
+      "artifact_role": "POA_FORMAL_SPLIT_OWNER",
+      "byte_count": 83848,
+      "path": "src/covalent_ext/covapie_poa_full_component_formal_split_authority_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "fa466fc335b664bec5063711a6da9576b0781594f9818f7f34be9f6090d491a8"
+    },
+    {
+      "artifact_role": "POA_SAMPLE_EFFECTIVE_SUPERVISION_OWNER",
+      "byte_count": 42406,
+      "path": "src/covalent_ext/covapie_poa_sample_level_effective_supervision_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "f4656f414a5d31d5e967b39885dd5d89e9bf205135dbd29b3285e0d1e856367f"
+    },
+    {
+      "artifact_role": "PRF_INGESTION_OWNER",
+      "byte_count": 76082,
+      "path": "src/covalent_ext/covapie_prf_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "52ce8a00e6e02af7a0dcec9fdccdc69f19555a49557b1b9f73fdf4d20e230264"
+    },
+    {
+      "artifact_role": "YUN_INGESTION_OWNER",
+      "byte_count": 82003,
+      "path": "src/covalent_ext/covapie_yun_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "8339aaa2c57fe1637ab4e4feb7db964fc76224957687d2e0752e28ba3b093928"
+    },
+    {
+      "artifact_role": "PREDECESSOR_I12_CENSUS_OWNER",
+      "byte_count": 71565,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_i12_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "42b01060024cf4c92e19bf3804c6440522019082ab6ec5fda89f5b7258e243b4"
+    },
+    {
+      "artifact_role": "PREDECESSOR_I12_MATERIALIZED_CENSUS",
+      "byte_count": 532022,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_i12_v1/covapie_cumulative1000_current_global_readiness_census_with_i12_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "f659b6c9d9475c94aa4bf2234053627d28a58d4b7f6ae424f49a18924c1ac3bf"
+    },
+    {
+      "artifact_role": "PREDECESSOR_I12_MATERIALIZED_SUMMARY",
+      "byte_count": 17549,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_i12_v1/covapie_cumulative1000_current_global_readiness_summary_with_i12_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "76d91f101898d8ba6c46de69be866e1408cbb9e630562906a52435a18e31d6b1"
+    },
+    {
+      "artifact_role": "ONE_N0_RECONCILIATION_OWNER",
+      "byte_count": 24762,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_1n0_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "86e722b46a1ad4c25c0c3c9c8de2f48461ff7153e2b6bbd7c901dfcd338e5af8"
+    },
+    {
+      "artifact_role": "ONE_N0_INGESTION_OWNER",
+      "byte_count": 79080,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_1n0_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "ce201de459400cd024c67428a39fb83dc665a3dfad0a73fb0f1cc12458db1bbd"
+    },
+    {
+      "artifact_role": "ONE_N0_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 7953,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_1n0_completed_decision_ingestion_and_task_label_availability_v1/covapie_1n0_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "75349801404461111e9d37658fa899ecfb7148ce760ce28d43e82a76f3347361"
+    },
+    {
+      "artifact_role": "PREDECESSOR_WITH_1N0_CENSUS_OWNER",
+      "byte_count": 65131,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_cumulative1000_current_global_readiness_census_with_1n0_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "8b5df9a718d9a42eb9372c68a466deb2b595fc6285dc02719b68390c96041ee5"
+    },
+    {
+      "artifact_role": "PREDECESSOR_WITH_1N0_MATERIALIZED_CENSUS",
+      "byte_count": 533426,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_1n0_v1/covapie_cumulative1000_current_global_readiness_census_with_1n0_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "ac63ced99e77212e5952b41169369c5e5c77967f9409e2e1fec25f99808eaf35"
+    },
+    {
+      "artifact_role": "PREDECESSOR_WITH_1N0_MATERIALIZED_SUMMARY",
+      "byte_count": 17728,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_1n0_v1/covapie_cumulative1000_current_global_readiness_summary_with_1n0_v1.json",
+      "path_namespace": "repository_relative",
+      "sha256": "516ab4c1ed9196c2233695566be9976d8f9f8dc5b13bb88b364b15eee8d08459"
+    },
+    {
+      "artifact_role": "CER_RECONCILIATION_OWNER",
+      "byte_count": 32847,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_with_cer_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "a3b5332654bbee87503737f6e8b077022232e4eb1a92fb48606bd761e30c6fba"
+    },
+    {
+      "artifact_role": "CER_INGESTION_OWNER",
+      "byte_count": 81662,
+      "expected_executable": false,
+      "path": "src/covalent_ext/covapie_cer_completed_decision_ingestion_and_task_label_availability_v1.py",
+      "path_namespace": "repository_relative",
+      "sha256": "bc190935f661cd94e7dd5cf4f48782d6c99fba4455224ef3c73a3d1411b84e54"
+    },
+    {
+      "artifact_role": "CER_EVENT_TASK_LABEL_AVAILABILITY",
+      "byte_count": 10331,
+      "expected_executable": false,
+      "path": "data/derived/covalent_small/covapie_cer_completed_decision_ingestion_and_task_label_availability_v1/covapie_cer_event_task_label_availability_v1.csv",
+      "path_namespace": "repository_relative",
+      "sha256": "420381168ef087940af6ed46584c15954a8590a0cbe760ad4a9947fa5d629899"
+    }
+  ],
+  "source_binding_policy_contract": {
+    "content_identity_and_executable_class_required": true,
+    "numeric_posix_mode_is_not_semantic_identity": true,
+    "policy": "covapie_source_binding_policy_v2"
+  },
+  "stage": "COVAPIE_CUMULATIVE1000_CURRENT_GLOBAL_READINESS_CENSUS_WITH_CER_V1"
+}
