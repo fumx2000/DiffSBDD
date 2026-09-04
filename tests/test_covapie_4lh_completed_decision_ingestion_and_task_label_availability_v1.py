@@ -338,10 +338,24 @@ def test_build_determinism_materialization_and_manifest_closure(artifacts: dict[
     assert all(Path(row["path"]).is_absolute() is False for row in manifest["active_source_bindings"])
 
 
-def test_checker_current_candidate_profile_and_independent_projection(artifacts: dict[str, bytes]) -> None:
+def test_checker_current_supported_lifecycle_profile_and_independent_projection(
+    artifacts: dict[str, bytes],
+) -> None:
     checker = load_checker()
     lifecycle = checker.check_git_lifecycle(REPO_ROOT)
-    assert lifecycle["profile"] == checker.CANDIDATE_UNTRACKED
+    assert lifecycle["profile"] in {
+        checker.CANDIDATE_UNTRACKED,
+        checker.TRACKED_CLEAN,
+    }
+    if lifecycle["profile"] == checker.CANDIDATE_UNTRACKED:
+        assert lifecycle["ordinary_untracked_count"] == 7
+        assert lifecycle["HEAD"] == owner.BASELINE_COMMIT
+        assert lifecycle["origin_main"] == owner.BASELINE_COMMIT
+        assert lifecycle["ahead"] == 0
+        assert lifecycle["behind"] == 0
+    else:
+        assert lifecycle["ordinary_untracked_count"] == 0
+        assert lifecycle["behind"] == 0
     sources = checker.independently_check_sources(REPO_ROOT)
     assert sources["active_source_binding_count"] == 12
     assert sources["formal_validator_provenance_only"] is True
