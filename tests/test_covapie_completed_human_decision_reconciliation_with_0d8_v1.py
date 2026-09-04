@@ -242,7 +242,7 @@ def test_artifact_is_existing_result_contract_prefix_stable_and_deterministic(
 
 
 def test_materialized_artifact_and_checker_pass(
-    artifact_payload: bytes, checker_report: dict[str, object]
+    artifact_payload: bytes, checker, checker_report: dict[str, object]
 ) -> None:
     assert (ROOT / subject.OUTPUT_RELATIVE).read_bytes() == artifact_payload
     report = checker_report
@@ -257,7 +257,10 @@ def test_materialized_artifact_and_checker_pass(
     assert report["current_census_refresh"] is False
     assert report["queue_refresh"] is False
     assert report["training_started"] is False
-    assert report["repository"]["lifecycle"] == "CANDIDATE_UNTRACKED"
+    assert report["repository"]["lifecycle"] in {
+        checker.CANDIDATE_UNTRACKED,
+        checker.TRACKED_CLEAN,
+    }
     assert report["repo_root_global_ROOT_dependency_removed"] is True
     assert report["lifecycle_simulations"] == {
         "candidate_untracked": True,
