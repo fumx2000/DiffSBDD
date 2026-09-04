@@ -1,0 +1,642 @@
+{
+  "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+  "GVE_implementation_precedent_only": {
+    "GVE_checker_executed": false,
+    "GVE_outputs_copied_byte_for_byte": false,
+    "GVE_owner_imported_at_runtime": false,
+    "GVE_tests_executed": false
+  },
+  "MANIFEST_SELF_SHA256_PROHIBITED": true,
+  "POST_boundary": {
+    "POST_geometry_training_authority": false,
+    "POST_geometry_training_label_available_now": false,
+    "POST_geometry_training_target_created": false,
+    "POST_source_evidence_available": true,
+    "POST_source_evidence_count": 4,
+    "distance_only_inference": false,
+    "explicit_covalent_evidence": true
+  },
+  "PRE_boundary": {
+    "POST_to_PRE_copy": false,
+    "PRE_coordinates_authority": false,
+    "PRE_geometry_authority": false,
+    "PRE_label_or_target_created": false,
+    "PRE_mapping_count_per_event": 0,
+    "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+    "PRE_reconstruction": false,
+    "PRE_source_graph_count_per_event": 1,
+    "PRE_source_graph_present": true,
+    "PRE_status": "PRE_REACTION_UNRESOLVED",
+    "PRE_topology_authority": false,
+    "PRE_zero_fill": false,
+    "bond_edit_inferred": false,
+    "leaving_group_inferred": false,
+    "reagent_inferred": false,
+    "supporting_PRE_source_graph_count_per_event": 1
+  },
+  "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+  "active_source_binding_count": 9,
+  "active_source_bindings": [
+    {
+      "SHA256": "d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+      "byte_count": 32277,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json@d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+      "source_role": "LCY_FROZEN_FORMAL_HUMAN_DECISION",
+      "validation_method": "PARSED_JSON_AND_INDEPENDENTLY_VALIDATED"
+    },
+    {
+      "SHA256": "b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+      "byte_count": 84087,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py@b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+      "source_role": "LCY_FROZEN_FORMAL_VALIDATOR_PROVENANCE_IDENTITY_ONLY",
+      "validation_method": "PROVENANCE_IDENTITY_ONLY_NOT_PARSED_IMPORTED_EXECUTED_OR_SUBPROCESSED"
+    },
+    {
+      "SHA256": "53864911c20a3671a1fec9382519dde033bcc0e4700513a4837952160c496388",
+      "byte_count": 8633,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_exact4_event_evidence_v1.csv",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_exact4_event_evidence_v1.csv@53864911c20a3671a1fec9382519dde033bcc0e4700513a4837952160c496388",
+      "source_role": "LCY_EXACT4_EVENT_EVIDENCE",
+      "validation_method": "PARSED_CSV_SUPPORTING_EVIDENCE"
+    },
+    {
+      "SHA256": "6780cccbd83157fabe7962f0471a5e1278dcefa8aac013357b57690d20d88e7f",
+      "byte_count": 23983,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_graph_and_role_candidates_v1.json",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_graph_and_role_candidates_v1.json@6780cccbd83157fabe7962f0471a5e1278dcefa8aac013357b57690d20d88e7f",
+      "source_role": "LCY_GRAPH_AND_MACHINE_ROLE_CANDIDATES_EVIDENCE_ONLY",
+      "validation_method": "PARSED_JSON_WITH_NO_CANDIDATE_SELECTION"
+    },
+    {
+      "SHA256": "c17f3532e6004b347ff62e5d354ac1843f384196c2207127e17971acd2e2d4ee",
+      "byte_count": 3704,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_source_binding_policy_v2.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_source_binding_policy_v2.py@c17f3532e6004b347ff62e5d354ac1843f384196c2207127e17971acd2e2d4ee",
+      "source_role": "PUBLISHED_SOURCE_BINDING_POLICY_V2",
+      "validation_method": "IMPORTED_CONTENT_IDENTITY_AND_SECURITY_POLICY"
+    },
+    {
+      "SHA256": "18e386ea0412d917d4e3d9f6c15374cdbd680ea243e7b51c0045ae889a215f8b",
+      "byte_count": 67274,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py@18e386ea0412d917d4e3d9f6c15374cdbd680ea243e7b51c0045ae889a215f8b",
+      "source_role": "PUBLISHED_CANONICAL_EXACT5_SEMANTIC_OWNER",
+      "validation_method": "PARSED_AST_LITERAL_CONTRACT_ONLY"
+    },
+    {
+      "SHA256": "2fcdf85f4753cedf6fe803ae1640fbf65484cdad2bc67732b5d9fdc24b8c3548",
+      "byte_count": 35925,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_v1.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_completed_human_decision_reconciliation_v1.py@2fcdf85f4753cedf6fe803ae1640fbf65484cdad2bc67732b5d9fdc24b8c3548",
+      "source_role": "PUBLISHED_GENERIC_COMPLETED_DECISION_RECONCILIATION_OWNER",
+      "validation_method": "IMPORTED_READ_ONLY_FOR_SYNTHETIC_EXACT11_COMPATIBILITY_PROBE"
+    },
+    {
+      "SHA256": "f8481147babbad02215c3c3f767fe22ba6a511b8a076482a9635fec5d5cf8e82",
+      "byte_count": 35603,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "data/derived/covalent_small/covapie_batch001_completed_decision_ingestion_and_task_label_availability_v1/covapie_batch001_event_task_label_availability_v1.csv",
+      "semantic_source_identity": "repository_relative:data/derived/covalent_small/covapie_batch001_completed_decision_ingestion_and_task_label_availability_v1/covapie_batch001_event_task_label_availability_v1.csv@f8481147babbad02215c3c3f767fe22ba6a511b8a076482a9635fec5d5cf8e82",
+      "source_role": "PUBLISHED_TASK_DOMAIN_NEGATIVE_COMPLETED_LANE_PRECEDENT",
+      "validation_method": "PARSED_CSV_LANE_AND_UNAVAILABLE_LABEL_VOCABULARY"
+    },
+    {
+      "SHA256": "540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+      "byte_count": 543602,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_gve_v1/covapie_cumulative1000_current_global_readiness_census_with_gve_v1.csv",
+      "semantic_source_identity": "repository_relative:data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_gve_v1/covapie_cumulative1000_current_global_readiness_census_with_gve_v1.csv@540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+      "source_role": "CURRENT_WITH_GVE_GLOBAL_CENSUS_PREFORMAL_READ_ONLY",
+      "validation_method": "PARSED_CSV_PREFORMAL_STATE_READ_ONLY"
+    }
+  ],
+  "artifact_role": "LCY_COMPLETED_DECISION_METADATA_ONLY_INGESTION_NOT_RECONCILIATION_CENSUS_REFRESH_ROLE_SELECTION_TASK_LABEL_MATERIALIZATION_OR_TRAINING",
+  "backward": false,
+  "batch_modified": false,
+  "candidate_publication_file_count": 7,
+  "candidate_publication_paths": [
+    "src/covalent_ext/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py",
+    "scripts/check_covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py",
+    "tests/test_covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_human_decision_snapshot_v1.json",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_event_task_label_availability_v1.csv",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_decision_ingestion_summary_v1.json",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_decision_ingestion_manifest_v1.json"
+  ],
+  "candidate_source_bindings": [
+    {
+      "SHA256": "380d3f0c8000bb1c1af404620430039dd87e41a0f10018bb83ee68e98a83de7c",
+      "byte_count": 101342,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py"
+    },
+    {
+      "SHA256": "12ef06f65e35d13599ae86b8bed259a1fb1d61fdd1af4915229d4335c632abac",
+      "byte_count": 28630,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "scripts/check_covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py"
+    },
+    {
+      "SHA256": "b74fa0514544c914d207dae587c79cbb8742ed84d98ab4d5b514d28b2eaa6d0c",
+      "byte_count": 28318,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "tests/test_covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1.py"
+    }
+  ],
+  "canonical_task_contract": {
+    "B3_present": true,
+    "authoritative_task_labels_created": false,
+    "direct_profile_applicable_task_ids": null,
+    "event_task_label_rows_materialized": false,
+    "global_canonical_task_count": 5,
+    "global_canonical_tasks": [
+      {
+        "display_alias": "A",
+        "fixed_or_seed_roles": [
+          "scaffold",
+          "linker"
+        ],
+        "generated_roles": [
+          "warhead"
+        ],
+        "semantic_long_name": "warhead_only",
+        "task_id": 0
+      },
+      {
+        "display_alias": "B",
+        "fixed_or_seed_roles": [
+          "scaffold"
+        ],
+        "generated_roles": [
+          "linker",
+          "warhead"
+        ],
+        "semantic_long_name": "linker_plus_warhead",
+        "task_id": 1
+      },
+      {
+        "display_alias": "B2",
+        "fixed_or_seed_roles": [
+          "linker"
+        ],
+        "generated_roles": [
+          "scaffold",
+          "warhead"
+        ],
+        "semantic_long_name": "scaffold_plus_warhead",
+        "task_id": 2
+      },
+      {
+        "display_alias": "B3",
+        "fixed_or_seed_roles": [
+          "linker",
+          "warhead"
+        ],
+        "generated_roles": [
+          "scaffold"
+        ],
+        "semantic_long_name": "scaffold_only",
+        "task_id": 3
+      },
+      {
+        "display_alias": "C",
+        "fixed_or_seed_roles": [
+          "minimal_seed"
+        ],
+        "generated_roles": [
+          "scaffold",
+          "linker",
+          "warhead"
+        ],
+        "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+        "task_id": 4
+      }
+    ],
+    "sample_authoritative_applicable_task_ids": null,
+    "sample_canonical_mask_structural_labels_available": false,
+    "sixth_task": false,
+    "task_applicability": [
+      {
+        "display_alias": "A",
+        "role_profile": null,
+        "semantic_long_name": "warhead_only",
+        "structurally_applicable": null,
+        "task_id": 0,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B",
+        "role_profile": null,
+        "semantic_long_name": "linker_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 1,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B2",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 2,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B3",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_only",
+        "structurally_applicable": null,
+        "task_id": 3,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "C",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 4,
+        "training_mask_target_available_now": false
+      }
+    ],
+    "task_applicability_determined": false,
+    "training_mask_targets_available_now": false
+  },
+  "census_crossfield_compatibility": {
+    "47_COLUMN_SCHEMA_CHANGE_REQUIRED": false,
+    "CURRENT_WITH_GVE_CENSUS_SUPPORTS_ORTHOGONAL_COMBINATION": true,
+    "GENERIC_SCHEMA_CHANGE_REQUIRED": false,
+    "HUMAN_D2_POSITIVE_PRESERVED": true,
+    "INGESTION_DOES_NOT_MODIFY_CENSUS": true,
+    "LEGACY_BASE_CENSUS_ASSUMPTION_HISTORICAL_ONLY": true,
+    "NEW_CENSUS_CROSSFIELD_AUDIT_REQUIRED": false,
+    "NEW_CROSSFIELD_DEBT_CREATED": false
+  },
+  "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+  "current_census_boundary": {
+    "CENSUS_REFRESH": false,
+    "chemistry": "UNRESOLVED",
+    "current_census_changed": false,
+    "current_global_status": "CURRENTLY_UNREVIEWED",
+    "event_count": 4,
+    "formal_training_admitted": false,
+    "human_review_completed": false,
+    "reactive_pair_sample_authority": false,
+    "role_partition_sample_authority": false,
+    "sample_mask_labels": false,
+    "source_SHA256": "540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+    "task_relevance": "UNRESOLVED",
+    "training_use": "UNRESOLVED"
+  },
+  "dataset_mutated": false,
+  "determinism": {
+    "LF": true,
+    "UTF8": true,
+    "double_build_required": true,
+    "dynamic_metadata_absent": true,
+    "single_final_LF": true,
+    "source_derived_only": true
+  },
+  "duplicate_source_binding_identity_count": 0,
+  "formal_decision_binding": {
+    "SHA256": "d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+    "byte_count": 32277,
+    "expected_executable_class": "NON_EXECUTABLE",
+    "expected_path_class": "REGULAR_NON_SYMLINK",
+    "namespace": "project_parent_relative",
+    "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json",
+    "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json@d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+    "source_role": "LCY_FROZEN_FORMAL_HUMAN_DECISION",
+    "validation_method": "PARSED_JSON_AND_INDEPENDENTLY_VALIDATED"
+  },
+  "formal_semantic_digest": "3383814e97c6a29318d3a38890e32cbdaf170a461dbacfbc2f7b9a9c2fd6492e",
+  "formal_semantics_independently_validated": true,
+  "formal_validator_binding": {
+    "SHA256": "b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+    "byte_count": 84087,
+    "expected_executable_class": "NON_EXECUTABLE",
+    "expected_path_class": "REGULAR_NON_SYMLINK",
+    "namespace": "project_parent_relative",
+    "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py",
+    "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py@b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+    "source_role": "LCY_FROZEN_FORMAL_VALIDATOR_PROVENANCE_IDENTITY_ONLY",
+    "validation_method": "PROVENANCE_IDENTITY_ONLY_NOT_PARSED_IMPORTED_EXECUTED_OR_SUBPROCESSED"
+  },
+  "formal_validator_executed": false,
+  "formal_validator_imported": false,
+  "formal_validator_parsed": false,
+  "formal_validator_provenance_identity_only": true,
+  "formal_validator_runtime_dependency": false,
+  "formal_validator_subprocessed": false,
+  "future_reconciliation_arithmetic": {
+    "LCY_adds_generic_completed_negative_facts": 4,
+    "LCY_chemistry_disposition": "POSITIVE",
+    "current": {
+      "completed_negative_events": 32,
+      "completed_negative_units": 6,
+      "completed_positive_events": 115,
+      "completed_positive_units": 18,
+      "completed_total_events": 147,
+      "completed_total_units": 24,
+      "fact_count": 123,
+      "in_progress_events": 0,
+      "in_progress_units": 0,
+      "source_count": 20,
+      "unreviewed_events": 191,
+      "unreviewed_units": 107
+    },
+    "expected_future_with_LCY": {
+      "completed_negative_events": 36,
+      "completed_negative_units": 7,
+      "completed_positive_events": 115,
+      "completed_positive_units": 18,
+      "completed_total_events": 151,
+      "completed_total_units": 25,
+      "fact_count": 127,
+      "in_progress_events": 0,
+      "in_progress_units": 0,
+      "source_count": 21,
+      "unreviewed_events": 187,
+      "unreviewed_units": 106
+    },
+    "future_arithmetic_only": true,
+    "reconciliation_output_files": 0,
+    "reconciliation_performed": false
+  },
+  "generic_owner_compatibility": {
+    "GENERIC_SOURCE_NAMESPACE_REPOSITORY_PARENT_RELATIVE": true,
+    "chemistry_disposition": "POSITIVE",
+    "generic_exact11_accepts_LCY_combination": true,
+    "generic_fact_materialized": false,
+    "human_review_completed": true,
+    "human_training_excluded": false,
+    "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+    "reconciliation_performed": false,
+    "source_binding_path_namespace": "repository_parent_relative",
+    "synthetic_fact_count_validated": 4,
+    "task_relevance_disposition": "NOT_RELEVANT",
+    "training_disposition": "NOT_APPLICABLE"
+  },
+  "loader_modified": false,
+  "loss": false,
+  "manifest_self_SHA256_recorded": false,
+  "metadata_only": true,
+  "model_forward": false,
+  "new_human_authority_created_by_ingestion": false,
+  "operation_boundary": {
+    "CENSUS_REFRESH": false,
+    "COMMIT": false,
+    "INGESTION_COMPLETE": true,
+    "MASK_LABEL_AUTHORITY_CREATED": false,
+    "PUSH": false,
+    "QUEUE_REFRESH": false,
+    "RECONCILIATION": false,
+    "ROLE_SELECTION": false,
+    "TRAINING_STARTED": false,
+    "backward": false,
+    "batch_modified": false,
+    "dataset_mutated": false,
+    "loader_modified": false,
+    "loss": false,
+    "metadata_only": true,
+    "model_forward": false,
+    "new_human_authority_created_by_ingestion": false,
+    "optimizer": false,
+    "parameter_update": false,
+    "tensorization": false,
+    "training": false,
+    "training_dataset_changed": false
+  },
+  "optimizer": false,
+  "output_artifact_bindings": {
+    "covapie_lcy_completed_decision_ingestion_summary_v1.json": {
+      "SHA256": "df739d89f129cee855387fd103282f6d6d76ddbe819c86aaa3ef6abc90e0531c",
+      "byte_count": 6127,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK"
+    },
+    "covapie_lcy_completed_human_decision_snapshot_v1.json": {
+      "SHA256": "4fcb96127582948b8625bb55956512cb603554e303e01d2ad7862d7e6e0f2b52",
+      "byte_count": 69322,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK"
+    },
+    "covapie_lcy_event_task_label_availability_v1.csv": {
+      "SHA256": "402ad7a822263a656e5bd362e142c29079e54d38cc2b894b1617d060cd72bce7",
+      "byte_count": 10030,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK"
+    }
+  },
+  "output_artifact_count": 4,
+  "output_paths": [
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_human_decision_snapshot_v1.json",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_event_task_label_availability_v1.csv",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_decision_ingestion_summary_v1.json",
+    "data/derived/covalent_small/covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1/covapie_lcy_completed_decision_ingestion_manifest_v1.json"
+  ],
+  "parameter_update": false,
+  "readiness": {
+    "CENSUS_REFRESH": false,
+    "COMMIT": false,
+    "CURRENT_WITH_GVE_CENSUS_SUPPORTS_ORTHOGONAL_COMBINATION": true,
+    "EXACT5_B3_PRESENT": true,
+    "EXPECTED_GENERIC_CHEMISTRY_POSITIVE": true,
+    "EXPECTED_GENERIC_LEGACY_STATUS_NEGATIVE": true,
+    "EXPECTED_GENERIC_TRAINING_NOT_APPLICABLE": true,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER": true,
+    "FUTURE_RECONCILIATION_SOURCE_CHAIN_21_127": true,
+    "GENERIC_EXACT11_COMPATIBILITY_PASS": true,
+    "GENERIC_SOURCE_NAMESPACE_REPOSITORY_PARENT_RELATIVE": true,
+    "LCY_CHEMISTRY_POSITIVE": true,
+    "LCY_CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+    "LCY_COMPLETED_DECISION_METADATA_PROJECTED": true,
+    "LCY_COMPLETED_LANE_TASK_DOMAIN_NEGATIVE": true,
+    "LCY_CURRENT_RUNTIME_MODEL_USABLE": false,
+    "LCY_D4_UNRESOLVED": true,
+    "LCY_D5_NOT_APPLICABLE": true,
+    "LCY_FORMAL_DECISION_BOUND": true,
+    "LCY_FORMAL_SEMANTICS_INDEPENDENTLY_VALIDATED": true,
+    "LCY_FORMAL_TRAINING_ADMITTED": false,
+    "LCY_FORMAL_VALIDATOR_PROVENANCE_ONLY": true,
+    "LCY_FORMAL_VALID_SINGLETON_DIAGNOSTIC_COUNT_3": true,
+    "LCY_FUTURE_TRAINING_ADMISSION_CANDIDATE": false,
+    "LCY_HUMAN_TRAINING_EXCLUDED": false,
+    "LCY_INGESTION_CANDIDATE_PASS": true,
+    "LCY_REVIEW_POLICY_CANDIDATE_COUNT_ZERO": true,
+    "LCY_SAMPLE_MASK_LABELS_AVAILABLE": false,
+    "LCY_SAMPLE_ROLE_AUTHORITY_AVAILABLE": false,
+    "LCY_SAMPLE_SG_C1_AUTHORITY_AVAILABLE": true,
+    "LCY_TASK_APPLICABILITY_AUTHORITY_AVAILABLE": false,
+    "LCY_TASK_NOT_RELEVANT": true,
+    "LCY_TENSOR_TARGET_CREATED": false,
+    "NEW_CENSUS_CROSSFIELD_AUDIT_REQUIRED": false,
+    "NEW_CROSSFIELD_DEBT_CREATED": false,
+    "PRE_REACTION_UNRESOLVED": true,
+    "PUSH": false,
+    "QUEUE_REFRESH": false,
+    "READY_FOR_EXTERNAL_REVIEW": true,
+    "READY_FOR_TRAINING": false,
+    "RECONCILIATION": false,
+    "SIXTH_TASK": false,
+    "TRAINING_STARTED": false
+  },
+  "reusable_authority_boundary": {
+    "cross_structure_regiochemistry_generalization": false,
+    "reaction_family_authority": false,
+    "reaction_family_training_class_target_available": false,
+    "reusable_authority_label_available": false,
+    "reusable_chemistry_authority": false,
+    "reusable_pair_rule_created": false,
+    "reusable_role_authority": false,
+    "warhead_rule_authority": false,
+    "warhead_rule_training_class_target_available": false,
+    "warhead_type_authority": false,
+    "warhead_type_target_available": false
+  },
+  "role_partition_boundary": {
+    "D4": "UNRESOLVED",
+    "W_L_S_counts": null,
+    "boundary_bonds": null,
+    "formal_valid_singleton_diagnostic_count": 3,
+    "formal_valid_singleton_diagnostic_indices": [
+      0,
+      1,
+      2
+    ],
+    "formal_valid_singleton_diagnostics": [
+      {
+        "S_atom_ids": [
+          "O2"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C3",
+          "atom_id_2": "O2"
+        },
+        "diagnostic_index": 0,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      },
+      {
+        "S_atom_ids": [
+          "O1"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C4",
+          "atom_id_2": "O1"
+        },
+        "diagnostic_index": 1,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      },
+      {
+        "S_atom_ids": [
+          "C5"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C5",
+          "atom_id_2": "N1"
+        },
+        "diagnostic_index": 2,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      }
+    ],
+    "formal_valid_singleton_diagnostics_are_selectable": false,
+    "linker_atoms": null,
+    "reusable_role_authority": false,
+    "review_policy_candidate_count": 0,
+    "review_policy_selectable_candidate_indices": [],
+    "role_decision_field_present": true,
+    "role_partition_human_authoritative": false,
+    "role_partition_human_decision_available": false,
+    "role_profile": "NOT_ESTABLISHED",
+    "scaffold_atoms": null,
+    "selected_candidate_index_0based": null,
+    "usable_role_partition_label_available": false,
+    "warhead_atoms": null
+  },
+  "same_component_3A2G_boundary": {
+    "PRE_transfer": false,
+    "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:3A2G:A:CYS:102-:SG:G:LCY:C1",
+    "current_Exact4_authority": false,
+    "current_target": false,
+    "decision_transfer": false,
+    "pair_transfer": false,
+    "role_transfer": false,
+    "training_transfer": false
+  },
+  "schema_version": "covapie_lcy_completed_decision_ingestion_manifest_v1",
+  "schemas": {
+    "manifest": "covapie_lcy_completed_decision_ingestion_manifest_v1",
+    "matrix": "covapie_lcy_event_task_label_availability_v1",
+    "snapshot": "covapie_lcy_completed_human_decision_snapshot_v1",
+    "summary": "covapie_lcy_completed_decision_ingestion_summary_v1"
+  },
+  "stage": "covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1",
+  "tensorization": false,
+  "training": false,
+  "training_boundary": {
+    "D5": "NOT_APPLICABLE",
+    "READY_FOR_TRAINING": false,
+    "candidate_for_future_training_admission": false,
+    "current_runtime_model_usable": false,
+    "event_training_use_human_decision_available": true,
+    "formal_event_training_use_decision": "NOT_APPLICABLE",
+    "formal_training_admitted": false,
+    "future_training_admission_candidate": false,
+    "future_training_admission_status": null,
+    "human_training_excluded": false,
+    "model_supervision_usable": false,
+    "parameter_update_authorization": false,
+    "tensor_target_created": false,
+    "training_admitted": false,
+    "training_exclusion_reason": null,
+    "training_mask_targets_available_now": false,
+    "training_materialization_allowed": false,
+    "training_materialization_allowed_now": false,
+    "training_use_allowed": false,
+    "training_use_include": false
+  },
+  "training_dataset_changed": false
+}

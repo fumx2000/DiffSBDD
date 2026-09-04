@@ -1,0 +1,1839 @@
+{
+  "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+  "GVE_implementation_precedent_only": {
+    "GVE_checker_executed": false,
+    "GVE_outputs_copied_byte_for_byte": false,
+    "GVE_owner_imported_at_runtime": false,
+    "GVE_tests_executed": false
+  },
+  "POST_boundary": {
+    "POST_geometry_training_authority": false,
+    "POST_geometry_training_label_available_now": false,
+    "POST_geometry_training_target_created": false,
+    "POST_source_evidence_available": true,
+    "POST_source_evidence_count": 4,
+    "distance_only_inference": false,
+    "explicit_covalent_evidence": true
+  },
+  "PRE_boundary": {
+    "POST_to_PRE_copy": false,
+    "PRE_coordinates_authority": false,
+    "PRE_geometry_authority": false,
+    "PRE_label_or_target_created": false,
+    "PRE_mapping_count_per_event": 0,
+    "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+    "PRE_reconstruction": false,
+    "PRE_source_graph_count_per_event": 1,
+    "PRE_source_graph_present": true,
+    "PRE_status": "PRE_REACTION_UNRESOLVED",
+    "PRE_topology_authority": false,
+    "PRE_zero_fill": false,
+    "bond_edit_inferred": false,
+    "leaving_group_inferred": false,
+    "reagent_inferred": false,
+    "supporting_PRE_source_graph_count_per_event": 1
+  },
+  "READY_FOR_TRAINING": false,
+  "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+  "active_source_binding_count": 9,
+  "active_source_bindings": [
+    {
+      "SHA256": "d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+      "byte_count": 32277,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json@d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+      "source_role": "LCY_FROZEN_FORMAL_HUMAN_DECISION",
+      "validation_method": "PARSED_JSON_AND_INDEPENDENTLY_VALIDATED"
+    },
+    {
+      "SHA256": "b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+      "byte_count": 84087,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py@b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+      "source_role": "LCY_FROZEN_FORMAL_VALIDATOR_PROVENANCE_IDENTITY_ONLY",
+      "validation_method": "PROVENANCE_IDENTITY_ONLY_NOT_PARSED_IMPORTED_EXECUTED_OR_SUBPROCESSED"
+    },
+    {
+      "SHA256": "53864911c20a3671a1fec9382519dde033bcc0e4700513a4837952160c496388",
+      "byte_count": 8633,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_exact4_event_evidence_v1.csv",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_exact4_event_evidence_v1.csv@53864911c20a3671a1fec9382519dde033bcc0e4700513a4837952160c496388",
+      "source_role": "LCY_EXACT4_EVENT_EVIDENCE",
+      "validation_method": "PARSED_CSV_SUPPORTING_EVIDENCE"
+    },
+    {
+      "SHA256": "6780cccbd83157fabe7962f0471a5e1278dcefa8aac013357b57690d20d88e7f",
+      "byte_count": 23983,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "project_parent_relative",
+      "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_graph_and_role_candidates_v1.json",
+      "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/review-preparation-v1/lcy_graph_and_role_candidates_v1.json@6780cccbd83157fabe7962f0471a5e1278dcefa8aac013357b57690d20d88e7f",
+      "source_role": "LCY_GRAPH_AND_MACHINE_ROLE_CANDIDATES_EVIDENCE_ONLY",
+      "validation_method": "PARSED_JSON_WITH_NO_CANDIDATE_SELECTION"
+    },
+    {
+      "SHA256": "c17f3532e6004b347ff62e5d354ac1843f384196c2207127e17971acd2e2d4ee",
+      "byte_count": 3704,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_source_binding_policy_v2.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_source_binding_policy_v2.py@c17f3532e6004b347ff62e5d354ac1843f384196c2207127e17971acd2e2d4ee",
+      "source_role": "PUBLISHED_SOURCE_BINDING_POLICY_V2",
+      "validation_method": "IMPORTED_CONTENT_IDENTITY_AND_SECURITY_POLICY"
+    },
+    {
+      "SHA256": "18e386ea0412d917d4e3d9f6c15374cdbd680ea243e7b51c0045ae889a215f8b",
+      "byte_count": 67274,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_ligand_role_and_minimal_seed_annotation_contract_design_v1.py@18e386ea0412d917d4e3d9f6c15374cdbd680ea243e7b51c0045ae889a215f8b",
+      "source_role": "PUBLISHED_CANONICAL_EXACT5_SEMANTIC_OWNER",
+      "validation_method": "PARSED_AST_LITERAL_CONTRACT_ONLY"
+    },
+    {
+      "SHA256": "2fcdf85f4753cedf6fe803ae1640fbf65484cdad2bc67732b5d9fdc24b8c3548",
+      "byte_count": 35925,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "src/covalent_ext/covapie_completed_human_decision_reconciliation_v1.py",
+      "semantic_source_identity": "repository_relative:src/covalent_ext/covapie_completed_human_decision_reconciliation_v1.py@2fcdf85f4753cedf6fe803ae1640fbf65484cdad2bc67732b5d9fdc24b8c3548",
+      "source_role": "PUBLISHED_GENERIC_COMPLETED_DECISION_RECONCILIATION_OWNER",
+      "validation_method": "IMPORTED_READ_ONLY_FOR_SYNTHETIC_EXACT11_COMPATIBILITY_PROBE"
+    },
+    {
+      "SHA256": "f8481147babbad02215c3c3f767fe22ba6a511b8a076482a9635fec5d5cf8e82",
+      "byte_count": 35603,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "data/derived/covalent_small/covapie_batch001_completed_decision_ingestion_and_task_label_availability_v1/covapie_batch001_event_task_label_availability_v1.csv",
+      "semantic_source_identity": "repository_relative:data/derived/covalent_small/covapie_batch001_completed_decision_ingestion_and_task_label_availability_v1/covapie_batch001_event_task_label_availability_v1.csv@f8481147babbad02215c3c3f767fe22ba6a511b8a076482a9635fec5d5cf8e82",
+      "source_role": "PUBLISHED_TASK_DOMAIN_NEGATIVE_COMPLETED_LANE_PRECEDENT",
+      "validation_method": "PARSED_CSV_LANE_AND_UNAVAILABLE_LABEL_VOCABULARY"
+    },
+    {
+      "SHA256": "540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+      "byte_count": 543602,
+      "expected_executable_class": "NON_EXECUTABLE",
+      "expected_path_class": "REGULAR_NON_SYMLINK",
+      "namespace": "repository_relative",
+      "path": "data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_gve_v1/covapie_cumulative1000_current_global_readiness_census_with_gve_v1.csv",
+      "semantic_source_identity": "repository_relative:data/derived/covalent_small/covapie_cumulative1000_current_global_readiness_census_with_gve_v1/covapie_cumulative1000_current_global_readiness_census_with_gve_v1.csv@540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+      "source_role": "CURRENT_WITH_GVE_GLOBAL_CENSUS_PREFORMAL_READ_ONLY",
+      "validation_method": "PARSED_CSV_PREFORMAL_STATE_READ_ONLY"
+    }
+  ],
+  "artifact_role": "LCY_COMPLETED_DECISION_METADATA_ONLY_PROJECTION",
+  "canonical_task_contract": {
+    "B3_present": true,
+    "authoritative_task_labels_created": false,
+    "direct_profile_applicable_task_ids": null,
+    "event_task_label_rows_materialized": false,
+    "global_canonical_task_count": 5,
+    "global_canonical_tasks": [
+      {
+        "display_alias": "A",
+        "fixed_or_seed_roles": [
+          "scaffold",
+          "linker"
+        ],
+        "generated_roles": [
+          "warhead"
+        ],
+        "semantic_long_name": "warhead_only",
+        "task_id": 0
+      },
+      {
+        "display_alias": "B",
+        "fixed_or_seed_roles": [
+          "scaffold"
+        ],
+        "generated_roles": [
+          "linker",
+          "warhead"
+        ],
+        "semantic_long_name": "linker_plus_warhead",
+        "task_id": 1
+      },
+      {
+        "display_alias": "B2",
+        "fixed_or_seed_roles": [
+          "linker"
+        ],
+        "generated_roles": [
+          "scaffold",
+          "warhead"
+        ],
+        "semantic_long_name": "scaffold_plus_warhead",
+        "task_id": 2
+      },
+      {
+        "display_alias": "B3",
+        "fixed_or_seed_roles": [
+          "linker",
+          "warhead"
+        ],
+        "generated_roles": [
+          "scaffold"
+        ],
+        "semantic_long_name": "scaffold_only",
+        "task_id": 3
+      },
+      {
+        "display_alias": "C",
+        "fixed_or_seed_roles": [
+          "minimal_seed"
+        ],
+        "generated_roles": [
+          "scaffold",
+          "linker",
+          "warhead"
+        ],
+        "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+        "task_id": 4
+      }
+    ],
+    "sample_authoritative_applicable_task_ids": null,
+    "sample_canonical_mask_structural_labels_available": false,
+    "sixth_task": false,
+    "task_applicability": [
+      {
+        "display_alias": "A",
+        "role_profile": null,
+        "semantic_long_name": "warhead_only",
+        "structurally_applicable": null,
+        "task_id": 0,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B",
+        "role_profile": null,
+        "semantic_long_name": "linker_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 1,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B2",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 2,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "B3",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_only",
+        "structurally_applicable": null,
+        "task_id": 3,
+        "training_mask_target_available_now": false
+      },
+      {
+        "display_alias": "C",
+        "role_profile": null,
+        "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+        "structurally_applicable": null,
+        "task_id": 4,
+        "training_mask_target_available_now": false
+      }
+    ],
+    "task_applicability_determined": false,
+    "training_mask_targets_available_now": false
+  },
+  "census_crossfield_compatibility": {
+    "47_COLUMN_SCHEMA_CHANGE_REQUIRED": false,
+    "CURRENT_WITH_GVE_CENSUS_SUPPORTS_ORTHOGONAL_COMBINATION": true,
+    "GENERIC_SCHEMA_CHANGE_REQUIRED": false,
+    "HUMAN_D2_POSITIVE_PRESERVED": true,
+    "INGESTION_DOES_NOT_MODIFY_CENSUS": true,
+    "LEGACY_BASE_CENSUS_ASSUMPTION_HISTORICAL_ONLY": true,
+    "NEW_CENSUS_CROSSFIELD_AUDIT_REQUIRED": false,
+    "NEW_CROSSFIELD_DEBT_CREATED": false
+  },
+  "chemistry": "POSITIVE",
+  "chemistry_authority": {
+    "chemistry": "POSITIVE",
+    "chemistry_human_authoritative": true,
+    "chemistry_human_authority": true,
+    "chemistry_known_positive": true,
+    "human_chemistry_decision": "POSITIVE",
+    "negative_chemistry": false,
+    "positive_generative_supervision_eligible": false
+  },
+  "chemistry_negative": false,
+  "completed": true,
+  "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+  "current_census_boundary": {
+    "CENSUS_REFRESH": false,
+    "chemistry": "UNRESOLVED",
+    "current_census_changed": false,
+    "current_global_status": "CURRENTLY_UNREVIEWED",
+    "event_count": 4,
+    "formal_training_admitted": false,
+    "human_review_completed": false,
+    "reactive_pair_sample_authority": false,
+    "role_partition_sample_authority": false,
+    "sample_mask_labels": false,
+    "source_SHA256": "540b072d45924688a640e5ca16484500b3815bc66267d73ceead81246b226557",
+    "task_relevance": "UNRESOLVED",
+    "training_use": "UNRESOLVED"
+  },
+  "current_runtime_model_usable": false,
+  "duplicate_source_binding_identity_count": 0,
+  "events": [
+    {
+      "3A2G_pair_promoted": false,
+      "B3_present": true,
+      "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+      "D3": "CONFIRM_OBSERVED_PAIR",
+      "D4": "UNRESOLVED",
+      "D5": "NOT_APPLICABLE",
+      "POST_distance_angstrom": 1.699831,
+      "POST_distance_frozen_lexeme": "1.699831",
+      "POST_geometry_training_authority": false,
+      "POST_geometry_training_label_available_now": false,
+      "POST_geometry_training_target_created": false,
+      "POST_source_evidence_available": true,
+      "POST_source_evidence_count": 4,
+      "POST_to_PRE_copy": false,
+      "PRE_coordinates_authority": false,
+      "PRE_geometry_authority": false,
+      "PRE_label_or_target_created": false,
+      "PRE_mapping_count_per_event": 0,
+      "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+      "PRE_reconstruction": false,
+      "PRE_source_graph_count_per_event": 1,
+      "PRE_source_graph_present": true,
+      "PRE_status": "PRE_REACTION_UNRESOLVED",
+      "PRE_topology_authority": false,
+      "PRE_zero_fill": false,
+      "READY_FOR_TRAINING": false,
+      "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+      "W_L_S_counts": null,
+      "all_LCY_C1_authority": false,
+      "authoritative_task_labels_created": false,
+      "authority_source": "FORMAL_LCY_HUMAN_DECISION",
+      "backward": false,
+      "batch_modified": false,
+      "bond_edit_inferred": false,
+      "boundary_bonds": null,
+      "candidate_for_future_training_admission": false,
+      "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:4R0O:A:CYS:45-:SG:F:LCY:C1",
+      "chemistry": "POSITIVE",
+      "chemistry_human_authoritative": true,
+      "chemistry_human_authority": true,
+      "chemistry_known_positive": true,
+      "chemistry_negative": false,
+      "completed": true,
+      "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+      "cross_structure_regiochemistry_generalization": false,
+      "current_runtime_model_usable": false,
+      "cys_residue_id": "CYS:45-",
+      "dataset_mutated": false,
+      "direct_profile_applicable_task_ids": null,
+      "distance_only_inference": false,
+      "event_task_label_rows_materialized": false,
+      "event_training_use_human_decision_available": true,
+      "explicit_covalent_evidence": true,
+      "formal_event_training_use_decision": "NOT_APPLICABLE",
+      "formal_training_admitted": false,
+      "formal_valid_singleton_diagnostic_count": 3,
+      "formal_valid_singleton_diagnostic_indices": [
+        0,
+        1,
+        2
+      ],
+      "formal_valid_singleton_diagnostics": [
+        {
+          "S_atom_ids": [
+            "O2"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C3",
+            "atom_id_2": "O2"
+          },
+          "diagnostic_index": 0,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "O1"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C4",
+            "atom_id_2": "O1"
+          },
+          "diagnostic_index": 1,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "C5"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C5",
+            "atom_id_2": "N1"
+          },
+          "diagnostic_index": 2,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        }
+      ],
+      "formal_valid_singleton_diagnostics_are_selectable": false,
+      "future_training_admission_candidate": false,
+      "future_training_admission_status": null,
+      "global_canonical_task_count": 5,
+      "global_canonical_tasks": [
+        {
+          "display_alias": "A",
+          "fixed_or_seed_roles": [
+            "scaffold",
+            "linker"
+          ],
+          "generated_roles": [
+            "warhead"
+          ],
+          "semantic_long_name": "warhead_only",
+          "task_id": 0
+        },
+        {
+          "display_alias": "B",
+          "fixed_or_seed_roles": [
+            "scaffold"
+          ],
+          "generated_roles": [
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "linker_plus_warhead",
+          "task_id": 1
+        },
+        {
+          "display_alias": "B2",
+          "fixed_or_seed_roles": [
+            "linker"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_warhead",
+          "task_id": 2
+        },
+        {
+          "display_alias": "B3",
+          "fixed_or_seed_roles": [
+            "linker",
+            "warhead"
+          ],
+          "generated_roles": [
+            "scaffold"
+          ],
+          "semantic_long_name": "scaffold_only",
+          "task_id": 3
+        },
+        {
+          "display_alias": "C",
+          "fixed_or_seed_roles": [
+            "minimal_seed"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "task_id": 4
+        }
+      ],
+      "human_chemistry_decision": "POSITIVE",
+      "human_review_completed": true,
+      "human_task_relevance_decision": "NOT_RELEVANT",
+      "human_training_excluded": false,
+      "leaving_group_inferred": false,
+      "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+      "ligand_chain_or_asym": "F",
+      "ligand_component_id": "LCY",
+      "ligand_reactive_atom": "C1",
+      "linker_atoms": null,
+      "loader_modified": false,
+      "loss": false,
+      "metadata_only": true,
+      "model_forward": false,
+      "model_number": 1,
+      "model_supervision_usable": false,
+      "negative_chemistry": false,
+      "new_human_authority_created_by_ingestion": false,
+      "observed_distances_angstrom": [
+        1.699831,
+        1.696052,
+        1.69649,
+        1.700175
+      ],
+      "optimizer": false,
+      "pair_authority_scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+      "parameter_update": false,
+      "parameter_update_authorization": false,
+      "pdb_id": "4R0O",
+      "positive_generative_supervision_eligible": false,
+      "projection_of_frozen_formal_human_authority": true,
+      "protein_chain_or_asym": "A",
+      "protein_reactive_atom": "SG",
+      "reaction_family_authority": false,
+      "reaction_family_training_class_target_available": false,
+      "reactive_pair_human_authoritative": true,
+      "reactive_pair_human_decision_available": true,
+      "reactive_pair_sample_authority": true,
+      "reagent_inferred": false,
+      "reported_POST_distance_angstrom": 1.7,
+      "reported_POST_distance_frozen_lexeme": "1.700",
+      "reusable_authority_label_available": false,
+      "reusable_chemistry_authority": false,
+      "reusable_pair_rule_created": false,
+      "reusable_role_authority": false,
+      "review_policy_candidate_count": 0,
+      "review_policy_selectable_candidate_indices": [],
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6",
+      "role_decision_field_present": true,
+      "role_partition_human_authoritative": false,
+      "role_partition_human_decision_available": false,
+      "role_profile": "NOT_ESTABLISHED",
+      "sample_authoritative_applicable_task_ids": null,
+      "sample_canonical_mask_structural_labels_available": false,
+      "scaffold_atoms": null,
+      "scaleup_rank": 898,
+      "selected_candidate_index_0based": null,
+      "selected_connection_id": "covale1",
+      "sixth_task": false,
+      "supporting_PRE_source_graph_count_per_event": 1,
+      "task_applicability": [
+        {
+          "display_alias": "A",
+          "role_profile": null,
+          "semantic_long_name": "warhead_only",
+          "structurally_applicable": null,
+          "task_id": 0,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B",
+          "role_profile": null,
+          "semantic_long_name": "linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 1,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B2",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 2,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B3",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_only",
+          "structurally_applicable": null,
+          "task_id": 3,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "C",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 4,
+          "training_mask_target_available_now": false
+        }
+      ],
+      "task_applicability_determined": false,
+      "task_domain_negative": true,
+      "task_relevance": "NOT_RELEVANT",
+      "task_relevance_human_authoritative": true,
+      "task_relevance_human_authority": true,
+      "tensor_target_created": false,
+      "tensorization": false,
+      "training": false,
+      "training_admitted": false,
+      "training_dataset_changed": false,
+      "training_exclusion_reason": null,
+      "training_mask_targets_available_now": false,
+      "training_materialization_allowed": false,
+      "training_materialization_allowed_now": false,
+      "training_use_allowed": false,
+      "training_use_include": false,
+      "usable_role_partition_label_available": false,
+      "warhead_atoms": null,
+      "warhead_rule_authority": false,
+      "warhead_rule_training_class_target_available": false,
+      "warhead_type_authority": false,
+      "warhead_type_target_available": false
+    },
+    {
+      "3A2G_pair_promoted": false,
+      "B3_present": true,
+      "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+      "D3": "CONFIRM_OBSERVED_PAIR",
+      "D4": "UNRESOLVED",
+      "D5": "NOT_APPLICABLE",
+      "POST_distance_angstrom": 1.696052,
+      "POST_distance_frozen_lexeme": "1.696052",
+      "POST_geometry_training_authority": false,
+      "POST_geometry_training_label_available_now": false,
+      "POST_geometry_training_target_created": false,
+      "POST_source_evidence_available": true,
+      "POST_source_evidence_count": 4,
+      "POST_to_PRE_copy": false,
+      "PRE_coordinates_authority": false,
+      "PRE_geometry_authority": false,
+      "PRE_label_or_target_created": false,
+      "PRE_mapping_count_per_event": 0,
+      "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+      "PRE_reconstruction": false,
+      "PRE_source_graph_count_per_event": 1,
+      "PRE_source_graph_present": true,
+      "PRE_status": "PRE_REACTION_UNRESOLVED",
+      "PRE_topology_authority": false,
+      "PRE_zero_fill": false,
+      "READY_FOR_TRAINING": false,
+      "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+      "W_L_S_counts": null,
+      "all_LCY_C1_authority": false,
+      "authoritative_task_labels_created": false,
+      "authority_source": "FORMAL_LCY_HUMAN_DECISION",
+      "backward": false,
+      "batch_modified": false,
+      "bond_edit_inferred": false,
+      "boundary_bonds": null,
+      "candidate_for_future_training_admission": false,
+      "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:4R0O:B:CYS:45-:SG:H:LCY:C1",
+      "chemistry": "POSITIVE",
+      "chemistry_human_authoritative": true,
+      "chemistry_human_authority": true,
+      "chemistry_known_positive": true,
+      "chemistry_negative": false,
+      "completed": true,
+      "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+      "cross_structure_regiochemistry_generalization": false,
+      "current_runtime_model_usable": false,
+      "cys_residue_id": "CYS:45-",
+      "dataset_mutated": false,
+      "direct_profile_applicable_task_ids": null,
+      "distance_only_inference": false,
+      "event_task_label_rows_materialized": false,
+      "event_training_use_human_decision_available": true,
+      "explicit_covalent_evidence": true,
+      "formal_event_training_use_decision": "NOT_APPLICABLE",
+      "formal_training_admitted": false,
+      "formal_valid_singleton_diagnostic_count": 3,
+      "formal_valid_singleton_diagnostic_indices": [
+        0,
+        1,
+        2
+      ],
+      "formal_valid_singleton_diagnostics": [
+        {
+          "S_atom_ids": [
+            "O2"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C3",
+            "atom_id_2": "O2"
+          },
+          "diagnostic_index": 0,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "O1"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C4",
+            "atom_id_2": "O1"
+          },
+          "diagnostic_index": 1,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "C5"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C5",
+            "atom_id_2": "N1"
+          },
+          "diagnostic_index": 2,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        }
+      ],
+      "formal_valid_singleton_diagnostics_are_selectable": false,
+      "future_training_admission_candidate": false,
+      "future_training_admission_status": null,
+      "global_canonical_task_count": 5,
+      "global_canonical_tasks": [
+        {
+          "display_alias": "A",
+          "fixed_or_seed_roles": [
+            "scaffold",
+            "linker"
+          ],
+          "generated_roles": [
+            "warhead"
+          ],
+          "semantic_long_name": "warhead_only",
+          "task_id": 0
+        },
+        {
+          "display_alias": "B",
+          "fixed_or_seed_roles": [
+            "scaffold"
+          ],
+          "generated_roles": [
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "linker_plus_warhead",
+          "task_id": 1
+        },
+        {
+          "display_alias": "B2",
+          "fixed_or_seed_roles": [
+            "linker"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_warhead",
+          "task_id": 2
+        },
+        {
+          "display_alias": "B3",
+          "fixed_or_seed_roles": [
+            "linker",
+            "warhead"
+          ],
+          "generated_roles": [
+            "scaffold"
+          ],
+          "semantic_long_name": "scaffold_only",
+          "task_id": 3
+        },
+        {
+          "display_alias": "C",
+          "fixed_or_seed_roles": [
+            "minimal_seed"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "task_id": 4
+        }
+      ],
+      "human_chemistry_decision": "POSITIVE",
+      "human_review_completed": true,
+      "human_task_relevance_decision": "NOT_RELEVANT",
+      "human_training_excluded": false,
+      "leaving_group_inferred": false,
+      "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+      "ligand_chain_or_asym": "H",
+      "ligand_component_id": "LCY",
+      "ligand_reactive_atom": "C1",
+      "linker_atoms": null,
+      "loader_modified": false,
+      "loss": false,
+      "metadata_only": true,
+      "model_forward": false,
+      "model_number": 1,
+      "model_supervision_usable": false,
+      "negative_chemistry": false,
+      "new_human_authority_created_by_ingestion": false,
+      "observed_distances_angstrom": [
+        1.699831,
+        1.696052,
+        1.69649,
+        1.700175
+      ],
+      "optimizer": false,
+      "pair_authority_scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+      "parameter_update": false,
+      "parameter_update_authorization": false,
+      "pdb_id": "4R0O",
+      "positive_generative_supervision_eligible": false,
+      "projection_of_frozen_formal_human_authority": true,
+      "protein_chain_or_asym": "B",
+      "protein_reactive_atom": "SG",
+      "reaction_family_authority": false,
+      "reaction_family_training_class_target_available": false,
+      "reactive_pair_human_authoritative": true,
+      "reactive_pair_human_decision_available": true,
+      "reactive_pair_sample_authority": true,
+      "reagent_inferred": false,
+      "reported_POST_distance_angstrom": 1.696,
+      "reported_POST_distance_frozen_lexeme": "1.696",
+      "reusable_authority_label_available": false,
+      "reusable_chemistry_authority": false,
+      "reusable_pair_rule_created": false,
+      "reusable_role_authority": false,
+      "review_policy_candidate_count": 0,
+      "review_policy_selectable_candidate_indices": [],
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6",
+      "role_decision_field_present": true,
+      "role_partition_human_authoritative": false,
+      "role_partition_human_decision_available": false,
+      "role_profile": "NOT_ESTABLISHED",
+      "sample_authoritative_applicable_task_ids": null,
+      "sample_canonical_mask_structural_labels_available": false,
+      "scaffold_atoms": null,
+      "scaleup_rank": 899,
+      "selected_candidate_index_0based": null,
+      "selected_connection_id": "covale2",
+      "sixth_task": false,
+      "supporting_PRE_source_graph_count_per_event": 1,
+      "task_applicability": [
+        {
+          "display_alias": "A",
+          "role_profile": null,
+          "semantic_long_name": "warhead_only",
+          "structurally_applicable": null,
+          "task_id": 0,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B",
+          "role_profile": null,
+          "semantic_long_name": "linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 1,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B2",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 2,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B3",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_only",
+          "structurally_applicable": null,
+          "task_id": 3,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "C",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 4,
+          "training_mask_target_available_now": false
+        }
+      ],
+      "task_applicability_determined": false,
+      "task_domain_negative": true,
+      "task_relevance": "NOT_RELEVANT",
+      "task_relevance_human_authoritative": true,
+      "task_relevance_human_authority": true,
+      "tensor_target_created": false,
+      "tensorization": false,
+      "training": false,
+      "training_admitted": false,
+      "training_dataset_changed": false,
+      "training_exclusion_reason": null,
+      "training_mask_targets_available_now": false,
+      "training_materialization_allowed": false,
+      "training_materialization_allowed_now": false,
+      "training_use_allowed": false,
+      "training_use_include": false,
+      "usable_role_partition_label_available": false,
+      "warhead_atoms": null,
+      "warhead_rule_authority": false,
+      "warhead_rule_training_class_target_available": false,
+      "warhead_type_authority": false,
+      "warhead_type_target_available": false
+    },
+    {
+      "3A2G_pair_promoted": false,
+      "B3_present": true,
+      "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+      "D3": "CONFIRM_OBSERVED_PAIR",
+      "D4": "UNRESOLVED",
+      "D5": "NOT_APPLICABLE",
+      "POST_distance_angstrom": 1.69649,
+      "POST_distance_frozen_lexeme": "1.696490",
+      "POST_geometry_training_authority": false,
+      "POST_geometry_training_label_available_now": false,
+      "POST_geometry_training_target_created": false,
+      "POST_source_evidence_available": true,
+      "POST_source_evidence_count": 4,
+      "POST_to_PRE_copy": false,
+      "PRE_coordinates_authority": false,
+      "PRE_geometry_authority": false,
+      "PRE_label_or_target_created": false,
+      "PRE_mapping_count_per_event": 0,
+      "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+      "PRE_reconstruction": false,
+      "PRE_source_graph_count_per_event": 1,
+      "PRE_source_graph_present": true,
+      "PRE_status": "PRE_REACTION_UNRESOLVED",
+      "PRE_topology_authority": false,
+      "PRE_zero_fill": false,
+      "READY_FOR_TRAINING": false,
+      "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+      "W_L_S_counts": null,
+      "all_LCY_C1_authority": false,
+      "authoritative_task_labels_created": false,
+      "authority_source": "FORMAL_LCY_HUMAN_DECISION",
+      "backward": false,
+      "batch_modified": false,
+      "bond_edit_inferred": false,
+      "boundary_bonds": null,
+      "candidate_for_future_training_admission": false,
+      "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:4R0O:C:CYS:45-:SG:J:LCY:C1",
+      "chemistry": "POSITIVE",
+      "chemistry_human_authoritative": true,
+      "chemistry_human_authority": true,
+      "chemistry_known_positive": true,
+      "chemistry_negative": false,
+      "completed": true,
+      "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+      "cross_structure_regiochemistry_generalization": false,
+      "current_runtime_model_usable": false,
+      "cys_residue_id": "CYS:45-",
+      "dataset_mutated": false,
+      "direct_profile_applicable_task_ids": null,
+      "distance_only_inference": false,
+      "event_task_label_rows_materialized": false,
+      "event_training_use_human_decision_available": true,
+      "explicit_covalent_evidence": true,
+      "formal_event_training_use_decision": "NOT_APPLICABLE",
+      "formal_training_admitted": false,
+      "formal_valid_singleton_diagnostic_count": 3,
+      "formal_valid_singleton_diagnostic_indices": [
+        0,
+        1,
+        2
+      ],
+      "formal_valid_singleton_diagnostics": [
+        {
+          "S_atom_ids": [
+            "O2"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C3",
+            "atom_id_2": "O2"
+          },
+          "diagnostic_index": 0,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "O1"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C4",
+            "atom_id_2": "O1"
+          },
+          "diagnostic_index": 1,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "C5"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C5",
+            "atom_id_2": "N1"
+          },
+          "diagnostic_index": 2,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        }
+      ],
+      "formal_valid_singleton_diagnostics_are_selectable": false,
+      "future_training_admission_candidate": false,
+      "future_training_admission_status": null,
+      "global_canonical_task_count": 5,
+      "global_canonical_tasks": [
+        {
+          "display_alias": "A",
+          "fixed_or_seed_roles": [
+            "scaffold",
+            "linker"
+          ],
+          "generated_roles": [
+            "warhead"
+          ],
+          "semantic_long_name": "warhead_only",
+          "task_id": 0
+        },
+        {
+          "display_alias": "B",
+          "fixed_or_seed_roles": [
+            "scaffold"
+          ],
+          "generated_roles": [
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "linker_plus_warhead",
+          "task_id": 1
+        },
+        {
+          "display_alias": "B2",
+          "fixed_or_seed_roles": [
+            "linker"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_warhead",
+          "task_id": 2
+        },
+        {
+          "display_alias": "B3",
+          "fixed_or_seed_roles": [
+            "linker",
+            "warhead"
+          ],
+          "generated_roles": [
+            "scaffold"
+          ],
+          "semantic_long_name": "scaffold_only",
+          "task_id": 3
+        },
+        {
+          "display_alias": "C",
+          "fixed_or_seed_roles": [
+            "minimal_seed"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "task_id": 4
+        }
+      ],
+      "human_chemistry_decision": "POSITIVE",
+      "human_review_completed": true,
+      "human_task_relevance_decision": "NOT_RELEVANT",
+      "human_training_excluded": false,
+      "leaving_group_inferred": false,
+      "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+      "ligand_chain_or_asym": "J",
+      "ligand_component_id": "LCY",
+      "ligand_reactive_atom": "C1",
+      "linker_atoms": null,
+      "loader_modified": false,
+      "loss": false,
+      "metadata_only": true,
+      "model_forward": false,
+      "model_number": 1,
+      "model_supervision_usable": false,
+      "negative_chemistry": false,
+      "new_human_authority_created_by_ingestion": false,
+      "observed_distances_angstrom": [
+        1.699831,
+        1.696052,
+        1.69649,
+        1.700175
+      ],
+      "optimizer": false,
+      "pair_authority_scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+      "parameter_update": false,
+      "parameter_update_authorization": false,
+      "pdb_id": "4R0O",
+      "positive_generative_supervision_eligible": false,
+      "projection_of_frozen_formal_human_authority": true,
+      "protein_chain_or_asym": "C",
+      "protein_reactive_atom": "SG",
+      "reaction_family_authority": false,
+      "reaction_family_training_class_target_available": false,
+      "reactive_pair_human_authoritative": true,
+      "reactive_pair_human_decision_available": true,
+      "reactive_pair_sample_authority": true,
+      "reagent_inferred": false,
+      "reported_POST_distance_angstrom": 1.696,
+      "reported_POST_distance_frozen_lexeme": "1.696",
+      "reusable_authority_label_available": false,
+      "reusable_chemistry_authority": false,
+      "reusable_pair_rule_created": false,
+      "reusable_role_authority": false,
+      "review_policy_candidate_count": 0,
+      "review_policy_selectable_candidate_indices": [],
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6",
+      "role_decision_field_present": true,
+      "role_partition_human_authoritative": false,
+      "role_partition_human_decision_available": false,
+      "role_profile": "NOT_ESTABLISHED",
+      "sample_authoritative_applicable_task_ids": null,
+      "sample_canonical_mask_structural_labels_available": false,
+      "scaffold_atoms": null,
+      "scaleup_rank": 900,
+      "selected_candidate_index_0based": null,
+      "selected_connection_id": "covale3",
+      "sixth_task": false,
+      "supporting_PRE_source_graph_count_per_event": 1,
+      "task_applicability": [
+        {
+          "display_alias": "A",
+          "role_profile": null,
+          "semantic_long_name": "warhead_only",
+          "structurally_applicable": null,
+          "task_id": 0,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B",
+          "role_profile": null,
+          "semantic_long_name": "linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 1,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B2",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 2,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B3",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_only",
+          "structurally_applicable": null,
+          "task_id": 3,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "C",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 4,
+          "training_mask_target_available_now": false
+        }
+      ],
+      "task_applicability_determined": false,
+      "task_domain_negative": true,
+      "task_relevance": "NOT_RELEVANT",
+      "task_relevance_human_authoritative": true,
+      "task_relevance_human_authority": true,
+      "tensor_target_created": false,
+      "tensorization": false,
+      "training": false,
+      "training_admitted": false,
+      "training_dataset_changed": false,
+      "training_exclusion_reason": null,
+      "training_mask_targets_available_now": false,
+      "training_materialization_allowed": false,
+      "training_materialization_allowed_now": false,
+      "training_use_allowed": false,
+      "training_use_include": false,
+      "usable_role_partition_label_available": false,
+      "warhead_atoms": null,
+      "warhead_rule_authority": false,
+      "warhead_rule_training_class_target_available": false,
+      "warhead_type_authority": false,
+      "warhead_type_target_available": false
+    },
+    {
+      "3A2G_pair_promoted": false,
+      "B3_present": true,
+      "CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+      "D3": "CONFIRM_OBSERVED_PAIR",
+      "D4": "UNRESOLVED",
+      "D5": "NOT_APPLICABLE",
+      "POST_distance_angstrom": 1.700175,
+      "POST_distance_frozen_lexeme": "1.700175",
+      "POST_geometry_training_authority": false,
+      "POST_geometry_training_label_available_now": false,
+      "POST_geometry_training_target_created": false,
+      "POST_source_evidence_available": true,
+      "POST_source_evidence_count": 4,
+      "POST_to_PRE_copy": false,
+      "PRE_coordinates_authority": false,
+      "PRE_geometry_authority": false,
+      "PRE_label_or_target_created": false,
+      "PRE_mapping_count_per_event": 0,
+      "PRE_mapping_status": "PRE_SOURCE_GRAPH_MAPPING_INCOMPATIBLE",
+      "PRE_reconstruction": false,
+      "PRE_source_graph_count_per_event": 1,
+      "PRE_source_graph_present": true,
+      "PRE_status": "PRE_REACTION_UNRESOLVED",
+      "PRE_topology_authority": false,
+      "PRE_zero_fill": false,
+      "READY_FOR_TRAINING": false,
+      "TASK_DOMAIN_NEGATIVE_DOES_NOT_COLLAPSE_POSITIVE_CHEMISTRY": true,
+      "W_L_S_counts": null,
+      "all_LCY_C1_authority": false,
+      "authoritative_task_labels_created": false,
+      "authority_source": "FORMAL_LCY_HUMAN_DECISION",
+      "backward": false,
+      "batch_modified": false,
+      "bond_edit_inferred": false,
+      "boundary_bonds": null,
+      "candidate_for_future_training_admission": false,
+      "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:4R0O:D:CYS:45-:SG:L:LCY:C1",
+      "chemistry": "POSITIVE",
+      "chemistry_human_authoritative": true,
+      "chemistry_human_authority": true,
+      "chemistry_known_positive": true,
+      "chemistry_negative": false,
+      "completed": true,
+      "completed_lane": "COMPLETED_TASK_DOMAIN_NEGATIVE",
+      "cross_structure_regiochemistry_generalization": false,
+      "current_runtime_model_usable": false,
+      "cys_residue_id": "CYS:45-",
+      "dataset_mutated": false,
+      "direct_profile_applicable_task_ids": null,
+      "distance_only_inference": false,
+      "event_task_label_rows_materialized": false,
+      "event_training_use_human_decision_available": true,
+      "explicit_covalent_evidence": true,
+      "formal_event_training_use_decision": "NOT_APPLICABLE",
+      "formal_training_admitted": false,
+      "formal_valid_singleton_diagnostic_count": 3,
+      "formal_valid_singleton_diagnostic_indices": [
+        0,
+        1,
+        2
+      ],
+      "formal_valid_singleton_diagnostics": [
+        {
+          "S_atom_ids": [
+            "O2"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C3",
+            "atom_id_2": "O2"
+          },
+          "diagnostic_index": 0,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "O1"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C4",
+            "atom_id_2": "O1"
+          },
+          "diagnostic_index": 1,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        },
+        {
+          "S_atom_ids": [
+            "C5"
+          ],
+          "S_count": 1,
+          "cut_bond": {
+            "atom_id_1": "C5",
+            "atom_id_2": "N1"
+          },
+          "diagnostic_index": 2,
+          "minimal_seed_2_or_3_possible": false,
+          "published_runtime_valid": true,
+          "review_policy_eligible": false,
+          "selected": false
+        }
+      ],
+      "formal_valid_singleton_diagnostics_are_selectable": false,
+      "future_training_admission_candidate": false,
+      "future_training_admission_status": null,
+      "global_canonical_task_count": 5,
+      "global_canonical_tasks": [
+        {
+          "display_alias": "A",
+          "fixed_or_seed_roles": [
+            "scaffold",
+            "linker"
+          ],
+          "generated_roles": [
+            "warhead"
+          ],
+          "semantic_long_name": "warhead_only",
+          "task_id": 0
+        },
+        {
+          "display_alias": "B",
+          "fixed_or_seed_roles": [
+            "scaffold"
+          ],
+          "generated_roles": [
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "linker_plus_warhead",
+          "task_id": 1
+        },
+        {
+          "display_alias": "B2",
+          "fixed_or_seed_roles": [
+            "linker"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_warhead",
+          "task_id": 2
+        },
+        {
+          "display_alias": "B3",
+          "fixed_or_seed_roles": [
+            "linker",
+            "warhead"
+          ],
+          "generated_roles": [
+            "scaffold"
+          ],
+          "semantic_long_name": "scaffold_only",
+          "task_id": 3
+        },
+        {
+          "display_alias": "C",
+          "fixed_or_seed_roles": [
+            "minimal_seed"
+          ],
+          "generated_roles": [
+            "scaffold",
+            "linker",
+            "warhead"
+          ],
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "task_id": 4
+        }
+      ],
+      "human_chemistry_decision": "POSITIVE",
+      "human_review_completed": true,
+      "human_task_relevance_decision": "NOT_RELEVANT",
+      "human_training_excluded": false,
+      "leaving_group_inferred": false,
+      "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+      "ligand_chain_or_asym": "L",
+      "ligand_component_id": "LCY",
+      "ligand_reactive_atom": "C1",
+      "linker_atoms": null,
+      "loader_modified": false,
+      "loss": false,
+      "metadata_only": true,
+      "model_forward": false,
+      "model_number": 1,
+      "model_supervision_usable": false,
+      "negative_chemistry": false,
+      "new_human_authority_created_by_ingestion": false,
+      "observed_distances_angstrom": [
+        1.699831,
+        1.696052,
+        1.69649,
+        1.700175
+      ],
+      "optimizer": false,
+      "pair_authority_scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+      "parameter_update": false,
+      "parameter_update_authorization": false,
+      "pdb_id": "4R0O",
+      "positive_generative_supervision_eligible": false,
+      "projection_of_frozen_formal_human_authority": true,
+      "protein_chain_or_asym": "D",
+      "protein_reactive_atom": "SG",
+      "reaction_family_authority": false,
+      "reaction_family_training_class_target_available": false,
+      "reactive_pair_human_authoritative": true,
+      "reactive_pair_human_decision_available": true,
+      "reactive_pair_sample_authority": true,
+      "reagent_inferred": false,
+      "reported_POST_distance_angstrom": 1.7,
+      "reported_POST_distance_frozen_lexeme": "1.700",
+      "reusable_authority_label_available": false,
+      "reusable_chemistry_authority": false,
+      "reusable_pair_rule_created": false,
+      "reusable_role_authority": false,
+      "review_policy_candidate_count": 0,
+      "review_policy_selectable_candidate_indices": [],
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6",
+      "role_decision_field_present": true,
+      "role_partition_human_authoritative": false,
+      "role_partition_human_decision_available": false,
+      "role_profile": "NOT_ESTABLISHED",
+      "sample_authoritative_applicable_task_ids": null,
+      "sample_canonical_mask_structural_labels_available": false,
+      "scaffold_atoms": null,
+      "scaleup_rank": 901,
+      "selected_candidate_index_0based": null,
+      "selected_connection_id": "covale4",
+      "sixth_task": false,
+      "supporting_PRE_source_graph_count_per_event": 1,
+      "task_applicability": [
+        {
+          "display_alias": "A",
+          "role_profile": null,
+          "semantic_long_name": "warhead_only",
+          "structurally_applicable": null,
+          "task_id": 0,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B",
+          "role_profile": null,
+          "semantic_long_name": "linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 1,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B2",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 2,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "B3",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_only",
+          "structurally_applicable": null,
+          "task_id": 3,
+          "training_mask_target_available_now": false
+        },
+        {
+          "display_alias": "C",
+          "role_profile": null,
+          "semantic_long_name": "scaffold_plus_linker_plus_warhead",
+          "structurally_applicable": null,
+          "task_id": 4,
+          "training_mask_target_available_now": false
+        }
+      ],
+      "task_applicability_determined": false,
+      "task_domain_negative": true,
+      "task_relevance": "NOT_RELEVANT",
+      "task_relevance_human_authoritative": true,
+      "task_relevance_human_authority": true,
+      "tensor_target_created": false,
+      "tensorization": false,
+      "training": false,
+      "training_admitted": false,
+      "training_dataset_changed": false,
+      "training_exclusion_reason": null,
+      "training_mask_targets_available_now": false,
+      "training_materialization_allowed": false,
+      "training_materialization_allowed_now": false,
+      "training_use_allowed": false,
+      "training_use_include": false,
+      "usable_role_partition_label_available": false,
+      "warhead_atoms": null,
+      "warhead_rule_authority": false,
+      "warhead_rule_training_class_target_available": false,
+      "warhead_type_authority": false,
+      "warhead_type_target_available": false
+    }
+  ],
+  "formal_decision_binding": {
+    "SHA256": "d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+    "byte_count": 32277,
+    "expected_executable_class": "NON_EXECUTABLE",
+    "expected_path_class": "REGULAR_NON_SYMLINK",
+    "namespace": "project_parent_relative",
+    "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json",
+    "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/lcy_formal_human_decision_v1.json@d7c7b427b87b13fa61188bd6b14a3e9dd3a37e4a170176222685065d419a3387",
+    "source_role": "LCY_FROZEN_FORMAL_HUMAN_DECISION",
+    "validation_method": "PARSED_JSON_AND_INDEPENDENTLY_VALIDATED"
+  },
+  "formal_projection": {
+    "D1": "NOT_RELEVANT",
+    "D2": "POSITIVE",
+    "D3": "CONFIRM_OBSERVED_PAIR",
+    "D4": "UNRESOLVED",
+    "D5": "NOT_APPLICABLE",
+    "D6_scientific_context": "Treat the current LCY 4R0O Exact4 as task-domain negative for the current CovaPIE target-directed medicinal covalent small-molecule training domain while preserving chemistry-positive sample-level evidence: 4R0O is a PEGylated plastocyanin structure produced in a cysteine/maleimide polymer-bioconjugation context, and the deposited LCY component is a local saturated succinimide-like post-adduct fragment rather than the full PEG conjugate or a standalone medicinal ligand. Confirm the source-observed Cys-SG ↔ LCY-C1 covalent endpoints for all four Exact4 events. D4 remains UNRESOLVED and no role-partition or Exact5 sample applicability authority is created: the isolated LCY graph lacks the full PEG/polymer context, the frozen review policy has zero selectable candidates, and although three singleton-scaffold DIRECT partitions are formally valid under the published role runtime, all have S=1 and cannot support the published 2/3-node minimal-seed cardinality. Do not force NO_MACHINE_VALID_ROLE_CANDIDATE or REVISE_ROLE_PARTITION merely from the policy-scoped zero-candidate result. The separate 3A2G LCY event is supporting same-component context only and transfers no authority. Set training use to NOT_APPLICABLE, not EXCLUDE_FROM_TRAINING_ONLY; human_training_excluded remains false. PRE remains PRE_REACTION_UNRESOLVED because the available candidate PRE/free graph has no compatible mapping; do not reconstruct PRE from maleimide chemistry, copy POST to PRE, or infer leaving groups, reagents, reaction-family labels, or bond edits. This decision creates no reusable chemistry/pair/role authority, reaction-family or warhead-rule/type authority, formal training admission, tensor target, runtime usability, or parameter-update authority.",
+    "D6_utf8_byte_count": 1754,
+    "D6_utf8_sha256": "db6fdb1ca13c1bbbfce111e251c0ceba011a770317edd92ff12c8042a2ee884b"
+  },
+  "formal_semantic_digest": "3383814e97c6a29318d3a38890e32cbdaf170a461dbacfbc2f7b9a9c2fd6492e",
+  "formal_semantics_independently_validated": true,
+  "formal_training_admitted": false,
+  "formal_validator_binding": {
+    "SHA256": "b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+    "byte_count": 84087,
+    "expected_executable_class": "NON_EXECUTABLE",
+    "expected_path_class": "REGULAR_NON_SYMLINK",
+    "namespace": "project_parent_relative",
+    "path": "covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py",
+    "semantic_source_identity": "project_parent_relative:covapie-state/manual-review-aids/cumulative1000-high-yield-calibration-v1/LCY_COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6/formal-human-decision-v1/validate_lcy_formal_human_decision_v1.py@b8e33358c80ebb1356a9af8ab2cd9db86033adfdb31fc05f32061b57eab68c85",
+    "source_role": "LCY_FROZEN_FORMAL_VALIDATOR_PROVENANCE_IDENTITY_ONLY",
+    "validation_method": "PROVENANCE_IDENTITY_ONLY_NOT_PARSED_IMPORTED_EXECUTED_OR_SUBPROCESSED"
+  },
+  "formal_validator_lifecycle": {
+    "formal_validator_executed": false,
+    "formal_validator_imported": false,
+    "formal_validator_parsed": false,
+    "formal_validator_provenance_identity_only": true,
+    "formal_validator_runtime_dependency": false,
+    "formal_validator_subprocessed": false
+  },
+  "future_reconciliation_arithmetic": {
+    "LCY_adds_generic_completed_negative_facts": 4,
+    "LCY_chemistry_disposition": "POSITIVE",
+    "current": {
+      "completed_negative_events": 32,
+      "completed_negative_units": 6,
+      "completed_positive_events": 115,
+      "completed_positive_units": 18,
+      "completed_total_events": 147,
+      "completed_total_units": 24,
+      "fact_count": 123,
+      "in_progress_events": 0,
+      "in_progress_units": 0,
+      "source_count": 20,
+      "unreviewed_events": 191,
+      "unreviewed_units": 107
+    },
+    "expected_future_with_LCY": {
+      "completed_negative_events": 36,
+      "completed_negative_units": 7,
+      "completed_positive_events": 115,
+      "completed_positive_units": 18,
+      "completed_total_events": 151,
+      "completed_total_units": 25,
+      "fact_count": 127,
+      "in_progress_events": 0,
+      "in_progress_units": 0,
+      "source_count": 21,
+      "unreviewed_events": 187,
+      "unreviewed_units": 106
+    },
+    "future_arithmetic_only": true,
+    "reconciliation_output_files": 0,
+    "reconciliation_performed": false
+  },
+  "future_training_admission_candidate": false,
+  "generic_Exact11_projection_preview": {
+    "GENERIC_SOURCE_NAMESPACE_REPOSITORY_PARENT_RELATIVE": true,
+    "chemistry_disposition": "POSITIVE",
+    "generic_exact11_accepts_LCY_combination": true,
+    "generic_fact_materialized": false,
+    "human_review_completed": true,
+    "human_training_excluded": false,
+    "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+    "reconciliation_performed": false,
+    "source_binding_path_namespace": "repository_parent_relative",
+    "synthetic_fact_count_validated": 4,
+    "task_relevance_disposition": "NOT_RELEVANT",
+    "training_disposition": "NOT_APPLICABLE"
+  },
+  "human_training_excluded": false,
+  "identity": {
+    "canonical_event_ids": [
+      "COVAPIE_CYS_SG_EVENT_V1:4R0O:A:CYS:45-:SG:F:LCY:C1",
+      "COVAPIE_CYS_SG_EVENT_V1:4R0O:B:CYS:45-:SG:H:LCY:C1",
+      "COVAPIE_CYS_SG_EVENT_V1:4R0O:C:CYS:45-:SG:J:LCY:C1",
+      "COVAPIE_CYS_SG_EVENT_V1:4R0O:D:CYS:45-:SG:L:LCY:C1"
+    ],
+    "event_count": 4,
+    "ligand_component_id": "LCY",
+    "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_BA488AF51EDD8ED6",
+    "scaleup_ranks": [
+      898,
+      899,
+      900,
+      901
+    ]
+  },
+  "legacy_completed_review_status": "COMPLETED_HUMAN_NEGATIVE",
+  "operation_boundary": {
+    "CENSUS_REFRESH": false,
+    "COMMIT": false,
+    "INGESTION_COMPLETE": true,
+    "MASK_LABEL_AUTHORITY_CREATED": false,
+    "PUSH": false,
+    "QUEUE_REFRESH": false,
+    "RECONCILIATION": false,
+    "ROLE_SELECTION": false,
+    "TRAINING_STARTED": false,
+    "backward": false,
+    "batch_modified": false,
+    "dataset_mutated": false,
+    "loader_modified": false,
+    "loss": false,
+    "metadata_only": true,
+    "model_forward": false,
+    "new_human_authority_created_by_ingestion": false,
+    "optimizer": false,
+    "parameter_update": false,
+    "tensorization": false,
+    "training": false,
+    "training_dataset_changed": false
+  },
+  "reactive_pair_authority": {
+    "3A2G_pair_promoted": false,
+    "D3": "CONFIRM_OBSERVED_PAIR",
+    "all_LCY_C1_authority": false,
+    "cross_structure_regiochemistry_generalization": false,
+    "ligand_reactive_atom": "C1",
+    "observed_distances_angstrom": [
+      1.699831,
+      1.696052,
+      1.69649,
+      1.700175
+    ],
+    "pair_authority_scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+    "protein_reactive_atom": "SG",
+    "reactive_pair_human_authoritative": true,
+    "reactive_pair_human_decision_available": true,
+    "reactive_pair_sample_authority": true,
+    "reusable_pair_rule_created": false
+  },
+  "reactive_pair_sample_authority": true,
+  "readiness": {
+    "CENSUS_REFRESH": false,
+    "COMMIT": false,
+    "CURRENT_WITH_GVE_CENSUS_SUPPORTS_ORTHOGONAL_COMBINATION": true,
+    "EXACT5_B3_PRESENT": true,
+    "EXPECTED_GENERIC_CHEMISTRY_POSITIVE": true,
+    "EXPECTED_GENERIC_LEGACY_STATUS_NEGATIVE": true,
+    "EXPECTED_GENERIC_TRAINING_NOT_APPLICABLE": true,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER": true,
+    "FUTURE_RECONCILIATION_SOURCE_CHAIN_21_127": true,
+    "GENERIC_EXACT11_COMPATIBILITY_PASS": true,
+    "GENERIC_SOURCE_NAMESPACE_REPOSITORY_PARENT_RELATIVE": true,
+    "LCY_CHEMISTRY_POSITIVE": true,
+    "LCY_CHEMISTRY_POSITIVE_BUT_TASK_DOMAIN_NEGATIVE": true,
+    "LCY_COMPLETED_DECISION_METADATA_PROJECTED": true,
+    "LCY_COMPLETED_LANE_TASK_DOMAIN_NEGATIVE": true,
+    "LCY_CURRENT_RUNTIME_MODEL_USABLE": false,
+    "LCY_D4_UNRESOLVED": true,
+    "LCY_D5_NOT_APPLICABLE": true,
+    "LCY_FORMAL_DECISION_BOUND": true,
+    "LCY_FORMAL_SEMANTICS_INDEPENDENTLY_VALIDATED": true,
+    "LCY_FORMAL_TRAINING_ADMITTED": false,
+    "LCY_FORMAL_VALIDATOR_PROVENANCE_ONLY": true,
+    "LCY_FORMAL_VALID_SINGLETON_DIAGNOSTIC_COUNT_3": true,
+    "LCY_FUTURE_TRAINING_ADMISSION_CANDIDATE": false,
+    "LCY_HUMAN_TRAINING_EXCLUDED": false,
+    "LCY_INGESTION_CANDIDATE_PASS": true,
+    "LCY_REVIEW_POLICY_CANDIDATE_COUNT_ZERO": true,
+    "LCY_SAMPLE_MASK_LABELS_AVAILABLE": false,
+    "LCY_SAMPLE_ROLE_AUTHORITY_AVAILABLE": false,
+    "LCY_SAMPLE_SG_C1_AUTHORITY_AVAILABLE": true,
+    "LCY_TASK_APPLICABILITY_AUTHORITY_AVAILABLE": false,
+    "LCY_TASK_NOT_RELEVANT": true,
+    "LCY_TENSOR_TARGET_CREATED": false,
+    "NEW_CENSUS_CROSSFIELD_AUDIT_REQUIRED": false,
+    "NEW_CROSSFIELD_DEBT_CREATED": false,
+    "PRE_REACTION_UNRESOLVED": true,
+    "PUSH": false,
+    "QUEUE_REFRESH": false,
+    "READY_FOR_EXTERNAL_REVIEW": true,
+    "READY_FOR_TRAINING": false,
+    "RECONCILIATION": false,
+    "SIXTH_TASK": false,
+    "TRAINING_STARTED": false
+  },
+  "reusable_authority_boundary": {
+    "cross_structure_regiochemistry_generalization": false,
+    "reaction_family_authority": false,
+    "reaction_family_training_class_target_available": false,
+    "reusable_authority_label_available": false,
+    "reusable_chemistry_authority": false,
+    "reusable_pair_rule_created": false,
+    "reusable_role_authority": false,
+    "warhead_rule_authority": false,
+    "warhead_rule_training_class_target_available": false,
+    "warhead_type_authority": false,
+    "warhead_type_target_available": false
+  },
+  "role_partition_boundary": {
+    "D4": "UNRESOLVED",
+    "W_L_S_counts": null,
+    "boundary_bonds": null,
+    "formal_valid_singleton_diagnostic_count": 3,
+    "formal_valid_singleton_diagnostic_indices": [
+      0,
+      1,
+      2
+    ],
+    "formal_valid_singleton_diagnostics": [
+      {
+        "S_atom_ids": [
+          "O2"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C3",
+          "atom_id_2": "O2"
+        },
+        "diagnostic_index": 0,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      },
+      {
+        "S_atom_ids": [
+          "O1"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C4",
+          "atom_id_2": "O1"
+        },
+        "diagnostic_index": 1,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      },
+      {
+        "S_atom_ids": [
+          "C5"
+        ],
+        "S_count": 1,
+        "cut_bond": {
+          "atom_id_1": "C5",
+          "atom_id_2": "N1"
+        },
+        "diagnostic_index": 2,
+        "minimal_seed_2_or_3_possible": false,
+        "published_runtime_valid": true,
+        "review_policy_eligible": false,
+        "selected": false
+      }
+    ],
+    "formal_valid_singleton_diagnostics_are_selectable": false,
+    "linker_atoms": null,
+    "reusable_role_authority": false,
+    "review_policy_candidate_count": 0,
+    "review_policy_selectable_candidate_indices": [],
+    "role_decision_field_present": true,
+    "role_partition_human_authoritative": false,
+    "role_partition_human_decision_available": false,
+    "role_profile": "NOT_ESTABLISHED",
+    "scaffold_atoms": null,
+    "selected_candidate_index_0based": null,
+    "usable_role_partition_label_available": false,
+    "warhead_atoms": null
+  },
+  "role_partition_sample_authority": false,
+  "same_component_3A2G_boundary": {
+    "PRE_transfer": false,
+    "canonical_event_id": "COVAPIE_CYS_SG_EVENT_V1:3A2G:A:CYS:102-:SG:G:LCY:C1",
+    "current_Exact4_authority": false,
+    "current_target": false,
+    "decision_transfer": false,
+    "pair_transfer": false,
+    "role_transfer": false,
+    "training_transfer": false
+  },
+  "schema_version": "covapie_lcy_completed_human_decision_snapshot_v1",
+  "stage": "covapie_lcy_completed_decision_ingestion_and_task_label_availability_v1",
+  "task_applicability_sample_authority": false,
+  "task_relevance": "NOT_RELEVANT",
+  "task_relevance_authority": {
+    "human_review_completed": true,
+    "human_task_relevance_decision": "NOT_RELEVANT",
+    "scope": "CURRENT_LCY_4R0O_EXACT4_ONLY",
+    "task_domain_negative": true,
+    "task_relevance": "NOT_RELEVANT",
+    "task_relevance_human_authoritative": true,
+    "task_relevance_human_authority": true,
+    "universal_task_domain_rule_created": false
+  },
+  "tensor_target_created": false,
+  "training_boundary": {
+    "D5": "NOT_APPLICABLE",
+    "READY_FOR_TRAINING": false,
+    "candidate_for_future_training_admission": false,
+    "current_runtime_model_usable": false,
+    "event_training_use_human_decision_available": true,
+    "formal_event_training_use_decision": "NOT_APPLICABLE",
+    "formal_training_admitted": false,
+    "future_training_admission_candidate": false,
+    "future_training_admission_status": null,
+    "human_training_excluded": false,
+    "model_supervision_usable": false,
+    "parameter_update_authorization": false,
+    "tensor_target_created": false,
+    "training_admitted": false,
+    "training_exclusion_reason": null,
+    "training_mask_targets_available_now": false,
+    "training_materialization_allowed": false,
+    "training_materialization_allowed_now": false,
+    "training_use_allowed": false,
+    "training_use_include": false
+  },
+  "training_materialization_allowed": false,
+  "training_use": "NOT_APPLICABLE"
+}
