@@ -422,10 +422,21 @@ def test_checker_independently_validates_sources_artifacts_and_lifecycle(
     independent = checker.independently_check_artifacts(REPO_ROOT, artifacts)
     assert independent["independent_artifact_validation"] is True
     lifecycle = checker.check_git_lifecycle(REPO_ROOT)
-    assert lifecycle["profile"] == checker.CANDIDATE_UNTRACKED
-    assert lifecycle["ordinary_untracked_count"] == 7
+    assert lifecycle["profile"] in {
+        checker.CANDIDATE_UNTRACKED,
+        checker.TRACKED_CLEAN,
+    }
     assert lifecycle["staged_count"] == 0
     assert lifecycle["tracked_modification_count"] == 0
+    if lifecycle["profile"] == checker.CANDIDATE_UNTRACKED:
+        assert lifecycle["ordinary_untracked_count"] == 7
+        assert lifecycle["HEAD"] == owner.BASELINE_COMMIT
+        assert lifecycle["origin_main"] == owner.BASELINE_COMMIT
+        assert lifecycle["ahead"] == 0
+        assert lifecycle["behind"] == 0
+    else:
+        assert lifecycle["ordinary_untracked_count"] == 0
+        assert lifecycle["behind"] == 0
 
 
 @pytest.mark.parametrize(
