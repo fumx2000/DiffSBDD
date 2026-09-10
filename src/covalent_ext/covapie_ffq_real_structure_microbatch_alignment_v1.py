@@ -252,10 +252,7 @@ def _projection(
 ) -> tuple[
     list[tuple[int, Mapping[str, Any]]], tuple[int, ...], tuple[int | None, ...]
 ]:
-    symbols = tuple(
-        pocket_owner._canonical_type_symbol(_atom_value(row, "type_symbol"))
-        for _, row in indexed_rows
-    )
+    symbols = tuple(row.get("_atom_site.type_symbol") for _, row in indexed_rows)
     projection = feature_owner.project_type_symbols_to_checkpoint_heavy_v1(symbols)
     if projection.sample_rejected or projection.outcome != "passed":
         detail = ";".join(projection.reasons) or "UNSPECIFIED"

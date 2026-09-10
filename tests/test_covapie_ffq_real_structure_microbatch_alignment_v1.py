@@ -538,6 +538,90 @@ def test_unsupported_nonhydrogen_in_model_bound_pocket_rejects_whole_sample() ->
         _build(samples=[bad, _sample("4R7U")])
 
 
+def test_projection_exact10_and_explicit_hydrogen_preserve_raw_source_order() -> None:
+    symbols = ("C", "H", "N", "O", "S", "B", "Br", "Cl", "P", "I", "F")
+    indexed_rows = [
+        (100 + index, {"_atom_site.type_symbol": symbol, "identity": index})
+        for index, symbol in enumerate(symbols)
+    ]
+
+    retained, channels, source_to_projected = subject._projection(
+        indexed_rows, domain="pocket"
+    )
+
+    expected_rows = [row for index, row in enumerate(indexed_rows) if index != 1]
+    assert retained == expected_rows
+    assert all(actual[1] is expected[1] for actual, expected in zip(retained, expected_rows))
+    assert [source_index for source_index, _row_value in retained] == [
+        100, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+    ]
+    assert channels == tuple(range(10))
+    assert source_to_projected == (0, None, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+
+@pytest.mark.parametrize(
+    ("row", "expected_raw", "reason"),
+    [
+        pytest.param({"_atom_site.type_symbol": " C"}, " C", "missing_or_invalid", id="leading-space"),
+        pytest.param({"_atom_site.type_symbol": "C "}, "C ", "missing_or_invalid", id="trailing-space"),
+        pytest.param({"_atom_site.type_symbol": "c"}, "c", "missing_or_invalid", id="lower-c"),
+        pytest.param({"_atom_site.type_symbol": "s"}, "s", "missing_or_invalid", id="lower-s"),
+        pytest.param({"_atom_site.type_symbol": "CL"}, "CL", "missing_or_invalid", id="upper-cl"),
+        pytest.param({"_atom_site.type_symbol": "br"}, "br", "missing_or_invalid", id="lower-br"),
+        pytest.param({"_atom_site.type_symbol": "h"}, "h", "missing_or_invalid", id="lower-h"),
+        pytest.param({"_atom_site.type_symbol": ""}, "", "missing_or_invalid", id="empty"),
+        pytest.param({}, None, "missing_or_invalid", id="missing-field"),
+        pytest.param({"_atom_site.type_symbol": None}, None, "missing_or_invalid", id="none"),
+        pytest.param({"_atom_site.type_symbol": "."}, ".", "missing_or_invalid", id="dot"),
+        pytest.param({"_atom_site.type_symbol": "?"}, "?", "missing_or_invalid", id="question-mark"),
+        pytest.param({"_atom_site.type_symbol": 6}, 6, "missing_or_invalid", id="non-string"),
+        pytest.param({"_atom_site.type_symbol": "Zn"}, "Zn", "unsupported_nonhydrogen", id="unsupported-zinc"),
+    ],
+)
+def test_projection_passes_raw_type_symbol_to_real_strict_policy_and_rejects(
+    monkeypatch: pytest.MonkeyPatch,
+    row: dict[str, object],
+    expected_raw: object,
+    reason: str,
+) -> None:
+    real_project = subject.feature_owner.project_type_symbols_to_checkpoint_heavy_v1
+    observed: list[tuple[object, ...]] = []
+
+    def observe_and_project(values: tuple[object, ...]) -> object:
+        observed.append(tuple(values))
+        return real_project(values)
+
+    monkeypatch.setattr(
+        subject.feature_owner,
+        "project_type_symbols_to_checkpoint_heavy_v1",
+        observe_and_project,
+    )
+    with pytest.raises(
+        subject.FFQRealStructureMicrobatchAlignmentError,
+        match=rf"POCKET_EXACT10_SAMPLE_REJECTED:0:{reason}",
+    ):
+        subject._projection([(17, row)], domain="pocket")
+    assert observed == [(expected_raw,)]
+    assert type(observed[0][0]) is type(expected_raw)
+
+
+@pytest.mark.parametrize("raw_symbol", ["c", "h"])
+def test_public_assembly_rejects_nonreactive_pocket_nonexact_type_symbol(
+    raw_symbol: str,
+) -> None:
+    bad = _sample(
+        "3VCY",
+        unsupported_pocket_symbol=raw_symbol,
+        extra_before_target=1,
+        extra_after_target=0,
+    )
+    with pytest.raises(
+        subject.FFQRealStructureMicrobatchAlignmentError,
+        match="POCKET_EXACT10_SAMPLE_REJECTED:0:missing_or_invalid",
+    ):
+        _build(samples=[bad])
+
+
 def test_ligand_explicit_hydrogen_projection_preserves_source_to_local_remap() -> None:
     result = _build()
     source = result.model_input_batch["lig_source_row_index"][8:16]
