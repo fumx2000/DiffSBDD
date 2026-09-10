@@ -814,13 +814,26 @@ class CovapieCurrent11TrainingLigandPocketDDPM(
         else:
             raise ValueError(TRAINING_MODULE_ERROR)
 
-    def forward(self, data: object) -> CovapieCurrent11TrainingForwardOutputV1:
+    def forward(
+        self,
+        data: object,
+        *,
+        post_geometry_loss_purpose: str = "existing_component_masks_v1",
+    ) -> CovapieCurrent11TrainingForwardOutputV1:
         # The transport superclass remains train/validation/test capable, but
         # this additive model/loss bridge V1 intentionally has no evaluation
         # objective.  Never mutate mode or enter tensorization/model execution.
         if self.training is not True:
             raise ValueError(TRAINING_MODULE_ERROR)
         if type(data) is not dict:
+            raise ValueError(TRAINING_MODULE_ERROR)
+        if (
+            type(post_geometry_loss_purpose) is not str
+            or post_geometry_loss_purpose not in (
+                "existing_component_masks_v1",
+                "independent_hidden_post_distance_v1",
+            )
+        ):
             raise ValueError(TRAINING_MODULE_ERROR)
         try:
             ligand, pocket = self.get_ligand_and_pocket(data)
@@ -879,6 +892,9 @@ class CovapieCurrent11TrainingLigandPocketDDPM(
                     self.covapie_current11_pair_contrastive_temperature
                 ),
                 geometry_smooth_l1_beta=1.0,
+                post_geometry_loss_purpose=post_geometry_loss_purpose,
+                ligand_batch_index=ligand["mask"],
+                pocket_batch_index=pocket["mask"],
             )
             return CovapieCurrent11TrainingForwardOutputV1(
                 model_output=model_output,

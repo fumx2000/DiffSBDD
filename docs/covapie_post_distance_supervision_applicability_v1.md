@@ -190,3 +190,59 @@ semantics audit；Step12D 仅是 smoke legality check，不是最终训练特征
 历史 `UNKNOWN_ATOM_FEATURE_POLICY` / `feature_semantics_known=False` 状态必须被
 解决或正式审计。本轮不构成 `READY_FOR_TRAINING`，也没有执行扩散模型 forward、
 checkpoint load、optimizer step、参数更新、真实训练、commit 或 push。
+
+## Current11.forward 限定接入补记
+
+本节对应基线 `2999ee0a20c8c4a8375dc7a63da12d0dcb5db55b` 之后的
+`wire_current11_forward_scoped_hidden_post_loss_v1` 未提交候选。上文所说
+“Current11 Lightning/生产调用方尚未迁移”是 loss gate 发布时的 BASELINE
+历史状态；本候选只把 `CovapieCurrent11TrainingLigandPocketDDPM.forward` 接到
+该 gate，不能反向改写为其他入口已经迁移。
+
+`Current11.forward` 现在接受逐次调用、keyword-only 的
+`post_geometry_loss_purpose`。默认仍是 `existing_component_masks_v1`；只有调用者
+明确传入 `independent_hidden_post_distance_v1` 才选择 hidden-POST 用途。类型和值
+在 transport、tensorizer 和 diffusion bridge 之前按精确字符串 fail closed；
+batch 中的同名自由字符串不会决定用途，也没有构造器参数、实例策略状态、hparams、
+配置或环境变量保存该选择。因此同一实例的 hidden→default→hidden 调用不会泄漏
+用途，既有 `training_step` 仍通过省略参数采用 legacy 默认值。
+
+调用真实 loss 时，forward 明确传入上述 purpose，并将同次
+`get_ligand_and_pocket(data)` 产生、随后参与模型计算的 `ligand["mask"]` 和
+`pocket["mask"]` 对象直接作为独立节点归属。caller 没有从 candidate metadata
+反推或复制 batch index，没有预过滤 component mask，也没有另写 eligibility
+算法；shape/dtype、candidate segment、跨样本归属、positive endpoint、
+generated/fixed 和有效性仍由已发布 loss 最终检查。loss 模块本身未修改。
+
+新增合成 harness 在 CPU 上实际执行了 Current11.forward 编排、基类真实
+`LigandPocketDDPM.get_ligand_and_pocket`、真实 auxiliary encoder/forward、真实
+loss 和一次小型 autograd backward；仅 tensorizer 返回合成 supervision，diffusion
+bridge 返回身份及维度一致的合成 trace。结果对照覆盖 generated 反应端点、fixed
+B3 反应端点以及 generated 但 request=false 的端点：默认与显式 legacy 一致并
+纳入前两者，hidden 仅纳入 generated 且已请求的端点；有效 sample 数、diagnostic、
+loss 与独立 unit-beta Smooth-L1 期望一致。hidden 梯度只落到获准的 POST
+candidate，模型参数没有更新。改变 transport 后的真实 ligand 节点归属造成跨样本
+矛盾时，调用到真实 loss 后以外层 `TRAINING_MODULE_ERROR` 拒绝，并保留实际
+`AUXILIARY_ERROR` cause。以上只证明该 caller 方法的限定编排，不是完整 Lightning
+初始化、真实 DDPM forward、DataLoader、Trainer 或端到端训练验收。
+
+实际四文件组合命令未使用 `-k`、deselect、新增 skip 或 xfail，原始摘要为：
+
+```text
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$REPO:$REPO/src" python -B -m pytest -q \
+  tests/test_covapie_current11_hidden_post_loss_routing_v1.py \
+  tests/test_covapie_post_distance_supervision_applicability_v1.py \
+  tests/test_covapie_current11_auxiliary_model_and_loss_v1.py \
+  tests/test_covapie_ffq_post_conditioning_visibility_v1.py
+........................................................................ [ 62%]
+...........................................                              [100%]
+115 passed, 5 warnings in 7.14s
+```
+
+mixed-profile 类重写了 `forward`，本候选没有执行、修改或赋予它绕过路径；其他
+独立 bridge/batch/smoke/FFQ adapter 也未迁移。这里的用途选择不是 sample use
+authority，没有创建真实 FFQ target，没有开启真实样本 loss，也没有改变
+authority、split、admission 或调用配置。真实 FFQ 的 target 来源、逐样本用途与
+准入仍需后续门禁。正式训练前仍必须完成 feature-semantics audit；Step12D 只是
+smoke legality check，不是最终训练特征合同，历史
+`UNKNOWN_ATOM_FEATURE_POLICY` / `feature_semantics_known=False` 仍须解决或正式审计。
