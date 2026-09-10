@@ -25,6 +25,11 @@ __all__ = (
 
 
 AUXILIARY_ERROR = "COVAPIE_CURRENT11_AUXILIARY_MODEL_AND_LOSS_V1_ERROR"
+_EXISTING_COMPONENT_MASKS_PURPOSE_V1 = "existing_component_masks_v1"
+_INDEPENDENT_HIDDEN_POST_DISTANCE_PURPOSE_V1 = (
+    "independent_hidden_post_distance_v1"
+)
+_POST_GEOMETRY_COMPONENT_INDEX_V1 = 1
 
 
 @dataclass(frozen=True)
@@ -467,6 +472,315 @@ def _validated_weights(
     return weights
 
 
+def _hidden_post_effective_component_loss_mask_v1(
+    *,
+    model_output: CovapieCurrent11ModelOutputV1,
+    supervision: CovapieCurrent11TrainingSupervisionTensorsV1,
+    ligand_batch_index: torch.Tensor | None,
+    pocket_batch_index: torch.Tensor | None,
+) -> torch.Tensor:
+    """Restrict only POST to independently verified hidden endpoints."""
+
+    geometry_predictions = _tensor(
+        model_output.pre_post_geometry_predictions_angstrom, ndim=2
+    )
+    ligand_hidden = _tensor(model_output.ligand_node_hidden, ndim=2)
+    pocket_hidden = _tensor(model_output.pocket_node_hidden, ndim=2)
+    admitted = _tensor(
+        supervision.sample_training_admitted, dtype=torch.bool, ndim=1
+    )
+    batch_size = len(admitted)
+    candidate_count = len(geometry_predictions)
+    ligand_count = len(ligand_hidden)
+    pocket_count = len(pocket_hidden)
+    device = geometry_predictions.device
+    if (
+        batch_size == 0
+        or geometry_predictions.shape != (candidate_count, 2)
+        or not torch.is_floating_point(geometry_predictions)
+        or ligand_hidden.device != device
+        or pocket_hidden.device != device
+    ):
+        _fail()
+
+    sample_bool_masks = (
+        admitted,
+        _tensor(
+            supervision.canonical_task_valid,
+            dtype=torch.bool,
+            ndim=1,
+        ),
+        _tensor(
+            supervision.target_residue_condition_valid,
+            dtype=torch.bool,
+            ndim=1,
+        ),
+        _tensor(
+            supervision.pair_positive_candidate_valid,
+            dtype=torch.bool,
+            ndim=1,
+        ),
+    )
+    if any(
+        item.shape != (batch_size,) or item.device != device
+        for item in sample_bool_masks
+    ):
+        _fail()
+    _, canonical_task_valid, target_condition_valid, positive_valid = (
+        sample_bool_masks
+    )
+
+    component_valid = _tensor(
+        supervision.pre_post_geometry_component_valid_mask,
+        dtype=torch.bool,
+        ndim=2,
+    )
+    component_loss = _tensor(
+        supervision.pre_post_geometry_component_loss_mask,
+        dtype=torch.bool,
+        ndim=2,
+    )
+    geometry_targets = _tensor(
+        supervision.pre_post_geometry_target_angstrom, ndim=2
+    )
+    if (
+        component_valid.shape != (batch_size, 2)
+        or component_loss.shape != (batch_size, 2)
+        or geometry_targets.shape != (batch_size, 2)
+        or not torch.is_floating_point(geometry_targets)
+        or component_valid.device != device
+        or component_loss.device != device
+        or geometry_targets.device != device
+    ):
+        _fail()
+
+    generation = _tensor(
+        supervision.ligand_base_generation_mask,
+        dtype=torch.bool,
+        ndim=2,
+    )
+    fixed = _tensor(
+        supervision.ligand_base_fixed_mask,
+        dtype=torch.bool,
+        ndim=2,
+    )
+    role_valid = _tensor(
+        supervision.ligand_role_valid, dtype=torch.bool, ndim=1
+    )
+    role_id = _tensor(
+        supervision.ligand_role_id, dtype=torch.long, ndim=1
+    )
+    if (
+        generation.shape != (ligand_count, 1)
+        or fixed.shape != (ligand_count, 1)
+        or role_valid.shape != (ligand_count,)
+        or role_id.shape != (ligand_count,)
+        or generation.device != device
+        or fixed.device != device
+        or role_valid.device != device
+        or role_id.device != device
+        or bool((generation & fixed).any().item())
+    ):
+        _fail()
+
+    ligand_batch = _tensor(ligand_batch_index, dtype=torch.long, ndim=1)
+    pocket_batch = _tensor(pocket_batch_index, dtype=torch.long, ndim=1)
+    if (
+        ligand_batch.shape != (ligand_count,)
+        or pocket_batch.shape != (pocket_count,)
+        or ligand_batch.device != device
+        or pocket_batch.device != device
+        or (
+            ligand_count
+            and bool(
+                ((ligand_batch < 0) | (ligand_batch >= batch_size))
+                .any()
+                .item()
+            )
+        )
+        or (
+            pocket_count
+            and bool(
+                ((pocket_batch < 0) | (pocket_batch >= batch_size))
+                .any()
+                .item()
+            )
+        )
+    ):
+        _fail()
+
+    canonical_task_id = _tensor(
+        supervision.canonical_task_id, dtype=torch.long, ndim=1
+    )
+    model_task_id = _tensor(
+        model_output.canonical_task_id, dtype=torch.long, ndim=1
+    )
+    if (
+        canonical_task_id.shape != (batch_size,)
+        or model_task_id.shape != (batch_size,)
+        or canonical_task_id.device != device
+        or model_task_id.device != device
+        or not torch.equal(canonical_task_id, model_task_id)
+        or bool(
+            (
+                canonical_task_valid
+                & ((canonical_task_id < 0) | (canonical_task_id > 4))
+            )
+            .any()
+            .item()
+        )
+    ):
+        _fail()
+
+    offsets = _tensor(
+        supervision.pair_candidate_offsets, dtype=torch.long, ndim=1
+    )
+    model_offsets = _tensor(
+        model_output.pair_candidate_offsets, dtype=torch.long, ndim=1
+    )
+    positive_index = _tensor(
+        supervision.pair_positive_candidate_index,
+        dtype=torch.long,
+        ndim=1,
+    )
+    target_pocket_flat = _tensor(
+        supervision.target_residue_reactive_atom_flat_index,
+        dtype=torch.long,
+        ndim=1,
+    )
+    if (
+        offsets.shape != (batch_size + 1,)
+        or model_offsets.shape != offsets.shape
+        or positive_index.shape != (batch_size,)
+        or target_pocket_flat.shape != (batch_size,)
+        or offsets.device != device
+        or model_offsets.device != device
+        or positive_index.device != device
+        or target_pocket_flat.device != device
+        or not torch.equal(offsets, model_offsets)
+    ):
+        _fail()
+    if (
+        int(offsets[0].item()) != 0
+        or int(offsets[-1].item()) != candidate_count
+        or bool((offsets[1:] < offsets[:-1]).any().item())
+    ):
+        _fail()
+
+    candidate_field_names = (
+        "pair_candidate_batch_index",
+        "pair_candidate_ligand_local_index",
+        "pair_candidate_residue_local_index",
+        "pair_candidate_ligand_flat_index",
+        "pair_candidate_pocket_flat_index",
+    )
+    candidate_fields: dict[str, torch.Tensor] = {}
+    for field_name in candidate_field_names:
+        supervision_value = _tensor(
+            getattr(supervision, field_name), dtype=torch.long, ndim=1
+        )
+        model_value = _tensor(
+            getattr(model_output, field_name), dtype=torch.long, ndim=1
+        )
+        if (
+            supervision_value.shape != (candidate_count,)
+            or model_value.shape != (candidate_count,)
+            or supervision_value.device != device
+            or model_value.device != device
+            or not torch.equal(supervision_value, model_value)
+        ):
+            _fail()
+        candidate_fields[field_name] = supervision_value
+    candidate_is_positive = _tensor(
+        supervision.pair_candidate_is_positive,
+        dtype=torch.bool,
+        ndim=1,
+    )
+    if (
+        candidate_is_positive.shape != (candidate_count,)
+        or candidate_is_positive.device != device
+    ):
+        _fail()
+
+    endpoint_is_hidden = torch.zeros(
+        batch_size, dtype=torch.bool, device=device
+    )
+    for sample in range(batch_size):
+        if not bool(positive_valid[sample].item()):
+            continue
+        start = int(offsets[sample].item())
+        end = int(offsets[sample + 1].item())
+        candidate = int(positive_index[sample].item())
+        if candidate < 0 or not start <= candidate < end:
+            _fail()
+
+        candidate_batch = int(
+            candidate_fields["pair_candidate_batch_index"][candidate].item()
+        )
+        ligand_local = int(
+            candidate_fields[
+                "pair_candidate_ligand_local_index"
+            ][candidate].item()
+        )
+        pocket_local = int(
+            candidate_fields[
+                "pair_candidate_residue_local_index"
+            ][candidate].item()
+        )
+        ligand_flat = int(
+            candidate_fields[
+                "pair_candidate_ligand_flat_index"
+            ][candidate].item()
+        )
+        pocket_flat = int(
+            candidate_fields[
+                "pair_candidate_pocket_flat_index"
+            ][candidate].item()
+        )
+        ligand_nodes = torch.nonzero(
+            ligand_batch == sample, as_tuple=False
+        ).flatten()
+        pocket_nodes = torch.nonzero(
+            pocket_batch == sample, as_tuple=False
+        ).flatten()
+        if (
+            not bool(candidate_is_positive[candidate].item())
+            or candidate_batch != sample
+            or ligand_local < 0
+            or ligand_local >= len(ligand_nodes)
+            or pocket_local < 0
+            or pocket_local >= len(pocket_nodes)
+            or ligand_flat < 0
+            or ligand_flat >= ligand_count
+            or pocket_flat < 0
+            or pocket_flat >= pocket_count
+            or int(ligand_nodes[ligand_local].item()) != ligand_flat
+            or int(pocket_nodes[pocket_local].item()) != pocket_flat
+            or int(ligand_batch[ligand_flat].item()) != sample
+            or int(pocket_batch[pocket_flat].item()) != sample
+            or pocket_flat != int(target_pocket_flat[sample].item())
+            or not bool(role_valid[ligand_flat].item())
+            or int(role_id[ligand_flat].item()) != 2
+        ):
+            _fail()
+        endpoint_is_hidden[sample] = bool(
+            generation[ligand_flat, 0].item()
+            and not fixed[ligand_flat, 0].item()
+        )
+
+    effective = component_loss.clone()
+    effective[:, _POST_GEOMETRY_COMPONENT_INDEX_V1] = (
+        component_loss[:, _POST_GEOMETRY_COMPONENT_INDEX_V1]
+        & component_valid[:, _POST_GEOMETRY_COMPONENT_INDEX_V1]
+        & admitted
+        & canonical_task_valid
+        & target_condition_valid
+        & positive_valid
+        & endpoint_is_hidden
+    )
+    return effective
+
+
 def compute_covapie_current11_training_losses_v1(
     *,
     model_output: CovapieCurrent11ModelOutputV1,
@@ -475,6 +789,9 @@ def compute_covapie_current11_training_losses_v1(
     loss_weights: CovapieCurrent11LossWeightsV1 | Mapping[str, float],
     pair_contrastive_temperature: float = 1.0,
     geometry_smooth_l1_beta: float = 1.0,
+    post_geometry_loss_purpose: str = _EXISTING_COMPONENT_MASKS_PURPOSE_V1,
+    ligand_batch_index: torch.Tensor | None = None,
+    pocket_batch_index: torch.Tensor | None = None,
 ) -> CovapieCurrent11LossOutputV1:
     """Apply the exact per-sample reductions and graph-connected zero policy."""
 
@@ -488,9 +805,30 @@ def compute_covapie_current11_training_losses_v1(
             or pair_contrastive_temperature != 1.0
             or type(geometry_smooth_l1_beta) is not float
             or geometry_smooth_l1_beta != 1.0
+            or type(post_geometry_loss_purpose) is not str
+            or post_geometry_loss_purpose not in (
+                _EXISTING_COMPONENT_MASKS_PURPOSE_V1,
+                _INDEPENDENT_HIDDEN_POST_DISTANCE_PURPOSE_V1,
+            )
         ):
             _fail()
         weights = _validated_weights(loss_weights)
+        if (
+            post_geometry_loss_purpose
+            == _INDEPENDENT_HIDDEN_POST_DISTANCE_PURPOSE_V1
+        ):
+            effective_geometry_component_loss_mask = (
+                _hidden_post_effective_component_loss_mask_v1(
+                    model_output=model_output,
+                    supervision=supervision,
+                    ligand_batch_index=ligand_batch_index,
+                    pocket_batch_index=pocket_batch_index,
+                )
+            )
+        else:
+            effective_geometry_component_loss_mask = (
+                supervision.pre_post_geometry_component_loss_mask
+            )
         base_per_sample = _tensor(
             getattr(diffusion_trace, "base_objective_per_sample", None),
             ndim=1,
@@ -609,9 +947,7 @@ def compute_covapie_current11_training_losses_v1(
         )
         geometry_valid_count = 0
         for sample in range(batch_size):
-            component_mask = (
-                supervision.pre_post_geometry_component_loss_mask[sample]
-            )
+            component_mask = effective_geometry_component_loss_mask[sample]
             if not bool(component_mask.any().item()):
                 continue
             if not bool(supervision.pair_positive_candidate_valid[sample]):
@@ -622,10 +958,18 @@ def compute_covapie_current11_training_losses_v1(
             targets = supervision.pre_post_geometry_target_angstrom[
                 sample, component_mask
             ]
-            if not bool(torch.isfinite(targets).all().item()):
+            selected_predictions = geometry_predictions[
+                positive_index, component_mask
+            ]
+            if (
+                not bool(torch.isfinite(targets).all().item())
+                or not bool(torch.isfinite(selected_predictions).all().item())
+                or bool((targets < 0).any().item())
+                or bool((selected_predictions < 0).any().item())
+            ):
                 _fail()
             component_losses = F.smooth_l1_loss(
-                geometry_predictions[positive_index, component_mask],
+                selected_predictions,
                 targets,
                 reduction="none",
                 beta=geometry_smooth_l1_beta,
@@ -637,7 +981,7 @@ def compute_covapie_current11_training_losses_v1(
         loss_geometry = (
             torch.stack(geometry_per_sample).mean()
             if geometry_per_sample
-            else geometry_predictions.sum() * 0.0
+            else geometry_predictions.reshape(-1)[:0].sum()
         )
 
         loss_total = (
