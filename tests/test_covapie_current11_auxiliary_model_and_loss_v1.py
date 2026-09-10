@@ -167,27 +167,53 @@ def test_shapes_dtypes_zero_initial_delta_and_geometry_nonnegative() -> None:
 
 def test_anchor_invalid_rows_do_not_enter_encoder_or_receive_gradient() -> None:
     supervision = _supervision()
+    anchor_distance = torch.tensor([
+        [7.0], [float("nan")], [float("nan")],
+        [float("nan")], [2.0], [float("nan")],
+    ], requires_grad=True)
     supervision = replace(
         supervision,
-        ligand_anchor_distance_angstrom=torch.tensor([
-            [1.0], [float("nan")], [float("nan")],
-            [float("nan")], [float("nan")], [float("nan")],
-        ]),
+        ligand_anchor_distance_angstrom=anchor_distance,
         ligand_anchor_distance_valid=torch.tensor(
-            [[True], [False], [False], [False], [False], [False]]
+            [[True], [False], [False], [False], [True], [False]]
         ),
     )
     auxiliary = CovapieCurrent11AuxiliaryModelV1(joint_nf=4)
     with torch.no_grad():
         auxiliary.anchor_distance_encoder[-1].weight.fill_(1.0)
-    delta = auxiliary.encode_role_mask_anchor_v1(
-        supervision=supervision,
-        ligand_batch_index=torch.tensor([0, 0, 0, 1, 1, 1]),
+    encoder_inputs = []
+
+    def observe_encoder_input(_module, inputs):
+        encoder_inputs.append(inputs[0].detach().clone())
+
+    handle = auxiliary.anchor_distance_encoder.register_forward_pre_hook(
+        observe_encoder_input
     )
+    try:
+        delta = auxiliary.encode_role_mask_anchor_v1(
+            supervision=supervision,
+            ligand_batch_index=torch.tensor([0, 0, 0, 1, 1, 1]),
+        )
+    finally:
+        handle.remove()
     # Other embedding tables are still exact zero.
-    assert torch.all(delta[1:] == 0)
+    assert torch.all(delta[torch.tensor([0, 1, 2, 3, 5])] == 0)
+    assert len(encoder_inputs) == 1
+    torch.testing.assert_close(
+        encoder_inputs[0], torch.log1p(torch.tensor([[2.0]]))
+    )
     delta.sum().backward()
+    assert anchor_distance.grad is not None
+    assert torch.equal(
+        anchor_distance.grad[torch.tensor([0, 1, 2, 3, 5])],
+        torch.zeros((5, 1)),
+    )
+    assert bool((anchor_distance.grad[4] != 0).any().item())
     assert auxiliary.anchor_distance_encoder[0].weight.grad is not None
+    assert bool(
+        (auxiliary.anchor_distance_encoder[0].weight.grad != 0).any().item()
+    )
+    assert auxiliary.anchor_distance_encoder[-1].weight.grad is not None
 
 
 def test_pair_bce_reduction_exact_per_sample_and_sample_isolation() -> None:

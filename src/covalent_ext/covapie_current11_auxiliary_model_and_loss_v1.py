@@ -171,12 +171,43 @@ class CovapieCurrent11AuxiliaryModelV1(nn.Module):
             role_valid = _tensor(
                 supervision.ligand_role_valid, dtype=torch.bool, ndim=1
             )
+            anchor_valid_mask = _tensor(
+                supervision.ligand_anchor_distance_valid,
+                dtype=torch.bool,
+                ndim=2,
+            )
+            fixed_mask = _tensor(
+                supervision.ligand_base_fixed_mask,
+                dtype=torch.bool,
+                ndim=2,
+            )
+            generation_mask = _tensor(
+                supervision.ligand_base_generation_mask,
+                dtype=torch.bool,
+                ndim=2,
+            )
+            anchor_distance = _tensor(
+                supervision.ligand_anchor_distance_angstrom,
+                ndim=2,
+            )
+            ligand_column_shape = (len(role_id), 1)
             if (
                 len(role_id) != len(ligand_batch_index)
                 or len(role_valid) != len(role_id)
                 or ligand_batch_index.device != role_id.device
                 or role_id.device != self.role_embedding.weight.device
+                or anchor_valid_mask.shape != ligand_column_shape
+                or fixed_mask.shape != ligand_column_shape
+                or generation_mask.shape != ligand_column_shape
+                or anchor_distance.shape != ligand_column_shape
+                or not torch.is_floating_point(anchor_distance)
+                or anchor_valid_mask.device != role_id.device
+                or fixed_mask.device != role_id.device
+                or generation_mask.device != role_id.device
+                or anchor_distance.device != role_id.device
             ):
+                _fail()
+            if bool((fixed_mask & generation_mask).any().item()):
                 _fail()
             batch_size = len(supervision.canonical_task_id)
             if (
@@ -219,11 +250,7 @@ class CovapieCurrent11AuxiliaryModelV1(nn.Module):
                 )
                 delta = delta + task_delta
 
-            generation_state = supervision.ligand_base_generation_mask[
-                :, 0
-            ].long()
-            if generation_state.shape != role_id.shape:
-                _fail()
+            generation_state = generation_mask[:, 0].long()
             delta = delta + self.generation_state_embedding(generation_state)
 
             seed_valid_by_node = supervision.ligand_minimal_seed_or_anchor_valid[
@@ -243,11 +270,11 @@ class CovapieCurrent11AuxiliaryModelV1(nn.Module):
                 )
                 delta = delta + seed_delta
 
-            anchor_valid = supervision.ligand_anchor_distance_valid[:, 0]
-            if bool(anchor_valid.any().item()):
-                distance = supervision.ligand_anchor_distance_angstrom[
-                    anchor_valid
-                ]
+            effective_anchor_valid = (
+                anchor_valid_mask & fixed_mask & ~generation_mask
+            )[:, 0]
+            if bool(effective_anchor_valid.any().item()):
+                distance = anchor_distance[effective_anchor_valid]
                 if (
                     not bool(torch.isfinite(distance).all().item())
                     or bool((distance < 0).any().item())
@@ -256,7 +283,7 @@ class CovapieCurrent11AuxiliaryModelV1(nn.Module):
                 anchor_delta = torch.zeros_like(delta)
                 encoded = self.anchor_distance_encoder(torch.log1p(distance))
                 anchor_delta = _assign_rows(
-                    anchor_delta, anchor_valid, encoded
+                    anchor_delta, effective_anchor_valid, encoded
                 )
                 delta = delta + anchor_delta
             return delta
