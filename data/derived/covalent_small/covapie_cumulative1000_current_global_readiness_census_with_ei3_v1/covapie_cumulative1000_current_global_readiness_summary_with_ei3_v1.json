@@ -1,0 +1,724 @@
+{
+  "authority_boundary": {
+    "0D8_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "0D8_REVIEW_COMPLETED": true,
+    "4LH_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "4LH_REVIEW_COMPLETED": true,
+    "6OA_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "6OA_RECONCILIATION_CONSUMED": true,
+    "6OA_REVIEW_COMPLETED": true,
+    "CENSUS_REFRESH": true,
+    "CENSUS_REFRESH_PERFORMED": true,
+    "CER_REVIEW_COMPLETED": true,
+    "CURRENT_GLOBAL_READINESS_CENSUS_COMPLETE": true,
+    "CURRENT_GLOBAL_RECONCILIATION_COMPLETE": true,
+    "EI3_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "EI3_RECONCILIATION_CONSUMED": true,
+    "EI3_REVIEW_COMPLETED": true,
+    "EI3_REVIEW_STATE_CREATED": true,
+    "EVENT_TASK_LABEL_ROWS_MATERIALIZED": false,
+    "FEATURE_SEMANTICS_AUDIT_PERFORMED": false,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_BEFORE_TRAINING": true,
+    "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER": true,
+    "FORMAL_TRAINING_ADMITTED": false,
+    "FOUR_M5_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "FOUR_M5_REVIEW_COMPLETED": true,
+    "GD1_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "GD1_REVIEW_COMPLETED": true,
+    "GVE_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "GVE_REVIEW_COMPLETED": true,
+    "HUMAN_REVIEW_DECISION_NOT_PERFORMED": true,
+    "LCY_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "LCY_REVIEW_COMPLETED": true,
+    "MASK_TENSOR_TARGETS_CREATED": false,
+    "ME7_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "ME7_RECONCILIATION_CONSUMED": true,
+    "ME7_REVIEW_COMPLETED": true,
+    "ME7_REVIEW_STATE_CREATED": true,
+    "NEW_CHEMISTRY_AUTHORITY_CREATED": false,
+    "NEW_HUMAN_AUTHORITY_CREATED": false,
+    "NEW_PAIR_AUTHORITY_CREATED": false,
+    "NEW_REUSABLE_AUTHORITY_CREATED": false,
+    "NEW_ROLE_AUTHORITY_CREATED": false,
+    "NEW_SCIENTIFIC_AUTHORITY_CREATED": false,
+    "NEXT_REVIEW_STARTED": false,
+    "NWJ_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "NWJ_REVIEW_COMPLETED": true,
+    "PARAMETER_UPDATE_AUTHORIZATION": false,
+    "PRE_mapping_incompatible": true,
+    "PYR_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "PYR_RECONCILIATION_CONSUMED": true,
+    "PYR_REVIEW_COMPLETED": true,
+    "QUEUE_REFRESH": false,
+    "QUEUE_REFRESH_PERFORMED": false,
+    "READY_FOR_EXTERNAL_REVIEW": true,
+    "READY_FOR_FORMAL_TRAINING": false,
+    "READY_FOR_NEXT_HIGH_YIELD_HUMAN_REVIEW_PREPARATION": true,
+    "READY_FOR_NEXT_HIGH_YIELD_HUMAN_REVIEW_SELECTION": true,
+    "READY_FOR_TRAINING": false,
+    "SR2_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "SR2_REVIEW_COMPLETED": true,
+    "SR2_formal_training_candidate": true,
+    "STEP12D_IS_ONLY_SMOKE_LEGALITY_CHECK": true,
+    "STEP12D_STATUS": "SMOKE_LEGALITY_CHECK_NOT_FINAL_TRAINING_FEATURE_CONTRACT",
+    "Step12D": "SMOKE_LEGALITY_CHECK_NOT_FINAL_TRAINING_FEATURE_CONTRACT",
+    "TASK_LABEL_AUTHORITY": false,
+    "TP2_CENSUS_SOURCE_BINDING_V2_CLEAN_FROM_BIRTH": true,
+    "TP2_REVIEW_COMPLETED": true,
+    "TRAINING_ADMISSION_CREATED": false,
+    "TRAINING_MATERIALIZATION_ALLOWED": false,
+    "TRAINING_STARTED": false,
+    "auxiliary_head_executed": false,
+    "backward_performed": false,
+    "batch_modified": false,
+    "census_refreshed": true,
+    "derived_refresh_not_new_authority": true,
+    "engineered_surrogate_caveat_preserved": true,
+    "feature_semantics_audit_performed": false,
+    "feature_semantics_status": "AUDIT_REQUIRED_LATER",
+    "fine_tune_performed": false,
+    "formal_decision_bound_directly": false,
+    "formal_decision_read_directly": false,
+    "formal_validator_executed": false,
+    "future_candidate_is_not_training_admission": true,
+    "loader_modified": false,
+    "loss_executed": false,
+    "minimal_seed_authority_created": false,
+    "model_forward_performed": false,
+    "new_ambiguous_source_mode_authority_introduced": false,
+    "new_chemistry_authority_created": false,
+    "new_exact_posix_source_mode_authority_introduced": false,
+    "new_human_authority_created": false,
+    "new_pair_authority_created": false,
+    "new_reusable_authority_created": false,
+    "new_role_authority_created": false,
+    "new_scientific_authority_created": false,
+    "next_priority_review_current_pending_rank": 1,
+    "next_priority_review_event_count": 3,
+    "next_priority_review_ligand": "AZP",
+    "next_priority_review_pdb_ids": [
+      "2A5I",
+      "2A5K"
+    ],
+    "next_priority_review_raw_priority_rank": 34,
+    "next_priority_review_unit": "COVAPIE_BULK_REVIEW_UNIT_7FB64BA2D198B24F",
+    "next_review_started": false,
+    "optimizer_created": false,
+    "optimizer_step_performed": false,
+    "parameter_update_authorization": false,
+    "parameter_update_performed": false,
+    "post_geometry_training_authority_created": false,
+    "pre_geometry_authority_created": false,
+    "priority_queue_file_created": false,
+    "priority_queue_file_modified": false,
+    "reaction_family_authority": false,
+    "reusable_chemistry_authority": false,
+    "reusable_pair_authority": false,
+    "reusable_role_authority": false,
+    "review_state_created_by_this_refresh": false,
+    "separate_FOUR_M5_census_V2_successor_required": false,
+    "separate_GD1_census_V2_successor_required": false,
+    "separate_GVE_census_V2_successor_required": false,
+    "separate_LCY_census_V2_successor_required": false,
+    "separate_SR2_census_V2_successor_required": false,
+    "tensor_integration_performed": false,
+    "tensor_status": "NOT_STARTED",
+    "training_admission_created": false,
+    "training_admission_status": "NOT_STARTED",
+    "training_dataset_changed": false,
+    "training_materialization_allowed": false,
+    "training_performed": false,
+    "training_started": false,
+    "training_status": "NOT_STARTED",
+    "warhead_rule_authority": false,
+    "warhead_type_authority": false
+  },
+  "blockers": {
+    "chemistry_unresolved": {
+      "all_1000": 740
+    },
+    "feature_semantics_pending": {
+      "within_chemistry_positive": 170
+    },
+    "human_training_exclusion": {
+      "within_chemistry_positive": 76
+    },
+    "missing_POST_training_authority": {
+      "within_chemistry_positive": 153,
+      "within_training_include": 51
+    },
+    "missing_split_authority": {
+      "within_chemistry_positive": 129,
+      "within_training_include": 43
+    },
+    "missing_tensor_integration": {
+      "all_missing_are_training_excluded_population": false,
+      "missing_source_composition": {
+        "0D8": 4,
+        "1F8": 8,
+        "2A2": 4,
+        "2VS": 8,
+        "4LH": 4,
+        "4M5": 4,
+        "6OA": 4,
+        "CER": 4,
+        "CHT": 5,
+        "EI3": 3,
+        "F24": 4,
+        "G3H": 8,
+        "GD1": 4,
+        "GVE": 4,
+        "I12": 4,
+        "LCY": 4,
+        "ME7": 3,
+        "NEQ": 6,
+        "NWJ": 4,
+        "ONL": 9,
+        "OZJ": 4,
+        "PRF": 8,
+        "PYR": 4,
+        "SR2": 4,
+        "TP2": 4,
+        "YUN": 7
+      },
+      "within_chemistry_positive": 129,
+      "within_training_include": 39
+    },
+    "missing_training_admission": {
+      "within_chemistry_positive": 165,
+      "within_training_include": 63
+    },
+    "non_exclusive_counts_must_not_be_summed": true,
+    "pair_authority_absent": {
+      "all_1000": 830,
+      "within_chemistry_positive": 0
+    },
+    "population_sizes": {
+      "chemistry_positive_population_count": 170,
+      "training_include_population_count": 68
+    },
+    "role_authority_absent": {
+      "all_1000": 844,
+      "within_chemistry_positive": 14
+    }
+  },
+  "canonical_exact5": {
+    "B3_present": true,
+    "sixth_task_present": false,
+    "task_count": 5,
+    "tasks": [
+      {
+        "display_alias": "A",
+        "semantic_name": "warhead_only",
+        "structurally_applicable_authoritative_role_count": 156,
+        "task_id": 0
+      },
+      {
+        "display_alias": "B",
+        "semantic_name": "linker_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 56,
+        "task_id": 1
+      },
+      {
+        "display_alias": "B2",
+        "semantic_name": "scaffold_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 56,
+        "task_id": 2
+      },
+      {
+        "display_alias": "B3",
+        "semantic_name": "scaffold_only",
+        "structurally_applicable_authoritative_role_count": 156,
+        "task_id": 3
+      },
+      {
+        "display_alias": "C",
+        "semantic_name": "scaffold_plus_linker_plus_warhead",
+        "structurally_applicable_authoritative_role_count": 156,
+        "task_id": 4
+      }
+    ]
+  },
+  "chemistry": {
+    "NEGATIVE": {
+      "count": 0,
+      "event_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "NOT_ESTABLISHED": {
+      "count": 90,
+      "event_set_sha256": "d45fd1e5f358b268da122af8f8bda1025d8efe09287be3083e9f4ab7818eda68"
+    },
+    "POSITIVE": {
+      "count": 170,
+      "event_set_sha256": "56411c126430c06a4e6c3b09e0768bfb65aedd9979d06b1d460e5e0e89e09fa4"
+    },
+    "UNRESOLVED": {
+      "count": 740,
+      "event_set_sha256": "f5fd7272458e71f36bdfd50bebaf63b316f832a86b495b53584f5247d86ac9fc"
+    },
+    "positive_authority_collision_count": 0,
+    "positive_source_composition": {
+      "0D8": 4,
+      "1F8": 8,
+      "2A2": 4,
+      "2VS": 8,
+      "4LH": 4,
+      "4M5": 4,
+      "6OA": 4,
+      "CER": 4,
+      "CHT": 5,
+      "CURRENT_RUNTIME": 17,
+      "EI3": 3,
+      "F24": 4,
+      "FFQ": 8,
+      "G3H": 8,
+      "GD1": 4,
+      "GVE": 4,
+      "I12": 4,
+      "LCY": 4,
+      "ME7": 3,
+      "NEQ": 6,
+      "NWJ": 4,
+      "ONL": 9,
+      "OZJ": 4,
+      "POA": 16,
+      "PRF": 8,
+      "PYR": 4,
+      "SR2": 4,
+      "TP2": 4,
+      "YUN": 7
+    }
+  },
+  "geometry": {
+    "POST_sample_authoritative_count": 21,
+    "POST_source_evidence_available_count": 867,
+    "POST_to_PRE_promotion_performed": false,
+    "POST_training_target_available_count": 17,
+    "PRE_is_v1_hard_requirement": false,
+    "PRE_sample_authoritative_count": 0,
+    "PRE_source_evidence_available_count": 0,
+    "PRE_training_target_available_count": 0,
+    "PRE_zero_fill_performed": false
+  },
+  "global_status_distribution": {
+    "counts": {
+      "COMPLETED_HUMAN_NEGATIVE": 84,
+      "COMPLETED_HUMAN_POSITIVE": 127,
+      "COMPLETED_PARTIAL_AUTHORITY": 1,
+      "CURRENTLY_IN_PROGRESS": 0,
+      "CURRENTLY_UNREVIEWED": 157,
+      "CURRENT_RUNTIME_MODEL_USABLE": 17,
+      "LEAKAGE_EXISTING_GROUP_CONFLICT": 369,
+      "PUBLISHED_EXACT_AUTO_NEGATIVE": 32,
+      "QUARANTINE_REPRESENTATION_GAP": 78,
+      "REJECTED_FEATURE_INCOMPATIBLE": 2,
+      "STRUCTURAL_EVIDENCE_INCOMPLETE": 133
+    },
+    "exactly_one_status_per_event": true,
+    "presentation_only_not_authority": true,
+    "status_priority": [
+      "CURRENTLY_UNREVIEWED",
+      "CURRENTLY_IN_PROGRESS",
+      "COMPLETED_HUMAN_POSITIVE",
+      "COMPLETED_HUMAN_NEGATIVE",
+      "COMPLETED_PARTIAL_AUTHORITY",
+      "CURRENT_RUNTIME_MODEL_USABLE",
+      "PUBLISHED_EXACT_AUTO_NEGATIVE",
+      "LEAKAGE_EXISTING_GROUP_CONFLICT",
+      "STRUCTURAL_EVIDENCE_INCOMPLETE",
+      "QUARANTINE_REPRESENTATION_GAP",
+      "REJECTED_FEATURE_INCOMPATIBLE"
+    ],
+    "total_count": 1000
+  },
+  "human_review": {
+    "completed_event_count": 181,
+    "completed_negative_event_count": 54,
+    "completed_negative_unit_count": 12,
+    "completed_positive_event_count": 127,
+    "completed_positive_unit_count": 21,
+    "completed_unit_count": 33,
+    "current_pending_review_unit_count": 98,
+    "in_progress_event_count": 0,
+    "in_progress_unit_count": 0,
+    "pending_event_count": 157,
+    "priority_review_population_event_count": 338,
+    "review_unit_count": 131,
+    "unreviewed_event_count": 157,
+    "unreviewed_unit_count": 98
+  },
+  "orthogonal_task_negative_chemistry_positive": {
+    "0d8_orthogonal_population_count": 4,
+    "6oa_orthogonal_population_count": 4,
+    "ei3_orthogonal_population_count": 3,
+    "gve_orthogonal_population_count": 4,
+    "historical_exact23_population_count": 23,
+    "lcy_orthogonal_population_count": 4,
+    "me7_orthogonal_population_count": 3,
+    "population_equals_historical_exact23_union_ei3_exact3": true,
+    "pyr_orthogonal_population_count": 0,
+    "task_negative_chemistry_positive_population_count": 26,
+    "tp2_orthogonal_population_count": 4
+  },
+  "reactive_pair": {
+    "0d8_sample_authority_contribution_count": 4,
+    "0d8_training_target_contribution_count": 0,
+    "4lh_sample_authority_contribution_count": 4,
+    "4lh_training_target_contribution_count": 0,
+    "6oa_sample_authority_contribution_count": 4,
+    "6oa_training_target_contribution_count": 0,
+    "cer_model_bound_target_contribution_count": 0,
+    "cer_sample_authority_contribution_count": 4,
+    "cht_model_bound_target_contribution_count": 0,
+    "cht_sample_authority_contribution_count": 5,
+    "current_runtime_bound_target_count": 17,
+    "ei3_sample_authority_contribution_count": 3,
+    "ei3_training_target_contribution_count": 0,
+    "f24_model_bound_target_contribution_count": 0,
+    "f24_sample_authority_contribution_count": 4,
+    "four_m5_model_bound_target_contribution_count": 0,
+    "four_m5_sample_authority_contribution_count": 4,
+    "g3h_sample_authority_contribution_count": 8,
+    "g3h_training_target_contribution_count": 0,
+    "gd1_sample_authority_contribution_count": 4,
+    "gd1_training_target_contribution_count": 0,
+    "gve_sample_authority_contribution_count": 4,
+    "gve_training_target_contribution_count": 0,
+    "i12_model_bound_target_contribution_count": 0,
+    "i12_sample_authority_contribution_count": 4,
+    "lcy_sample_authority_contribution_count": 4,
+    "lcy_training_target_contribution_count": 0,
+    "me7_sample_authority_contribution_count": 3,
+    "me7_training_target_contribution_count": 0,
+    "neq_model_bound_target_contribution_count": 0,
+    "neq_sample_authority_contribution_count": 6,
+    "nwj_sample_authority_contribution_count": 4,
+    "nwj_training_target_contribution_count": 0,
+    "one_f8_model_bound_target_contribution_count": 0,
+    "one_f8_sample_authority_contribution_count": 8,
+    "onl_model_bound_target_contribution_count": 0,
+    "onl_sample_authority_contribution_count": 9,
+    "ozj_model_bound_target_contribution_count": 0,
+    "ozj_sample_authority_contribution_count": 4,
+    "positive_without_sample_pair_authority_count": 0,
+    "prf_model_bound_target_contribution_count": 0,
+    "prf_sample_authority_contribution_count": 8,
+    "published_model_bound_target_constructible_count": 41,
+    "pyr_sample_authority_contribution_count": 4,
+    "pyr_training_target_contribution_count": 0,
+    "raw_structural_pair_evidence_count": 865,
+    "sample_level_authoritative_pair_count": 170,
+    "sr2_sample_authority_contribution_count": 4,
+    "sr2_training_target_contribution_count": 0,
+    "tp2_sample_authority_contribution_count": 4,
+    "tp2_training_target_contribution_count": 0,
+    "two_a2_model_bound_target_contribution_count": 0,
+    "two_a2_sample_authority_contribution_count": 4,
+    "two_vs_model_bound_target_contribution_count": 0,
+    "two_vs_sample_authority_contribution_count": 8,
+    "yun_model_bound_target_contribution_count": 0,
+    "yun_sample_authority_contribution_count": 7
+  },
+  "refresh_delta": {
+    "EI3_exact3_positive_delta_count": 3,
+    "EI3_future_candidate_delta_count": 0,
+    "EI3_training_exclude_delta_count": 0,
+    "EI3_training_include_delta_count": 0,
+    "EI3_training_not_applicable_delta_count": 3,
+    "changed_event_count": 3,
+    "derived_refresh_not_new_authority": true,
+    "frozen_predecessor_future_candidate_count": 51,
+    "frozen_predecessor_positive_count": 167,
+    "frozen_predecessor_training_exclude_count": 76,
+    "frozen_predecessor_training_include_count": 68,
+    "frozen_predecessor_training_not_applicable_count": 113,
+    "non_target_changed_event_count": 0,
+    "refreshed_future_candidate_count": 51,
+    "refreshed_positive_count": 170,
+    "refreshed_training_exclude_count": 76,
+    "refreshed_training_include_count": 68,
+    "refreshed_training_not_applicable_count": 116,
+    "unchanged_event_count": 997
+  },
+  "role": {
+    "all_five_structurally_applicable_count": 56,
+    "canonical_mask_structural_labels_available_count": 156,
+    "direct_profile_A_B3_C_count": 100,
+    "role_partition_sample_authoritative_count": 156,
+    "role_profile_counts": {
+      "DIRECT_ATTACHMENT_OPTIONAL_LINKER_V1": 100,
+      "STRICT_LINKER_PRESENT_V1": 56,
+      "other": 0
+    },
+    "unknown_role_row_count": 844,
+    "unknown_role_rows_are_not_false_applicability": true
+  },
+  "schema_version": "covapie_cumulative1000_current_global_readiness_census_with_ei3_v1",
+  "stage": "COVAPIE_CUMULATIVE1000_CURRENT_GLOBAL_READINESS_CENSUS_WITH_EI3_V1",
+  "structural": {
+    "ccd_graph_complete_count": 865,
+    "distance_only_event_inference_used_count": 0,
+    "exact_cys_sg_event_recovered_count": 867,
+    "explicit_covalent_evidence_count": 867,
+    "feature_compatible_count": 865,
+    "feature_incompatible_count": 2,
+    "full_coordinate_post_evidence_available_count": 867,
+    "post_geometry_source_evidence_available_count": 867,
+    "raw_structure_available_count": 997,
+    "representation_gap_count": 78,
+    "structural_processing_success_count": 865
+  },
+  "task_relevance": {
+    "NOT_RELEVANT": {
+      "count": 116,
+      "event_set_sha256": "7c91ac69826578fa64e3a596094da7440ce211b40fc1cce4d59b8e6225e42c33"
+    },
+    "RELEVANT": {
+      "count": 145,
+      "event_set_sha256": "d89babedb955ae9b1d2198efb7f677f8c4a6b6b4bc29c891a90f0d6ccf1fcfb3"
+    },
+    "UNRESOLVED": {
+      "count": 739,
+      "event_set_sha256": "60e75353fbfe6dce7ba37a171465a05e22f1f21160d95498069e9443f24de37f"
+    }
+  },
+  "top_pending_review_units_by_event_yield": [
+    {
+      "ccd_complete_count": 3,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 3,
+      "exact_pair_count": 3,
+      "full_coordinate_count": 3,
+      "ligand_component_ids": [
+        "AZP"
+      ],
+      "pdb_ids": [
+        "2A5I",
+        "2A5K"
+      ],
+      "post_source_evidence_count": 3,
+      "rank": 1,
+      "raw_priority_rank": 34,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_7FB64BA2D198B24F"
+    },
+    {
+      "ccd_complete_count": 3,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 3,
+      "exact_pair_count": 3,
+      "full_coordinate_count": 3,
+      "ligand_component_ids": [
+        "4MZ"
+      ],
+      "pdb_ids": [
+        "1KEQ"
+      ],
+      "post_source_evidence_count": 3,
+      "rank": 2,
+      "raw_priority_rank": 35,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_90EE047F15B414B4"
+    },
+    {
+      "ccd_complete_count": 3,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 3,
+      "exact_pair_count": 3,
+      "full_coordinate_count": 3,
+      "ligand_component_ids": [
+        "LMB"
+      ],
+      "pdb_ids": [
+        "4HAT",
+        "4HAW",
+        "4HAY"
+      ],
+      "post_source_evidence_count": 3,
+      "rank": 3,
+      "raw_priority_rank": 36,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_9C9E0519571BA9A5"
+    },
+    {
+      "ccd_complete_count": 3,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 3,
+      "exact_pair_count": 3,
+      "full_coordinate_count": 3,
+      "ligand_component_ids": [
+        "PY0"
+      ],
+      "pdb_ids": [
+        "2W93"
+      ],
+      "post_source_evidence_count": 3,
+      "rank": 4,
+      "raw_priority_rank": 37,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_EA929B6D5C86E86B"
+    },
+    {
+      "ccd_complete_count": 3,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 3,
+      "exact_pair_count": 3,
+      "full_coordinate_count": 3,
+      "ligand_component_ids": [
+        "CYX"
+      ],
+      "pdb_ids": [
+        "1ML3"
+      ],
+      "post_source_evidence_count": 3,
+      "rank": 5,
+      "raw_priority_rank": 38,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_F405B411FF44DFF3"
+    },
+    {
+      "ccd_complete_count": 2,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 2,
+      "exact_pair_count": 2,
+      "full_coordinate_count": 2,
+      "ligand_component_ids": [
+        "DJK"
+      ],
+      "pdb_ids": [
+        "2HWP"
+      ],
+      "post_source_evidence_count": 2,
+      "rank": 6,
+      "raw_priority_rank": 39,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_0E25EAA0EAED92E1"
+    },
+    {
+      "ccd_complete_count": 2,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 2,
+      "exact_pair_count": 2,
+      "full_coordinate_count": 2,
+      "ligand_component_ids": [
+        "OCR"
+      ],
+      "pdb_ids": [
+        "2ZK4"
+      ],
+      "post_source_evidence_count": 2,
+      "rank": 7,
+      "raw_priority_rank": 40,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_013E84BB94630904"
+    },
+    {
+      "ccd_complete_count": 2,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 2,
+      "exact_pair_count": 2,
+      "full_coordinate_count": 2,
+      "ligand_component_ids": [
+        "OCR"
+      ],
+      "pdb_ids": [
+        "3ADW"
+      ],
+      "post_source_evidence_count": 2,
+      "rank": 8,
+      "raw_priority_rank": 41,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_051699CAC7019ABA"
+    },
+    {
+      "ccd_complete_count": 2,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 2,
+      "exact_pair_count": 2,
+      "full_coordinate_count": 2,
+      "ligand_component_ids": [
+        "ME7"
+      ],
+      "pdb_ids": [
+        "3QVY",
+        "3QVZ"
+      ],
+      "post_source_evidence_count": 2,
+      "rank": 9,
+      "raw_priority_rank": 42,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_06A012CB91AC4F3B"
+    },
+    {
+      "ccd_complete_count": 2,
+      "current_review_status": "CURRENTLY_UNREVIEWED",
+      "event_count": 2,
+      "exact_pair_count": 2,
+      "full_coordinate_count": 2,
+      "ligand_component_ids": [
+        "HMY"
+      ],
+      "pdb_ids": [
+        "3C9W"
+      ],
+      "post_source_evidence_count": 2,
+      "rank": 10,
+      "raw_priority_rank": 43,
+      "review_unit_id": "COVAPIE_BULK_REVIEW_UNIT_0E4BBC981ADBD5F5"
+    }
+  ],
+  "training_stage": {
+    "current_runtime_model_usable_count": 17,
+    "feature_semantics_audit_completed": false,
+    "feature_semantics_status": "FEATURE_SEMANTICS_AUDIT_REQUIRED_LATER",
+    "formal_training_admitted_count": 5,
+    "future_candidate_source_composition": {
+      "1F8": 0,
+      "2VS": 0,
+      "4LH": 4,
+      "4M5": 4,
+      "CER": 4,
+      "CHT": 0,
+      "F24": 4,
+      "FFQ": 4,
+      "G3H": 0,
+      "GD1": 0,
+      "I12": 4,
+      "NEQ": 0,
+      "NWJ": 4,
+      "ONL": 0,
+      "OZJ": 4,
+      "POA": 8,
+      "PRF": 0,
+      "SR2": 4,
+      "YUN": 7
+    },
+    "future_training_admission_candidate_count": 51,
+    "ready_for_formal_training_event_count": 0,
+    "step12d_status": "SMOKE_LEGALITY_CHECK_NOT_FINAL_TRAINING_FEATURE_CONTRACT",
+    "training_materialization_allowed_global_status": "NOT_COMPUTABLE_FROM_CURRENT_PUBLISHED_AUTHORITY",
+    "training_use_include_count": 68
+  },
+  "training_use": {
+    "EXCLUDE_FROM_TRAINING_ONLY": {
+      "count": 76,
+      "event_set_sha256": "afd69e2bd18794a98ebd5e771ae754704b8e66d69df43d1938fa4031cd164f0c"
+    },
+    "INCLUDE": {
+      "count": 68,
+      "event_set_sha256": "4742568b69ec1e1a55ec24195afd7d277b9b6c8a035bf7e1c73372fdbdb4b5bf"
+    },
+    "NOT_APPLICABLE": {
+      "count": 116,
+      "event_set_sha256": "7c91ac69826578fa64e3a596094da7440ce211b40fc1cce4d59b8e6225e42c33"
+    },
+    "UNRESOLVED": {
+      "count": 740,
+      "event_set_sha256": "f5fd7272458e71f36bdfd50bebaf63b316f832a86b495b53584f5247d86ac9fc"
+    },
+    "excluded_positive_is_not_chemistry_negative": true,
+    "total_count": 1000
+  },
+  "universe": {
+    "canonical_event_set_sha256": "f74d4e568d97ac23e2bc2cba2e8473e6705b726daf92204868efb1afbe0453ce",
+    "duplicate_canonical_event_id_count": 0,
+    "event_count": 1000,
+    "missing_rank_count": 0,
+    "rank_end": 1000,
+    "rank_start": 1,
+    "unique_canonical_event_id_count": 1000,
+    "unique_ligand_component_count": 416,
+    "unique_pdb_count": 546
+  }
+}
