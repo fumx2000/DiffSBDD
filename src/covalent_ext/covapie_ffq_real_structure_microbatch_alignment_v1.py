@@ -79,6 +79,16 @@ POCKET_SELECTION_SEMANTICS_V1 = (
     "checkpoint_CrossDocked_8A_strict_less_than_standard_amino_acid_"
     "residue_level_full_atom_model1_blank_or_A_altloc_source_atom_site_order"
 )
+POCKET_SEED_POLICY_FULL_LIGAND_V1 = "full_ligand_v1"
+POCKET_SEED_POLICY_FIXED_SCAFFOLD_WARHEAD_ONLY_V1 = (
+    "fixed_scaffold_warhead_only_v1"
+)
+_POCKET_SEED_POLICIES_V1 = frozenset(
+    {
+        POCKET_SEED_POLICY_FULL_LIGAND_V1,
+        POCKET_SEED_POLICY_FIXED_SCAFFOLD_WARHEAD_ONLY_V1,
+    }
+)
 
 
 class FFQRealStructureMicrobatchAlignmentError(ValueError):
@@ -431,6 +441,183 @@ def _build_checkpoint_model_input_pocket_v1(
     return pocket
 
 
+def _fixed_scaffold_warhead_only_pocket_seed_v1(
+    *,
+    effective_supervision_record: Mapping[str, object],
+    ligand_rows: Sequence[Mapping[str, object]],
+    ligand_retained: Sequence[tuple[int, Mapping[str, Any]]],
+    ligand_source_to_projected: Sequence[int | None],
+    role: role_owner.FFQDirectProfileRoleMaskTensorsV1,
+    sample_ordinal: int,
+) -> list[tuple[int, Mapping[str, Any]]]:
+    """Bind the validated Task-A scaffold role to retained source rows."""
+
+    reason_prefix = f"SAMPLE_{sample_ordinal}_"
+    if (
+        type(effective_supervision_record) is not dict
+        or type(role) is not role_owner.FFQDirectProfileRoleMaskTensorsV1
+        or role.canonical_task_id != 0
+        or role.canonical_event_id
+        != effective_supervision_record.get("canonical_event_id")
+        or role.task_applicable is not True
+    ):
+        _fail(reason_prefix + "FIXED_SCAFFOLD_ROLE_BINDING_INVALID")
+    node_count = len(ligand_retained)
+    scaffold_indices = role.scaffold_parser_local_indices
+    if type(scaffold_indices) is not tuple or not scaffold_indices:
+        _fail(reason_prefix + "FIXED_SCAFFOLD_SEED_EMPTY")
+    if (
+        any(
+            type(index) is not int or not 0 <= index < node_count
+            for index in scaffold_indices
+        )
+        or len(set(scaffold_indices)) != len(scaffold_indices)
+    ):
+        _fail(reason_prefix + "FIXED_SCAFFOLD_SEED_INDICES_INVALID")
+
+    tensors = (
+        (role.ligand_role_id, torch.long, (node_count,)),
+        (role.ligand_role_valid, torch.bool, (node_count,)),
+        (role.ligand_base_fixed_mask, torch.bool, (node_count, 1)),
+        (role.ligand_base_generation_mask, torch.bool, (node_count, 1)),
+    )
+    if any(
+        type(tensor) is not torch.Tensor
+        or tensor.dtype != dtype
+        or tuple(tensor.shape) != shape
+        for tensor, dtype, shape in tensors
+    ):
+        _fail(reason_prefix + "FIXED_SCAFFOLD_ROLE_TENSOR_SCHEMA_INVALID")
+    fixed = role.ligand_base_fixed_mask.squeeze(1)
+    generated = role.ligand_base_generation_mask.squeeze(1)
+    if torch.any(fixed & generated).item():
+        _fail(reason_prefix + "FIXED_GENERATED_MASK_CONFLICT")
+
+    scaffold_set = set(scaffold_indices)
+    fixed_set = set(torch.nonzero(fixed, as_tuple=False).flatten().tolist())
+    generated_set = set(torch.nonzero(generated, as_tuple=False).flatten().tolist())
+    linker_indices = role.linker_parser_local_indices
+    warhead_indices = role.warhead_parser_local_indices
+    if (
+        not torch.all(role.ligand_role_valid).item()
+        or type(linker_indices) is not tuple
+        or linker_indices
+        or type(warhead_indices) is not tuple
+        or any(
+            type(index) is not int or not 0 <= index < node_count
+            for index in warhead_indices
+        )
+        or len(set(warhead_indices)) != len(warhead_indices)
+        or scaffold_set & set(warhead_indices)
+        or scaffold_set | set(warhead_indices) != set(range(node_count))
+        or fixed_set != scaffold_set
+        or generated_set != set(warhead_indices)
+        or not torch.equal(fixed, ~generated)
+        or any(
+            role.ligand_role_id[index].item()
+            != role_owner._ROLE_ID_BY_NAME["scaffold"]
+            for index in scaffold_indices
+        )
+        or any(
+            role.ligand_role_id[index].item()
+            != role_owner._ROLE_ID_BY_NAME["warhead"]
+            for index in warhead_indices
+        )
+    ):
+        _fail(reason_prefix + "FIXED_SCAFFOLD_ROLE_MASK_INVALID")
+
+    if (
+        type(ligand_rows) not in (list, tuple)
+        or type(ligand_source_to_projected) not in (list, tuple)
+        or len(ligand_rows) != len(ligand_source_to_projected)
+        or not ligand_rows
+        or not ligand_retained
+    ):
+        _fail(reason_prefix + "PROJECTED_LIGAND_MAPPING_INVALID")
+    projected_to_parser: dict[int, int] = {}
+    for parser_position, (identity_row, projected_index) in enumerate(
+        zip(ligand_rows, ligand_source_to_projected)
+    ):
+        if (
+            type(identity_row) is not dict
+            or identity_row.get("parser_local_index") != parser_position
+        ):
+            _fail(reason_prefix + "PROJECTED_LIGAND_MAPPING_INVALID")
+        if projected_index is None:
+            continue
+        if (
+            type(projected_index) is not int
+            or not 0 <= projected_index < node_count
+            or projected_index in projected_to_parser
+        ):
+            _fail(reason_prefix + "PROJECTED_LIGAND_MAPPING_INVALID")
+        projected_to_parser[projected_index] = parser_position
+    if set(projected_to_parser) != set(range(node_count)):
+        _fail(reason_prefix + "PROJECTED_LIGAND_MAPPING_INVALID")
+
+    expected_source_indices = [
+        ligand_rows[projected_to_parser[index]].get(
+            "source_atom_site_row_index_0based"
+        )
+        for index in range(node_count)
+    ]
+    actual_source_indices = [source_index for source_index, _ in ligand_retained]
+    if (
+        actual_source_indices != expected_source_indices
+        or any(type(index) is not int for index in actual_source_indices)
+        or actual_source_indices != sorted(actual_source_indices)
+        or len(set(actual_source_indices)) != node_count
+    ):
+        _fail(reason_prefix + "PROJECTED_LIGAND_ORDER_INVALID")
+
+    for projected_index, (source_index, source_row) in enumerate(ligand_retained):
+        identity_row = ligand_rows[projected_to_parser[projected_index]]
+        if (
+            source_index
+            != identity_row.get("source_atom_site_row_index_0based")
+            or _atom_value(source_row, "id") != identity_row.get("atom_site_id")
+            or _atom_value(source_row, "label_atom_id")
+            != identity_row.get("atom_id")
+            or _atom_value(source_row, "type_symbol")
+            != identity_row.get("type_symbol")
+            or _atom_value(source_row, "label_comp_id")
+            != identity_row.get("label_comp_id")
+            or _atom_value(source_row, "label_asym_id")
+            != identity_row.get("label_asym_id")
+            or (_atom_value(source_row, "pdbx_PDB_model_num") or "1")
+            != identity_row.get("model_num")
+        ):
+            _fail(reason_prefix + "PROJECTED_LIGAND_IDENTITY_INVALID")
+
+    expected_scaffold_atom_ids = effective_supervision_record.get(
+        "reviewed_scaffold_atom_ids"
+    )
+    if (
+        type(expected_scaffold_atom_ids) is not list
+        or len(expected_scaffold_atom_ids) != len(scaffold_indices)
+        or len(set(expected_scaffold_atom_ids)) != len(expected_scaffold_atom_ids)
+        or any(
+            type(atom_id) is not str or not atom_id
+            for atom_id in expected_scaffold_atom_ids
+        )
+        or any(
+            ligand_rows[projected_to_parser[index]].get("atom_id") != atom_id
+            or _atom_value(ligand_retained[index][1], "label_atom_id") != atom_id
+            for atom_id, index in zip(expected_scaffold_atom_ids, scaffold_indices)
+        )
+    ):
+        _fail(reason_prefix + "FIXED_SCAFFOLD_IDENTITY_INVALID")
+
+    pocket_seed = [
+        indexed_row
+        for projected_index, indexed_row in enumerate(ligand_retained)
+        if projected_index in scaffold_set
+    ]
+    if not pocket_seed:
+        _fail(reason_prefix + "FIXED_SCAFFOLD_SEED_EMPTY")
+    return pocket_seed
+
+
 def _coordinates(
     indexed_rows: Sequence[tuple[int, Mapping[str, Any]]], *, domain: str,
     device: torch.device,
@@ -514,10 +701,17 @@ def _ligand_reactive_index(
 
 
 def assemble_covapie_ffq_real_structure_microbatch_alignment_v1(
-    *, samples: object, device: object = "cpu"
+    *,
+    samples: object,
+    device: object = "cpu",
+    pocket_seed_policy: object = POCKET_SEED_POLICY_FULL_LIGAND_V1,
 ) -> FFQRealStructureMicrobatchAlignmentV1:
     """Build an N-sample FFQ structural batch with local/flat pair alignment."""
 
+    if type(pocket_seed_policy) is not str:
+        _fail("POCKET_SEED_POLICY_EXACT_STRING_REQUIRED")
+    if pocket_seed_policy not in _POCKET_SEED_POLICIES_V1:
+        _fail("POCKET_SEED_POLICY_INVALID")
     if type(samples) not in (list, tuple) or not samples:
         _fail("SAMPLES_NONEMPTY_LIST_OR_TUPLE_REQUIRED")
     try:
@@ -572,6 +766,15 @@ def assemble_covapie_ffq_real_structure_microbatch_alignment_v1(
             reason=f"SAMPLE_{sample_ordinal}_EFFECTIVE_RECORD_EXACT_DICT_REQUIRED",
         )
         task_id = sample["canonical_task_id"]
+        if (
+            pocket_seed_policy
+            == POCKET_SEED_POLICY_FIXED_SCAFFOLD_WARHEAD_ONLY_V1
+            and (type(task_id) is not int or task_id != 0)
+        ):
+            _fail(
+                f"SAMPLE_{sample_ordinal}_"
+                "FIXED_SCAFFOLD_POCKET_SEED_REQUIRES_TASK_ID_0"
+            )
 
         try:
             identity = _event_identity(record)
@@ -594,8 +797,21 @@ def assemble_covapie_ffq_real_structure_microbatch_alignment_v1(
             ligand_retained, ligand_channels, ligand_source_to_projected = _projection(
                 ligand_preprojection, domain="ligand"
             )
+            pocket_seed_rows = ligand_retained
+            if (
+                pocket_seed_policy
+                == POCKET_SEED_POLICY_FIXED_SCAFFOLD_WARHEAD_ONLY_V1
+            ):
+                pocket_seed_rows = _fixed_scaffold_warhead_only_pocket_seed_v1(
+                    effective_supervision_record=record,
+                    ligand_rows=ligand_rows,
+                    ligand_retained=ligand_retained,
+                    ligand_source_to_projected=ligand_source_to_projected,
+                    role=role,
+                    sample_ordinal=sample_ordinal,
+                )
             pocket_preprojection = _build_checkpoint_model_input_pocket_v1(
-                list(enumerate(atom_rows)), ligand_retained
+                list(enumerate(atom_rows)), pocket_seed_rows
             )
             pocket_retained, pocket_channels, _ = _projection(
                 pocket_preprojection, domain="pocket"
