@@ -24,6 +24,9 @@ from covalent_ext import (
 from covalent_ext import (
     covapie_current11_formal_validation4_masked_vlb_nll_v1 as evaluator,
 )
+from covalent_ext import (
+    covapie_current11_auxiliary_model_and_loss_v1 as current_loss_owner,
+)
 from covalent_ext import covapie_current11_checkpoint_migration_v1 as migration_owner
 
 
@@ -87,6 +90,92 @@ def test_current_source_drift_fails_closed(monkeypatch):
         )
 
 
+def test_training_objective_profile_mapping_is_exact_and_rejects_arbitrary_values():
+    joint_profile, joint_weights = (
+        subject.resolve_covapie_batch001_training_objective_profile_v1(
+            "joint_default"
+        )
+    )
+    diffusion_profile, diffusion_weights = (
+        subject.resolve_covapie_batch001_training_objective_profile_v1(
+            "diffusion_only"
+        )
+    )
+    assert joint_profile == "joint_default"
+    assert joint_weights == bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    assert diffusion_profile == "diffusion_only"
+    assert diffusion_weights == current_loss_owner.CovapieCurrent11LossWeightsV1(
+        base_diffusion=1.0,
+        covalent_pair_prediction=0.0,
+        pre_post_geometry=0.0,
+        covalent_pair_contrastive=0.0,
+    )
+    assert tuple(
+        profile
+        for profile, _weights in subject.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1
+    ) == ("joint_default", "diffusion_only")
+    for invalid in (
+        "unknown",
+        True,
+        False,
+        None,
+        {},
+        {"base_diffusion": 1.0},
+    ):
+        with pytest.raises(
+            ValueError,
+            match="TRAINING_OBJECTIVE_PROFILE_NOT_EXPLICITLY_ALLOWED",
+        ):
+            subject.resolve_covapie_batch001_training_objective_profile_v1(
+                invalid
+            )
+
+
+def test_declared_profile_must_match_exact_model_loss_weights():
+    model = _ProbeModel()
+    model.covapie_current11_loss_weights = bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    assert subject._validate_model_training_objective_profile_v1(
+        model,
+        training_objective_profile="joint_default",
+    ) is bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    with pytest.raises(
+        subject._AdapterInvariantError,
+        match="CURRENT_MODEL_TRAINING_OBJECTIVE_PROFILE_MISMATCH",
+    ):
+        subject._validate_model_training_objective_profile_v1(
+            model,
+            training_objective_profile="diffusion_only",
+        )
+    diffusion_weights = dict(
+        subject.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1
+    )["diffusion_only"]
+    model.covapie_current11_loss_weights = diffusion_weights
+    assert subject._validate_model_training_objective_profile_v1(
+        model,
+        training_objective_profile="diffusion_only",
+    ) is diffusion_weights
+    for declared, actual in (
+        ("joint_default", diffusion_weights),
+        ("diffusion_only", bounded_owner.DEFAULT_LOSS_WEIGHTS_V1),
+        (
+            "diffusion_only",
+            current_loss_owner.CovapieCurrent11LossWeightsV1(
+                base_diffusion=1.0,
+                covalent_pair_prediction=0.5,
+                pre_post_geometry=0.0,
+                covalent_pair_contrastive=0.0,
+            ),
+        ),
+        ("diffusion_only", {"base_diffusion": 1.0}),
+    ):
+        model.covapie_current11_loss_weights = actual
+        with pytest.raises(subject._AdapterInvariantError):
+            subject._validate_model_training_objective_profile_v1(
+                model,
+                training_objective_profile=declared,
+            )
+
+
 def test_default_prepare_and_missing_opt_in_never_reach_model_evaluation(
     monkeypatch,
 ):
@@ -102,6 +191,46 @@ def test_default_prepare_and_missing_opt_in_never_reach_model_evaluation(
             repository_root=REPOSITORY_ROOT,
             cache_root=CACHE_ROOT,
         )
+
+
+def test_public_evaluate_forwards_default_and_explicit_profile_to_strict_gate(
+    monkeypatch,
+):
+    observed = []
+
+    def stop_at_model_gate(_model, *, training_objective_profile):
+        observed.append(training_objective_profile)
+        raise subject._AdapterInvariantError("SYNTHETIC_STOP_AT_MODEL_GATE")
+
+    monkeypatch.setattr(
+        subject,
+        "verify_covapie_batch001_current_state_validation4_sources_v1",
+        lambda **_kwargs: (),
+    )
+    monkeypatch.setattr(
+        subject,
+        "_validate_current_source_model_v1",
+        stop_at_model_gate,
+    )
+    common = {
+        "source_model": object(),
+        "execution_opt_in": True,
+        "caller_model_stage": "SYNTHETIC_CALLER_STAGE",
+        "caller_stage_evidence": "SYNTHETIC_TEST_METADATA",
+        "caller_confirms_model_is_quiescent": True,
+        "repository_root": REPOSITORY_ROOT,
+        "cache_root": CACHE_ROOT,
+    }
+    with pytest.raises(ValueError, match="SYNTHETIC_STOP_AT_MODEL_GATE"):
+        subject.evaluate_covapie_batch001_current_state_validation4_v1(
+            **common
+        )
+    with pytest.raises(ValueError, match="SYNTHETIC_STOP_AT_MODEL_GATE"):
+        subject.evaluate_covapie_batch001_current_state_validation4_v1(
+            **common,
+            training_objective_profile="diffusion_only",
+        )
+    assert observed == ["joint_default", "diffusion_only"]
 
 
 def test_real_prepare_uses_exact_validation4_and_never_constructs_model():
@@ -223,7 +352,11 @@ def test_production_route_consumes_caller_model_and_has_checkpoint_loader_tripwi
     guarded = _function(tree, "_guarded_slice_collection_v1")
     evaluation_text = ast.unparse(evaluation)
     calls = _call_names(evaluation) | _call_names(guarded)
-    assert "_validate_current_source_model_v1(source_model)" in evaluation_text
+    assert (
+        "_validate_current_source_model_v1(source_model, "
+        "training_objective_profile=declared_profile)"
+        in evaluation_text
+    )
     assert "_guarded_slice_collection_v1(source_model=source_model" in evaluation_text
     assert "inference_mode" in calls
     assert "eval" in calls
@@ -378,6 +511,37 @@ def test_synthetic_parameter_or_buffer_mutation_is_detected_not_repaired(
         )
     after = model.weight.detach() if target == "parameter" else model.running
     assert not torch.equal(after, before)
+
+
+def test_synthetic_training_objective_change_is_detected_not_repaired(prepared):
+    model = _probe_with_mixed_modes_and_grad()
+    model.covapie_current11_loss_weights = bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    diffusion_weights = dict(
+        subject.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1
+    )["diffusion_only"]
+
+    def mutate(*, model, **_unused):
+        model.covapie_current11_loss_weights = diffusion_weights
+        return evaluator._SliceOutputV1(
+            estimates=(),
+            main_calls=1,
+            t0_calls=1,
+            fixed_clean=True,
+            indicator_reused=True,
+            tensors_require_grad=False,
+        )
+
+    with pytest.raises(
+        subject._AdapterInvariantError,
+        match="SOURCE_MODEL_STATE_MUTATED_DURING_VALIDATION",
+    ):
+        subject._guarded_slice_collection_v1(
+            source_model=model,
+            prepared=prepared,
+            slice_evaluator=mutate,
+            evidence_kind="SYNTHETIC_TEST_FIXTURE",
+        )
+    assert model.covapie_current11_loss_weights is diffusion_weights
 
 
 def test_synthetic_new_module_parameter_and_state_key_are_rejected(prepared):

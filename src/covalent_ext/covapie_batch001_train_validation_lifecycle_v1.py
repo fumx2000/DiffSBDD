@@ -27,12 +27,16 @@ from covalent_ext import (
 from covalent_ext import (
     covapie_batch001_current_state_validation4_adapter_v1 as validation_owner,
 )
+from covalent_ext import (
+    covapie_current11_auxiliary_model_and_loss_v1 as current_loss_owner,
+)
 
 
 __all__ = (
     "COVAPIE_BATCH001_TRAIN_VALIDATION_LIFECYCLE_ERROR_V1",
     "TASK_ID_V1",
     "EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1",
+    "EXPLICIT_OBJECTIVE_PROFILE_OPTION_TASK_ID_V1",
     "LEGACY_CONSTRUCTOR_LEARNING_RATE_V1",
     "CANDIDATE_LEARNING_RATE_V1",
     "ALLOWED_RUN_LEARNING_RATES_V1",
@@ -63,6 +67,9 @@ TASK_ID_V1 = "implement_covapie_batch001_train_validation_lifecycle_v1"
 EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1 = (
     "implement_covapie_batch001_explicit_lr_diagnostic_option_v1"
 )
+EXPLICIT_OBJECTIVE_PROFILE_OPTION_TASK_ID_V1 = (
+    "implement_covapie_batch001_diffusion_only_objective_option_v1"
+)
 LEGACY_CONSTRUCTOR_LEARNING_RATE_V1 = 1.0e-3
 CANDIDATE_LEARNING_RATE_V1 = 1.0e-4
 ALLOWED_RUN_LEARNING_RATES_V1 = (
@@ -72,6 +79,7 @@ ALLOWED_RUN_LEARNING_RATES_V1 = (
 PRE_FIT_MODEL_STAGE_V1 = "PRE_FIT_INITIAL_MODEL"
 POST_FIT_MODEL_STAGE_V1 = "POST_FIT_CURRENT_MODEL"
 LEARNING_RATE_APPLICATION_STAGE_V1 = "POST_RUNTIME_BUILD_PRE_A0"
+TRAINING_OBJECTIVE_APPLICATION_STAGE_V1 = "POST_RUNTIME_BUILD_PRE_A0"
 NOT_OBSERVED_V1 = "NOT_OBSERVED"
 CANONICAL_MASK_CONTRACT_V1 = bounded_owner.CANONICAL_MASK_CONTRACT_V1
 DIRECT_BOUND_SOURCE_SHA256_V1 = (
@@ -82,7 +90,7 @@ DIRECT_BOUND_SOURCE_SHA256_V1 = (
     (
         "src/covalent_ext/"
         "covapie_batch001_current_state_validation4_adapter_v1.py",
-        "5300e7599453b92684e3dd12f0ae728e0b37ce410f29b5c82eb969edbe943099",
+        "3eacf077b9cd1dacbfd26d09232933d0bd1f49bd75b49f20b9daedf4f861da76",
     ),
 )
 
@@ -143,6 +151,7 @@ class CovapieBatch001TrainValidationLifecyclePrepareSummaryV1:
     task_id: str
     implementation_status: str
     learning_rate_diagnostic_option_task_id: str
+    training_objective_option_task_id: str
     legacy_constructor_learning_rate: float
     requested_run_learning_rate: float
     requested_run_learning_rate_differs_from_legacy_reference: bool
@@ -151,6 +160,14 @@ class CovapieBatch001TrainValidationLifecyclePrepareSummaryV1:
     constructor_hparams_learning_rate_after_application: str
     learning_rate_application_stage: str
     actual_optimizer_param_group_learning_rates: str
+    requested_training_objective_profile: str
+    declared_training_loss_weights: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1
+    )
+    original_constructor_training_loss_weights: str
+    model_training_loss_weights_before_application: str
+    model_training_loss_weights_after_application: str
+    training_objective_application_stage: str
     source_bindings: tuple[CovapieBatch001TrainValidationSourceBindingV1, ...]
     bounded_training_owner_task_id: str
     validation4_owner_task_id: str
@@ -304,6 +321,22 @@ class CovapieBatch001TrainValidationLifecycleRunV1:
     actual_optimizer_param_group_learning_rates: tuple[float, ...] | str = (
         NOT_OBSERVED_V1
     )
+    requested_training_objective_profile: str = (
+        validation_owner.JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+    )
+    declared_training_loss_weights: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1
+    ) = validation_owner.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1[0][1]
+    original_constructor_training_loss_weights: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1 | str
+    ) = NOT_OBSERVED_V1
+    model_training_loss_weights_before_application: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1 | str
+    ) = NOT_OBSERVED_V1
+    model_training_loss_weights_after_application: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1 | str
+    ) = NOT_OBSERVED_V1
+    training_objective_application_stage: str = "NOT_APPLIED"
     phase: str = "READY_NOT_EXECUTED"
     terminal_status: str = "NOT_REACHED"
     stage_history: list[str] = field(default_factory=lambda: ["READY_NOT_EXECUTED"])
@@ -377,6 +410,30 @@ def _validate_requested_run_learning_rate_v1(value: object) -> float:
     ):
         _fail("RUN_LEARNING_RATE_NOT_EXPLICITLY_ALLOWED")
     return value
+
+
+def _validate_requested_training_objective_profile_v1(
+    value: object,
+    *,
+    requested_run_learning_rate: float,
+) -> tuple[str, current_loss_owner.CovapieCurrent11LossWeightsV1]:
+    try:
+        profile, weights = (
+            validation_owner.resolve_covapie_batch001_training_objective_profile_v1(
+                value
+            )
+        )
+    except ValueError as error:
+        raise CovapieBatch001TrainValidationLifecycleExecutionErrorV1(
+            "TRAINING_OBJECTIVE_PROFILE_NOT_EXPLICITLY_ALLOWED"
+        ) from error
+    if (
+        profile
+        == validation_owner.DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1
+        and requested_run_learning_rate != CANDIDATE_LEARNING_RATE_V1
+    ):
+        _fail("DIFFUSION_ONLY_REQUIRES_EXPLICIT_1E4_LEARNING_RATE")
+    return profile, weights
 
 
 def _require_directory(value: object, *, default: Path, reason: str) -> Path:
@@ -560,11 +617,20 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
     state_root: object = None,
     cache_root: object = None,
     learning_rate: object = LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
+    training_objective_profile: object = (
+        validation_owner.JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+    ),
 ) -> CovapieBatch001PreparedTrainValidationLifecycleV1:
     """Prepare real train5/validation4 carriers with zero model execution."""
 
     requested_run_learning_rate = _validate_requested_run_learning_rate_v1(
         learning_rate
+    )
+    requested_training_objective_profile, declared_training_loss_weights = (
+        _validate_requested_training_objective_profile_v1(
+            training_objective_profile,
+            requested_run_learning_rate=requested_run_learning_rate,
+        )
     )
     repository = _require_directory(
         repository_root,
@@ -601,6 +667,9 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
         learning_rate_diagnostic_option_task_id=(
             EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1
         ),
+        training_objective_option_task_id=(
+            EXPLICIT_OBJECTIVE_PROFILE_OPTION_TASK_ID_V1
+        ),
         legacy_constructor_learning_rate=(
             LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
         ),
@@ -614,6 +683,16 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
         constructor_hparams_learning_rate_after_application=NOT_OBSERVED_V1,
         learning_rate_application_stage="NOT_APPLIED_PREPARE_ONLY",
         actual_optimizer_param_group_learning_rates=NOT_OBSERVED_V1,
+        requested_training_objective_profile=(
+            requested_training_objective_profile
+        ),
+        declared_training_loss_weights=declared_training_loss_weights,
+        original_constructor_training_loss_weights=NOT_OBSERVED_V1,
+        model_training_loss_weights_before_application=NOT_OBSERVED_V1,
+        model_training_loss_weights_after_application=NOT_OBSERVED_V1,
+        training_objective_application_stage=(
+            "NOT_APPLIED_PREPARE_ONLY"
+        ),
         source_bindings=bindings,
         bounded_training_owner_task_id=bounded_owner.TASK_ID_V1,
         validation4_owner_task_id=validation_owner.TASK_ID_V1,
@@ -694,7 +773,13 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
     )
 
 
-def _validate_prepared_lifecycle_v1(prepared: object) -> float:
+def _validate_prepared_lifecycle_v1(
+    prepared: object,
+) -> tuple[
+    float,
+    str,
+    current_loss_owner.CovapieCurrent11LossWeightsV1,
+]:
     if type(prepared) is not CovapieBatch001PreparedTrainValidationLifecycleV1:
         _fail("PREPARED_LIFECYCLE_TYPE_INVALID")
     _validate_prepared_components_v1(
@@ -706,9 +791,17 @@ def _validate_prepared_lifecycle_v1(prepared: object) -> float:
     requested = _validate_requested_run_learning_rate_v1(
         summary.requested_run_learning_rate
     )
+    requested_profile, declared_weights = (
+        _validate_requested_training_objective_profile_v1(
+            summary.requested_training_objective_profile,
+            requested_run_learning_rate=requested,
+        )
+    )
     if (
         summary.learning_rate_diagnostic_option_task_id
         != EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1
+        or summary.training_objective_option_task_id
+        != EXPLICIT_OBJECTIVE_PROFILE_OPTION_TASK_ID_V1
         or summary.legacy_constructor_learning_rate
         != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
         or summary.requested_run_learning_rate_differs_from_legacy_reference
@@ -721,6 +814,15 @@ def _validate_prepared_lifecycle_v1(prepared: object) -> float:
         != "NOT_APPLIED_PREPARE_ONLY"
         or summary.actual_optimizer_param_group_learning_rates
         != NOT_OBSERVED_V1
+        or summary.declared_training_loss_weights != declared_weights
+        or summary.original_constructor_training_loss_weights
+        != NOT_OBSERVED_V1
+        or summary.model_training_loss_weights_before_application
+        != NOT_OBSERVED_V1
+        or summary.model_training_loss_weights_after_application
+        != NOT_OBSERVED_V1
+        or summary.training_objective_application_stage
+        != "NOT_APPLIED_PREPARE_ONLY"
         or summary.actual_checkpoint_load_count != 0
         or summary.actual_model_construction_count != 0
         or summary.actual_trainer_construction_count != 0
@@ -731,14 +833,18 @@ def _validate_prepared_lifecycle_v1(prepared: object) -> float:
         or summary.actual_optimizer_step_count != 0
         or summary.parameter_update_performed
     ):
-        _fail("PREPARED_LEARNING_RATE_DIAGNOSTIC_CONTRACT_INVALID")
-    return requested
+        _fail("PREPARED_RUNTIME_CONFIGURATION_CONTRACT_INVALID")
+    return requested, requested_profile, declared_weights
 
 
 def create_covapie_batch001_train_validation_lifecycle_run_v1(
     *, prepared: object
 ) -> CovapieBatch001TrainValidationLifecycleRunV1:
-    requested_run_learning_rate = _validate_prepared_lifecycle_v1(prepared)
+    (
+        requested_run_learning_rate,
+        requested_training_objective_profile,
+        declared_training_loss_weights,
+    ) = _validate_prepared_lifecycle_v1(prepared)
     return CovapieBatch001TrainValidationLifecycleRunV1(
         prepared=prepared,
         requested_run_learning_rate=requested_run_learning_rate,
@@ -746,6 +852,10 @@ def create_covapie_batch001_train_validation_lifecycle_run_v1(
             requested_run_learning_rate
             != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
         ),
+        requested_training_objective_profile=(
+            requested_training_objective_profile
+        ),
+        declared_training_loss_weights=declared_training_loss_weights,
     )
 
 
@@ -818,7 +928,9 @@ def _runtime_model_v1(
 def _validate_unexecuted_run_learning_rate_contract_v1(
     run: CovapieBatch001TrainValidationLifecycleRunV1,
 ) -> None:
-    requested = _validate_prepared_lifecycle_v1(run.prepared)
+    requested, requested_profile, declared_weights = (
+        _validate_prepared_lifecycle_v1(run.prepared)
+    )
     if (
         run.legacy_constructor_learning_rate
         != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
@@ -832,8 +944,17 @@ def _validate_unexecuted_run_learning_rate_contract_v1(
         or run.learning_rate_application_stage != "NOT_APPLIED"
         or run.actual_optimizer_param_group_learning_rates
         != NOT_OBSERVED_V1
+        or run.requested_training_objective_profile != requested_profile
+        or run.declared_training_loss_weights != declared_weights
+        or run.original_constructor_training_loss_weights
+        != NOT_OBSERVED_V1
+        or run.model_training_loss_weights_before_application
+        != NOT_OBSERVED_V1
+        or run.model_training_loss_weights_after_application
+        != NOT_OBSERVED_V1
+        or run.training_objective_application_stage != "NOT_APPLIED"
     ):
-        _fail("RUN_LEARNING_RATE_DIAGNOSTIC_CONTRACT_INVALID", run=run)
+        _fail("RUN_RUNTIME_CONFIGURATION_CONTRACT_INVALID", run=run)
 
 
 def _model_learning_rate_v1(
@@ -920,6 +1041,96 @@ def _apply_pre_fit_learning_rate_v1(
     run.learning_rate_application_stage = LEARNING_RATE_APPLICATION_STAGE_V1
 
 
+def _apply_pre_fit_training_objective_profile_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+    *,
+    synthetic_fixture_mode: bool,
+) -> None:
+    """Apply the fixed objective after build and before A0 or optimizer creation."""
+
+    if run.training_objective_application_stage != "NOT_APPLIED":
+        _fail("RUN_TRAINING_OBJECTIVE_ALREADY_APPLIED", run=run)
+    model = _runtime_model_v1(
+        run, synthetic_fixture_mode=synthetic_fixture_mode
+    )
+    runtime = run.runtime
+    trainer = getattr(runtime, "trainer", None)
+    optimizers = getattr(trainer, "optimizers", None)
+    if validation_owner._trainer_running(model):
+        _fail("RUNNING_TRAINER_MODEL_VALIDATION_FORBIDDEN", run=run)
+    if (
+        run.runtime_build_request_count != 1
+        or run.runtime_build_completion_count != 1
+        or run.A0 is not None
+        or run.A1 is not None
+        or run.B0 is not None
+        or run.B1 is not None
+        or run.validation_request_count != 0
+        or run.validation_completion_count != 0
+        or run.fit_request_count != 0
+        or run.fit_completion_count != 0
+        or getattr(runtime, "fit_call_count", None) != 0
+        or getattr(trainer, "global_step", None) != 0
+    ):
+        _fail("RUN_TRAINING_OBJECTIVE_APPLICATION_TOO_LATE", run=run)
+    if type(optimizers) not in (tuple, list) or len(optimizers) != 0:
+        _fail(
+            "OPTIMIZER_MUST_NOT_EXIST_BEFORE_TRAINING_OBJECTIVE_APPLICATION",
+            run=run,
+        )
+    profile, declared_weights = (
+        _validate_requested_training_objective_profile_v1(
+            run.requested_training_objective_profile,
+            requested_run_learning_rate=run.requested_run_learning_rate,
+        )
+    )
+    if run.declared_training_loss_weights != declared_weights:
+        _fail("RUN_DECLARED_TRAINING_LOSS_WEIGHTS_DRIFT", run=run)
+    before_weights = getattr(model, "covapie_current11_loss_weights", None)
+    if (
+        type(before_weights)
+        is not current_loss_owner.CovapieCurrent11LossWeightsV1
+        or before_weights != bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    ):
+        _fail("CONSTRUCTOR_TRAINING_LOSS_WEIGHTS_DRIFT", run=run)
+    before = validation_owner._snapshot_model_state_v1(model)
+    environment_before = _cpu_environment_snapshot_v1()
+    run.original_constructor_training_loss_weights = before_weights
+    run.model_training_loss_weights_before_application = before_weights
+    if profile == validation_owner.DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1:
+        model.covapie_current11_loss_weights = declared_weights
+    after_weights = getattr(model, "covapie_current11_loss_weights", None)
+    after = validation_owner._snapshot_model_state_v1(model)
+    parity = _snapshot_parity_v1(before, after)
+    expected_configuration_unchanged = (
+        profile
+        == validation_owner.JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+    )
+    if (
+        type(after_weights)
+        is not current_loss_owner.CovapieCurrent11LossWeightsV1
+        or after_weights != declared_weights
+        or (
+            profile
+            == validation_owner.JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+            and after_weights is not before_weights
+        )
+        or parity["configuration_unchanged"]
+        is not expected_configuration_unchanged
+        or not all(
+            value
+            for name, value in parity.items()
+            if name != "configuration_unchanged"
+        )
+        or not _cpu_environment_unchanged_v1(environment_before)
+    ):
+        _fail("TRAINING_OBJECTIVE_APPLICATION_STATE_ISOLATION_FAILED", run=run)
+    run.model_training_loss_weights_after_application = after_weights
+    run.training_objective_application_stage = (
+        TRAINING_OBJECTIVE_APPLICATION_STAGE_V1
+    )
+
+
 def _require_effective_run_learning_rate_v1(
     run: CovapieBatch001TrainValidationLifecycleRunV1,
 ) -> None:
@@ -941,6 +1152,36 @@ def _require_effective_run_learning_rate_v1(
         or current != run.requested_run_learning_rate
     ):
         _fail("EFFECTIVE_MODEL_LEARNING_RATE_DRIFT", run=run)
+
+
+def _require_effective_training_objective_profile_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+) -> None:
+    model = run.model
+    if not isinstance(model, nn.Module):
+        _fail("RUN_MODEL_NOT_AVAILABLE_FOR_TRAINING_OBJECTIVE_CHECK", run=run)
+    profile, expected_weights = (
+        _validate_requested_training_objective_profile_v1(
+            run.requested_training_objective_profile,
+            requested_run_learning_rate=run.requested_run_learning_rate,
+        )
+    )
+    current_weights = getattr(model, "covapie_current11_loss_weights", None)
+    if (
+        run.training_objective_application_stage
+        != TRAINING_OBJECTIVE_APPLICATION_STAGE_V1
+        or run.original_constructor_training_loss_weights
+        != bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+        or run.model_training_loss_weights_before_application
+        != bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+        or run.declared_training_loss_weights != expected_weights
+        or run.model_training_loss_weights_after_application != expected_weights
+        or current_weights != expected_weights
+        or current_weights
+        is not run.model_training_loss_weights_after_application
+        or profile != run.requested_training_objective_profile
+    ):
+        _fail("EFFECTIVE_TRAINING_OBJECTIVE_PROFILE_DRIFT", run=run)
 
 
 def _snapshot_parity_v1(before: object, after: object) -> Mapping[str, bool]:
@@ -1013,12 +1254,23 @@ def _validate_validation_result_v1(
     expected_stage: str,
     expected_stage_evidence: str,
     expected_snapshot: object,
+    expected_training_objective_profile: str,
     synthetic_fixture_mode: bool,
 ) -> tuple[
     tuple[object, ...],
     tuple[object, ...],
     tuple[object, ...],
 ]:
+    try:
+        expected_profile, expected_weights = (
+            validation_owner.resolve_covapie_batch001_training_objective_profile_v1(
+                expected_training_objective_profile
+            )
+        )
+    except ValueError as error:
+        raise CovapieBatch001TrainValidationLifecycleExecutionErrorV1(
+            "VALIDATION4_RESULT_TRAINING_OBJECTIVE_PROFILE_INVALID"
+        ) from error
     if (
         not synthetic_fixture_mode
         and type(result)
@@ -1031,6 +1283,8 @@ def _validate_validation_result_v1(
         "validation_model_weight_source": (
             validation_owner.VALIDATION_MODEL_WEIGHT_SOURCE_V1
         ),
+        "declared_training_objective_profile": expected_profile,
+        "validated_actual_training_loss_weights": expected_weights,
         "caller_model_stage": expected_stage,
         "caller_stage_evidence": expected_stage_evidence,
         "caller_quiescence_asserted": True,
@@ -1180,6 +1434,7 @@ def _build_paired_comparison_v1(
     post_snapshot: object,
     pre_stage_evidence: str,
     post_stage_evidence: str,
+    expected_training_objective_profile: str,
     synthetic_fixture_mode: bool,
 ) -> CovapieBatch001PairedMetricComparisonV1:
     pre_rows, pre_tasks, pre_events = _validate_validation_result_v1(
@@ -1188,6 +1443,9 @@ def _build_paired_comparison_v1(
         expected_stage=PRE_FIT_MODEL_STAGE_V1,
         expected_stage_evidence=pre_stage_evidence,
         expected_snapshot=pre_snapshot,
+        expected_training_objective_profile=(
+            expected_training_objective_profile
+        ),
         synthetic_fixture_mode=synthetic_fixture_mode,
     )
     post_rows, post_tasks, post_events = _validate_validation_result_v1(
@@ -1196,6 +1454,9 @@ def _build_paired_comparison_v1(
         expected_stage=POST_FIT_MODEL_STAGE_V1,
         expected_stage_evidence=post_stage_evidence,
         expected_snapshot=post_snapshot,
+        expected_training_objective_profile=(
+            expected_training_objective_profile
+        ),
         synthetic_fixture_mode=synthetic_fixture_mode,
     )
     pre_by_key = {_row_key_v1(row): row for row in pre_rows}
@@ -1477,6 +1738,7 @@ def _perform_validation_stage_v1(
         if validation_owner._trainer_running(model):
             _fail("RUNNING_TRAINER_MODEL_VALIDATION_FORBIDDEN", run=run)
         _require_effective_run_learning_rate_v1(run)
+        _require_effective_training_objective_profile_v1(run)
     except BaseException as error:
         reason = (
             error.reason
@@ -1507,10 +1769,14 @@ def _perform_validation_stage_v1(
             caller_model_stage=stage,
             caller_stage_evidence=stage_evidence,
             caller_confirms_model_is_quiescent=True,
+            training_objective_profile=(
+                run.requested_training_objective_profile
+            ),
             repository_root=repository_root,
             cache_root=cache_root,
         )
         _require_effective_run_learning_rate_v1(run)
+        _require_effective_training_objective_profile_v1(run)
     except BaseException as error:
         after = validation_owner._snapshot_model_state_v1(model)
         if is_pre:
@@ -1565,6 +1831,9 @@ def _perform_validation_stage_v1(
             expected_stage=stage,
             expected_stage_evidence=stage_evidence,
             expected_snapshot=before,
+            expected_training_objective_profile=(
+                run.requested_training_objective_profile
+            ),
             synthetic_fixture_mode=synthetic_fixture_mode,
         )
     except BaseException as error:
@@ -1686,6 +1955,9 @@ def _execute_lifecycle_with_callbacks_v1(
             _apply_pre_fit_learning_rate_v1(
                 run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
             )
+            _apply_pre_fit_training_objective_profile_v1(
+                run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
+            )
         run.A0 = validation_owner._snapshot_model_state_v1(model)
         run.parameter_object_identities = _parameter_ids_v1(run.A0)
     except BaseException as error:
@@ -1713,6 +1985,7 @@ def _execute_lifecycle_with_callbacks_v1(
     if not _cross_fit_object_parity_v1(run.A0, run.A1):
         _fail("PRE_FIT_MODEL_OBJECT_PARITY_INVALID", run=run)
     _require_effective_run_learning_rate_v1(run)
+    _require_effective_training_objective_profile_v1(run)
     _request_operation_v1(run, "FIT")
     _set_phase_v1(run, "FIT_REQUESTED")
     try:
@@ -1747,6 +2020,7 @@ def _execute_lifecycle_with_callbacks_v1(
             run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
         )
         _require_effective_run_learning_rate_v1(run)
+        _require_effective_training_objective_profile_v1(run)
         trainer = getattr(runtime, "trainer", None)
         run.actual_global_step = getattr(trainer, "global_step", None)
         run.actual_final_epoch = getattr(trainer, "current_epoch", None)
@@ -1816,6 +2090,7 @@ def _execute_lifecycle_with_callbacks_v1(
         )
         if not run.same_model_and_parameter_objects_pass:
             _fail("FOUR_STAGE_MODEL_OR_PARAMETER_IDENTITY_MISMATCH", run=run)
+        _require_effective_training_objective_profile_v1(run)
         final_bindings = (
             verify_covapie_batch001_train_validation_lifecycle_sources_v1(
                 repository_root=repository
@@ -1849,6 +2124,9 @@ def _execute_lifecycle_with_callbacks_v1(
             post_snapshot=run.B0,
             pre_stage_evidence=pre_evidence,
             post_stage_evidence=post_evidence,
+            expected_training_objective_profile=(
+                run.requested_training_objective_profile
+            ),
             synthetic_fixture_mode=bool(synthetic_fixture_mode),
         )
     except BaseException as error:
@@ -1921,12 +2199,25 @@ def main(argv: Sequence[str] | None = None) -> int:
         choices=ALLOWED_RUN_LEARNING_RATES_V1,
         default=LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
     )
+    parser.add_argument(
+        "--training-objective-profile",
+        choices=tuple(
+            profile
+            for profile, _weights in (
+                validation_owner.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1
+            )
+        ),
+        default=(
+            validation_owner.JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+        ),
+    )
     arguments = parser.parse_args(argv)
     prepared = prepare_covapie_batch001_train_validation_lifecycle_v1(
         repository_root=arguments.repository_root,
         state_root=arguments.state_root,
         cache_root=arguments.cache_root,
         learning_rate=arguments.learning_rate,
+        training_objective_profile=arguments.training_objective_profile,
     )
     print(
         serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(

@@ -25,6 +25,9 @@ from covalent_ext import (
 from covalent_ext import (
     covapie_current11_formal_validation4_masked_vlb_nll_v1 as evaluator_owner,
 )
+from covalent_ext import (
+    covapie_current11_auxiliary_model_and_loss_v1 as current_loss_owner,
+)
 from covalent_ext import covapie_current11_checkpoint_migration_v1 as migration_owner
 
 
@@ -98,6 +101,14 @@ def candidate_prepared():
     )
 
 
+@pytest.fixture(scope="module")
+def diffusion_only_prepared():
+    return _prepare_without_real_execution(
+        learning_rate=subject.CANDIDATE_LEARNING_RATE_V1,
+        training_objective_profile="diffusion_only",
+    )
+
+
 def test_fixed_direct_sources_and_real_prepare_only_contract(prepared):
     bindings = subject.verify_covapie_batch001_train_validation_lifecycle_sources_v1(
         repository_root=REPOSITORY_ROOT
@@ -148,6 +159,18 @@ def test_fixed_direct_sources_and_real_prepare_only_contract(prepared):
     assert summary.model_learning_rate_before_application == "NOT_OBSERVED"
     assert summary.model_learning_rate_after_application == "NOT_OBSERVED"
     assert summary.actual_optimizer_param_group_learning_rates == "NOT_OBSERVED"
+    assert summary.requested_training_objective_profile == "joint_default"
+    assert (
+        summary.declared_training_loss_weights
+        == bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert summary.original_constructor_training_loss_weights == "NOT_OBSERVED"
+    assert summary.model_training_loss_weights_before_application == "NOT_OBSERVED"
+    assert summary.model_training_loss_weights_after_application == "NOT_OBSERVED"
+    assert (
+        summary.training_objective_application_stage
+        == "NOT_APPLIED_PREPARE_ONLY"
+    )
 
 
 def test_prepare_plan_counts_are_distinct_from_zero_actual_calls(prepared):
@@ -282,6 +305,96 @@ def test_candidate_prepare_is_lr_only_and_cli_remains_prepare_only(
     assert "execute_covapie" not in inspect.getsource(subject.main)
 
 
+def test_diffusion_only_1e4_prepare_differs_only_by_objective_fields(
+    candidate_prepared,
+    diffusion_only_prepared,
+    monkeypatch,
+    capsys,
+):
+    joint_payload = json.loads(
+        subject.serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
+            candidate_prepared
+        )
+    )
+    diffusion_payload = json.loads(
+        subject.serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
+            diffusion_only_prepared
+        )
+    )
+    assert {
+        key
+        for key in joint_payload
+        if joint_payload[key] != diffusion_payload[key]
+    } == {
+        "requested_training_objective_profile",
+        "declared_training_loss_weights",
+    }
+    assert diffusion_payload["requested_training_objective_profile"] == (
+        "diffusion_only"
+    )
+    assert diffusion_payload["declared_training_loss_weights"] == {
+        "base_diffusion": 1.0,
+        "covalent_pair_prediction": 0.0,
+        "pre_post_geometry": 0.0,
+        "covalent_pair_contrastive": 0.0,
+    }
+    invariant_fields = (
+        "requested_run_learning_rate",
+        "training_carrier_fingerprints",
+        "training_scheduled_task_ids",
+        "formal_train_event_ids",
+        "formal_validation_event_ids",
+        "formal_test_event_ids",
+        "validation_root_seeds",
+        "validation_context_seed",
+        "validation_profile_task_matrix",
+        "planned_max_optimizer_step_count",
+        "planned_validation4_call_count",
+    )
+    assert all(
+        joint_payload[name] == diffusion_payload[name]
+        for name in invariant_fields
+    )
+    for prefix in (
+        "actual_checkpoint_load_count",
+        "actual_model_construction_count",
+        "actual_trainer_construction_count",
+        "actual_optimizer_construction_count",
+        "actual_fit_call_count",
+        "actual_validation4_call_count",
+        "actual_backward_count",
+        "actual_optimizer_step_count",
+    ):
+        assert diffusion_payload[prefix] == 0
+    assert diffusion_payload["parameter_update_performed"] is False
+
+    observed = []
+
+    def prepare_spy(**kwargs):
+        observed.append(kwargs)
+        return diffusion_only_prepared
+
+    monkeypatch.setattr(
+        subject,
+        "prepare_covapie_batch001_train_validation_lifecycle_v1",
+        prepare_spy,
+    )
+    assert subject.main([
+        "--learning-rate",
+        "0.0001",
+        "--training-objective-profile",
+        "diffusion_only",
+    ]) == 0
+    assert observed == [{
+        "repository_root": None,
+        "state_root": None,
+        "cache_root": None,
+        "learning_rate": 1.0e-4,
+        "training_objective_profile": "diffusion_only",
+    }]
+    assert json.loads(capsys.readouterr().out) == diffusion_payload
+
+
 @pytest.mark.parametrize(
     "invalid",
     (
@@ -308,6 +421,48 @@ def test_invalid_learning_rate_is_rejected_before_preparation(
     ):
         subject.prepare_covapie_batch001_train_validation_lifecycle_v1(
             learning_rate=invalid
+        )
+    directory_probe.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "invalid",
+    (
+        "unknown",
+        True,
+        False,
+        None,
+        {},
+        {"base_diffusion": 1.0},
+    ),
+)
+def test_invalid_training_objective_profile_is_rejected_before_preparation(
+    invalid, monkeypatch
+):
+    directory_probe = mock.Mock(side_effect=_forbidden)
+    monkeypatch.setattr(subject, "_require_directory", directory_probe)
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="TRAINING_OBJECTIVE_PROFILE_NOT_EXPLICITLY_ALLOWED",
+    ):
+        subject.prepare_covapie_batch001_train_validation_lifecycle_v1(
+            learning_rate=subject.CANDIDATE_LEARNING_RATE_V1,
+            training_objective_profile=invalid,
+        )
+    directory_probe.assert_not_called()
+
+
+def test_diffusion_only_without_explicit_1e4_is_rejected_before_preparation(
+    monkeypatch,
+):
+    directory_probe = mock.Mock(side_effect=_forbidden)
+    monkeypatch.setattr(subject, "_require_directory", directory_probe)
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="DIFFUSION_ONLY_REQUIRES_EXPLICIT_1E4_LEARNING_RATE",
+    ):
+        subject.prepare_covapie_batch001_train_validation_lifecycle_v1(
+            training_objective_profile="diffusion_only"
         )
     directory_probe.assert_not_called()
 
@@ -415,7 +570,7 @@ class _ProbeModel(nn.Module):
         self.loss_type = "SYNTHETIC"
         self.lr = 1.0e-3
         self.hparams = {"lr": 1.0e-3}
-        self.covapie_current11_loss_weights = None
+        self.covapie_current11_loss_weights = bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
         self.train()
         self.branch.eval()
         self.weight.grad = torch.tensor([7.0, 11.0])
@@ -530,6 +685,7 @@ def _validation_fixture_result(
     model,
     stage,
     stage_evidence,
+    training_objective_profile,
     offset,
     rows=None,
 ):
@@ -550,6 +706,10 @@ def _validation_fixture_result(
         evidence_scope="SYNTHETIC_TEST_FIXTURE_NOT_REAL_LEARNING_RATE_EXPERIMENT",
         primary_metric_name=validation_owner.PRIMARY_METRIC_NAME_V1,
         validation_model_weight_source=validation_owner.VALIDATION_MODEL_WEIGHT_SOURCE_V1,
+        declared_training_objective_profile=training_objective_profile,
+        validated_actual_training_loss_weights=(
+            model.covapie_current11_loss_weights
+        ),
         caller_model_stage=stage,
         caller_stage_evidence=stage_evidence,
         caller_quiescence_asserted=True,
@@ -639,6 +799,12 @@ def _callbacks(prepared, *, post_offset=10.0, optimizer_learning_rate=None):
         calls.append("pre" if stage == subject.PRE_FIT_MODEL_STAGE_V1 else "post")
         assert kwargs["source_model"] is model
         assert model.lr == prepared.summary.requested_run_learning_rate
+        assert kwargs["training_objective_profile"] == (
+            prepared.summary.requested_training_objective_profile
+        )
+        assert model.covapie_current11_loss_weights == (
+            prepared.summary.declared_training_loss_weights
+        )
         assert kwargs["execution_opt_in"] is True
         assert kwargs["caller_confirms_model_is_quiescent"] is True
         assert not validation_owner._trainer_running(model)
@@ -647,6 +813,7 @@ def _callbacks(prepared, *, post_offset=10.0, optimizer_learning_rate=None):
             model=model,
             stage=stage,
             stage_evidence=kwargs["caller_stage_evidence"],
+            training_objective_profile=kwargs["training_objective_profile"],
             offset=(0.0 if stage == subject.PRE_FIT_MODEL_STAGE_V1 else post_offset),
         )
 
@@ -654,6 +821,9 @@ def _callbacks(prepared, *, post_offset=10.0, optimizer_learning_rate=None):
         calls.append("fit")
         assert value is runtime
         assert model.lr == prepared.summary.requested_run_learning_rate
+        assert model.covapie_current11_loss_weights == (
+            prepared.summary.declared_training_loss_weights
+        )
         runtime.fit_call_count += 1
         trainer.state.status = "running"
         trainer.fit_loop.running = True
@@ -795,6 +965,106 @@ def test_optimizer_exists_fit_started_or_repeat_lr_application_fails_closed(
     assert repeat_callbacks.model.lr == 1.0e-4
 
 
+def test_objective_profile_applies_before_a0_without_state_or_rng_change(
+    prepared,
+    diffusion_only_prepared,
+):
+    joint_run, joint_callbacks = _ready_synthetic_run(prepared)
+    original_joint_weights = joint_callbacks.model.covapie_current11_loss_weights
+    subject._apply_pre_fit_training_objective_profile_v1(
+        joint_run, synthetic_fixture_mode=True
+    )
+    assert (
+        joint_callbacks.model.covapie_current11_loss_weights
+        is original_joint_weights
+    )
+    assert joint_run.requested_training_objective_profile == "joint_default"
+
+    run, callbacks = _ready_synthetic_run(diffusion_only_prepared)
+    before = validation_owner._snapshot_model_state_v1(callbacks.model)
+    rng_before = torch.random.get_rng_state().clone()
+    subject._apply_pre_fit_training_objective_profile_v1(
+        run, synthetic_fixture_mode=True
+    )
+    after = validation_owner._snapshot_model_state_v1(callbacks.model)
+    expected = diffusion_only_prepared.summary.declared_training_loss_weights
+    assert run.A0 is None
+    assert run.original_constructor_training_loss_weights == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.model_training_loss_weights_before_application == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.model_training_loss_weights_after_application == expected
+    assert callbacks.model.covapie_current11_loss_weights is expected
+    assert run.training_objective_application_stage == (
+        subject.TRAINING_OBJECTIVE_APPLICATION_STAGE_V1
+    )
+    assert before.model_state_sha256 == after.model_state_sha256
+    assert before.parameter_entries == after.parameter_entries
+    assert before.buffer_entries == after.buffer_entries
+    assert before.gradient_entries == after.gradient_entries
+    assert before.module_entries == after.module_entries
+    assert before.state_keys == after.state_keys
+    assert before.training_flags == after.training_flags
+    assert before.node_distribution_identity == after.node_distribution_identity
+    assert before.node_distribution_sha256 == after.node_distribution_sha256
+    assert before.configuration_sha256 != after.configuration_sha256
+    assert torch.equal(torch.random.get_rng_state(), rng_before)
+
+
+def test_optimizer_fit_or_repeat_objective_application_fails_closed(
+    diffusion_only_prepared,
+):
+    optimizer_run, optimizer_callbacks = _ready_synthetic_run(
+        diffusion_only_prepared
+    )
+    optimizer_callbacks.trainer.optimizers = [
+        _FakeOptimizer(
+            optimizer_callbacks.model,
+            learning_rate=subject.CANDIDATE_LEARNING_RATE_V1,
+        )
+    ]
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="OPTIMIZER_MUST_NOT_EXIST_BEFORE_TRAINING_OBJECTIVE_APPLICATION",
+    ):
+        subject._apply_pre_fit_training_objective_profile_v1(
+            optimizer_run, synthetic_fixture_mode=True
+        )
+    assert (
+        optimizer_callbacks.model.covapie_current11_loss_weights
+        == bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+
+    fit_run, fit_callbacks = _ready_synthetic_run(diffusion_only_prepared)
+    fit_callbacks.runtime.fit_call_count = 1
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="RUN_TRAINING_OBJECTIVE_APPLICATION_TOO_LATE",
+    ):
+        subject._apply_pre_fit_training_objective_profile_v1(
+            fit_run, synthetic_fixture_mode=True
+        )
+
+    repeat_run, repeat_callbacks = _ready_synthetic_run(
+        diffusion_only_prepared
+    )
+    subject._apply_pre_fit_training_objective_profile_v1(
+        repeat_run, synthetic_fixture_mode=True
+    )
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="RUN_TRAINING_OBJECTIVE_ALREADY_APPLIED",
+    ):
+        subject._apply_pre_fit_training_objective_profile_v1(
+            repeat_run, synthetic_fixture_mode=True
+        )
+    assert repeat_callbacks.model.covapie_current11_loss_weights == (
+        diffusion_only_prepared.summary.declared_training_loss_weights
+    )
+
+
 def test_synthetic_same_model_sequence_state_isolation_and_signed_worse_delta(
     prepared,
 ):
@@ -834,6 +1104,22 @@ def test_synthetic_same_model_sequence_state_isolation_and_signed_worse_delta(
         == subject.LEARNING_RATE_APPLICATION_STAGE_V1
     )
     assert run.actual_optimizer_param_group_learning_rates == (1.0e-3,)
+    assert run.requested_training_objective_profile == "joint_default"
+    assert run.declared_training_loss_weights == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.original_constructor_training_loss_weights == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.model_training_loss_weights_before_application == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.model_training_loss_weights_after_application == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.training_objective_application_stage == (
+        subject.TRAINING_OBJECTIVE_APPLICATION_STAGE_V1
+    )
     assert (
         run.pre_fit_validation_result.evidence_scope
         == "SYNTHETIC_TEST_FIXTURE_NOT_REAL_LEARNING_RATE_EXPERIMENT"
@@ -883,6 +1169,37 @@ def test_candidate_synthetic_lifecycle_applies_before_a0_preserves_isolation_and
     assert run.same_model_and_parameter_objects_pass is True
     assert run.paired_comparison.event_macro_post_minus_pre == pytest.approx(10.0)
     assert torch.equal(torch.random.get_rng_state(), rng_before)
+
+
+def test_diffusion_only_synthetic_lifecycle_passes_same_profile_to_both_evaluations(
+    diffusion_only_prepared,
+):
+    callbacks = _callbacks(diffusion_only_prepared, post_offset=10.0)
+    run = _execute_synthetic(diffusion_only_prepared, callbacks)
+    expected = diffusion_only_prepared.summary.declared_training_loss_weights
+    assert callbacks.calls == ["build", "pre", "fit", "post"]
+    assert run.terminal_status == "COMPLETED"
+    assert run.requested_run_learning_rate == 1.0e-4
+    assert run.requested_training_objective_profile == "diffusion_only"
+    assert run.original_constructor_training_loss_weights == (
+        bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+    assert run.model_training_loss_weights_after_application == expected
+    assert callbacks.model.covapie_current11_loss_weights is expected
+    assert (
+        run.pre_fit_validation_result.declared_training_objective_profile
+        == run.post_fit_validation_result.declared_training_objective_profile
+        == "diffusion_only"
+    )
+    assert (
+        run.pre_fit_validation_result.validated_actual_training_loss_weights
+        == run.post_fit_validation_result.validated_actual_training_loss_weights
+        == expected
+    )
+    assert run.A0.configuration_sha256 == run.A1.configuration_sha256
+    assert run.A1.configuration_sha256 == run.B0.configuration_sha256
+    assert run.B0.configuration_sha256 == run.B1.configuration_sha256
+    assert run.paired_comparison.event_macro_post_minus_pre == pytest.approx(10.0)
 
 
 def test_optimizer_observation_mismatch_fails_closed(candidate_prepared):
@@ -941,6 +1258,101 @@ def test_production_configure_optimizers_reads_selected_model_lr_without_constru
     )
 
 
+def test_SYNTHETIC_published_loss_weighting_preserves_all_raw_diagnostics(prepared):
+    # SYNTHETIC: fixed tensors only; this is not a model, training, or validation run.
+    supervision = prepared.training.carriers[0].supervision
+    sample_count = len(supervision.sample_training_admitted)
+    ligand_count = len(supervision.ligand_role_id)
+    pocket_count = len(supervision.target_residue_membership_mask)
+    pair_count = int(supervision.pair_candidate_offsets[-1].item())
+    model_output = current_loss_owner.CovapieCurrent11ModelOutputV1(
+        diffusion_epsilon_prediction_ligand=torch.zeros(ligand_count, 13),
+        denoised_ligand_xh=torch.zeros(ligand_count, 13),
+        diffusion_timestep_int=torch.ones(sample_count, dtype=torch.long),
+        ligand_node_hidden=torch.zeros(ligand_count, 1),
+        pocket_node_hidden=torch.zeros(pocket_count, 1),
+        role_mask_anchor_hidden_delta=torch.zeros(ligand_count, 1),
+        pair_embeddings=torch.zeros(pair_count, 1),
+        pair_logits=torch.linspace(-1.0, 1.0, pair_count),
+        pre_post_geometry_predictions_angstrom=torch.ones(pair_count, 2),
+        target_pair_consistency=torch.ones(sample_count, dtype=torch.bool),
+        canonical_task_id=supervision.canonical_task_id,
+        pair_candidate_offsets=supervision.pair_candidate_offsets,
+        pair_candidate_batch_index=supervision.pair_candidate_batch_index,
+        pair_candidate_ligand_local_index=(
+            supervision.pair_candidate_ligand_local_index
+        ),
+        pair_candidate_residue_local_index=(
+            supervision.pair_candidate_residue_local_index
+        ),
+        pair_candidate_ligand_flat_index=(
+            supervision.pair_candidate_ligand_flat_index
+        ),
+        pair_candidate_pocket_flat_index=(
+            supervision.pair_candidate_pocket_flat_index
+        ),
+    )
+    trace = SimpleNamespace(
+        base_objective_per_sample=torch.linspace(
+            0.25, 1.25, sample_count
+        )
+    )
+    profile_weights = dict(
+        validation_owner.TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1
+    )
+    joint = current_loss_owner.compute_covapie_current11_training_losses_v1(
+        model_output=model_output,
+        supervision=supervision,
+        diffusion_trace=trace,
+        loss_weights=profile_weights["joint_default"],
+    )
+    diffusion_only = (
+        current_loss_owner.compute_covapie_current11_training_losses_v1(
+            model_output=model_output,
+            supervision=supervision,
+            diffusion_trace=trace,
+            loss_weights=profile_weights["diffusion_only"],
+        )
+    )
+    raw_names = (
+        "loss_base_diffusion",
+        "loss_covalent_pair_prediction",
+        "loss_pre_post_geometry",
+        "loss_covalent_pair_contrastive",
+    )
+    count_names = (
+        "base_diffusion_valid_sample_count",
+        "covalent_pair_prediction_valid_sample_count",
+        "pre_post_geometry_valid_sample_count",
+        "covalent_pair_contrastive_valid_sample_count",
+    )
+    assert all(
+        torch.equal(getattr(joint, name), getattr(diffusion_only, name))
+        for name in raw_names
+    )
+    assert all(
+        getattr(joint, name) == getattr(diffusion_only, name)
+        for name in count_names
+    )
+    assert torch.allclose(
+        joint.loss_total,
+        joint.loss_base_diffusion
+        + joint.loss_covalent_pair_prediction
+        + 0.1 * joint.loss_covalent_pair_contrastive,
+    )
+    assert torch.equal(
+        diffusion_only.loss_total,
+        diffusion_only.loss_base_diffusion,
+    )
+    assert joint.loss_covalent_pair_prediction.item() > 0.0
+    assert joint.loss_covalent_pair_contrastive.item() > 0.0
+    training_step_source = inspect.getsource(
+        bounded_owner.CovapieBatch001BoundedTrainingLigandPocketDDPMV1
+        ._shared_covapie_training_step_v1
+    )
+    assert '"loss": losses.loss_total' in training_step_source
+
+
 def test_pre_fit_failure_prevents_fit_and_post_validation(prepared):
     callbacks = _callbacks(prepared)
 
@@ -975,6 +1387,86 @@ def test_pre_fit_failure_prevents_fit_and_post_validation(prepared):
     assert run.fit_request_count == 0
     assert run.parameter_update_observed is None
     assert run.terminal_status == "FAILED"
+
+
+def test_objective_weight_drift_during_validation_is_not_repaired_or_accepted(
+    diffusion_only_prepared,
+):
+    callbacks = _callbacks(diffusion_only_prepared)
+    ordinary_evaluate = callbacks.evaluate
+
+    def drift(**kwargs):
+        result = ordinary_evaluate(**kwargs)
+        callbacks.model.covapie_current11_loss_weights = (
+            bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+        )
+        return result
+
+    callbacks.evaluate = drift
+    run = subject.create_covapie_batch001_train_validation_lifecycle_run_v1(
+        prepared=diffusion_only_prepared
+    )
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="PRE_FIT_VALIDATION_FAILED",
+    ):
+        subject._execute_lifecycle_with_callbacks_v1(
+            run=run,
+            execution_opt_in=True,
+            runtime_root=REPOSITORY_ROOT,
+            repository_root=REPOSITORY_ROOT,
+            state_root=STATE_ROOT,
+            cache_root=CACHE_ROOT,
+            runtime_builder=callbacks.build,
+            evaluator=callbacks.evaluate,
+            fit_invoker=callbacks.fit,
+            synthetic_fixture_mode=True,
+        )
+    assert callbacks.calls == ["build", "pre"]
+    assert run.pre_fit_state_isolation_pass is False
+    assert run.fit_request_count == 0
+    assert (
+        callbacks.model.covapie_current11_loss_weights
+        is bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    )
+
+
+def test_objective_weight_drift_during_fit_prevents_post_validation(
+    diffusion_only_prepared,
+):
+    callbacks = _callbacks(diffusion_only_prepared)
+    ordinary_fit = callbacks.fit
+
+    def drift(runtime):
+        ordinary_fit(runtime)
+        callbacks.model.covapie_current11_loss_weights = (
+            bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+        )
+
+    callbacks.fit = drift
+    run = subject.create_covapie_batch001_train_validation_lifecycle_run_v1(
+        prepared=diffusion_only_prepared
+    )
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="BOUNDED_FIT_COMPLETION_STATE_REJECTED",
+    ):
+        subject._execute_lifecycle_with_callbacks_v1(
+            run=run,
+            execution_opt_in=True,
+            runtime_root=REPOSITORY_ROOT,
+            repository_root=REPOSITORY_ROOT,
+            state_root=STATE_ROOT,
+            cache_root=CACHE_ROOT,
+            runtime_builder=callbacks.build,
+            evaluator=callbacks.evaluate,
+            fit_invoker=callbacks.fit,
+            synthetic_fixture_mode=True,
+        )
+    assert callbacks.calls == ["build", "pre", "fit"]
+    assert run.fit_completion_count == 1
+    assert run.validation_request_count == 1
+    assert run.post_fit_validation_result is None
 
 
 def test_fit_failure_prevents_post_validation_and_preserves_update_fact(prepared):
@@ -1124,6 +1616,7 @@ def test_model_replacement_running_trainer_and_state_mutation_fail_closed(prepar
             model=kwargs["source_model"],
             stage=kwargs["caller_model_stage"],
             stage_evidence=kwargs["caller_stage_evidence"],
+            training_objective_profile=kwargs["training_objective_profile"],
             offset=0.0,
         )
 
@@ -1274,6 +1767,9 @@ def test_paired_metric_domain_rejects_missing_duplicate_nonfinite_or_illegal(
             post_snapshot=run.B0,
             pre_stage_evidence=run.pre_fit_validation_result.caller_stage_evidence,
             post_stage_evidence=post.caller_stage_evidence,
+            expected_training_objective_profile=(
+                run.requested_training_objective_profile
+            ),
             synthetic_fixture_mode=True,
         )
 

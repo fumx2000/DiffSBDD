@@ -47,6 +47,9 @@ __all__ = (
     "TASK_ID_V1",
     "VALIDATION_MODEL_WEIGHT_SOURCE_V1",
     "PRIMARY_METRIC_NAME_V1",
+    "JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1",
+    "DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1",
+    "TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1",
     "CANONICAL_MASK_CONTRACT_V1",
     "CURRENT_BOUND_SOURCE_AND_ARTIFACT_SHA256_V1",
     "CovapieBatch001CurrentValidationSourceBindingV1",
@@ -55,6 +58,7 @@ __all__ = (
     "CovapieBatch001PreparedCurrentStateValidation4V1",
     "CovapieBatch001CurrentStateValidation4ResultV1",
     "verify_covapie_batch001_current_state_validation4_sources_v1",
+    "resolve_covapie_batch001_training_objective_profile_v1",
     "prepare_covapie_batch001_current_state_validation4_v1",
     "evaluate_covapie_batch001_current_state_validation4_v1",
     "serialize_covapie_batch001_current_state_validation4_prepare_v1",
@@ -68,6 +72,28 @@ COVAPIE_BATCH001_CURRENT_STATE_VALIDATION4_ADAPTER_ERROR_V1 = (
 TASK_ID_V1 = "implement_covapie_batch001_current_state_validation4_adapter_v1"
 VALIDATION_MODEL_WEIGHT_SOURCE_V1 = "CURRENT_CALLER_MODEL_STATE"
 PRIMARY_METRIC_NAME_V1 = "MASKED_CONDITIONAL_VLB_NLL_V1"
+JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1 = "joint_default"
+DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1 = "diffusion_only"
+TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1 = (
+    (
+        JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1,
+        current_loss_owner.CovapieCurrent11LossWeightsV1(
+            base_diffusion=1.0,
+            covalent_pair_prediction=1.0,
+            pre_post_geometry=0.0,
+            covalent_pair_contrastive=0.1,
+        ),
+    ),
+    (
+        DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1,
+        current_loss_owner.CovapieCurrent11LossWeightsV1(
+            base_diffusion=1.0,
+            covalent_pair_prediction=0.0,
+            pre_post_geometry=0.0,
+            covalent_pair_contrastive=0.0,
+        ),
+    ),
+)
 MODEL_STATE_TRAINING_PROVENANCE_V1 = (
     "UNPROVEN_CURRENT_CALLER_MODEL_STATE_NOT_HISTORICAL_OUTPUT644_RECOVERY"
 )
@@ -295,6 +321,10 @@ class CovapieBatch001CurrentStateValidation4ResultV1:
     metric_evidence_kind: str
     primary_metric_name: str
     validation_model_weight_source: str
+    declared_training_objective_profile: str
+    validated_actual_training_loss_weights: (
+        current_loss_owner.CovapieCurrent11LossWeightsV1
+    )
     caller_model_stage: str
     caller_stage_evidence: str
     caller_quiescence_asserted: bool
@@ -417,6 +447,41 @@ def _public_error(error: BaseException) -> NoReturn:
     raise ValueError(
         f"{COVAPIE_BATCH001_CURRENT_STATE_VALIDATION4_ADAPTER_ERROR_V1}:{reason}"
     ) from error
+
+
+def _resolve_training_objective_profile_v1(
+    value: object,
+) -> tuple[str, current_loss_owner.CovapieCurrent11LossWeightsV1]:
+    if type(value) is not str:
+        _fail("TRAINING_OBJECTIVE_PROFILE_NOT_EXPLICITLY_ALLOWED")
+    by_profile = dict(TRAINING_OBJECTIVE_PROFILE_LOSS_WEIGHTS_V1)
+    if (
+        tuple(by_profile) != (
+            JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1,
+            DIFFUSION_ONLY_TRAINING_OBJECTIVE_PROFILE_V1,
+        )
+        or len(by_profile) != 2
+        or by_profile[JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1]
+        != bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
+    ):
+        _fail("TRAINING_OBJECTIVE_PROFILE_MAPPING_DRIFT")
+    weights = by_profile.get(value)
+    if weights is None:
+        _fail("TRAINING_OBJECTIVE_PROFILE_NOT_EXPLICITLY_ALLOWED")
+    if type(weights) is not current_loss_owner.CovapieCurrent11LossWeightsV1:
+        _fail("TRAINING_OBJECTIVE_PROFILE_MAPPING_DRIFT")
+    return value, weights
+
+
+def resolve_covapie_batch001_training_objective_profile_v1(
+    value: object,
+) -> tuple[str, current_loss_owner.CovapieCurrent11LossWeightsV1]:
+    """Resolve exactly one of the two fixed training-objective profiles."""
+
+    try:
+        return _resolve_training_objective_profile_v1(value)
+    except BaseException as error:
+        _public_error(error)
 
 
 def _require_directory(value: object, *, default: Path, reason: str) -> Path:
@@ -1023,10 +1088,38 @@ def _validate_caller_metadata(
     return caller_model_stage, caller_stage_evidence
 
 
-def _validate_current_source_model_v1(model: object) -> str:
+def _validate_model_training_objective_profile_v1(
+    model: object,
+    *,
+    training_objective_profile: object,
+) -> current_loss_owner.CovapieCurrent11LossWeightsV1:
+    _profile, expected_weights = _resolve_training_objective_profile_v1(
+        training_objective_profile
+    )
+    actual_weights = getattr(model, "covapie_current11_loss_weights", None)
+    if (
+        type(actual_weights)
+        is not current_loss_owner.CovapieCurrent11LossWeightsV1
+        or actual_weights != expected_weights
+    ):
+        _fail("CURRENT_MODEL_TRAINING_OBJECTIVE_PROFILE_MISMATCH")
+    return actual_weights
+
+
+def _validate_current_source_model_v1(
+    model: object,
+    *,
+    training_objective_profile: object = (
+        JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+    ),
+) -> str:
     expected_type = bounded_owner.CovapieBatch001BoundedTrainingLigandPocketDDPMV1
     if type(model) is not expected_type or not isinstance(model, nn.Module):
         _fail("CURRENT_BOUNDED_MODEL_EXACT_TYPE_REQUIRED")
+    _validate_model_training_objective_profile_v1(
+        model,
+        training_objective_profile=training_objective_profile,
+    )
     if _trainer_running(model):
         _fail("CONCURRENT_TRAINER_FIT_STATE_REJECTED")
     state = model.state_dict()
@@ -1046,8 +1139,6 @@ def _validate_current_source_model_v1(model: object) -> str:
         or getattr(model, "covapie_current11_training_enabled", None) is not True
         or getattr(model, "covapie_batch001_hidden_post_forward_enabled", None)
         is not True
-        or getattr(model, "covapie_current11_loss_weights", None)
-        != bounded_owner.DEFAULT_LOSS_WEIGHTS_V1
     ):
         _fail("CURRENT_BOUNDED_MODEL_CONFIGURATION_INVALID")
     return _validate_current_node_distribution_v1(model)
@@ -1353,6 +1444,9 @@ def evaluate_covapie_batch001_current_state_validation4_v1(
     caller_model_stage: object,
     caller_stage_evidence: object,
     caller_confirms_model_is_quiescent: object,
+    training_objective_profile: object = (
+        JOINT_DEFAULT_TRAINING_OBJECTIVE_PROFILE_V1
+    ),
     repository_root: object = None,
     cache_root: object = None,
 ) -> CovapieBatch001CurrentStateValidation4ResultV1:
@@ -1368,6 +1462,11 @@ def evaluate_covapie_batch001_current_state_validation4_v1(
                 caller_confirms_model_is_quiescent
             ),
         )
+        declared_profile, expected_training_loss_weights = (
+            _resolve_training_objective_profile_v1(
+                training_objective_profile
+            )
+        )
         repository = _require_directory(
             repository_root,
             default=_DEFAULT_REPOSITORY_ROOT,
@@ -1381,7 +1480,15 @@ def evaluate_covapie_batch001_current_state_validation4_v1(
         bindings = verify_covapie_batch001_current_state_validation4_sources_v1(
             repository_root=repository
         )
-        node_distribution_sha = _validate_current_source_model_v1(source_model)
+        node_distribution_sha = _validate_current_source_model_v1(
+            source_model,
+            training_objective_profile=declared_profile,
+        )
+        validated_actual_training_loss_weights = getattr(
+            source_model, "covapie_current11_loss_weights"
+        )
+        if validated_actual_training_loss_weights != expected_training_loss_weights:
+            _fail("CURRENT_MODEL_TRAINING_OBJECTIVE_PROFILE_MISMATCH")
         prepared = _prepare_impl(
             repository_root=repository,
             cache_root=cache,
@@ -1422,6 +1529,10 @@ def evaluate_covapie_batch001_current_state_validation4_v1(
             metric_evidence_kind="REAL_CALLER_MODEL_EXECUTION",
             primary_metric_name=PRIMARY_METRIC_NAME_V1,
             validation_model_weight_source=VALIDATION_MODEL_WEIGHT_SOURCE_V1,
+            declared_training_objective_profile=declared_profile,
+            validated_actual_training_loss_weights=(
+                validated_actual_training_loss_weights
+            ),
             caller_model_stage=stage,
             caller_stage_evidence=stage_evidence,
             caller_quiescence_asserted=True,
