@@ -40,8 +40,7 @@ def _forbidden(*_args, **_kwargs):
     raise AssertionError("forbidden real model, Trainer, optimizer, or execution path")
 
 
-@pytest.fixture(scope="module")
-def prepared():
+def _prepare_without_real_execution(**kwargs):
     with (
         mock.patch.object(torch, "load", side_effect=_forbidden),
         mock.patch.object(torch, "save", side_effect=_forbidden),
@@ -83,7 +82,20 @@ def prepared():
             repository_root=REPOSITORY_ROOT,
             state_root=STATE_ROOT,
             cache_root=CACHE_ROOT,
+            **kwargs,
         )
+
+
+@pytest.fixture(scope="module")
+def prepared():
+    return _prepare_without_real_execution()
+
+
+@pytest.fixture(scope="module")
+def candidate_prepared():
+    return _prepare_without_real_execution(
+        learning_rate=subject.CANDIDATE_LEARNING_RATE_V1
+    )
 
 
 def test_fixed_direct_sources_and_real_prepare_only_contract(prepared):
@@ -129,6 +141,13 @@ def test_fixed_direct_sources_and_real_prepare_only_contract(prepared):
     assert summary.primary_metric_name == "MASKED_CONDITIONAL_VLB_NLL_V1"
     assert summary.validation_root_seeds == evaluator_owner.FORMAL_VALIDATION_ROOT_SEEDS_V1
     assert summary.validation_context_seed == validation_owner.VALIDATION_CONTEXT_SEED_V1
+    assert summary.legacy_constructor_learning_rate == 1.0e-3
+    assert summary.requested_run_learning_rate == 1.0e-3
+    assert not summary.requested_run_learning_rate_differs_from_legacy_reference
+    assert summary.learning_rate_application_stage == "NOT_APPLIED_PREPARE_ONLY"
+    assert summary.model_learning_rate_before_application == "NOT_OBSERVED"
+    assert summary.model_learning_rate_after_application == "NOT_OBSERVED"
+    assert summary.actual_optimizer_param_group_learning_rates == "NOT_OBSERVED"
 
 
 def test_prepare_plan_counts_are_distinct_from_zero_actual_calls(prepared):
@@ -200,6 +219,97 @@ def test_prepare_serialization_is_deterministic_and_cli_has_no_execute_option(
     assert subject.main([]) == 0
     assert json.loads(capsys.readouterr().out) == payload
     assert "--execute" not in inspect.getsource(subject.main)
+
+
+def test_candidate_prepare_is_lr_only_and_cli_remains_prepare_only(
+    prepared, candidate_prepared, monkeypatch, capsys
+):
+    reference_payload = json.loads(
+        subject.serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
+            prepared
+        )
+    )
+    candidate_payload = json.loads(
+        subject.serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
+            candidate_prepared
+        )
+    )
+    differing_fields = {
+        key
+        for key in reference_payload
+        if reference_payload[key] != candidate_payload[key]
+    }
+    assert differing_fields == {
+        "requested_run_learning_rate",
+        "requested_run_learning_rate_differs_from_legacy_reference",
+    }
+    assert candidate_payload["legacy_constructor_learning_rate"] == 1.0e-3
+    assert candidate_payload["requested_run_learning_rate"] == 1.0e-4
+    assert candidate_payload[
+        "requested_run_learning_rate_differs_from_legacy_reference"
+    ] is True
+    assert candidate_payload["actual_model_construction_count"] == 0
+    assert candidate_payload["actual_optimizer_construction_count"] == 0
+    assert candidate_payload["actual_optimizer_step_count"] == 0
+    assert candidate_payload["parameter_update_performed"] is False
+    assert (
+        candidate_prepared.summary.training_carrier_fingerprints
+        == prepared.summary.training_carrier_fingerprints
+    )
+    assert (
+        candidate_prepared.summary.training_scheduled_task_ids
+        == prepared.summary.training_scheduled_task_ids
+    )
+    assert (
+        candidate_prepared.summary.validation_profile_task_matrix
+        == prepared.summary.validation_profile_task_matrix
+    )
+
+    observed = []
+
+    def prepare_spy(**kwargs):
+        observed.append(kwargs)
+        return candidate_prepared
+
+    monkeypatch.setattr(
+        subject,
+        "prepare_covapie_batch001_train_validation_lifecycle_v1",
+        prepare_spy,
+    )
+    assert subject.main(["--learning-rate", "0.0001"]) == 0
+    assert observed[0]["learning_rate"] == 1.0e-4
+    assert json.loads(capsys.readouterr().out) == candidate_payload
+    assert "execute_covapie" not in inspect.getsource(subject.main)
+
+
+@pytest.mark.parametrize(
+    "invalid",
+    (
+        True,
+        False,
+        "0.001",
+        float("nan"),
+        float("inf"),
+        float("-inf"),
+        0.0,
+        -1.0e-4,
+        1.0e-2,
+        1,
+    ),
+)
+def test_invalid_learning_rate_is_rejected_before_preparation(
+    invalid, monkeypatch
+):
+    directory_probe = mock.Mock(side_effect=_forbidden)
+    monkeypatch.setattr(subject, "_require_directory", directory_probe)
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="RUN_LEARNING_RATE_NOT_EXPLICITLY_ALLOWED",
+    ):
+        subject.prepare_covapie_batch001_train_validation_lifecycle_v1(
+            learning_rate=invalid
+        )
+    directory_probe.assert_not_called()
 
 
 def test_direct_source_drift_fails_closed(monkeypatch):
@@ -303,6 +413,8 @@ class _ProbeModel(nn.Module):
         self.register_buffer("running_buffer", torch.tensor([5.0]))
         self.mode = "SYNTHETIC_PROBE"
         self.loss_type = "SYNTHETIC"
+        self.lr = 1.0e-3
+        self.hparams = {"lr": 1.0e-3}
         self.covapie_current11_loss_weights = None
         self.train()
         self.branch.eval()
@@ -310,14 +422,21 @@ class _ProbeModel(nn.Module):
 
 
 class _FakeOptimizer:
-    def __init__(self, model):
-        self.param_groups = [{"params": list(model.parameters()), "lr": 0.001}]
+    def __init__(self, model, *, learning_rate):
+        self.param_groups = [
+            {"params": list(model.parameters()), "lr": learning_rate}
+        ]
         self.state = {0: {"step": torch.tensor(5.0), "moment": torch.tensor([1.0])}}
 
     def state_dict(self):
         return {
             "state": self.state,
-            "param_groups": [{"params": list(range(len(self.param_groups[0]["params"]))), "lr": 0.001}],
+            "param_groups": [
+                {
+                    "params": list(range(len(self.param_groups[0]["params"]))),
+                    "lr": self.param_groups[0]["lr"],
+                }
+            ],
         }
 
 
@@ -428,6 +547,7 @@ def _validation_fixture_result(
     )
     return SimpleNamespace(
         implementation_status="EXECUTED",
+        evidence_scope="SYNTHETIC_TEST_FIXTURE_NOT_REAL_LEARNING_RATE_EXPERIMENT",
         primary_metric_name=validation_owner.PRIMARY_METRIC_NAME_V1,
         validation_model_weight_source=validation_owner.VALIDATION_MODEL_WEIGHT_SOURCE_V1,
         caller_model_stage=stage,
@@ -495,7 +615,7 @@ def _validation_fixture_result(
     )
 
 
-def _callbacks(prepared, *, post_offset=10.0):
+def _callbacks(prepared, *, post_offset=10.0, optimizer_learning_rate=None):
     calls = []
     model = _ProbeModel()
     trainer = _FakeTrainer()
@@ -518,6 +638,7 @@ def _callbacks(prepared, *, post_offset=10.0):
         stage = kwargs["caller_model_stage"]
         calls.append("pre" if stage == subject.PRE_FIT_MODEL_STAGE_V1 else "post")
         assert kwargs["source_model"] is model
+        assert model.lr == prepared.summary.requested_run_learning_rate
         assert kwargs["execution_opt_in"] is True
         assert kwargs["caller_confirms_model_is_quiescent"] is True
         assert not validation_owner._trainer_running(model)
@@ -532,12 +653,20 @@ def _callbacks(prepared, *, post_offset=10.0):
     def fit(value):
         calls.append("fit")
         assert value is runtime
+        assert model.lr == prepared.summary.requested_run_learning_rate
         runtime.fit_call_count += 1
         trainer.state.status = "running"
         trainer.fit_loop.running = True
         with torch.no_grad():
             model.weight.add_(1.0)
-        optimizer = _FakeOptimizer(model)
+        optimizer = _FakeOptimizer(
+            model,
+            learning_rate=(
+                prepared.summary.requested_run_learning_rate
+                if optimizer_learning_rate is None
+                else optimizer_learning_rate
+            ),
+        )
         optimizer_holder.append(optimizer)
         trainer.optimizers = [optimizer]
         trainer.global_step = 5
@@ -575,6 +704,97 @@ def _execute_synthetic(prepared, callbacks):
     )
 
 
+def _ready_synthetic_run(prepared):
+    callbacks = _callbacks(prepared)
+    run = subject.create_covapie_batch001_train_validation_lifecycle_run_v1(
+        prepared=prepared
+    )
+    run.execution_consumed = True
+    run.terminal_status = "RUNNING"
+    run.runtime_build_request_count = 1
+    run.runtime_build_completion_count = 1
+    run.runtime = callbacks.runtime
+    run.model = callbacks.model
+    run.model_object_identity = id(callbacks.model)
+    return run, callbacks
+
+
+def test_candidate_lr_application_changes_only_effective_configuration_and_not_rng(
+    candidate_prepared,
+):
+    run, callbacks = _ready_synthetic_run(candidate_prepared)
+    before = validation_owner._snapshot_model_state_v1(callbacks.model)
+    rng_before = torch.random.get_rng_state().clone()
+    subject._apply_pre_fit_learning_rate_v1(
+        run, synthetic_fixture_mode=True
+    )
+    after = validation_owner._snapshot_model_state_v1(callbacks.model)
+    assert run.A0 is None
+    assert run.model_learning_rate_before_application == 1.0e-3
+    assert run.model_learning_rate_after_application == 1.0e-4
+    assert run.constructor_hparams_learning_rate_after_application == 1.0e-3
+    assert (
+        run.learning_rate_application_stage
+        == subject.LEARNING_RATE_APPLICATION_STAGE_V1
+    )
+    assert run.actual_optimizer_param_group_learning_rates == "NOT_OBSERVED"
+    assert before.model_state_sha256 == after.model_state_sha256
+    assert before.parameter_entries == after.parameter_entries
+    assert before.buffer_entries == after.buffer_entries
+    assert before.gradient_entries == after.gradient_entries
+    assert before.module_entries == after.module_entries
+    assert before.state_keys == after.state_keys
+    assert before.training_flags == after.training_flags
+    assert before.node_distribution_identity == after.node_distribution_identity
+    assert before.node_distribution_sha256 == after.node_distribution_sha256
+    assert before.configuration_sha256 != after.configuration_sha256
+    assert torch.equal(torch.random.get_rng_state(), rng_before)
+
+
+def test_optimizer_exists_fit_started_or_repeat_lr_application_fails_closed(
+    candidate_prepared,
+):
+    optimizer_run, optimizer_callbacks = _ready_synthetic_run(candidate_prepared)
+    optimizer_callbacks.trainer.optimizers = [
+        _FakeOptimizer(
+            optimizer_callbacks.model,
+            learning_rate=subject.LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
+        )
+    ]
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="OPTIMIZER_MUST_NOT_EXIST_BEFORE_LEARNING_RATE_APPLICATION",
+    ):
+        subject._apply_pre_fit_learning_rate_v1(
+            optimizer_run, synthetic_fixture_mode=True
+        )
+    assert optimizer_callbacks.model.lr == 1.0e-3
+
+    fit_run, fit_callbacks = _ready_synthetic_run(candidate_prepared)
+    fit_callbacks.runtime.fit_call_count = 1
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="RUN_LEARNING_RATE_APPLICATION_TOO_LATE",
+    ):
+        subject._apply_pre_fit_learning_rate_v1(
+            fit_run, synthetic_fixture_mode=True
+        )
+    assert fit_callbacks.model.lr == 1.0e-3
+
+    repeat_run, repeat_callbacks = _ready_synthetic_run(candidate_prepared)
+    subject._apply_pre_fit_learning_rate_v1(
+        repeat_run, synthetic_fixture_mode=True
+    )
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="RUN_LEARNING_RATE_ALREADY_APPLIED",
+    ):
+        subject._apply_pre_fit_learning_rate_v1(
+            repeat_run, synthetic_fixture_mode=True
+        )
+    assert repeat_callbacks.model.lr == 1.0e-4
+
+
 def test_synthetic_same_model_sequence_state_isolation_and_signed_worse_delta(
     prepared,
 ):
@@ -604,6 +824,20 @@ def test_synthetic_same_model_sequence_state_isolation_and_signed_worse_delta(
     assert run.post_fit_public_API_rng_isolation_pass is True
     assert run.same_model_and_parameter_objects_pass is True
     assert run.source_and_carrier_identity_final_pass is True
+    assert run.legacy_constructor_learning_rate == 1.0e-3
+    assert run.requested_run_learning_rate == 1.0e-3
+    assert run.model_learning_rate_before_application == 1.0e-3
+    assert run.model_learning_rate_after_application == 1.0e-3
+    assert run.constructor_hparams_learning_rate_after_application == 1.0e-3
+    assert (
+        run.learning_rate_application_stage
+        == subject.LEARNING_RATE_APPLICATION_STAGE_V1
+    )
+    assert run.actual_optimizer_param_group_learning_rates == (1.0e-3,)
+    assert (
+        run.pre_fit_validation_result.evidence_scope
+        == "SYNTHETIC_TEST_FIXTURE_NOT_REAL_LEARNING_RATE_EXPERIMENT"
+    )
     assert tuple(module.training for module in callbacks.model.modules()) == modes_before
     assert callbacks.model.weight.grad is grad_object
     assert torch.equal(callbacks.model.weight.grad, grad_before)
@@ -619,6 +853,91 @@ def test_synthetic_same_model_sequence_state_isolation_and_signed_worse_delta(
     assert all(
         row.masked_conditional_vlb_nll_post_minus_pre == pytest.approx(10.0)
         for row in comparison.per_estimate
+    )
+
+
+def test_candidate_synthetic_lifecycle_applies_before_a0_preserves_isolation_and_accepts_worse_metric(
+    candidate_prepared,
+):
+    callbacks = _callbacks(candidate_prepared, post_offset=10.0)
+    rng_before = torch.random.get_rng_state().clone()
+    run = _execute_synthetic(candidate_prepared, callbacks)
+    assert callbacks.calls == ["build", "pre", "fit", "post"]
+    assert run.terminal_status == "COMPLETED"
+    assert run.requested_run_learning_rate == 1.0e-4
+    assert run.requested_run_learning_rate_differs_from_legacy_reference
+    assert run.model_learning_rate_before_application == 1.0e-3
+    assert run.model_learning_rate_after_application == 1.0e-4
+    assert run.constructor_hparams_learning_rate_after_application == 1.0e-3
+    assert (
+        run.learning_rate_application_stage
+        == subject.LEARNING_RATE_APPLICATION_STAGE_V1
+    )
+    assert run.actual_optimizer_param_group_learning_rates == (1.0e-4,)
+    assert run.A0.configuration_sha256 == run.A1.configuration_sha256
+    assert run.B0.configuration_sha256 == run.B1.configuration_sha256
+    assert run.A1.configuration_sha256 == run.B0.configuration_sha256
+    assert run.pre_fit_state_isolation_pass is True
+    assert run.post_fit_state_isolation_pass is True
+    assert run.post_fit_optimizer_isolation_pass is True
+    assert run.same_model_and_parameter_objects_pass is True
+    assert run.paired_comparison.event_macro_post_minus_pre == pytest.approx(10.0)
+    assert torch.equal(torch.random.get_rng_state(), rng_before)
+
+
+def test_optimizer_observation_mismatch_fails_closed(candidate_prepared):
+    callbacks = _callbacks(
+        candidate_prepared,
+        optimizer_learning_rate=subject.LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
+    )
+    run = subject.create_covapie_batch001_train_validation_lifecycle_run_v1(
+        prepared=candidate_prepared
+    )
+    with pytest.raises(
+        subject.CovapieBatch001TrainValidationLifecycleExecutionErrorV1,
+        match="BOUNDED_FIT_COMPLETION_STATE_REJECTED",
+    ) as caught:
+        subject._execute_lifecycle_with_callbacks_v1(
+            run=run,
+            execution_opt_in=True,
+            runtime_root=REPOSITORY_ROOT,
+            repository_root=REPOSITORY_ROOT,
+            state_root=STATE_ROOT,
+            cache_root=CACHE_ROOT,
+            runtime_builder=callbacks.build,
+            evaluator=callbacks.evaluate,
+            fit_invoker=callbacks.fit,
+            synthetic_fixture_mode=True,
+        )
+    assert caught.value.run is run
+    assert run.failure_stage == "BOUNDED_FIT"
+    assert run.actual_optimizer_param_group_learning_rates == (1.0e-3,)
+    assert run.post_fit_validation_result is None
+
+
+def test_production_configure_optimizers_reads_selected_model_lr_without_construction():
+    ddpm_parameters = (object(), object())
+    auxiliary_parameters = (object(),)
+    fake_self = SimpleNamespace(
+        ddpm=SimpleNamespace(parameters=lambda: ddpm_parameters),
+        covapie_current11_auxiliary_model_v1=SimpleNamespace(
+            parameters=lambda: auxiliary_parameters
+        ),
+        lr=subject.CANDIDATE_LEARNING_RATE_V1,
+    )
+    optimizer_sentinel = object()
+    adamw_factory = mock.Mock(return_value=optimizer_sentinel)
+    with mock.patch.object(torch.optim, "AdamW", new=adamw_factory):
+        observed = (
+            bounded_owner.CovapieBatch001BoundedTrainingLigandPocketDDPMV1
+            .configure_optimizers(fake_self)
+        )
+    assert observed is optimizer_sentinel
+    adamw_factory.assert_called_once_with(
+        list(ddpm_parameters) + list(auxiliary_parameters),
+        lr=subject.CANDIDATE_LEARNING_RATE_V1,
+        amsgrad=True,
+        weight_decay=1.0e-12,
     )
 
 

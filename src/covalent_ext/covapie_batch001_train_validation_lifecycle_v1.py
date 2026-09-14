@@ -32,6 +32,10 @@ from covalent_ext import (
 __all__ = (
     "COVAPIE_BATCH001_TRAIN_VALIDATION_LIFECYCLE_ERROR_V1",
     "TASK_ID_V1",
+    "EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1",
+    "LEGACY_CONSTRUCTOR_LEARNING_RATE_V1",
+    "CANDIDATE_LEARNING_RATE_V1",
+    "ALLOWED_RUN_LEARNING_RATES_V1",
     "DIRECT_BOUND_SOURCE_SHA256_V1",
     "CANONICAL_MASK_CONTRACT_V1",
     "CovapieBatch001TrainValidationSourceBindingV1",
@@ -56,8 +60,19 @@ COVAPIE_BATCH001_TRAIN_VALIDATION_LIFECYCLE_ERROR_V1 = (
     "COVAPIE_BATCH001_TRAIN_VALIDATION_LIFECYCLE_V1_ERROR"
 )
 TASK_ID_V1 = "implement_covapie_batch001_train_validation_lifecycle_v1"
+EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1 = (
+    "implement_covapie_batch001_explicit_lr_diagnostic_option_v1"
+)
+LEGACY_CONSTRUCTOR_LEARNING_RATE_V1 = 1.0e-3
+CANDIDATE_LEARNING_RATE_V1 = 1.0e-4
+ALLOWED_RUN_LEARNING_RATES_V1 = (
+    LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
+    CANDIDATE_LEARNING_RATE_V1,
+)
 PRE_FIT_MODEL_STAGE_V1 = "PRE_FIT_INITIAL_MODEL"
 POST_FIT_MODEL_STAGE_V1 = "POST_FIT_CURRENT_MODEL"
+LEARNING_RATE_APPLICATION_STAGE_V1 = "POST_RUNTIME_BUILD_PRE_A0"
+NOT_OBSERVED_V1 = "NOT_OBSERVED"
 CANONICAL_MASK_CONTRACT_V1 = bounded_owner.CANONICAL_MASK_CONTRACT_V1
 DIRECT_BOUND_SOURCE_SHA256_V1 = (
     (
@@ -127,6 +142,15 @@ class CovapieBatch001TrainValidationLifecyclePrepareSummaryV1:
     schema_version: str
     task_id: str
     implementation_status: str
+    learning_rate_diagnostic_option_task_id: str
+    legacy_constructor_learning_rate: float
+    requested_run_learning_rate: float
+    requested_run_learning_rate_differs_from_legacy_reference: bool
+    model_learning_rate_before_application: str
+    model_learning_rate_after_application: str
+    constructor_hparams_learning_rate_after_application: str
+    learning_rate_application_stage: str
+    actual_optimizer_param_group_learning_rates: str
     source_bindings: tuple[CovapieBatch001TrainValidationSourceBindingV1, ...]
     bounded_training_owner_task_id: str
     validation4_owner_task_id: str
@@ -268,6 +292,18 @@ class _OptimizerSnapshotV1:
 @dataclass
 class CovapieBatch001TrainValidationLifecycleRunV1:
     prepared: CovapieBatch001PreparedTrainValidationLifecycleV1
+    legacy_constructor_learning_rate: float = LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+    requested_run_learning_rate: float = LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+    requested_run_learning_rate_differs_from_legacy_reference: bool = False
+    model_learning_rate_before_application: float | str = NOT_OBSERVED_V1
+    model_learning_rate_after_application: float | str = NOT_OBSERVED_V1
+    constructor_hparams_learning_rate_after_application: float | str = (
+        NOT_OBSERVED_V1
+    )
+    learning_rate_application_stage: str = "NOT_APPLIED"
+    actual_optimizer_param_group_learning_rates: tuple[float, ...] | str = (
+        NOT_OBSERVED_V1
+    )
     phase: str = "READY_NOT_EXECUTED"
     terminal_status: str = "NOT_REACHED"
     stage_history: list[str] = field(default_factory=lambda: ["READY_NOT_EXECUTED"])
@@ -331,6 +367,16 @@ def _fail(
     raise CovapieBatch001TrainValidationLifecycleExecutionErrorV1(
         reason, run=run
     )
+
+
+def _validate_requested_run_learning_rate_v1(value: object) -> float:
+    if (
+        type(value) is not float
+        or not math.isfinite(value)
+        or value not in ALLOWED_RUN_LEARNING_RATES_V1
+    ):
+        _fail("RUN_LEARNING_RATE_NOT_EXPLICITLY_ALLOWED")
+    return value
 
 
 def _require_directory(value: object, *, default: Path, reason: str) -> Path:
@@ -513,9 +559,13 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
     repository_root: object = None,
     state_root: object = None,
     cache_root: object = None,
+    learning_rate: object = LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
 ) -> CovapieBatch001PreparedTrainValidationLifecycleV1:
     """Prepare real train5/validation4 carriers with zero model execution."""
 
+    requested_run_learning_rate = _validate_requested_run_learning_rate_v1(
+        learning_rate
+    )
     repository = _require_directory(
         repository_root,
         default=_DEFAULT_REPOSITORY_ROOT,
@@ -548,6 +598,22 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
         schema_version="covapie_batch001_train_validation_lifecycle_v1",
         task_id=TASK_ID_V1,
         implementation_status="PREPARED_NOT_EXECUTED",
+        learning_rate_diagnostic_option_task_id=(
+            EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1
+        ),
+        legacy_constructor_learning_rate=(
+            LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        ),
+        requested_run_learning_rate=requested_run_learning_rate,
+        requested_run_learning_rate_differs_from_legacy_reference=(
+            requested_run_learning_rate
+            != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        ),
+        model_learning_rate_before_application=NOT_OBSERVED_V1,
+        model_learning_rate_after_application=NOT_OBSERVED_V1,
+        constructor_hparams_learning_rate_after_application=NOT_OBSERVED_V1,
+        learning_rate_application_stage="NOT_APPLIED_PREPARE_ONLY",
+        actual_optimizer_param_group_learning_rates=NOT_OBSERVED_V1,
         source_bindings=bindings,
         bounded_training_owner_task_id=bounded_owner.TASK_ID_V1,
         validation4_owner_task_id=validation_owner.TASK_ID_V1,
@@ -628,15 +694,59 @@ def prepare_covapie_batch001_train_validation_lifecycle_v1(
     )
 
 
-def create_covapie_batch001_train_validation_lifecycle_run_v1(
-    *, prepared: object
-) -> CovapieBatch001TrainValidationLifecycleRunV1:
+def _validate_prepared_lifecycle_v1(prepared: object) -> float:
     if type(prepared) is not CovapieBatch001PreparedTrainValidationLifecycleV1:
         _fail("PREPARED_LIFECYCLE_TYPE_INVALID")
     _validate_prepared_components_v1(
         training=prepared.training, validation=prepared.validation
     )
-    return CovapieBatch001TrainValidationLifecycleRunV1(prepared=prepared)
+    summary = prepared.summary
+    if type(summary) is not CovapieBatch001TrainValidationLifecyclePrepareSummaryV1:
+        _fail("PREPARED_LIFECYCLE_SUMMARY_TYPE_INVALID")
+    requested = _validate_requested_run_learning_rate_v1(
+        summary.requested_run_learning_rate
+    )
+    if (
+        summary.learning_rate_diagnostic_option_task_id
+        != EXPLICIT_LR_DIAGNOSTIC_OPTION_TASK_ID_V1
+        or summary.legacy_constructor_learning_rate
+        != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        or summary.requested_run_learning_rate_differs_from_legacy_reference
+        is not (requested != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1)
+        or summary.model_learning_rate_before_application != NOT_OBSERVED_V1
+        or summary.model_learning_rate_after_application != NOT_OBSERVED_V1
+        or summary.constructor_hparams_learning_rate_after_application
+        != NOT_OBSERVED_V1
+        or summary.learning_rate_application_stage
+        != "NOT_APPLIED_PREPARE_ONLY"
+        or summary.actual_optimizer_param_group_learning_rates
+        != NOT_OBSERVED_V1
+        or summary.actual_checkpoint_load_count != 0
+        or summary.actual_model_construction_count != 0
+        or summary.actual_trainer_construction_count != 0
+        or summary.actual_optimizer_construction_count != 0
+        or summary.actual_fit_call_count != 0
+        or summary.actual_validation4_call_count != 0
+        or summary.actual_backward_count != 0
+        or summary.actual_optimizer_step_count != 0
+        or summary.parameter_update_performed
+    ):
+        _fail("PREPARED_LEARNING_RATE_DIAGNOSTIC_CONTRACT_INVALID")
+    return requested
+
+
+def create_covapie_batch001_train_validation_lifecycle_run_v1(
+    *, prepared: object
+) -> CovapieBatch001TrainValidationLifecycleRunV1:
+    requested_run_learning_rate = _validate_prepared_lifecycle_v1(prepared)
+    return CovapieBatch001TrainValidationLifecycleRunV1(
+        prepared=prepared,
+        requested_run_learning_rate=requested_run_learning_rate,
+        requested_run_learning_rate_differs_from_legacy_reference=(
+            requested_run_learning_rate
+            != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        ),
+    )
 
 
 def _set_phase_v1(
@@ -703,6 +813,134 @@ def _runtime_model_v1(
     if run.model is not None and model is not run.model:
         _fail("RUNTIME_MODEL_OBJECT_REPLACED", run=run)
     return model
+
+
+def _validate_unexecuted_run_learning_rate_contract_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+) -> None:
+    requested = _validate_prepared_lifecycle_v1(run.prepared)
+    if (
+        run.legacy_constructor_learning_rate
+        != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        or run.requested_run_learning_rate != requested
+        or run.requested_run_learning_rate_differs_from_legacy_reference
+        is not (requested != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1)
+        or run.model_learning_rate_before_application != NOT_OBSERVED_V1
+        or run.model_learning_rate_after_application != NOT_OBSERVED_V1
+        or run.constructor_hparams_learning_rate_after_application
+        != NOT_OBSERVED_V1
+        or run.learning_rate_application_stage != "NOT_APPLIED"
+        or run.actual_optimizer_param_group_learning_rates
+        != NOT_OBSERVED_V1
+    ):
+        _fail("RUN_LEARNING_RATE_DIAGNOSTIC_CONTRACT_INVALID", run=run)
+
+
+def _model_learning_rate_v1(
+    model: nn.Module,
+    *,
+    reason: str,
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+) -> float:
+    value = getattr(model, "lr", None)
+    if type(value) is not float or not math.isfinite(value):
+        _fail(reason, run=run)
+    return value
+
+
+def _apply_pre_fit_learning_rate_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+    *,
+    synthetic_fixture_mode: bool,
+) -> None:
+    """Apply the prepared choice after build and before the first A0 snapshot."""
+
+    if run.learning_rate_application_stage != "NOT_APPLIED":
+        _fail("RUN_LEARNING_RATE_ALREADY_APPLIED", run=run)
+    model = _runtime_model_v1(
+        run, synthetic_fixture_mode=synthetic_fixture_mode
+    )
+    runtime = run.runtime
+    trainer = getattr(runtime, "trainer", None)
+    optimizers = getattr(trainer, "optimizers", None)
+    if validation_owner._trainer_running(model):
+        _fail("RUNNING_TRAINER_MODEL_VALIDATION_FORBIDDEN", run=run)
+    if (
+        run.runtime_build_request_count != 1
+        or run.runtime_build_completion_count != 1
+        or run.A0 is not None
+        or run.A1 is not None
+        or run.B0 is not None
+        or run.B1 is not None
+        or run.validation_request_count != 0
+        or run.validation_completion_count != 0
+        or run.fit_request_count != 0
+        or run.fit_completion_count != 0
+        or getattr(runtime, "fit_call_count", None) != 0
+        or getattr(trainer, "global_step", None) != 0
+    ):
+        _fail("RUN_LEARNING_RATE_APPLICATION_TOO_LATE", run=run)
+    if type(optimizers) not in (tuple, list) or len(optimizers) != 0:
+        _fail("OPTIMIZER_MUST_NOT_EXIST_BEFORE_LEARNING_RATE_APPLICATION", run=run)
+    before = _model_learning_rate_v1(
+        model,
+        reason="LEGACY_CONSTRUCTOR_MODEL_LEARNING_RATE_INVALID",
+        run=run,
+    )
+    if before != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1:
+        _fail("LEGACY_CONSTRUCTOR_MODEL_LEARNING_RATE_DRIFT", run=run)
+    requested = run.requested_run_learning_rate
+    _validate_requested_run_learning_rate_v1(requested)
+    run.model_learning_rate_before_application = before
+    if before != requested:
+        model.lr = requested
+    after = _model_learning_rate_v1(
+        model,
+        reason="EFFECTIVE_MODEL_LEARNING_RATE_INVALID_AFTER_APPLICATION",
+        run=run,
+    )
+    if after != requested:
+        _fail("EFFECTIVE_MODEL_LEARNING_RATE_APPLICATION_FAILED", run=run)
+    constructor_hparams_lr = validation_owner._hparam_value(model, "lr")
+    if constructor_hparams_lr is None:
+        observed_hparams_lr: float | str = NOT_OBSERVED_V1
+    else:
+        if (
+            type(constructor_hparams_lr) is not float
+            or not math.isfinite(constructor_hparams_lr)
+            or constructor_hparams_lr
+            != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        ):
+            _fail("LEGACY_CONSTRUCTOR_HPARAMS_LEARNING_RATE_DRIFT", run=run)
+        observed_hparams_lr = constructor_hparams_lr
+    run.model_learning_rate_after_application = after
+    run.constructor_hparams_learning_rate_after_application = (
+        observed_hparams_lr
+    )
+    run.learning_rate_application_stage = LEARNING_RATE_APPLICATION_STAGE_V1
+
+
+def _require_effective_run_learning_rate_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+) -> None:
+    model = run.model
+    if not isinstance(model, nn.Module):
+        _fail("RUN_MODEL_NOT_AVAILABLE_FOR_LEARNING_RATE_CHECK", run=run)
+    current = _model_learning_rate_v1(
+        model,
+        reason="EFFECTIVE_MODEL_LEARNING_RATE_INVALID",
+        run=run,
+    )
+    if (
+        run.learning_rate_application_stage
+        != LEARNING_RATE_APPLICATION_STAGE_V1
+        or run.model_learning_rate_before_application
+        != LEGACY_CONSTRUCTOR_LEARNING_RATE_V1
+        or run.model_learning_rate_after_application
+        != run.requested_run_learning_rate
+        or current != run.requested_run_learning_rate
+    ):
+        _fail("EFFECTIVE_MODEL_LEARNING_RATE_DRIFT", run=run)
 
 
 def _snapshot_parity_v1(before: object, after: object) -> Mapping[str, bool]:
@@ -1145,6 +1383,30 @@ def _sole_optimizer_v1(
     return optimizer
 
 
+def _observe_optimizer_learning_rates_v1(
+    run: CovapieBatch001TrainValidationLifecycleRunV1,
+    optimizer: object,
+) -> tuple[float, ...]:
+    if run.actual_optimizer_param_group_learning_rates != NOT_OBSERVED_V1:
+        _fail("OPTIMIZER_LEARNING_RATE_ALREADY_OBSERVED", run=run)
+    groups = getattr(optimizer, "param_groups", None)
+    if type(groups) is not list or not groups:
+        _fail("OPTIMIZER_PARAMETER_GROUPS_INVALID", run=run)
+    learning_rates = []
+    for group in groups:
+        if type(group) is not dict:
+            _fail("OPTIMIZER_PARAMETER_GROUP_INVALID", run=run)
+        value = group.get("lr")
+        if type(value) is not float or not math.isfinite(value):
+            _fail("OPTIMIZER_PARAMETER_GROUP_LEARNING_RATE_INVALID", run=run)
+        learning_rates.append(value)
+    observed = tuple(learning_rates)
+    run.actual_optimizer_param_group_learning_rates = observed
+    if any(value != run.requested_run_learning_rate for value in observed):
+        _fail("OPTIMIZER_LEARNING_RATE_MISMATCH", run=run)
+    return observed
+
+
 def _optimizer_snapshot_v1(optimizer: object) -> _OptimizerSnapshotV1:
     parameter_ids = tuple(
         id(parameter)
@@ -1214,6 +1476,7 @@ def _perform_validation_stage_v1(
         )
         if validation_owner._trainer_running(model):
             _fail("RUNNING_TRAINER_MODEL_VALIDATION_FORBIDDEN", run=run)
+        _require_effective_run_learning_rate_v1(run)
     except BaseException as error:
         reason = (
             error.reason
@@ -1247,6 +1510,7 @@ def _perform_validation_stage_v1(
             repository_root=repository_root,
             cache_root=cache_root,
         )
+        _require_effective_run_learning_rate_v1(run)
     except BaseException as error:
         after = validation_owner._snapshot_model_state_v1(model)
         if is_pre:
@@ -1344,6 +1608,7 @@ def _execute_lifecycle_with_callbacks_v1(
         _fail("LIFECYCLE_RUN_TYPE_INVALID")
     if run.execution_consumed:
         _fail("LIFECYCLE_ALREADY_CONSUMED_NO_RETRY_OR_RESUME", run=run)
+    _validate_unexecuted_run_learning_rate_contract_v1(run)
     callbacks = (runtime_builder, evaluator, fit_invoker)
     if synthetic_fixture_mode is True:
         if not all(callable(callback) for callback in callbacks):
@@ -1377,9 +1642,7 @@ def _execute_lifecycle_with_callbacks_v1(
         default=Path("/__no_default__"),
         reason="RUNTIME_ROOT_INVALID",
     )
-    _validate_prepared_components_v1(
-        training=run.prepared.training, validation=run.prepared.validation
-    )
+    _validate_prepared_lifecycle_v1(run.prepared)
     verify_covapie_batch001_train_validation_lifecycle_sources_v1(
         repository_root=repository
     )
@@ -1419,6 +1682,10 @@ def _execute_lifecycle_with_callbacks_v1(
         )
         run.model = model
         run.model_object_identity = id(model)
+        if not validation_owner._trainer_running(model):
+            _apply_pre_fit_learning_rate_v1(
+                run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
+            )
         run.A0 = validation_owner._snapshot_model_state_v1(model)
         run.parameter_object_identities = _parameter_ids_v1(run.A0)
     except BaseException as error:
@@ -1445,6 +1712,7 @@ def _execute_lifecycle_with_callbacks_v1(
         _fail("PRE_FIT_STATE_CHECKPOINTS_MISSING", run=run)
     if not _cross_fit_object_parity_v1(run.A0, run.A1):
         _fail("PRE_FIT_MODEL_OBJECT_PARITY_INVALID", run=run)
+    _require_effective_run_learning_rate_v1(run)
     _request_operation_v1(run, "FIT")
     _set_phase_v1(run, "FIT_REQUESTED")
     try:
@@ -1478,6 +1746,7 @@ def _execute_lifecycle_with_callbacks_v1(
         model_after_fit = _runtime_model_v1(
             run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
         )
+        _require_effective_run_learning_rate_v1(run)
         trainer = getattr(runtime, "trainer", None)
         run.actual_global_step = getattr(trainer, "global_step", None)
         run.actual_final_epoch = getattr(trainer, "current_epoch", None)
@@ -1501,6 +1770,7 @@ def _execute_lifecycle_with_callbacks_v1(
         optimizer = _sole_optimizer_v1(
             run, synthetic_fixture_mode=bool(synthetic_fixture_mode)
         )
+        _observe_optimizer_learning_rates_v1(run, optimizer)
         optimizer_before = _optimizer_snapshot_v1(optimizer)
         run.optimizer_object_identity = id(optimizer)
     except BaseException as error:
@@ -1625,8 +1895,7 @@ def execute_covapie_batch001_train_validation_lifecycle_v1(
 def serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
     prepared: object,
 ) -> bytes:
-    if type(prepared) is not CovapieBatch001PreparedTrainValidationLifecycleV1:
-        _fail("PREPARED_LIFECYCLE_TYPE_INVALID")
+    _validate_prepared_lifecycle_v1(prepared)
     return (
         json.dumps(
             asdict(prepared.summary),
@@ -1646,11 +1915,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--repository-root", type=Path)
     parser.add_argument("--state-root", type=Path)
     parser.add_argument("--cache-root", type=Path)
+    parser.add_argument(
+        "--learning-rate",
+        type=float,
+        choices=ALLOWED_RUN_LEARNING_RATES_V1,
+        default=LEGACY_CONSTRUCTOR_LEARNING_RATE_V1,
+    )
     arguments = parser.parse_args(argv)
     prepared = prepare_covapie_batch001_train_validation_lifecycle_v1(
         repository_root=arguments.repository_root,
         state_root=arguments.state_root,
         cache_root=arguments.cache_root,
+        learning_rate=arguments.learning_rate,
     )
     print(
         serialize_covapie_batch001_train_validation_lifecycle_prepare_v1(
